@@ -242,48 +242,108 @@
     });
 </script>
             
-            <!-- Service 3 -->
-            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
-                <div class="h-3 bg-gradient"></div>
-                <div class="p-6">
-                    <h3 class="text-2xl font-bold mb-2">Data Preservation</h3>
-                    <p class="text-gray-400 mb-4">Integrity & Security Solutions</p>
-                    <p class="mb-6 text-gray-300">
-                        Secure, decentralized storage solutions with immutable data integrity and customizable access control for individuals and organizations.
-                    </p>
-                    <div class="flex justify-between items-center">
-                        <a href="#contact" class="border border-purple-700 hover:bg-purple-700 hover:bg-opacity-20 text-white py-2 px-4 rounded-full text-sm transition duration-300">
-                            Learn More
-                        </a>
-                        <div class="flex items-center text-gray-400 text-sm">
-                            <span class="mr-2">Coming Q3 2025</span>
-                            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                        </div>
-                    </div>
-                </div>
+<!-- Service 3 -->
+<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
+    <div class="h-3 bg-gradient"></div>
+    <div class="p-6">
+        <h3 class="text-2xl font-bold mb-2">Data Preservation</h3>
+        <p class="text-gray-400 mb-4">Integrity & Security Solutions</p>
+        <p class="mb-6 text-gray-300">
+            Secure, decentralized storage solutions with immutable data integrity and customizable access control for individuals and organizations.
+        </p>
+        <div class="flex justify-between items-center">
+            <button id="learn-more-data-btn" class="border border-purple-700 hover:bg-purple-700 hover:bg-opacity-20 text-white py-2 px-4 rounded-full text-sm transition duration-300">
+                Learn More
+            </button>
+            <div class="flex items-center text-gray-400 text-sm">
+                <span class="mr-2">Coming Q3 2025</span>
+                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
             </div>
-            
-            <!-- Service 4 -->
-            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
-                <div class="h-3 bg-gradient"></div>
-                <div class="p-6">
-                    <h3 class="text-2xl font-bold mb-2">AI Training Marketplace</h3>
-                    <p class="text-gray-400 mb-4">Ethical Data Exchange</p>
-                    <p class="mb-6 text-gray-300">
-                        Facilitate the exchange of ethically sourced data for AI training with quality assurance and rewards for ethical data contribution.
-                    </p>
-                    <div class="flex justify-between items-center">
-                        <a href="#contact" class="border border-purple-700 hover:bg-purple-700 hover:bg-opacity-20 text-white py-2 px-4 rounded-full text-sm transition duration-300">
-                            Join Waitlist
-                        </a>
-                        <div class="flex items-center text-gray-400 text-sm">
-                            <span class="mr-2">Coming Q4 2025</span>
-                            <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                        </div>
-                    </div>
-                </div>
+        </div>
+    </div>
+</div>
+
+<!-- Learn More Form (Hidden by Default) -->
+<div class="container mx-auto px-4 hidden" id="learn-more-data-form">
+    <div class="bg-gray-800 rounded-lg p-6 shadow-2xl max-w-2xl mx-auto">
+        <h3 class="text-2xl font-semibold text-white mb-4">Learn More About Data Preservation</h3>
+        <p class="mb-4 text-sm text-gray-400">Tell us how we can assist with your data preservation needs. We’ll contact you soon!</p>
+        <form id="learn-more-data-form-data" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="e9cb9d21-9e95-419d-8449-68bce91c17de">
+            <input type="hidden" name="redirect" value="onezeroeight-ai.github.io/SUTRA-Presale/">
+            <div class="mb-4">
+                <label class="block text-sm mb-2 text-gray-300" for="name">Your Name</label>
+                <input type="text" id="name" name="name" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g., John Doe" required>
             </div>
+            <div class="mb-4">
+                <label class="block text-sm mb-2 text-gray-300" for="email">Your Email</label>
+                <input type="email" id="email" name="email" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g., john@example.com" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm mb-2 text-gray-300" for="message">Your Preservation Needs</label>
+                <textarea id="message" name="message" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" rows="5" placeholder="e.g., We need secure storage for sensitive AI data." required></textarea>
+            </div>
+            <!-- Honeypot Field for Spam Prevention -->
+            <div style="display:none">
+                <input type="text" name="_gotcha" style="display:none" />
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="submit" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                    Submit
+                </button>
+                <button type="button" id="cancel-learn-more-data" class="text-gray-400 hover:text-white font-medium py-2 px-4">
+                    Cancel
+                </button>
+            </div>
+            <input type="hidden" name="_subject" value="New SUTRA Data Preservation Inquiry">
+            <input type="hidden" name="_next" value="https://onezeroeight-ai.github.io/thanks.html">
+            <input type="hidden" name="email_to" value="info@onezeroeight.ai">
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript to Toggle Form Visibility -->
+<script>
+    document.getElementById('learn-more-data-btn').addEventListener('click', function() {
+        document.getElementById('learn-more-data-form').classList.remove('hidden');
+    });
+
+    document.getElementById('cancel-learn-more-data').addEventListener('click', function() {
+        document.getElementById('learn-more-data-form').classList.add('hidden');
+    });
+</script>
             
+<!-- Service 4 -->
+<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
+    <div class="h-3 bg-gradient"></div>
+    <div class="p-6">
+        <h3 class="text-2xl font-bold mb-2">AI Training Marketplace</h3>
+        <p class="text-gray-400 mb-4">Ethical Data Exchange</p>
+        <p class="mb-6 text-gray-300">
+            Facilitate the exchange of ethically sourced data for AI training with quality assurance and rewards for ethical data contribution.
+        </p>
+        <div class="flex justify-between items-center">
+            <button id="join-waitlist-btn" class="border border-purple-700 hover:bg-purple-700 hover:bg-opacity-20 text-white py-2 px-4 rounded-full text-sm transition duration-300">
+                Join Waitlist
+            </button>
+            <div class="flex items-center text-gray-400 text-sm">
+                <span class="mr-2">Coming Q4 2025</span>
+                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Join Waitlist Form (Hidden by Default) -->
+<div class="container mx-auto px-4 hidden" id="join-waitlist-form">
+    <div class="bg-gray-800 rounded-lg p-6 shadow-2xl max-w-2xl mx-auto">
+        <h3 class="text-2xl font-semibold text-white mb-4">Join the AI Training Marketplace Waitlist</h3>
+        <p class="mb-4 text-sm text-gray-400">Sign up to be the first to access our ethical data exchange platform, launching Q4 2025.</p>
+        <form id="join-waitlist-form-data" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="e9cb9d21-9e95-419d-8449-68bce91c17de">
+            <input type="hidden" name="redirect" value="onezeroeight-ai.github.io/SUTRA-Presale/">
+            <div class="mb-4">
+                <label class="            
             <!-- Service 5 -->
             <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
                 <div class="h-3 bg-gradient"></div>
