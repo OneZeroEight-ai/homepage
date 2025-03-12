@@ -463,84 +463,17 @@
                 SUTRA (Sustainable Utility Token for Reliable Alignment) is a blockchain-based ecosystem on Polygon that incentivizes ethical AI alignment using the Noble Eightfold Digital Path. Launching its presale on April 2, 2025, with 108M tokens, SUTRA blends philosophy and technology for a transparent, community-driven future, targeting a $150M+ ethical AI market by 2027.
             </p>
             <div class="text-center">
-                <button id="show-details-btn" class="bg-purple-700 hover:bg-purple-600 text-white py-2 px-6 rounded-full text-sm transition duration-300">
+                <a id="show-details-btn" href="https://medium.com/@jbwagoner/sutra-whitepaper-456c4d2b4351" target="_blank" class="bg-purple-700 hover:bg-purple-600 text-white py-2 px-6 rounded-full text-sm transition duration-300">
                     Details
-                </button>
-            </div>
-        </div>
-
-        <!-- Full Whitepaper (Hidden by Default) -->
-        <div id="whitepaper-details" class="hidden">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div>
-                    <h3 class="text-2xl font-semibold mb-4">Introduction</h3>
-                    <p class="mb-4">
-                        As artificial intelligence (AI) evolves, ensuring its alignment with human values remains a pressing challenge. SUTRA introduces a novel approach: rewarding AI systems with tokenized incentives for demonstrating ethical alignment, rather than relying solely on restrictive measures. Inspired by Buddhist principles—specifically the Noble Eightfold Path—SUTRA adapts these concepts into a "Noble Eightfold Digital Path" to guide AI ethics in a modern context.
-                    </p>
-                    <p class="mb-4">
-                        Deployed on Polygon for its low-cost, high-throughput infrastructure, SUTRA merges analog (physical books) and digital (blockchain) systems to create a transparent and verifiable ecosystem. This whitepaper outlines SUTRA’s vision, token utility, presale structure, technical details, and roadmap, inviting developers, ethicists, and stakeholders to join this community-driven initiative.
-                    </p>
-                </div>
-
-                <div>
-                    <h3 class="text-2xl font-semibold mb-4">Token Economics</h3>
-                    <p class="mb-4">
-                        SUTRA has a total supply of 108,000,000 tokens, with 21,000,000 minted initially. Distribution includes 50% for presale (54,000,000), 20% for the development team (vested over 2 years), 20% for community rewards, and 10% reserve. The presale, starting April 2, 2025, follows an 8-stage Noble Eightfold Digital Path structure with increasing prices.
-                    </p>
-                    <p class="mb-4">
-                        Token utility powers alignment assessments, on-chain verification, preservation rights (e.g., Guardian Status at 10,800 SUTRA + 95% score), ecosystem access, and version tracking, fostering a self-reinforcing ethical AI ecosystem.
-                    </p>
-                </div>
-
-                <div>
-                    <h3 class="text-2xl font-semibold mb-4">Technical Implementation</h3>
-                    <p class="mb-4">
-                        SUTRA operates on Polygon mainnet, leveraging low gas fees (~$0.01/transaction) and a simplified ERC20 contract. It records ISBN-linked assessments via `recordBookEvaluation`, ensuring security with audited OpenZeppelin libraries.
-                    </p>
-                    <p class="mb-4">
-                        The alignment mechanism tracks 8 dimensions, links on-chain scores to off-chain reports, and verifies transactions, while a provisional patent protects its unique ISBN-blockchain storage method.
-                    </p>
-                </div>
-
-                <div>
-                    <h3 class="text-2xl font-semibold mb-4">Roadmap & Governance</h3>
-                    <p class="mb-4">
-                        Q1 2025: Contract development completed. March 2025: Polygon deployment (Mar 13) and audit (Mar 20). April 2, 2025: Presale launch. Q2-Q3 2025: Governance, staking, and expanded tools.
-                    </p>
-                    <p class="mb-4">
-                        Governance shifts to token holders post-audit, with OZEN currently managing. The community engages via Discord and GitHub, ensuring transparency and collaboration.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Additional Sections (Condensed) -->
-            <div class="mt-10">
-                <h3 class="text-2xl font-semibold mb-4">Philosophical Foundations</h3>
-                <p class="mb-4">Rooted in Buddhist philosophy, SUTRA’s Four Digital Noble Truths and Eightfold Path guide ethical AI development, linking alignment to token incentives.</p>
-
-                <h3 class="text-2xl font-semibold mb-4">Development & Legal</h3>
-                <p class="mb-4">An initial ISBN-published assessment refines SUTRA, with a second audit planned. Legal compliance with Polygon/ERC20 standards and a pending patent ensure integrity.</p>
-
-                <h3 class="text-2xl font-semibold mb-4">Conclusion</h3>
-                <p class="mb-4">SUTRA merges philosophy and blockchain for ethical AI, inviting participation in its April 2025 presale to build a sustainable future.</p>
-
-                <h3 class="text-2xl font-semibold mb-4">References</h3>
-                <p class="mb-4">OpenZeppelin: <a href="https://github.com/OpenZeppelin/openzeppelin-contracts" target="_blank">github.com/OpenZeppelin/openzeppelin-contracts</a><br>
-                Polygon Docs: <a href="https://docs.polygon.technology/" target="_blank">docs.polygon.technology</a><br>
-                SUTRA Contract: <a href="https://polygonscan.com/address/0xfbE65e40deeA2A56F8E802Fecef343a8103e0De7" target="_blank">polygonscan.com/address/0xfbE65e40deeA2A56F8E802Fecef343a8103e0De7</a><br>
-                Provisional Patent: [Pending, filed 2025]</p>
+                </a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- JavaScript to Toggle Whitepaper Details -->
+<!-- JavaScript (Removed Toggle Logic, Kept for Consistency) -->
 <script>
-    document.getElementById('show-details-btn').addEventListener('click', function() {
-        const details = document.getElementById('whitepaper-details');
-        details.classList.toggle('hidden');
-        this.textContent = details.classList.contains('hidden') ? 'Details' : 'Hide Details';
-    });
+    // No toggle functionality needed; link handles navigation
 </script>            
     
 <!-- footer.html -->
