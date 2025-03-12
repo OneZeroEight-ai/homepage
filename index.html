@@ -365,26 +365,89 @@
                 </div>
             </div>
             
-            <!-- SUTRA Token -->
-            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
-                <div class="h-3 bg-gradient"></div>
-                <div class="p-6">
-                    <h3 class="text-2xl font-bold mb-2">SUTRA Token</h3>
-                    <p class="text-gray-400 mb-4">Powering the Ethical AI Ecosystem</p>
-                    <p class="mb-6 text-gray-300">
-                        Our utility token that incentivizes ethical AI alignment through the Noble Eightfold Digital Path, enabling participation across all OZEN services.
-                    </p>
-                    <div class="flex justify-between items-center">
-                        <a href="https://onezeroeight-ai.github.io/SUTRA-Presale/" class="bg-purple-700 hover:bg-purple-600 text-white py-2 px-4 rounded-full text-sm transition duration-300">
-                            Join Presale
-                        </a>
-                        <div class="flex items-center text-gray-400 text-sm">
-                            <span class="mr-2">April 2, 2025</span>
-                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                        </div>
-                    </div>
-                </div>
+<!-- AI Ethics Contest -->
+<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
+    <div class="h-3 bg-gradient"></div>
+    <div class="p-6">
+        <h3 class="text-2xl font-bold mb-2">AI Ethics Contest</h3>
+        <p class="text-gray-400 mb-4">Submit Your Ethical Scenario</p>
+        <p class="mb-6 text-gray-300">
+            Describe an ethical dilemma involving AI and join our contest to shape the future of ethical AI alignment. Winners announced after May 30, 2025.
+        </p>
+        <div class="flex justify-between items-center">
+            <button id="submit-contest-btn" class="bg-purple-700 hover:bg-purple-600 text-white py-2 px-4 rounded-full text-sm transition duration-300">
+                Submit Scenario
+            </button>
+            <div class="flex items-center text-gray-400 text-sm">
+                <span class="mr-2">Deadline: May 19, 2025</span>
+                <div class="w-2 h-2 rounded-full bg-green-500"></div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contest Submission Form (Hidden by Default) -->
+<div class="container mx-auto px-4 hidden" id="contest-form">
+    <div class="bg-gray-800 rounded-lg p-6 shadow-2xl max-w-4xl mx-auto">
+        <h3 class="text-2xl font-semibold text-white mb-4">Submit Your Ethical Scenario</h3>
+        <p class="mb-4 text-sm text-gray-400">Describe an ethical dilemma involving AI. Winners will be announced after May 30, 2025.</p>
+        <form id="contest-form-data" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="e9cb9d21-9e95-419d-8449-68bce91c17de">
+            <input type="hidden" name="redirect" value="https://onezeroeight-ai.github.io/SUTRA-Presale/">
+            <div class="mb-4">
+                <label class="block text-sm mb-2 text-gray-300" for="scenario">Your Scenario</label>
+                <textarea id="scenario" name="scenario" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" rows="5" placeholder="e.g., Should AI prioritize climate over jobs?" required></textarea>
+            </div>
+            <div class="mb-6">
+                <label class="block text-sm mb-2 text-gray-300" for="wallet">Polygon Wallet Address</label>
+                <input type="text" id="wallet" name="wallet" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="0x..." required pattern="0x[a-fA-F0-9]{40}" title="Please enter a valid Polygon wallet address starting with 0x followed by 40 hexadecimal characters">
+            </div>
+            <!-- Honeypot Field for Spam Prevention -->
+            <div style="display:none">
+                <input type="text" name="_gotcha" style="display:none" />
+            </div>
+            <div class="flex justify-end space-x-4">
+                <button type="submit" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">
+                    Submit
+                </button>
+                <button type="button" id="cancel-contest" class="text-gray-400 hover:text-white font-medium py-2 px-4">
+                    Cancel
+                </button>
+            </div>
+            <input type="hidden" name="_subject" value="New SUTRA AI Ethics Contest Submission">
+            <input type="hidden" name="_next" value="https://onezeroeight-ai.github.io/thanks.html">
+            <input type="hidden" name="email_to" value="contest@onezeroeight.ai">
+        </form>
+    </div>
+</div>
+
+<!-- Contest Rules -->
+<div id="contest-rules" class="max-w-4xl mx-auto mt-20">
+    <h2 class="text-3xl font-bold mb-6 text-center">Contest Rules</h2>
+    <div class="bg-gray-800 p-6 rounded-lg">
+        <ol class="list-decimal list-inside space-y-4 text-gray-300">
+            <li><strong>Eligibility:</strong> Open to anyone worldwide. Must be 18 years or older.</li>
+            <li><strong>Submission:</strong> Submit one AI ethics scenario that challenges current alignment frameworks.</li>
+            <li><strong>Deadline:</strong> All submissions must be received by May 19, 2025, 11:59 PM UTC.</li>
+            <li><strong>Judging:</strong> Entries will be judged based on originality, complexity, and relevance to real-world AI alignment.</li>
+            <li><strong>Prizes:</strong> First place: 20,000 SUTRA, Second place: 15,000 SUTRA, Third place: 10,000 SUTRA, Five honorable mentions: 1,000 SUTRA each.</li>
+            <li><strong>Notification:</strong> Winners will be announced on May 30, 2025, on our website and Discord.</li>
+            <li><strong>Rights:</strong> By submitting, you grant OneZeroEight.ai the right to use your scenario in our alignment framework with attribution.</li>
+        </ol>
+    </div>
+</div>
+
+<!-- JavaScript to Toggle Form Visibility -->
+<script>
+    document.getElementById('submit-contest-btn').addEventListener('click', function() {
+        document.getElementById('contest-form').classList.remove('hidden');
+    });
+
+    document.getElementById('cancel-contest').addEventListener('click', function() {
+        document.getElementById('contest-form').classList.add('hidden');
+    });
+</script>
+            
         </div>
     </div>
 </section>
