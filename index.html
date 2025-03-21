@@ -397,92 +397,231 @@
             </div>
          </div>
     </div>
-           
-<!-- AI Ethics Contest -->
-<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
-    <div class="h-3 bg-gradient"></div>
-    <div class="p-6">
-        <h3 class="text-2xl font-bold mb-2">AI Ethics Contest</h3>
-        <p class="text-gray-400 mb-4">Submit Your Ethical Scenario</p>
-        <p class="mb-6 text-gray-300">
-            Describe an ethical dilemma involving AI and join our contest to shape the future of ethical AI alignment. Winners announced after May 30, 2025.
-        </p>
-        <div class="flex justify-between items-center">
-            <button id="submit-contest-btn" class="bg-purple-700 hover:bg-purple-600 text-white py-2 px-4 rounded-full text-sm transition duration-300">
-                Submit Scenario
-            </button>
-            <div class="flex items-center text-gray-400 text-sm">
-                <span class="mr-2">Deadline: May 19, 2025</span>
-                <div class="w-2 h-2 rounded-full bg-green-500"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Contest Submission Form (Hidden by Default) -->
-<div class="container mx-auto px-4 hidden" id="contest-form">
-    <div class="bg-gray-800 rounded-lg p-6 shadow-2xl max-w-4xl mx-auto">
-        <h3 class="text-2xl font-semibold text-white mb-4">Submit Your Ethical Scenario</h3>
-        <p class="mb-4 text-sm text-gray-400">Describe an ethical dilemma involving AI. Winners will be announced after May 30, 2025.</p>
-        <form id="contest-form-data" action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="e9cb9d21-9e95-419d-8449-68bce91c17de">
-            <input type="hidden" name="redirect" value="https://onezeroeight-ai.github.io/SUTRA-Presale/">
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="scenario">Your Scenario</label>
-                <textarea id="scenario" name="scenario" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" rows="5" placeholder="e.g., Should AI prioritize climate over jobs?" required></textarea>
-            </div>
-            <div class="mb-6">
-                <label class="block text-sm mb-2 text-gray-300" for="wallet">Polygon Wallet Address</label>
-                <input type="text" id="wallet" name="wallet" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="0x..." required pattern="0x[a-fA-F0-9]{40}" title="Please enter a valid Polygon wallet address starting with 0x followed by 40 hexadecimal characters">
-            </div>
-            <!-- Honeypot Field for Spam Prevention -->
-            <div style="display:none">
-                <input type="text" name="_gotcha" style="display:none" />
-            </div>
-            <div class="flex justify-end space-x-4">
-                <button type="submit" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">
-                    Submit
-                </button>
-                <button type="button" id="cancel-contest" class="text-gray-400 hover:text-white font-medium py-2 px-4">
-                    Cancel
-                </button>
-            </div>
-            <input type="hidden" name="_subject" value="New SUTRA AI Ethics Contest Submission">
-            <input type="hidden" name="_next" value="https://onezeroeight-ai.github.io/thanks.html">
-            <input type="hidden" name="email_to" value="contest@onezeroeight.ai">
-        </form>
-    </div>
-</div>
-
-<!-- Contest Rules -->
-<div id="contest-rules" class="max-w-4xl mx-auto mt-20">
-    <h2 class="text-3xl font-bold mb-6 text-center">Contest Rules</h2>
-    <div class="bg-gray-800 p-6 rounded-lg">
-        <ol class="list-decimal list-inside space-y-4 text-gray-300">
-            <li><strong>Eligibility:</strong> Open to anyone worldwide. Must be 18 years or older.</li>
-            <li><strong>Submission:</strong> Submit one AI ethics scenario that challenges current alignment frameworks.</li>
-            <li><strong>Deadline:</strong> All submissions must be received by May 19, 2025, 11:59 PM UTC.</li>
-            <li><strong>Judging:</strong> Entries will be judged based on originality, complexity, and relevance to real-world AI alignment.</li>
-            <li><strong>Prizes:</strong> First place: 20,000 SUTRA, Second place: 15,000 SUTRA, Third place: 10,000 SUTRA, Five honorable mentions: 1,000 SUTRA each.</li>
-            <li><strong>Notification:</strong> Winners will be announced on May 30, 2025, on our website and Discord.</li>
-            <li><strong>Rights:</strong> By submitting, you grant OneZeroEight.ai the right to use your scenario in our alignment framework with attribution.</li>
-        </ol>
-    </div>
-</div>
-
-<!-- JavaScript to Toggle Form Visibility -->
-<script>
-    document.getElementById('submit-contest-btn').addEventListener('click', function() {
-        document.getElementById('contest-form').classList.remove('hidden');
-    });
-
-    document.getElementById('cancel-contest').addEventListener('click', function() {
-        document.getElementById('contest-form').classList.add('hidden');
-    });
-</script>
             
 </section>
 
+<!-- Products Section -->
+<section id="products" class="py-20 bg-gray-900">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold mb-10 text-center">Spend Your SUTRA Tokens</h2>
+        <p class="text-lg text-gray-400 text-center mb-12 max-w-3xl mx-auto">
+            Cultivate ethical AI with SUTRA’s Zen Path. Explore <a href="https://a.co/d/fprJvr4" class="text-purple-400 hover:text-purple-300">Zen AI: Dharma Inquiries</a> ($1.08 on Kindle), suggest topics for <a href="https://audio.com/jb-wagoner" class="text-purple-400 hover:text-purple-300">OZEN AI Roundtable</a>, and get tokens via our <a href="#contest-section" class="text-purple-400 hover:text-purple-300">Contest</a> or <a href="#presale" class="text-purple-400 hover:text-purple-300">Presale</a> starting April 2, 2025!
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="available" data-cost="500">
+                <h3 class="text-xl font-semibold mb-4">Mindful Alignment Auditor</h3>
+                <p class="text-gray-300 mb-4">Audit AI with <em>Dharma Inquiries</em> methodology—bias, fairness, on-chain scores.</p>
+                <p class="text-lg font-medium mb-4">500 SUTRA (~$125/month)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="available" data-cost="100">
+                <h3 class="text-xl font-semibold mb-4">Mindful Roundtable Suggestion</h3>
+                <p class="text-gray-300 mb-4">Suggest a topic for <em>OZEN AI Roundtable</em>—Mindful Observer interviews LLMs.</p>
+                <p class="text-lg font-medium mb-4">100 SUTRA (~$25)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="10800">
+                <h3 class="text-xl font-semibold mb-4">Guardian Harmony Pass</h3>
+                <p class="text-gray-300 mb-4">Advanced preservation rights with 95% alignment serenity.</p>
+                <p class="text-lg font-medium mb-4">10,800 SUTRA (~$2,700)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <!-- 6. Mindful Swag Offerings -->
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="available" data-cost="200">
+                <h3 class="text-xl font-semibold mb-4">Mindful Swag Offerings</h3>
+                <p class="text-gray-300 mb-4">Eco-friendly Zen—bamboo mugs, tees with ethical slogans.</p>
+                <p class="text-lg font-medium mb-4">from 50 SUTRA (~$12.50)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <!-- 7. Compassionate Giving Pool -->
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="1000">
+                <h3 class="text-xl font-semibold mb-4">Compassionate Giving Pool</h3>
+                <p class="text-gray-300 mb-4">Fund AI-for-good with Zen harmony—matched up to 1,000 SUTRA (e.g., climate tech, education).</p>
+                <p class="text-lg font-medium mb-4">Up to 1,000 SUTRA (~$250)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <!-- 8. Sangha of Mindful Discourse -->
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="2000">
+                <h3 class="text-xl font-semibold mb-4">Sangha of Mindful Discourse</h3>
+                <p class="text-gray-300 mb-4">Join Zen debates on AI ethics with thought leaders via Discord/Zoom.</p>
+                <p class="text-lg font-medium mb-4">2,000 SUTRA (~$500/year)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <!-- 9. Ethical Exchange Bazaar -->
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="300">
+                <h3 class="text-xl font-semibold mb-4">Ethical Exchange Bazaar</h3>
+                <p class="text-gray-300 mb-4">Buy/sell ethical AI models in a Zen marketplace (e.g., open-source ethics bots).</p>
+                <p class="text-lg font-medium mb-4">300-1,000 SUTRA (~$75-$250)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <!-- 10. Mindful Summit Pass -->
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="400">
+                <h3 class="text-xl font-semibold mb-4">Mindful Summit Pass</h3>
+                <p class="text-gray-300 mb-4">Access the SUTRA AI ethics summit (May 2025) with Zen focus.</p>
+                <p class="text-lg font-medium mb-4">400 SUTRA (~$100)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <!-- 11. Harmony Offset Tokens -->
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="50">
+                <h3 class="text-xl font-semibold mb-4">Harmony Offset Tokens</h3>
+                <p class="text-gray-300 mb-4">Offset AI emissions with SUTRA-funded carbon Zen.</p>
+                <p class="text-lg font-medium mb-4">50 SUTRA (~$12.50/ton)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <!-- 13. Zen Counsel Session -->
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="1500">
+                <h3 class="text-xl font-semibold mb-4">Zen Counsel Session</h3>
+                <p class="text-gray-300 mb-4">1-hour Zen review with an ethics expert for your AI project.</p>
+                <p class="text-lg font-medium mb-4">1,500 SUTRA (~$375)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <!-- 14. Tranquil Transaction Aid -->
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="available" data-cost="50">
+                <h3 class="text-xl font-semibold mb-4">Tranquil Transaction Aid</h3>
+                <p class="text-gray-300 mb-4">Subsidize Polygon fees for AI dApps with Zen ease.</p>
+                <p class="text-lg font-medium mb-4">50 SUTRA (~$12.50)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+
+            <!-- 15. Koan Quest Challenge -->
+            <div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="250">
+                <h3 class="text-xl font-semibold mb-4">Koan Quest Challenge</h3>
+                <p class="text-gray-300 mb-4">Interactive <em>Dharma Inquiries</em>—solve LLM ethical koans with Zen flair.</p>
+                <p class="text-lg font-medium mb-4">250 SUTRA (~$62.50)</p>
+                <p class="status py-2 px-4 rounded-full text-sm font-bold mb-4 text-center"></p>
+                <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled title="Available after token distribution">Buy Now</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .product-item .status {
+            display: inline-block;
+        }
+        .product-item[data-status="available"] .status {
+            background-color: #10b981; /* Tailwind green-500 */
+            color: #fff;
+        }
+        .product-item[data-status="available"] .status::before {
+            content: "Available";
+        }
+        .product-item[data-status="not-available"] .status {
+            background-color: #f59e0b; /* Tailwind yellow-500 */
+            color: #fff;
+        }
+        .product-item[data-status="not-available"] .status::before {
+            content: "Not Available Yet";
+        }
+        .product-item[data-status="sold-out"] .status {
+            background-color: #ef4444; /* Tailwind red-500 */
+            color: #fff;
+        }
+        .product-item[data-status="sold-out"] .status::before {
+            content: "Sold Out";
+        }
+        .product-item[data-status="not-available"] button,
+        .product-item[data-status="sold-out"] button {
+            background-color: #6b7280; /* Tailwind gray-500 */
+            cursor: not-allowed;
+        }
+        .product-item[data-status="not-available"] button:hover,
+        .product-item[data-status="sold-out"] button:hover {
+            background-color: #6b7280; /* Prevent hover effect */
+        }
+        .buy-btn[disabled] {
+            background-color: #6b7280; /* Grayed out when disabled */
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .buy-btn[disabled]:hover {
+            background-color: #6b7280; /* No hover effect when disabled */
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buyButtons = document.querySelectorAll('.buy-btn');
+            const SUTRA_CONTRACT_ADDRESS = '0xfbE65e40deeA2A56F8E802Fecef343a8103e0De7';
+            const VENDOR_ADDRESS = '0xYourVendorAddressHere'; // Replace with your vendor wallet
+            const SUTRA_ABI = [
+                "function balanceOf(address owner) view returns (uint256)",
+                "function transfer(address to, uint256 value) returns (bool)"
+            ];
+
+            // For now, buttons are disabled by default in HTML
+            // Uncomment below to enable buying once tokens are distributed
+
+            /*
+            buyButtons.forEach(button => {
+                button.addEventListener('click', async function () {
+                    const productItem = button.closest('.product-item');
+                    const status = productItem.getAttribute('data-status');
+                    const cost = parseInt(productItem.getAttribute('data-cost')) * 10**18;
+
+                    if (status !== 'available') {
+                        alert('This product is not available for purchase yet.');
+                        return;
+                    }
+
+                    if (!window.ethereum) {
+                        alert('Please install MetaMask to make purchases.');
+                        return;
+                    }
+
+                    try {
+                        const provider = new ethers.providers.Web3Provider(window.ethereum);
+                        await provider.send('eth_requestAccounts', []);
+                        const signer = provider.getSigner();
+                        const userAddress = await signer.getAddress();
+                        const sutraContract = new ethers.Contract(SUTRA_CONTRACT_ADDRESS, SUTRA_ABI, signer);
+
+                        const balance = await sutraContract.balanceOf(userAddress);
+                        if (balance.lt(cost)) {
+                            alert('Insufficient SUTRA balance. Get tokens via contest or presale!');
+                            return;
+                        }
+
+                        const tx = await sutraContract.transfer(VENDOR_ADDRESS, cost);
+                        button.textContent = 'Processing...';
+                        button.disabled = true;
+                        await tx.wait();
+
+                        alert('Purchase successful! Your product will be delivered soon.');
+                        button.textContent = 'Buy Now';
+                        button.disabled = false;
+                    } catch (error) {
+                        console.error('Purchase failed:', error);
+                        alert('Purchase failed: ' + (error.message || 'Unknown error'));
+                        button.textContent = 'Buy Now';
+                        button.disabled = false;
+                    }
+                });
+            });
+            */
+        });
+    </script>
+</section>
+            
 <!-- Whitepaper Section -->
 <section id="whitepaper" class="py-20 bg-gray-800">
     <div class="container mx-auto px-4">
