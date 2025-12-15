@@ -1,673 +1,741 @@
-<!-- header.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OneZeroEight.ai (OZEN) - Sustainable AI Alignment Solutions</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <title>OneZeroEight.ai - Ethical AI Music Platform</title>
+    <meta name="description" content="The ethical infrastructure for AI-generated music. Transparent promotion, fair rewards, community governance. Powered by SUTRA token.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --darker: #111827;
+            --light: #f9fafb;
+            --text: #374151;
+            --text-light: #6b7280;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            opacity: 0.95;
+        }
+
+        .hero .subtext {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Value Props Section */
+        .value-props {
+            padding: 5rem 0;
+            background: var(--light);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+
+        .props-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .prop-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .prop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .prop-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .prop-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .prop-card p {
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 5rem 0;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+        }
+
+        .step p {
+            color: var(--text-light);
+        }
+
+        /* SUTRA Section */
+        .sutra-section {
+            padding: 5rem 0;
+            background: var(--darker);
+            color: white;
+        }
+
+        .sutra-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .sutra-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sutra-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .sutra-benefits {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .sutra-benefits li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sutra-benefits li::before {
+            content: "✓";
+            background: var(--secondary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .sutra-stats {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat {
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 0.25rem;
+        }
+
+        /* For Artists / Curators Section */
+        .audience-section {
+            padding: 5rem 0;
+        }
+
+        .audience-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .audience-card {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .audience-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+        }
+
+        .audience-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .audience-card p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            color: var(--text);
+        }
+
+        .feature-list li::before {
+            content: "→";
+            color: var(--primary);
+            font-weight: 700;
+            margin-right: 0.75rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 5rem 0;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-box h4 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-box p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .sutra-content,
+            .audience-tabs,
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
-<body class="bg-gray-900 text-white">
-    <header class="bg-gradient shadow-xl">
-        <div class="container mx-auto px-4 py-6">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <h1 class="text-3xl font-bold">OneZeroEight.ai</h1>
-                    <span class="ml-2 text-sm bg-purple-700 rounded-full px-3 py-1">OZEN</span>
-                </div>
-<!--                <nav>
-                    <ul class="flex space-x-6">
-                        <li><a href="#about" class="hover:text-purple-300">About</a></li>
-                        <li><a href="#projects" class="hover:text-purple-300">Projects</a></li>
-                        <li><a href="#philosophy" class="hover:text-purple-300">Philosophy</a></li>
-                        <li><a href="#team" class="hover:text-purple-300">Team</a></li>
-                        <li><a href="#contact" class="hover:text-purple-300">Contact</a></li>
-                    </ul>
-                </nav>
--->            </div>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">OneZeroEight.ai</a>
+            <ul class="nav-links">
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#sutra">SUTRA Token</a></li>
+                <li><a href="#for-artists">For Artists</a></li>
+                <li><a href="#for-curators">For Curators</a></li>
+            </ul>
         </div>
-    </header>
+    </nav>
 
-<div class="audio-player-wrapper" style="max-width: 600px; margin: 20px auto;">
-  <h1 style="color: white; margin-bottom: 15px; font-size: 1.2rem;">OZEN AI Roundtable: Divine vs. Artificial Consciousness</h1>
-  
-  <a href="https://audio.com/jb-wagoner/audio/ozen-ai-roundtable-divine-consciousness-vs-artificial-consciousness" 
-     target="_blank" 
-     style="display: block; text-decoration: none;">
-     
-    <div class="player-ui" style="background-color: #f8f9fa; border-radius: 50px; padding: 10px 20px; display: flex; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-      <!-- Play button -->
-      <div class="play-button" style="background-color: #5C6BC0; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 15px;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-      </div>
-      
-      <!-- Episode info -->
-      <div class="episode-info" style="flex-grow: 1;">
-        <div style="font-weight: bold; color: #333;">Sovereign Arificial Intelligence</div>
-        <div style="font-size: 0.8rem; color: #666;">OZEN AI Roundtable • Episode 5 (part 1)</div>
-      </div>
-      
-      <!-- External link indicator -->
-      <div class="external-link" style="color: #5C6BC0; font-size: 0.8rem;">
-        Listen on Audio.com
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#5C6BC0" style="vertical-align: middle; margin-left: 5px;">
-          <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-        </svg>
-      </div>
-    </div>
-  </a>
-</div>    
-                
-<!-- hero-section.html -->
-<section class="py-20 hero-pattern">
-    <div class="container mx-auto px-4">
-        <div class="flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 mb-10 md:mb-0">
-                <h1 class="text-5xl font-bold mb-6 leading-tight">AI Ethics. AI Safety. AI Certification.</h1>
-                <p class="text-xl mb-8 text-gray-300">
-                    OneZeroEight.ai (OZEN) provides blockchain-powered solutions for ethical AI alignment, verification, and governance.
-                </p>
-                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="#services" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                        Explore Our Services
-                    </a>
-                    <a href="https://onezeroeight-ai.github.io/SUTRA-Presale/" class="border border-purple-700 hover:bg-purple-700 hover:bg-opacity-20 text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                        Join SUTRA Presale
-                    </a>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>The Ethical Infrastructure<br>for AI-Generated Music</h1>
+            <p>No bots. No fake streams. Just ethical growth and fair rewards.</p>
+            <p class="subtext">Built on blockchain. Powered by SUTRA. Governed by creators.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Launch Your Music</a>
+                <a href="#" class="btn btn-secondary">Become a Curator</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Props -->
+    <section class="value-props">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose OneZeroEight.ai?</h2>
+                <p>The first token economy for AI creators</p>
+            </div>
+            <div class="props-grid">
+                <div class="prop-card">
+                    <div class="prop-icon">🎵</div>
+                    <h3>Ethical Promotion</h3>
+                    <p>Full transparency with every curator. See exactly where your music goes. Money-back guarantee if you get zero placements.</p>
+                </div>
+                <div class="prop-card">
+                    <div class="prop-icon">💰</div>
+                    <h3>Earn SUTRA Tokens</h3>
+                    <p>Get rewarded for quality music, playlist placements, and community participation. Build wealth while building your career.</p>
+                </div>
+                <div class="prop-card">
+                    <div class="prop-icon">🔒</div>
+                    <h3>Stake for Benefits</h3>
+                    <p>Lock your SUTRA to unlock lifetime discounts, priority support, revenue sharing, and governance rights.</p>
+                </div>
+                <div class="prop-card">
+                    <div class="prop-icon">🗳️</div>
+                    <h3>Community Governed</h3>
+                    <p>Vote on platform fees, features, and standards. This is your platform, owned and shaped by creators.</p>
+                </div>
+                <div class="prop-card">
+                    <div class="prop-icon">✓</div>
+                    <h3>Spotify-Safe Growth</h3>
+                    <p>100% TOS compliant. Real curators, real playlists, real engagement. No bots, no risks to your account.</p>
+                </div>
+                <div class="prop-card">
+                    <div class="prop-icon">📊</div>
+                    <h3>Blockchain Verified</h3>
+                    <p>Every reward, every payment, every transaction is transparent and verifiable on-chain. Complete trust.</p>
                 </div>
             </div>
-            <div class="md:w-1/2 flex justify-center">
-                <div class="relative w-72 h-72">
-                    <div class="absolute inset-0 bg-gradient-light rounded-full opacity-20 circle-animation"></div>
-                    <div class="absolute inset-4 bg-gradient rounded-full opacity-40 circle-animation" style="animation-delay: 0.5s;"></div>
-                    <div class="absolute inset-8 bg-gradient rounded-full opacity-60 circle-animation" style="animation-delay: 1s;"></div>
-                    <div class="absolute inset-0 w-full h-full flex items-center justify-center">
-                        <img src="OZENlogo.png" alt="OneZeroEight.ai Logo" class="w-3/4 h-auto">
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Simple, transparent, ethical</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Submit Your Track</h3>
+                    <p>Upload your AI music and Spotify link. Free quality verification included.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Get Matched</h3>
+                    <p>Our AI matches you with verified curators who accept AI music and fit your genre.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Track Results</h3>
+                    <p>See every curator, every response, every placement in real-time. Complete transparency.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Earn Rewards</h3>
+                    <p>Get SUTRA tokens for quality submissions, placements, and community participation.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>Build Your Career</h3>
+                    <p>Stake tokens for benefits, vote on platform decisions, grow sustainably.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SUTRA Token Section -->
+    <section class="sutra-section" id="sutra">
+        <div class="container">
+            <div class="sutra-content">
+                <div class="sutra-text">
+                    <h2>SUTRA: Real Utility, Real Value</h2>
+                    <p>SUTRA isn't just a speculative token. It's the backbone of the ethical AI creative economy, starting with music.</p>
+                    <p>Every SUTRA you earn or stake unlocks real benefits and gives you a voice in how the platform evolves.</p>
+                    <ul class="sutra-benefits">
+                        <li>Save 50% on campaigns by paying with SUTRA</li>
+                        <li>Earn tokens for quality work and placements</li>
+                        <li>Stake for lifetime discounts and revenue share</li>
+                        <li>Vote on platform fees and features</li>
+                        <li>Participate in platform governance</li>
+                        <li>Access exclusive curator networks</li>
+                    </ul>
+                    <div style="margin-top: 2rem;">
+                        <a href="#" class="btn btn-primary">Learn About SUTRA</a>
+                    </div>
+                </div>
+                <div class="sutra-stats">
+                    <div class="stat">
+                        <div class="stat-value">108M</div>
+                        <div class="stat-label">Total SUTRA Supply</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">40M</div>
+                        <div class="stat-label">Allocated to Music Platform</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">10%</div>
+                        <div class="stat-label">Of Fees Used for Token Burns</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">Coming Soon</div>
+                        <div class="stat-label">DEX Listing (Polygon)</div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-    
-<!-- about-section.html -->
-<section id="about" class="py-20 bg-gray-800">
-    <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold mb-10 text-center">About OneZeroEight.ai</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div>
-                <h3 class="text-2xl font-semibold mb-4">Our Mission</h3>
-                <p class="mb-4 text-gray-300">
-                    At OneZeroEight.ai (OZEN), we foster a sustainable ecosystem where ethical alignment and beneficial outcomes are incentivized through blockchain-powered services and the SUTRA token.
-                </p>
-                <p class="mb-4 text-gray-300">
-                    We're pioneering practical solutions for AI ethics verification, governance, data integrity, and trust systems that provide immediate value while building toward our long-term vision.
-                </p>
-            </div>
-            
-            <div>
-                <h3 class="text-2xl font-semibold mb-4">Our Approach</h3>
-                <p class="mb-4 text-gray-300">
-                    We combine cutting-edge blockchain technology with ethical frameworks inspired by timeless philosophical traditions to create verifiable, transparent, and incentive-aligned systems.
-                </p>
-                <p class="mb-4 text-gray-300">
-                    By focusing on practical applications first, we're building a foundation of trust, users, and proven technology that will support our vision of a comprehensive ethical AI ecosystem.
-                </p>
-            </div>
-        </div>
-        
-    </div>
-</section>
+    </section>
 
-<!-- services-section.html -->
-<section id="services" class="py-20 bg-gray-900">
-    <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold mb-10 text-center">Our Services</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-<!-- Ethical AI Verification -->
-<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
-    <div class="h-3 bg-gradient"></div>
-    <div class="p-6">
-        <h3 class="text-2xl font-bold mb-2">Ethical AI Verification</h3>
-        <p class="text-gray-400 mb-4">Audit & Certification Platform</p>
-        <p class="mb-6 text-gray-300">
-            Comprehensive tools and services to audit AI systems for ethical alignment, with automated and manual verification processes backed by blockchain transparency.
-        </p>
-        <div class="flex justify-between items-center">
-            <button id="get-started-btn" class="bg-purple-700 hover:bg-purple-600 text-white py-2 px-4 rounded-full text-sm transition duration-300">
-                Get Started
-            </button>
-            <div class="flex items-center text-gray-400 text-sm">
-                <span class="mr-2">Available Now</span>
-                <div class="w-2 h-2 rounded-full bg-green-500"></div>
+    <!-- For Artists and Curators -->
+    <section class="audience-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Built for Creators, by Creators</h2>
             </div>
-        </div>
-    </div>
-</div>
-            
-<!-- Get Started Form (Hidden by Default) -->
-<div class="container mx-auto px-4 hidden" id="get-started-form">
-    <div class="bg-gray-800 rounded-lg p-6 shadow-2xl max-w-2xl mx-auto">
-        <h3 class="text-2xl font-semibold text-white mb-4">Request Ethical AI Verification</h3>
-        <p class="mb-4 text-sm text-gray-400">Tell us about your AI verification needs. We’ll get back to you soon!</p>
-        <form id="get-started-form-data" action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="e9cb9d21-9e95-419d-8449-68bce91c17de">
-            <input type="hidden" name="redirect" value="onezeroeight-ai.github.io/SUTRA-Presale/">
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="name">Your Name</label>
-                <input type="text" id="name" name="name" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g., John Doe" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="email">Your Email</label>
-                <input type="email" id="email" name="email" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g., john@example.com" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="message">Your Verification Needs</label>
-                <textarea id="message" name="message" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" rows="5" placeholder="e.g., We need to audit our AI for bias in hiring algorithms." required></textarea>
-            </div>
-            <!-- Honeypot Field for Spam Prevention -->
-            <div style="display:none">
-                <input type="text" name="_gotcha" style="display:none" />
-            </div>
-            <div class="flex justify-end space-x-4">
-                <button type="submit" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">
-                    Submit
-                </button>
-                <button type="button" id="cancel-get-started" class="text-gray-400 hover:text-white font-medium py-2 px-4">
-                    Cancel
-                </button>
-            </div>
-            <input type="hidden" name="_subject" value="New SUTRA Ethical AI Verification Request">
-            <input type="hidden" name="_next" value="https://onezeroeight-ai.github.io/thanks.html">
-            <input type="hidden" name="email_to" value="info@onezeroeight.ai">
-        </form>
-    </div>
-</div>
-
-<!-- JavaScript to Toggle Form Visibility -->
-<script>
-    document.getElementById('get-started-btn').addEventListener('click', function() {
-        document.getElementById('get-started-form').classList.remove('hidden');
-    });
-
-    document.getElementById('cancel-get-started').addEventListener('click', function() {
-        document.getElementById('get-started-form').classList.add('hidden');
-    });
-</script>          
-            
-<!-- Service 2 -->
-<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
-    <div class="h-3 bg-gradient"></div>
-    <div class="p-6">
-        <h3 class="text-2xl font-bold mb-2">Decentralized Governance</h3>
-        <p class="text-gray-400 mb-4">Token-Based Decision Platform</p>
-        <p class="mb-6 text-gray-300">
-            Enable organizations to handle decision-making in a decentralized manner with secure voting, delegation, and long-term stakeholder incentives.
-        </p>
-        <div class="flex justify-between items-center">
-            <button id="learn-more-btn" class="border border-purple-700 hover:bg-purple-700 hover:bg-opacity-20 text-white py-2 px-4 rounded-full text-sm transition duration-300">
-                Learn More
-            </button>
-            <div class="flex items-center text-gray-400 text-sm">
-                <span class="mr-2">Available Q2 2025</span>
-                <div class="w-2 h-2 rounded-full bg-blue-500"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Learn More Form (Hidden by Default) -->
-<div class="container mx-auto px-4 hidden" id="learn-more-form">
-    <div class="bg-gray-800 rounded-lg p-6 shadow-2xl max-w-2xl mx-auto">
-        <h3 class="text-2xl font-semibold text-white mb-4">Learn More About Decentralized Governance</h3>
-        <p class="mb-4 text-sm text-gray-400">Tell us how we can help with your decentralized governance needs. We’ll respond soon!</p>
-        <form id="learn-more-form-data" action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="e9cb9d21-9e95-419d-8449-68bce91c17de">
-            <input type="hidden" name="redirect" value="onezeroeight-ai.github.io/SUTRA-Presale/">
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="name">Your Name</label>
-                <input type="text" id="name" name="name" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g., John Doe" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="email">Your Email</label>
-                <input type="email" id="email" name="email" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g., john@example.com" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="message">Your Governance Needs</label>
-                <textarea id="message" name="message" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" rows="5" placeholder="e.g., We need secure voting for our DAO’s decisions." required></textarea>
-            </div>
-            <!-- Honeypot Field for Spam Prevention -->
-            <div style="display:none">
-                <input type="text" name="_gotcha" style="display:none" />
-            </div>
-            <div class="flex justify-end space-x-4">
-                <button type="submit" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">
-                    Submit
-                </button>
-                <button type="button" id="cancel-learn-more" class="text-gray-400 hover:text-white font-medium py-2 px-4">
-                    Cancel
-                </button>
-            </div>
-            <input type="hidden" name="_subject" value="New SUTRA Decentralized Governance Inquiry">
-            <input type="hidden" name="_next" value="https://onezeroeight-ai.github.io/thanks.html">
-            <input type="hidden" name="email_to" value="info@onezeroeight.ai">
-        </form>
-    </div>
-</div>
-
-<!-- JavaScript to Toggle Form Visibility -->
-<script>
-    document.getElementById('learn-more-btn').addEventListener('click', function() {
-        document.getElementById('learn-more-form').classList.remove('hidden');
-    });
-
-    document.getElementById('cancel-learn-more').addEventListener('click', function() {
-        document.getElementById('learn-more-form').classList.add('hidden');
-    });
-</script>
-            
-<!-- Service 3 -->
-<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
-    <div class="h-3 bg-gradient"></div>
-    <div class="p-6">
-        <h3 class="text-2xl font-bold mb-2">Data Preservation</h3>
-        <p class="text-gray-400 mb-4">Integrity & Security Solutions</p>
-        <p class="mb-6 text-gray-300">
-            Secure, decentralized storage solutions with immutable data integrity and customizable access control for individuals and organizations.
-        </p>
-        <div class="flex justify-between items-center">
-            <button id="learn-more-data-btn" class="border border-purple-700 hover:bg-purple-700 hover:bg-opacity-20 text-white py-2 px-4 rounded-full text-sm transition duration-300">
-                Learn More
-            </button>
-            <div class="flex items-center text-gray-400 text-sm">
-                <span class="mr-2">Coming Q3 2025</span>
-                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Learn More Form (Hidden by Default) -->
-<div class="container mx-auto px-4 hidden" id="learn-more-data-form">
-    <div class="bg-gray-800 rounded-lg p-6 shadow-2xl max-w-2xl mx-auto">
-        <h3 class="text-2xl font-semibold text-white mb-4">Learn More About Data Preservation</h3>
-        <p class="mb-4 text-sm text-gray-400">Tell us how we can assist with your data preservation needs. We’ll contact you soon!</p>
-        <form id="learn-more-data-form-data" action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="e9cb9d21-9e95-419d-8449-68bce91c17de">
-            <input type="hidden" name="redirect" value="onezeroeight-ai.github.io/SUTRA-Presale/">
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="name">Your Name</label>
-                <input type="text" id="name" name="name" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g., John Doe" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="email">Your Email</label>
-                <input type="email" id="email" name="email" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="e.g., john@example.com" required>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm mb-2 text-gray-300" for="message">Your Preservation Needs</label>
-                <textarea id="message" name="message" class="w-full p-3 bg-gray-700 rounded text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" rows="5" placeholder="e.g., We need secure storage for sensitive AI data." required></textarea>
-            </div>
-            <!-- Honeypot Field for Spam Prevention -->
-            <div style="display:none">
-                <input type="text" name="_gotcha" style="display:none" />
-            </div>
-            <div class="flex justify-end space-x-4">
-                <button type="submit" class="bg-purple-700 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-full transition duration-300">
-                    Submit
-                </button>
-                <button type="button" id="cancel-learn-more-data" class="text-gray-400 hover:text-white font-medium py-2 px-4">
-                    Cancel
-                </button>
-            </div>
-            <input type="hidden" name="_subject" value="New SUTRA Data Preservation Inquiry">
-            <input type="hidden" name="_next" value="https://onezeroeight-ai.github.io/thanks.html">
-            <input type="hidden" name="email_to" value="info@onezeroeight.ai">
-        </form>
-    </div>
-</div>
-
-<!-- JavaScript to Toggle Form Visibility -->
-<script>
-    document.getElementById('learn-more-data-btn').addEventListener('click', function() {
-        document.getElementById('learn-more-data-form').classList.remove('hidden');
-    });
-
-    document.getElementById('cancel-learn-more-data').addEventListener('click', function() {
-        document.getElementById('learn-more-data-form').classList.add('hidden');
-    });
-</script>
-
-<div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="1000">
-    <div class="flex items-center mb-4">
-        <i class="fas fa-robot text-purple-400 text-2xl mr-3"></i>
-        <h3 class="text-xl font-semibold">Virtual Dofo - Ethical Sovereign AI Agents</h3>
-    </div>
-    <p class="text-gray-300 mb-4">
-        Virtual Dojo is an agency certified in developing and managing ethical Sovereign AI Agents. Our agents are designed to operate autonomously while strictly adhering to ethical guidelines, ensuring they make decisions that align with human values and societal norms. 
-        <span class="text-sm text-gray-500">Planned for Q3 2025.</span>
-    </p>
-    <p class="text-lg font-medium mb-4">1,000 SUTRA per agent</p>
-    <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled>Coming Soon</button>
-</div>
-            
-<div class="product-item bg-gray-800 p-6 rounded-lg shadow-xl" data-status="not-available" data-cost="500">
-    <div class="flex items-center mb-4">
-        <i class="fas fa-certificate text-purple-400 text-2xl mr-3"></i>
-        <h3 class="text-xl font-semibold">IEEE CertfAIed (tm) Certification</h3>
-    </div>
-    <p class="text-gray-300 mb-4">
-        The IEEE CertfAIed (tm) Certification is a prestigious program that validates the ethical alignment and technical proficiency of AI systems and professionals. By adhering to the highest standards set by the IEEE, certified entities demonstrate their commitment to responsible AI development and deployment. 
-        <span class="text-sm text-gray-500">Planned for Q3 2025.</span>
-    </p>
-    <p class="text-lg font-medium mb-4">#SUTRA</p>
-    <button class="buy-btn w-full bg-purple-700 text-white font-bold py-2 px-4 rounded-full transition duration-300" disabled>Coming Soon</button>
-</div>
-            
-<!-- Service 4 -->
-<div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
-    <div class="h-3 bg-gradient"></div>
-    <div class="p-6">
-        <h3 class="text-2xl font-bold mb-2">AI Training Marketplace</h3>
-        <p class="text-gray-400 mb-4">Ethical Data Exchange</p>
-        <p class="mb-6 text-gray-300">
-            Facilitate the exchange of ethically sourced data for AI training with quality assurance and rewards for ethical data contribution.
-        </p>
-        <div class="flex justify-between items-center">
-            <button id="join-waitlist-btn" class="border border-purple-700 hover:bg-purple-700 hover:bg-opacity-20 text-white py-2 px-4 rounded-full text-sm transition duration-300">
-                Join Waitlist
-            </button>
-            <div class="flex items-center text-gray-400 text-sm">
-                <span class="mr-2">Coming Q4 2025</span>
-                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Join Waitlist Form (Hidden by Default) -->
-<div class="container mx-auto px-4 hidden" id="join-waitlist-form">
-    <div class="bg-gray-800 rounded-lg p-6 shadow-2xl max-w-2xl mx-auto">
-        <h3 class="text-2xl font-semibold text-white mb-4">Join the AI Training Marketplace Waitlist</h3>
-        <p class="mb-4 text-sm text-gray-400">Sign up to be the first to access our ethical data exchange platform, launching Q4 2025.</p>
-        <form id="join-waitlist-form-data" action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="e9cb9d21-9e95-419d-8449-68bce91c17de">
-            <input type="hidden" name="redirect" value="onezeroeight-ai.github.io/SUTRA-Presale/">
-            <div class="mb-4">
-                <label class="            
-            <!-- Service 5 -->
-            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:transform hover:scale-105">
-                <div class="h-3 bg-gradient"></div>
-                <div class="p-6">
-                    <h3 class="text-2xl font-bold mb-2">Reputation Systems</h3>
-                    <p class="text-gray-400 mb-4">Trust & Verification Network</p>
-                    <p class="mb-6 text-gray-300">
-                        Decentralized reputation system based on ethical behavior and alignment, with transparent scoring and staking incentives.
-                    </p>
-                    <div class="flex justify-between items-center">
-                        <a href="#contact" class="border border-purple-700 hover:bg-purple-700 hover:bg-opacity-20 text-white py-2 px-4 rounded-full text-sm transition duration-300">
-                            Join Waitlist
-                        </a>
-                        <div class="flex items-center text-gray-400 text-sm">
-                            <span class="mr-2">Coming Q1 2026</span>
-                            <div class="w-2 h-2 rounded-full bg-gray-500"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-         </div>
-    </div>
-            
-</section>
-
-
-            
-<!-- Whitepaper Section -->
-<section id="whitepaper" class="py-20 bg-gray-800">
-    <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold mb-10 text-center">SUTRA Whitepaper</h2>
-
-        <!-- Whitepaper Summary -->
-        <div class="mb-6">
-            <p class="text-gray-300 text-center mb-4">
-                SUTRA (Sustainable Utility Token for Reliable Alignment) is a blockchain-based ecosystem on Polygon that incentivizes ethical AI alignment using the Noble Eightfold Digital Path. Launching its presale on June 2, 2025, with 108M tokens, SUTRA blends philosophy and technology for a transparent, community-driven future, targeting a $150M+ ethical AI market by 2027.
-            </p>
-            <div class="text-center">
-                <a id="show-details-btn" href="https://medium.com/@jbwagoner/sutra-whitepaper-456c4d2b4351" target="_blank" class="bg-purple-700 hover:bg-purple-600 text-white py-2 px-6 rounded-full text-sm transition duration-300">
-                    Details
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Spend Your SUTRA Tokens Section -->
-<section id="spend-sutra" class="py-20 bg-gray-800">
-    <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold mb-6 text-center">Spend Your SUTRA Tokens</h2>
-        <p class="text-lg text-gray-300 text-center mb-12 max-w-3xl mx-auto">
-            SUTRA tokens aren't just for holding—they're for using! Explore our growing ecosystem of products and services where you can spend your tokens for real utility.
-        </p>
-        
-        <!-- Products Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
-            <!-- AI Tools Card -->
-            <div class="bg-gray-900 rounded-lg overflow-hidden shadow-xl transform transition duration-300 hover:-translate-y-2">
-                <div class="h-48 bg-gradient-to-br from-purple-600 to-indigo-800 p-6 flex items-center justify-center">
-                    <i class="fas fa-robot text-white text-5xl"></i>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-3">AI Tools & Services</h3>
-                    <p class="text-gray-400 mb-4">Access premium AI models, generate audio with ElevenLabs, and utilize cross-analysis tools with your SUTRA tokens.</p>
-                    <ul class="space-y-2 mb-6 text-gray-300 text-sm">
-                        <li class="flex items-start">
-                            <svg class="h-5 w-5 text-purple-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>LLM Selection Panel (20 SUTRA per model)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="h-5 w-5 text-purple-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>OZEN AI Roundtable (216 SUTRA)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="h-5 w-5 text-purple-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>Dharma Inquiries (108-432 SUTRA)</span>
-                        </li>
+            <div class="audience-tabs">
+                <div class="audience-card" id="for-artists">
+                    <h3>For AI Music Artists</h3>
+                    <p>Grow your music ethically with transparent promotion and token rewards.</p>
+                    <ul class="feature-list">
+                        <li>Submit tracks starting at $79 USD or 790 SUTRA</li>
+                        <li>Earn 10 SUTRA per quality submission</li>
+                        <li>Earn 25 SUTRA per playlist placement</li>
+                        <li>Earn 50 SUTRA for hitting stream milestones</li>
+                        <li>Get full transparency on every curator</li>
+                        <li>Money-back guarantee on campaigns</li>
+                        <li>Stake 1,000 SUTRA for 20% lifetime discount</li>
                     </ul>
-                    <a href="https://onezeroeight-ai.github.io/Products/" class="block w-full text-center bg-purple-700 hover:bg-purple-600 text-white py-3 px-6 rounded-full transition duration-300">
-                        Explore AI Tools
-                    </a>
+                    <a href="#" class="btn btn-primary">Start Promoting</a>
                 </div>
-            </div>
-            
-            <!-- Digital Products Card -->
-            <div class="bg-gray-900 rounded-lg overflow-hidden shadow-xl transform transition duration-300 hover:-translate-y-2">
-                <div class="h-48 bg-gradient-to-br from-blue-600 to-blue-900 p-6 flex items-center justify-center">
-                    <i class="fas fa-book text-white text-5xl"></i>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-3">Digital Products</h3>
-                    <p class="text-gray-400 mb-4">From ebooks to exclusive media content, spend your SUTRA on digital products that enhance your AI journey.</p>
-                    <ul class="space-y-2 mb-6 text-gray-300 text-sm">
-                        <li class="flex items-start">
-                            <svg class="h-5 w-5 text-purple-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>Dharma Insight Scrolls (108 SUTRA)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="h-5 w-5 text-purple-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>Research Papers & Whitepapers</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="h-5 w-5 text-purple-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>Alignment Framework Templates</span>
-                        </li>
+                <div class="audience-card" id="for-curators">
+                    <h3>For Playlist Curators</h3>
+                    <p>Earn fairly while discovering great AI music and building your reputation.</p>
+                    <ul class="feature-list">
+                        <li>Earn $10 USD + 50 SUTRA per review</li>
+                        <li>Bonus 25 SUTRA for successful placements</li>
+                        <li>Monthly bonuses for engaged playlists</li>
+                        <li>Stake 500 SUTRA for verified badge</li>
+                        <li>Build on-chain reputation</li>
+                        <li>Revenue share at elite curator level</li>
+                        <li>Vote on platform standards and fees</li>
                     </ul>
-                    <a href="https://onezeroeight-ai.github.io/Products/" class="block w-full text-center bg-purple-700 hover:bg-purple-600 text-white py-3 px-6 rounded-full transition duration-300">
-                        Browse Digital Products
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Events Card -->
-            <div class="bg-gray-900 rounded-lg overflow-hidden shadow-xl transform transition duration-300 hover:-translate-y-2">
-                <div class="h-48 bg-gradient-to-br from-green-600 to-teal-800 p-6 flex items-center justify-center">
-                    <i class="fas fa-calendar-alt text-white text-5xl"></i>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold mb-3">Events & Accommodations</h3>
-                    <p class="text-gray-400 mb-4">Use your SUTRA tokens for event tickets and exclusive accommodations at the Mindful Summit and other gatherings.</p>
-                    <ul class="space-y-2 mb-6 text-gray-300 text-sm">
-                        <li class="flex items-start">
-                            <svg class="h-5 w-5 text-purple-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>Mindful Summit Tickets (400 SUTRA)</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="h-5 w-5 text-purple-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>Skyrocket Ranch Accommodations</span>
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="h-5 w-5 text-purple-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span>World Summit AI Canada Access</span>
-                        </li>
-                    </ul>
-                    <a href="https://onezeroeight-ai.github.io/Mindful-Summit/" class="block w-full text-center bg-purple-700 hover:bg-purple-600 text-white py-3 px-6 rounded-full transition duration-300">
-                        View Events
-                    </a>
+                    <a href="#" class="btn btn-primary">Become a Curator</a>
                 </div>
             </div>
         </div>
-        
-        <!-- Featured Product Banner -->
-        <div class="max-w-6xl mx-auto bg-gray-900 rounded-lg overflow-hidden shadow-xl">
-            <div class="relative">
-                <div class="absolute top-0 right-0 bg-purple-600 text-white px-4 py-2 text-sm font-bold">FEATURED</div>
-                <div class="grid grid-cols-1 md:grid-cols-3">
-                    <div class="md:col-span-2 p-8">
-                        <h3 class="text-2xl font-bold mb-3">Sitcom Maker</h3>
-                        <p class="text-gray-300 mb-4">Create custom sitcom scenes with your favorite characters using our AI ensemble! Perfect comedic timing, authentic dialogue, and even ElevenLabs audio options.</p>
-                        
-                        <div class="bg-gray-800 p-4 rounded-lg mb-6">
-                            <div class="text-center mb-2">
-                                <div class="font-bold text-purple-400 mb-1">SAMPLE OUTPUT</div>
-                                <div class="border-b border-gray-700 mb-2"></div>
-                            </div>
-                            <div class="text-sm text-left">
-                                <p><span class="text-yellow-400">CHANDLER:</span> So I told my boss, "That's not a spreadsheet, that's my hopes and dreams crushed into little cells!"</p>
-                                <p><span class="text-green-400">RACHEL:</span> Did he laugh?</p>
-                                <p><span class="text-yellow-400">CHANDLER:</span> No, he put me in charge of the company softball team. Apparently, I'm good at handling crushed hopes and dreams.</p>
-                                <p class="text-gray-500 italic text-xs text-right">[Audience laughter]</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex flex-wrap gap-4 justify-between items-center">
-                            <span class="text-xl font-bold text-purple-400">1,080 SUTRA</span>
-                            <a href="/products.html#digital" class="inline-block bg-purple-700 hover:bg-purple-600 text-white py-2 px-6 rounded-full transition duration-300">
-                                Try Sitcom Maker
-                            </a>
-                        </div>
-                    </div>
-                    <div class="hidden md:block bg-gradient-to-br from-purple-800 to-purple-900 p-6">
-                        <div class="h-full flex items-center justify-center">
-                            <div class="text-center">
-                                <i class="fas fa-theater-masks text-white text-6xl mb-4"></i>
-                                <div class="text-white text-xl font-bold">Original Content</div>
-                                <div class="text-purple-200 mt-2">Characters, settings, and plot—all generated just for you</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Call to Action -->
-        <div class="text-center mt-16">
-            <h3 class="text-2xl font-semibold mb-4">Ready to explore all SUTRA products?</h3>
-            <p class="text-gray-400 mb-8 max-w-2xl mx-auto">Our product ecosystem continues to grow. Secure your SUTRA tokens now to unlock all current and future utilities.</p>
-            <a href="https://onezeroeight-ai.github.io/Products/" class="inline-block bg-purple-700 hover:bg-purple-600 text-white font-bold py-3 px-8 rounded-full text-lg transition duration-300 transform hover:scale-105">
-                View All Products
-            </a>
-        </div>
-    </div>
-</section>
+    </section>
 
-            
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <h2>Join the Ethical AI Music Movement</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <h4>127</h4>
+                    <p>Artists Promoting</p>
+                </div>
+                <div class="stat-box">
+                    <h4>43</h4>
+                    <p>Verified Curators</p>
+                </div>
+                <div class="stat-box">
+                    <h4>234</h4>
+                    <p>Placements This Month</p>
+                </div>
+                <div class="stat-box">
+                    <h4>42K</h4>
+                    <p>SUTRA Earned by Community</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<!-- JavaScript (Removed Toggle Logic, Kept for Consistency) -->
-<script>
-    // No toggle functionality needed; link handles navigation
-</script>            
-    
-<!-- footer.html -->
-<footer class="bg-gray-900 border-t border-gray-800 py-10">
-    <div class="container mx-auto px-4">
-        <div class="flex flex-col md:flex-row justify-between">
-            <div class="mb-6 md:mb-0">
-                <h2 class="text-2xl font-bold mb-4">OneZeroEight.ai</h2>
-                <p class="text-gray-400 max-w-md">
-                    AI Ethics. AI Safety. AI Certification.
-                </p>
-            </div>
-            
-            <div>
-                <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
-<div class="flex space-x-4">
-    <a href="https://github.com/OneZeroEight-ai/SUTRA.3.5" target="_blank" class="text-gray-400 hover:text-white">
-        <i class="fab fa-github text-xl"></i>
-    </a>
-    <a href="https://discord.gg/Chw26Yj4" class="text-gray-400 hover:text-white">
-        <i class="fab fa-discord text-xl"></i>
-    </a>
-    <a href="https://x.com/SUTRA_ai" class="text-gray-400 hover:text-white">
-        <i class="fab fa-twitter text-xl"></i>
-    </a>
-    <a href="https://t.me/OneZeroEight_ai" class="text-gray-400 hover:text-white">
-        <i class="fab fa-telegram text-xl"></i>
-    </a>
-    <a href="https://a.co/d/7XdBwz0" target="_blank" class="text-gray-400 hover:text-white">
-        <i class="fab fa-amazon text-xl"></i>
-    </a>
-    <a href="https://audio.com/jb-wagoner" target="_blank" class="text-gray-400 hover:text-white">
-        <i class="fab fa-audible text-xl"></i>
-    </a>
-    <a href="mailto:info@onezeroeight.ai" class="text-gray-400 hover:text-white">
-        <i class="fas fa-envelope text-xl"></i>
-    </a>
-    <a href="https://medium.com/@jbwagoner" target="_blank" class="text-gray-400 hover:text-white">
-        <i class="fab fa-medium text-xl"></i>
-    </a>
-</div>
+    <!-- Final CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Grow Your AI Music Ethically?</h2>
+            <p>Join the first token economy for AI creators. No bots. No fake streams. Just real growth.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Launch Campaign</a>
+                <a href="#" class="btn btn-secondary">Explore Platform</a>
             </div>
         </div>
-        
-        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-            <p>&copy; 2025 OneZeroEight.ai Network (OZEN). All rights reserved.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>OneZeroEight.ai</h4>
+                    <p>Building the ethical infrastructure for AI-generated content, starting with music.</p>
+                    <p style="margin-top: 1rem;">Powered by SUTRA token on Polygon.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Platform</h4>
+                    <a href="#">For Artists</a>
+                    <a href="#">For Curators</a>
+                    <a href="#">How It Works</a>
+                    <a href="#">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h4>SUTRA Token</h4>
+                    <a href="#">What is SUTRA?</a>
+                    <a href="#">Tokenomics</a>
+                    <a href="#">How to Buy</a>
+                    <a href="#">Governance</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <a href="#">Documentation</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Community</a>
+                    <a href="#">Support</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 OneZeroEight.ai. All rights reserved. | <a href="#" style="display: inline; color: inherit;">Terms</a> | <a href="#" style="display: inline; color: inherit;">Privacy</a></p>
+            </div>
         </div>
-    </div>
-</footer>
-    
-<script src="js/main.js"></script>
+    </footer>
 </body>
 </html>
