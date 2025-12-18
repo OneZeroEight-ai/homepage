@@ -486,7 +486,7 @@
                 <li><a href="https://music.onezeroeight.ai">Platform</a></li>
                 <li><a href="https://music.onezeroeight.ai#pricing">Pricing</a></li>
                 <li><a href="#sutra">SUTRA Token</a></li>
-                <li><a href="https://forms.gle/EY79pStqZQj3ABDw8" target="_blank">Join Waitlist</a></li>
+                <li><a href="#" onclick="openArtistModal(); return false;" target="_blank">Join Waitlist</a></li>
             </ul>
         </div>
     </nav>
@@ -498,7 +498,7 @@
             <p>No bots. No fake streams. Just ethical growth and fair rewards.</p>
             <p class="subtext">Built on blockchain. Powered by SUTRA. Governed by creators.</p>
             <div class="cta-buttons">
-                <a href="https://forms.gle/EY79pStqZQj3ABDw8" target="_blank" class="btn btn-primary">Join Waitlist</a>
+                <a href="#" onclick="openArtistModal(); return false;" target="_blank" class="btn btn-primary">Join Waitlist</a>
                 <a href="https://music.onezeroeight.ai" class="btn btn-secondary">Learn More</a>
             </div>
         </div>
@@ -644,7 +644,7 @@
                         <li>Money-back guarantee on campaigns</li>
                         <li>Stake 1,000 SUTRA for 20% lifetime discount</li>
                     </ul>
-                    <a href="https://forms.gle/EY79pStqZQj3ABDw8" target="_blank" class="btn btn-primary">Join Waitlist</a>
+                    <a href="#" onclick="openArtistModal(); return false;" target="_blank" class="btn btn-primary">Join Waitlist</a>
                     <a href="https://music.onezeroeight.ai#pricing" style="display: block; margin-top: 1rem; color: var(--primary); text-decoration: none; font-weight: 600;">View Detailed Pricing →</a>
                 </div>
                 <div class="audience-card" id="for-curators">
@@ -697,7 +697,7 @@
             <h2>Ready to Grow Your AI Music Ethically?</h2>
             <p>Join the first token economy for AI creators. No bots. No fake streams. Just real growth.</p>
             <div class="cta-buttons">
-                <a href="https://forms.gle/EY79pStqZQj3ABDw8" target="_blank" class="btn btn-primary">Join Waitlist</a>
+                <a href="#" onclick="openArtistModal(); return false;" target="_blank" class="btn btn-primary">Join Waitlist</a>
                 <a href="https://music.onezeroeight.ai" class="btn btn-secondary">Explore Platform</a>
             </div>
 
@@ -763,5 +763,48 @@
             </div>
         </div>
     </footer>
+
+    <!-- ARTIST SIGNUP MODAL -->
+    <div id="artistModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;justify-content:center;align-items:center;">
+    <div style="background:#fff;border-radius:16px;max-width:450px;width:90%;max-height:90vh;overflow-y:auto;">
+    <div style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:1.5rem;border-radius:16px 16px 0 0;position:relative;">
+    <button onclick="closeArtistModal()" style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;">×</button>
+    <h2 style="margin:0 0 5px 0;">🎵 Join Artist Waitlist</h2>
+    <p style="margin:0;opacity:0.9;font-size:14px;">Get early access to ethical AI music promotion</p>
+    </div>
+    <div style="padding:1.5rem;">
+    <div id="formMsg" style="display:none;padding:12px;border-radius:8px;margin-bottom:15px;"></div>
+    <form id="artistForm" onsubmit="submitForm(event)">
+    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Name *</label><input type="text" id="fname" required style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"></div>
+    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Email *</label><input type="email" id="femail" required style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"></div>
+    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Artist Name *</label><input type="text" id="fartist" required style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"></div>
+    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Spotify Link</label><input type="url" id="fspotify" placeholder="https://open.spotify.com/artist/..." style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"></div>
+    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Genre *</label><select id="fgenre" required style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"><option value="">Select...</option><option>Electronic</option><option>Hip Hop</option><option>Pop</option><option>Lo-Fi</option><option>Ambient</option><option>Other</option></select></div>
+    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Campaign Tier</label><select id="ftier" style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"><option value="basic">Basic ($79)</option><option value="growth" selected>Growth ($149)</option><option value="pro">Pro ($299)</option></select></div>
+    <button type="submit" id="submitBtn" style="width:100%;background:#6366f1;color:#fff;padding:12px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;">Join Waitlist 🚀</button>
+    </form>
+    </div>
+    </div>
+    </div>
+
+    <script>
+    function openArtistModal(){document.getElementById('artistModal').style.display='flex';}
+    function closeArtistModal(){document.getElementById('artistModal').style.display='none';document.getElementById('artistForm').reset();document.getElementById('formMsg').style.display='none';}
+    document.getElementById('artistModal').onclick=function(e){if(e.target===this)closeArtistModal();};
+    async function submitForm(e){
+    e.preventDefault();
+    var btn=document.getElementById('submitBtn'),msg=document.getElementById('formMsg');
+    btn.disabled=true;btn.textContent='Submitting...';
+    var data={name:document.getElementById('fname').value,email:document.getElementById('femail').value,artist_name:document.getElementById('fartist').value,spotify_link:document.getElementById('fspotify').value||'https://spotify.com',genre:document.getElementById('fgenre').value,interested_tier:document.getElementById('ftier').value,bio:'',referral_source:'Website'};
+    try{
+    var r=await fetch('https://onezeroeight-backend-production.up.railway.app/api/artists/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    var j=await r.json();
+    if(r.ok&&j.success){msg.style.display='block';msg.style.background='#d1fae5';msg.style.color='#065f46';msg.textContent='🎉 '+j.message;document.getElementById('artistForm').reset();setTimeout(closeArtistModal,3000);}
+    else{msg.style.display='block';msg.style.background='#fee2e2';msg.style.color='#991b1b';msg.textContent=j.detail||'Error. Try again.';}
+    }catch(err){msg.style.display='block';msg.style.background='#fee2e2';msg.style.color='#991b1b';msg.textContent='Network error.';}
+    btn.disabled=false;btn.textContent='Join Waitlist 🚀';
+    }
+    </script>
+    
 </body>
 </html>
