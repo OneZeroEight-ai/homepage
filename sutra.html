@@ -7,7 +7,7 @@
     <meta name="description" content="SUTRA is the utility token powering the ethical AI creative economy. Earn, stake, and govern the future of AI music.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -778,15 +778,24 @@
     <!-- Hero -->
     <section class="hero">
         <div class="container hero-content">
-            <div class="token-badge">
-                <span>🔷</span> Polygon Network
+            <div class="token-badge" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #10b981;">
+                <span>🟢</span> LIVE on Polygon
             </div>
             <h1>SUTRA Token</h1>
             <p>The utility token powering the ethical AI creative economy. Earn rewards, unlock benefits, and govern the future of AI music.</p>
             
             <div class="cta-buttons">
-                <a href="#earn" class="btn btn-primary">Start Earning</a>
+                <a href="#buy" class="btn btn-primary">Buy SUTRA</a>
                 <a href="#tokenomics" class="btn btn-secondary">View Tokenomics</a>
+            </div>
+
+            <!-- Contract Address -->
+            <div style="margin-top: 2rem; background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1rem 1.5rem; display: inline-flex; align-items: center; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <span style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Contract:</span>
+                <code style="font-family: 'JetBrains Mono', monospace; color: #10b981; font-size: 0.85rem;" id="contract-address">0x0b3f81d3E1FA01e911A8B4e49048eEA0ddf2A896</code>
+                <a href="https://polygonscan.com/token/0x0b3f81d3E1FA01e911A8B4e49048eEA0ddf2A896" target="_blank" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 0.25rem;">
+                    View on PolygonScan ↗
+                </a>
             </div>
 
             <div class="hero-stats">
@@ -1088,19 +1097,19 @@
                     </div>
                 </div>
                 <div class="roadmap-item">
-                    <div class="roadmap-marker current"></div>
+                    <div class="roadmap-marker completed"></div>
                     <div class="roadmap-content">
-                        <div class="roadmap-date">Q1 2025 (Current)</div>
-                        <div class="roadmap-title">Music Platform Launch</div>
-                        <div class="roadmap-desc">988 verified curators, first artist campaigns, platform MVP live.</div>
+                        <div class="roadmap-date">Q1 2025</div>
+                        <div class="roadmap-title">Music Platform & Token Launch</div>
+                        <div class="roadmap-desc">988 verified curators, first artist campaigns, SUTRA deployed on Polygon.</div>
                     </div>
                 </div>
                 <div class="roadmap-item">
-                    <div class="roadmap-marker"></div>
+                    <div class="roadmap-marker current"></div>
                     <div class="roadmap-content">
-                        <div class="roadmap-date">Q2 2025</div>
-                        <div class="roadmap-title">Token Launch</div>
-                        <div class="roadmap-desc">SUTRA token deployment on Polygon, DEX listing, reward distribution begins.</div>
+                        <div class="roadmap-date">Q1-Q2 2025 (Current)</div>
+                        <div class="roadmap-title">Platform Growth</div>
+                        <div class="roadmap-desc">DEX liquidity, reward distribution, curator dashboard, artist onboarding.</div>
                     </div>
                 </div>
                 <div class="roadmap-item">
@@ -1132,21 +1141,93 @@
     </section>
 
     <!-- Buy Section -->
-    <section class="buy-section" id="buy">
+    <section class="section-dark" id="buy" style="border-top: 1px solid rgba(255,255,255,0.1);">
         <div class="container">
-            <div class="buy-content">
-                <h2>Get Notified When SUTRA Launches</h2>
-                <p>Be the first to know when SUTRA token goes live on Polygon.</p>
+            <div class="section-header">
+                <h2>How to Buy SUTRA</h2>
+                <p>SUTRA is live on Polygon with a SushiSwap v3 liquidity pool.</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
                 
-                <div class="coming-soon-badge">
-                    🚀 DEX Listing: Q2 2025
+                <!-- Step 1 -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), #8b5cf6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">1</div>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; margin-bottom: 0.75rem;">Get a Wallet</h3>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-bottom: 1rem;">Install MetaMask or any Web3 wallet that supports Polygon network.</p>
+                    <a href="https://metamask.io/download/" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 500;">Download MetaMask →</a>
                 </div>
 
-                <form class="email-signup" onsubmit="handleEmailSignup(event)">
-                    <input type="email" placeholder="Enter your email" required id="sutra-email">
-                    <button type="submit">Notify Me</button>
-                </form>
-                <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Join 500+ others waiting for launch.</p>
+                <!-- Step 2 -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), #8b5cf6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">2</div>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; margin-bottom: 0.75rem;">Add Polygon Network</h3>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-bottom: 1rem;">Add Polygon (MATIC) network to your wallet. You'll need POL for gas fees.</p>
+                    <a href="https://chainlist.org/chain/137" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 500;">Add via ChainList →</a>
+                </div>
+
+                <!-- Step 3 -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--primary), #8b5cf6); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">3</div>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; margin-bottom: 0.75rem;">Get POL for Gas</h3>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-bottom: 1rem;">Buy POL on an exchange (Coinbase, Binance) and send to your wallet address.</p>
+                    <span style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">~$0.50 worth is plenty for many transactions</span>
+                </div>
+
+                <!-- Step 4 -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 2rem;">
+                    <div style="width: 48px; height: 48px; background: linear-gradient(135deg, var(--secondary), #059669); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">4</div>
+                    <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; margin-bottom: 0.75rem;">Swap for SUTRA</h3>
+                    <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; margin-bottom: 1rem;">Use SushiSwap to swap WMATIC for SUTRA tokens via our v3 liquidity pool.</p>
+                    <a href="https://www.sushi.com/swap?chainId=137&token1=0x0b3f81d3E1FA01e911A8B4e49048eEA0ddf2A896" target="_blank" style="color: var(--secondary); text-decoration: none; font-weight: 500;">Trade on SushiSwap →</a>
+                </div>
+            </div>
+
+            <!-- Contract Info Box -->
+            <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 16px; padding: 2rem; text-align: center;">
+                <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; margin-bottom: 1.5rem;">Contract Addresses</h3>
+                
+                <!-- SUTRA Token -->
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-bottom: 0.5rem;">SUTRA Token (ERC-20)</div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #10b981; word-break: break-all;">
+                        0x0b3f81d3E1FA01e911A8B4e49048eEA0ddf2A896
+                    </div>
+                </div>
+
+                <!-- Pool Address -->
+                <div style="margin-bottom: 1.5rem;">
+                    <div style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-bottom: 0.5rem;">SushiSwap v3 Pool (SUTRA/WMATIC)</div>
+                    <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #f59e0b; word-break: break-all;">
+                        0x77c2815C805fEB72478189e946Aa05c618ff7b4C
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="https://polygonscan.com/token/0x0b3f81d3E1FA01e911A8B4e49048eEA0ddf2A896" target="_blank" style="background: rgba(255,255,255,0.1); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        📊 Token on PolygonScan
+                    </a>
+                    <a href="https://polygonscan.com/address/0x77c2815C805fEB72478189e946Aa05c618ff7b4C" target="_blank" style="background: rgba(255,255,255,0.1); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        🏊 Pool on PolygonScan
+                    </a>
+                    <button onclick="copyContract()" style="background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; border: none; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        📋 Copy Token Address
+                    </button>
+                    <a href="https://www.sushi.com/swap?chainId=137&token1=0x0b3f81d3E1FA01e911A8B4e49048eEA0ddf2A896" target="_blank" style="background: #d946ef; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem;">
+                        🍣 Trade on SushiSwap
+                    </a>
+                </div>
+                <p style="margin-top: 1.5rem; color: rgba(255,255,255,0.6); font-size: 0.9rem;">
+                    ⚠️ Always verify contract addresses before trading. Only use official addresses above.
+                </p>
+            </div>
+
+            <!-- Add to Wallet -->
+            <div style="margin-top: 2rem; text-align: center;">
+                <button onclick="addToMetaMask()" style="background: rgba(255,255,255,0.1); color: white; padding: 1rem 2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); font-weight: 600; cursor: pointer; font-size: 1rem; display: inline-flex; align-items: center; gap: 0.75rem;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" style="width: 24px; height: 24px;">
+                    Add SUTRA to MetaMask
+                </button>
             </div>
         </div>
     </section>
@@ -1194,12 +1275,37 @@
     </footer>
 
     <script>
-        function handleEmailSignup(e) {
-            e.preventDefault();
-            const email = document.getElementById('sutra-email').value;
-            // In production, this would submit to your backend
-            alert('Thanks! We\'ll notify you when SUTRA launches. Email: ' + email);
-            document.getElementById('sutra-email').value = '';
+        const SUTRA_CONTRACT = '0x0b3f81d3E1FA01e911A8B4e49048eEA0ddf2A896';
+        
+        function copyContract() {
+            navigator.clipboard.writeText(SUTRA_CONTRACT);
+            alert('Contract address copied to clipboard!');
+        }
+
+        async function addToMetaMask() {
+            if (typeof window.ethereum === 'undefined') {
+                alert('Please install MetaMask to add SUTRA token');
+                window.open('https://metamask.io/download/', '_blank');
+                return;
+            }
+
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_watchAsset',
+                    params: {
+                        type: 'ERC20',
+                        options: {
+                            address: SUTRA_CONTRACT,
+                            symbol: 'SUTRA',
+                            decimals: 18,
+                            image: 'https://onezeroeight.ai/sutra-logo.png'
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error adding token:', error);
+                alert('Could not add token. Please add manually using the contract address.');
+            }
         }
     </script>
 </body>
