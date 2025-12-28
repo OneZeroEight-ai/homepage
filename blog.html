@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - OneZeroEight.ai</title>
+    <meta name="description" content="Updates, insights, and stories from the OneZeroEight.ai team building the ethical AI music platform.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --darker: #111827;
+            --light: #f9fafb;
+            --text: #374151;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+        }
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: white;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+        }
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .page-header p { opacity: 0.9; font-size: 1.1rem; }
+
+        .blog-content { padding: 4rem 0; }
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+        .blog-main { display: flex; flex-direction: column; gap: 2rem; }
+
+        .featured-post {
+            background: var(--light);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+        .featured-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .featured-image {
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+        .featured-content { padding: 2rem; }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .post-category {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+        .post-date { color: var(--text-light); }
+        .featured-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        .featured-content h2 a { color: inherit; text-decoration: none; }
+        .featured-content h2 a:hover { color: var(--primary); }
+        .featured-content p { color: var(--text-light); margin-bottom: 1.5rem; }
+        .read-more {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.2s;
+        }
+        .read-more:hover { gap: 0.75rem; }
+
+        .post-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .post-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        .post-card-image {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        .post-card-content { padding: 1.5rem; }
+        .post-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+        }
+        .post-card h3 a { color: inherit; text-decoration: none; }
+        .post-card h3 a:hover { color: var(--primary); }
+        .post-card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-sidebar { display: flex; flex-direction: column; gap: 2rem; }
+        .sidebar-section {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+        }
+        .sidebar-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+        }
+        .sidebar-links { list-style: none; }
+        .sidebar-links li { margin-bottom: 0.5rem; }
+        .sidebar-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            transition: color 0.2s;
+        }
+        .sidebar-links a:hover { color: var(--primary); }
+        .sidebar-links .count {
+            background: var(--border);
+            padding: 0.15rem 0.5rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .newsletter-form { margin-top: 1rem; }
+        .newsletter-form input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+        }
+        .newsletter-form button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .newsletter-form button:hover {
+            background: var(--primary-dark);
+        }
+
+        .social-links { display: flex; gap: 0.75rem; margin-top: 1rem; }
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+        .social-link:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        footer {
+            background: var(--darker);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+        .footer-section h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .footer-section a:hover { color: white; }
+        .footer-bottom {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        .footer-bottom a { color: rgba(255,255,255,0.5); text-decoration: none; }
+        .footer-bottom a:hover { color: white; }
+
+        @media (max-width: 968px) {
+            .blog-grid { grid-template-columns: 1fr; }
+            .blog-sidebar { order: -1; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-header h1 { font-size: 2rem; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="https://onezeroeight.ai" class="logo">OneZeroEight.ai</a>
+            <ul class="nav-links">
+                <li><a href="https://music.onezeroeight.ai">Platform</a></li>
+                <li><a href="https://music.onezeroeight.ai#pricing">Pricing</a></li>
+                <li><a href="sutra.html">SUTRA Token</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Blog</h1>
+        <p>Updates, insights, and stories from the OneZeroEight.ai team</p>
+    </header>
+
+    <main class="blog-content">
+        <div class="container">
+            <div class="blog-grid">
+                <div class="blog-main">
+                    <!-- Featured Post -->
+                    <article class="featured-post">
+                        <div class="featured-image">🎵</div>
+                        <div class="featured-content">
+                            <div class="post-meta">
+                                <span class="post-category">Announcement</span>
+                                <span class="post-date">December 27, 2025</span>
+                            </div>
+                            <h2><a href="#post-1">Why We Built OneZeroEight.ai: The Founder's Story</a></h2>
+                            <p>I've been making AI music for over a year now. And like many of you, I've felt the frustration of trying to promote it ethically. The playlist promotion space is broken—full of bots, fake streams, and services that treat curators as an afterthought. That's why I built OneZeroEight.ai.</p>
+                            <a href="#post-1" class="read-more">Read Full Story →</a>
+                        </div>
+                    </article>
+
+                    <!-- Post 2 -->
+                    <article class="post-card">
+                        <div class="post-card-image" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">📊</div>
+                        <div class="post-card-content">
+                            <div class="post-meta">
+                                <span class="post-category">Milestone</span>
+                                <span class="post-date">December 26, 2025</span>
+                            </div>
+                            <h3><a href="#post-2">We Hit 988 Verified Curators (And What We Learned)</a></h3>
+                            <p>When we started building our curator network, we didn't know what to expect. Now, less than a month later, we have nearly 1,000 verified playlist curators ready to review AI music. Here's how we did it and what surprised us along the way.</p>
+                            <a href="#post-2" class="read-more">Read More →</a>
+                        </div>
+                    </article>
+
+                    <!-- Post 3 -->
+                    <article class="post-card">
+                        <div class="post-card-image" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white;">🔷</div>
+                        <div class="post-card-content">
+                            <div class="post-meta">
+                                <span class="post-category">Token</span>
+                                <span class="post-date">December 24, 2025</span>
+                            </div>
+                            <h3><a href="#post-3">SUTRA Token: Real Utility for the AI Creative Economy</a></h3>
+                            <p>Most crypto projects launch a token and then figure out what it's for. We did the opposite. SUTRA was designed from day one to power a real platform with real users. Here's the complete breakdown of tokenomics, utility, and our roadmap.</p>
+                            <a href="#post-3" class="read-more">Read More →</a>
+                        </div>
+                    </article>
+
+                    <!-- Post 4 -->
+                    <article class="post-card">
+                        <div class="post-card-image" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white;">🎧</div>
+                        <div class="post-card-content">
+                            <div class="post-meta">
+                                <span class="post-category">Guide</span>
+                                <span class="post-date">December 22, 2025</span>
+                            </div>
+                            <h3><a href="#post-4">How to Promote AI Music Without Getting Banned</a></h3>
+                            <p>Spotify's policies on AI music are evolving fast. Here's what you need to know to promote your AI-generated tracks safely, ethically, and effectively—without risking your account or your reputation.</p>
+                            <a href="#post-4" class="read-more">Read More →</a>
+                        </div>
+                    </article>
+
+                    <!-- Full Article Section -->
+                    <div id="post-1" style="background: var(--light); padding: 3rem; border-radius: 16px; margin-top: 2rem;">
+                        <span class="post-category">Announcement</span>
+                        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: 2rem; color: var(--dark); margin: 1rem 0;">Why We Built OneZeroEight.ai: The Founder's Story</h2>
+                        <p style="color: var(--text-light); margin-bottom: 2rem;">December 27, 2025 • 5 min read</p>
+                        
+                        <div style="color: var(--text); font-size: 1.05rem; line-height: 1.9;">
+                            <p style="margin-bottom: 1.5rem;">I've been making AI music for over a year now. What started as an experiment with Udio and Suno became a genuine creative passion. I released tracks under the name "Sutra and the Noble 8" and "JB Wagoner"—music I'm genuinely proud of.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;">But when I tried to promote it, I hit a wall.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;">The playlist promotion industry is a mess. Services charge $100+ to send your music to "curators" who are often just bots or fake accounts. There's no transparency about where your money goes. Curators—when they're real—get paid pennies while the platforms take the majority. And worst of all, many of these services use tactics that violate Spotify's Terms of Service, putting your account at risk.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;"><strong>I knew there had to be a better way.</strong></p>
+                            
+                            <p style="margin-bottom: 1.5rem;">That's why I built OneZeroEight.ai. The name comes from the sacred number 108 in Buddhist tradition—representing completeness, wholeness, and the universe itself. I wanted to build something that embodied those principles: a complete, ethical ecosystem for AI music creators.</p>
+                            
+                            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; color: var(--dark); margin: 2rem 0 1rem;">The Three Pillars</h3>
+                            
+                            <p style="margin-bottom: 1.5rem;"><strong>1. Transparency:</strong> Every campaign shows you exactly which curators reviewed your music, what feedback they gave, and where your track was placed. No black boxes.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;"><strong>2. Fair Compensation:</strong> Curators earn $10 + 50 SUTRA tokens per review. That's real money for real work. Happy curators mean better reviews and better placements.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;"><strong>3. Community Ownership:</strong> SUTRA isn't just a payment token—it's a governance token. As the platform grows, token holders will vote on fees, features, and the future direction of the platform.</p>
+                            
+                            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; color: var(--dark); margin: 2rem 0 1rem;">Where We Are Now</h3>
+                            
+                            <p style="margin-bottom: 1.5rem;">As I write this, we have 988 verified curators in our network. We've run our first campaigns for "Awareness" and "Going Amish"—tracks I produced myself. We're learning, iterating, and building in public.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;">This isn't vaporware. This isn't a whitepaper promising features that will never ship. This is a working platform, built by someone who actually uses it.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;">If you're an AI music creator looking for ethical promotion, or a curator looking for fair compensation, I'd love to have you join us. We're building something different here—something that puts creators first.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;">Let's make AI music the right way.</p>
+                            
+                            <p style="margin-bottom: 0; font-style: italic; color: var(--primary);">— JB Wagoner, Founder of OneZeroEight.ai</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="blog-sidebar">
+                    <div class="sidebar-section">
+                        <h3>Categories</h3>
+                        <ul class="sidebar-links">
+                            <li><a href="#">Announcements <span class="count">2</span></a></li>
+                            <li><a href="#">Guides <span class="count">1</span></a></li>
+                            <li><a href="#">Token Updates <span class="count">1</span></a></li>
+                            <li><a href="#">Case Studies <span class="count">0</span></a></li>
+                            <li><a href="#">Industry News <span class="count">0</span></a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>Subscribe</h3>
+                        <p style="font-size: 0.95rem; color: var(--text-light); margin-bottom: 0;">Get updates on new features, token launches, and platform news.</p>
+                        <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+                            <input type="email" placeholder="Your email" required id="newsletter-email">
+                            <button type="submit">Subscribe</button>
+                        </form>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>Connect</h3>
+                        <p style="font-size: 0.95rem; color: var(--text-light);">Join our community</p>
+                        <div class="social-links">
+                            <a href="https://discord.gg/4A6ExTnKnK" target="_blank" class="social-link" title="Discord">💬</a>
+                            <a href="https://x.com/OneZeroEight_ai" target="_blank" class="social-link" title="Twitter">🐦</a>
+                            <a href="https://t.me/OneZeroEight_ai" target="_blank" class="social-link" title="Telegram">✈️</a>
+                            <a href="https://www.youtube.com/channel/UCaxEQWVE75Oo4hjMSjBn0iw" target="_blank" class="social-link" title="YouTube">📺</a>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-color: var(--primary);">
+                        <h3 style="border-color: rgba(99, 102, 241, 0.3);">Quick Stats</h3>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <div>
+                                <div style="font-family: 'Space Grotesk', sans-serif; font-size: 1.75rem; font-weight: 700; color: var(--primary);">988</div>
+                                <div style="font-size: 0.85rem; color: var(--text-light);">Verified Curators</div>
+                            </div>
+                            <div>
+                                <div style="font-family: 'Space Grotesk', sans-serif; font-size: 1.75rem; font-weight: 700; color: var(--secondary);">3</div>
+                                <div style="font-size: 0.85rem; color: var(--text-light);">Artists Promoting</div>
+                            </div>
+                            <div>
+                                <div style="font-family: 'Space Grotesk', sans-serif; font-size: 1.75rem; font-weight: 700; color: var(--dark);">2</div>
+                                <div style="font-size: 0.85rem; color: var(--text-light);">Campaigns Launched</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>OneZeroEight.ai</h4>
+                    <p>Building the ethical infrastructure for AI-generated content, starting with music.</p>
+                    <p style="margin-top: 1rem;">Powered by SUTRA token on Polygon.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Platform</h4>
+                    <a href="https://music.onezeroeight.ai">For Artists</a>
+                    <a href="https://music.onezeroeight.ai#curators">For Curators</a>
+                    <a href="https://music.onezeroeight.ai#process">How It Works</a>
+                    <a href="https://music.onezeroeight.ai#pricing">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h4>SUTRA Token</h4>
+                    <a href="sutra.html">What is SUTRA?</a>
+                    <a href="sutra.html#tokenomics">Tokenomics</a>
+                    <a href="sutra.html#utility">Token Utility</a>
+                    <a href="sutra.html#roadmap">Roadmap</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <a href="docs.html">Documentation</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="mailto:support@onezeroeight.ai">Support</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <a href="https://discord.gg/4A6ExTnKnK" target="_blank">Discord</a>
+                    <a href="https://x.com/OneZeroEight_ai" target="_blank">Twitter / X</a>
+                    <a href="https://t.me/OneZeroEight_ai" target="_blank">Telegram</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 OneZeroEight.ai. All rights reserved. | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function handleNewsletter(e) {
+            e.preventDefault();
+            const email = document.getElementById('newsletter-email').value;
+            alert('Thanks for subscribing! We\'ll keep you updated. Email: ' + email);
+            document.getElementById('newsletter-email').value = '';
+        }
+    </script>
+</body>
+</html>
