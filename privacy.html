@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - OneZeroEight.ai</title>
+    <meta name="description" content="Privacy Policy for OneZeroEight.ai ethical AI music promotion platform. Learn how we collect, use, and protect your data.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --darker: #111827;
+            --light: #f9fafb;
+            --text: #374151;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: white;
+        }
+
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 20px 5rem;
+        }
+
+        .last-updated {
+            background: var(--light);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        .content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .content h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 1.5rem 0 0.75rem;
+        }
+
+        .content p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .content ul, .content ol {
+            margin: 1rem 0 1rem 1.5rem;
+            color: var(--text);
+        }
+
+        .content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .data-table tr:hover {
+            background: rgba(99, 102, 241, 0.03);
+        }
+
+        footer {
+            background: var(--darker);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 2rem auto 0;
+            padding: 1.5rem 20px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+        }
+
+        .footer-bottom a:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .data-table {
+                font-size: 0.85rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="https://onezeroeight.ai" class="logo">OneZeroEight.ai</a>
+            <ul class="nav-links">
+                <li><a href="https://music.onezeroeight.ai">Platform</a></li>
+                <li><a href="https://music.onezeroeight.ai#pricing">Pricing</a></li>
+                <li><a href="sutra.html">SUTRA Token</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Privacy Policy</h1>
+        <p>How we collect, use, and protect your information</p>
+    </header>
+
+    <main class="content">
+        <div class="last-updated">
+            <strong>Last Updated:</strong> December 27, 2025
+        </div>
+
+        <p>At OneZeroEight.ai ("we," "us," or "our"), we are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services.</p>
+
+        <div class="highlight-box">
+            <p>We believe in transparency. We only collect data necessary to provide our service, and we never sell your personal information to third parties.</p>
+        </div>
+
+        <h2>1. Information We Collect</h2>
+
+        <h3>1.1 Information You Provide</h3>
+        <p>We collect information you voluntarily provide when you:</p>
+        <ul>
+            <li>Create an account (name, email address, password)</li>
+            <li>Submit music for promotion (artist name, track information, Spotify links)</li>
+            <li>Apply as a curator (playlist information, genre preferences)</li>
+            <li>Make a payment (payment details processed by our payment provider)</li>
+            <li>Contact us for support</li>
+            <li>Connect a cryptocurrency wallet (wallet address only)</li>
+        </ul>
+
+        <h3>1.2 Information Collected Automatically</h3>
+        <p>When you access our Service, we automatically collect:</p>
+        <ul>
+            <li>Device information (browser type, operating system)</li>
+            <li>IP address and approximate location</li>
+            <li>Usage data (pages visited, features used, time spent)</li>
+            <li>Cookies and similar tracking technologies</li>
+        </ul>
+
+        <h3>1.3 Information from Third Parties</h3>
+        <p>We may receive information from:</p>
+        <ul>
+            <li>Spotify API (public playlist and artist data)</li>
+            <li>Payment processors (transaction confirmations)</li>
+            <li>Blockchain networks (public wallet transaction data)</li>
+        </ul>
+
+        <h2>2. How We Use Your Information</h2>
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Purpose</th>
+                    <th>Data Used</th>
+                    <th>Legal Basis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Provide our services</td>
+                    <td>Account info, music submissions, playlist data</td>
+                    <td>Contract performance</td>
+                </tr>
+                <tr>
+                    <td>Process payments</td>
+                    <td>Payment information, billing address</td>
+                    <td>Contract performance</td>
+                </tr>
+                <tr>
+                    <td>Match artists with curators</td>
+                    <td>Genre preferences, playlist analytics</td>
+                    <td>Contract performance</td>
+                </tr>
+                <tr>
+                    <td>Distribute SUTRA rewards</td>
+                    <td>Wallet address, activity data</td>
+                    <td>Contract performance</td>
+                </tr>
+                <tr>
+                    <td>Send service updates</td>
+                    <td>Email address</td>
+                    <td>Legitimate interest</td>
+                </tr>
+                <tr>
+                    <td>Improve our platform</td>
+                    <td>Usage analytics, feedback</td>
+                    <td>Legitimate interest</td>
+                </tr>
+                <tr>
+                    <td>Marketing communications</td>
+                    <td>Email address</td>
+                    <td>Consent</td>
+                </tr>
+                <tr>
+                    <td>Prevent fraud</td>
+                    <td>IP address, device info, activity patterns</td>
+                    <td>Legitimate interest</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3. Information Sharing</h2>
+
+        <h3>3.1 We Share Information With:</h3>
+        <ul>
+            <li><strong>Curators:</strong> Artist name, track information, and Spotify links (when you submit a campaign)</li>
+            <li><strong>Artists:</strong> Curator feedback and playlist information (after review)</li>
+            <li><strong>Service Providers:</strong> Payment processors, hosting providers, analytics services</li>
+            <li><strong>Blockchain Networks:</strong> Wallet addresses and transaction data (for SUTRA token)</li>
+        </ul>
+
+        <h3>3.2 We Do NOT:</h3>
+        <ul>
+            <li>Sell your personal information to third parties</li>
+            <li>Share your email address with other users without consent</li>
+            <li>Provide your data to advertisers</li>
+            <li>Use your music for any purpose other than the promotion service</li>
+        </ul>
+
+        <h3>3.3 Legal Requirements</h3>
+        <p>We may disclose information if required by law, court order, or government request, or to protect our rights, safety, or property.</p>
+
+        <h2>4. Data Retention</h2>
+        <p>We retain your information for as long as necessary to:</p>
+        <ul>
+            <li>Provide our services to you</li>
+            <li>Comply with legal obligations</li>
+            <li>Resolve disputes and enforce agreements</li>
+        </ul>
+        <p>Upon account deletion, we will remove your personal data within 30 days, except where retention is required by law or for legitimate business purposes (such as financial records).</p>
+
+        <h2>5. Data Security</h2>
+        <p>We implement appropriate technical and organizational measures to protect your data, including:</p>
+        <ul>
+            <li>Encryption of data in transit (HTTPS/TLS)</li>
+            <li>Secure password hashing</li>
+            <li>Regular security assessments</li>
+            <li>Limited employee access to personal data</li>
+            <li>Secure cloud infrastructure</li>
+        </ul>
+        <p>However, no method of transmission over the Internet is 100% secure. We cannot guarantee absolute security.</p>
+
+        <h2>6. Your Rights</h2>
+        <p>Depending on your location, you may have the right to:</p>
+        <ul>
+            <li><strong>Access:</strong> Request a copy of your personal data</li>
+            <li><strong>Correction:</strong> Request correction of inaccurate data</li>
+            <li><strong>Deletion:</strong> Request deletion of your data</li>
+            <li><strong>Portability:</strong> Receive your data in a structured format</li>
+            <li><strong>Objection:</strong> Object to certain processing activities</li>
+            <li><strong>Withdrawal:</strong> Withdraw consent where processing is based on consent</li>
+        </ul>
+        <p>To exercise these rights, contact us at <a href="mailto:privacy@onezeroeight.ai" style="color: var(--primary);">privacy@onezeroeight.ai</a>.</p>
+
+        <h2>7. Cookies and Tracking</h2>
+        <p>We use cookies and similar technologies to:</p>
+        <ul>
+            <li>Keep you logged in</li>
+            <li>Remember your preferences</li>
+            <li>Analyze how our service is used</li>
+            <li>Improve user experience</li>
+        </ul>
+        <p>You can control cookies through your browser settings. Note that disabling cookies may affect functionality.</p>
+
+        <h2>8. Third-Party Services</h2>
+        <p>Our Service integrates with third-party services that have their own privacy policies:</p>
+        <ul>
+            <li><strong>Spotify:</strong> For playlist and artist data</li>
+            <li><strong>Stripe:</strong> For payment processing</li>
+            <li><strong>Polygon Network:</strong> For SUTRA token transactions</li>
+            <li><strong>Google Analytics:</strong> For usage analytics</li>
+        </ul>
+        <p>We encourage you to review the privacy policies of these services.</p>
+
+        <h2>9. International Transfers</h2>
+        <p>Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place for such transfers.</p>
+
+        <h2>10. Children's Privacy</h2>
+        <p>Our Service is not intended for individuals under 18 years of age. We do not knowingly collect personal information from children. If we become aware that we have collected data from a child, we will delete it promptly.</p>
+
+        <h2>11. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. We will notify you of material changes by:</p>
+        <ul>
+            <li>Posting the new policy on this page</li>
+            <li>Updating the "Last Updated" date</li>
+            <li>Sending an email notification for significant changes</li>
+        </ul>
+
+        <h2>12. Contact Us</h2>
+        <p>For questions about this Privacy Policy or our data practices, contact us at:</p>
+        <p><strong>Email:</strong> <a href="mailto:privacy@onezeroeight.ai" style="color: var(--primary);">privacy@onezeroeight.ai</a></p>
+        <p><strong>General Support:</strong> <a href="mailto:support@onezeroeight.ai" style="color: var(--primary);">support@onezeroeight.ai</a></p>
+
+        <div class="highlight-box" style="margin-top: 3rem;">
+            <p>🔒 Your privacy matters to us. If you have any concerns about how we handle your data, please reach out. We're committed to addressing your questions promptly.</p>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>OneZeroEight.ai</h4>
+                <p>Building the ethical infrastructure for AI-generated content, starting with music.</p>
+                <p style="margin-top: 1rem;">Powered by SUTRA token on Polygon.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Platform</h4>
+                <a href="https://music.onezeroeight.ai">For Artists</a>
+                <a href="https://music.onezeroeight.ai#curators">For Curators</a>
+                <a href="https://music.onezeroeight.ai#process">How It Works</a>
+                <a href="https://music.onezeroeight.ai#pricing">Pricing</a>
+            </div>
+            <div class="footer-section">
+                <h4>SUTRA Token</h4>
+                <a href="sutra.html">What is SUTRA?</a>
+                <a href="sutra.html#tokenomics">Tokenomics</a>
+                <a href="sutra.html#utility">Token Utility</a>
+                <a href="sutra.html#roadmap">Roadmap</a>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <a href="docs.html">Documentation</a>
+                <a href="blog.html">Blog</a>
+                <a href="mailto:support@onezeroeight.ai">Support</a>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <a href="https://discord.gg/4A6ExTnKnK" target="_blank">Discord</a>
+                <a href="https://x.com/OneZeroEight_ai" target="_blank">Twitter / X</a>
+                <a href="https://t.me/OneZeroEight_ai" target="_blank">Telegram</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 OneZeroEight.ai. All rights reserved. | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
+        </div>
+    </footer>
+</body>
+</html>
