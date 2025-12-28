@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OneZeroEight.ai - Ethical AI Music Platform</title>
-    <meta name="description" content="The ethical infrastructure for AI-generated music. Transparent promotion, fair rewards, community governance. Powered by SUTRA token.">
+    <meta name="description" content="The ethical infrastructure for AI-generated music. Guaranteed playlist placement, fair curator rewards, community governance. Powered by SUTRA token.">
     <style>
         * {
             margin: 0;
@@ -77,11 +77,24 @@
             color: var(--primary);
         }
 
+        /* Announcement Bar */
+        .announcement-bar {
+            background: linear-gradient(135deg, var(--secondary), #059669);
+            color: white;
+            padding: 0.75rem 0;
+            text-align: center;
+            font-weight: 600;
+        }
+        .announcement-bar a {
+            color: white;
+            text-decoration: underline;
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 6rem 0;
+            padding: 5rem 0;
             text-align: center;
         }
 
@@ -207,7 +220,7 @@
 
         .steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
             margin-top: 3rem;
         }
@@ -314,6 +327,19 @@
             font-size: 0.9rem;
             opacity: 0.8;
             margin-top: 0.25rem;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
         }
 
         /* For Artists / Curators Section */
@@ -424,7 +450,7 @@
 
         .footer-content {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
             gap: 3rem;
             margin-bottom: 2rem;
         }
@@ -478,6 +504,11 @@
     </style>
 </head>
 <body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        🎉 FREE Guaranteed Playlist Placement — <a href="free-trial.html">Start Your Free Trial →</a>
+    </div>
+
     <!-- Navigation -->
     <nav>
         <div class="container">
@@ -485,8 +516,8 @@
             <ul class="nav-links">
                 <li><a href="https://music.onezeroeight.ai">Platform</a></li>
                 <li><a href="https://music.onezeroeight.ai#pricing">Pricing</a></li>
-                <li><a href="#sutra">SUTRA Token</a></li>
-                <li><a href="#" onclick="openArtistModal(); return false;" target="_blank">Join Waitlist</a></li>
+                <li><a href="sutra.html">SUTRA Token</a></li>
+                <li><a href="free-trial.html">Free Trial</a></li>
             </ul>
         </div>
     </nav>
@@ -494,12 +525,12 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>The Ethical Infrastructure<br>for AI-Generated Music</h1>
-            <p>No bots. No fake streams. Just ethical growth and fair rewards.</p>
-            <p class="subtext">Built on blockchain. Powered by SUTRA. Governed by creators.</p>
+            <h1>Get Your AI Music<br>On Spotify Playlists</h1>
+            <p>Guaranteed playlist placement + real curator feedback. No bots, no fake streams.</p>
+            <p class="subtext">988 verified curators • 100% Spotify-safe • Powered by SUTRA</p>
             <div class="cta-buttons">
-                <a href="#" onclick="openArtistModal(); return false;" target="_blank" class="btn btn-primary">Join Waitlist</a>
-                <a href="https://music.onezeroeight.ai" class="btn btn-secondary">Learn More</a>
+                <a href="free-trial.html" class="btn btn-primary">Get Free Placement</a>
+                <a href="https://music.onezeroeight.ai" class="btn btn-secondary">View Pricing</a>
             </div>
         </div>
     </section>
@@ -509,38 +540,38 @@
         <div class="container">
             <div class="section-header">
                 <h2>Why Choose OneZeroEight.ai?</h2>
-                <p>The first token economy for AI creators</p>
+                <p>The only AI music platform with guaranteed results</p>
             </div>
             <div class="props-grid">
                 <div class="prop-card">
-                    <div class="prop-icon">🎵</div>
-                    <h3>Ethical Promotion</h3>
-                    <p>Full transparency with every curator. See exactly where your music goes. Money-back guarantee if you get zero placements.</p>
+                    <div class="prop-icon">🎧</div>
+                    <h3>Guaranteed Placement</h3>
+                    <p>Every free trial gets placed on "OneZeroEight Discoveries" playlist. Paid campaigns get matched with genre-specific curators.</p>
+                </div>
+                <div class="prop-card">
+                    <div class="prop-icon">👥</div>
+                    <h3>988 Verified Curators</h3>
+                    <p>Real playlist curators who actually accept AI music. No fake profiles, no bots, no wasted submissions.</p>
                 </div>
                 <div class="prop-card">
                     <div class="prop-icon">💰</div>
+                    <h3>Money-Back Guarantee</h3>
+                    <p>Zero placements on paid campaigns? Full refund. We're that confident in our curator network.</p>
+                </div>
+                <div class="prop-card">
+                    <div class="prop-icon">🪙</div>
                     <h3>Earn SUTRA Tokens</h3>
-                    <p>Get rewarded for quality music, playlist placements, and community participation. Build wealth while building your career.</p>
+                    <p>Get rewarded for quality music. Use tokens for 50% off campaigns or trade on SushiSwap.</p>
                 </div>
                 <div class="prop-card">
                     <div class="prop-icon">🔒</div>
-                    <h3>Stake for Benefits</h3>
-                    <p>Lock your SUTRA to unlock lifetime discounts, priority support, revenue sharing, and governance rights.</p>
-                </div>
-                <div class="prop-card">
-                    <div class="prop-icon">🗳️</div>
-                    <h3>Community Governed</h3>
-                    <p>Vote on platform fees, features, and standards. This is your platform, owned and shaped by creators.</p>
-                </div>
-                <div class="prop-card">
-                    <div class="prop-icon">✓</div>
-                    <h3>Spotify-Safe Growth</h3>
-                    <p>100% TOS compliant. Real curators, real playlists, real engagement. No bots, no risks to your account.</p>
+                    <h3>100% Spotify Safe</h3>
+                    <p>Real curators, real playlists, real engagement. No TOS violations, no risk to your account.</p>
                 </div>
                 <div class="prop-card">
                     <div class="prop-icon">📊</div>
-                    <h3>Blockchain Verified</h3>
-                    <p>Every reward, every payment, every transaction is transparent and verifiable on-chain. Complete trust.</p>
+                    <h3>Full Transparency</h3>
+                    <p>See every curator, every response, every placement. Know exactly where your music goes.</p>
                 </div>
             </div>
         </div>
@@ -551,33 +582,28 @@
         <div class="container">
             <div class="section-header">
                 <h2>How It Works</h2>
-                <p>Simple, transparent, ethical</p>
+                <p>From submission to playlist in 24 hours</p>
             </div>
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
-                    <h3>Submit Your Track</h3>
-                    <p>Upload your AI music and Spotify link. Free quality verification included.</p>
+                    <h3>Submit Track</h3>
+                    <p>Paste your Spotify link and select your genre</p>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
-                    <h3>Get Matched</h3>
-                    <p>Our AI matches you with verified curators who accept AI music and fit your genre.</p>
+                    <h3>Get Placed</h3>
+                    <p>Guaranteed placement on OneZeroEight Discoveries</p>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
-                    <h3>Track Results</h3>
-                    <p>See every curator, every response, every placement in real-time. Complete transparency.</p>
+                    <h3>Curator Reviews</h3>
+                    <p>3 curators listen and provide feedback</p>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
-                    <h3>Earn Rewards</h3>
-                    <p>Get SUTRA tokens for quality submissions, placements, and community participation.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">5</div>
-                    <h3>Build Your Career</h3>
-                    <p>Stake tokens for benefits, vote on platform decisions, grow sustainably.</p>
+                    <h3>Grow & Upgrade</h3>
+                    <p>See results, then scale with paid campaigns</p>
                 </div>
             </div>
         </div>
@@ -588,19 +614,19 @@
         <div class="container">
             <div class="sutra-content">
                 <div class="sutra-text">
-                    <h2>SUTRA: Real Utility, Real Value</h2>
-                    <p>SUTRA isn't just a speculative token. It's the backbone of the ethical AI creative economy, starting with music.</p>
-                    <p>Every SUTRA you earn or stake unlocks real benefits and gives you a voice in how the platform evolves.</p>
+                    <div class="live-badge">🟢 LIVE on Polygon</div>
+                    <h2>SUTRA Token</h2>
+                    <p>The utility token powering the ethical AI creative economy. Earn rewards, unlock discounts, and govern the platform.</p>
+                    <p>Trade now on SushiSwap (Polygon network).</p>
                     <ul class="sutra-benefits">
-                        <li>Save 50% on campaigns by paying with SUTRA</li>
-                        <li>Earn tokens for quality work and placements</li>
-                        <li>Stake for lifetime discounts and revenue share</li>
-                        <li>Vote on platform fees and features</li>
-                        <li>Participate in platform governance</li>
-                        <li>Access exclusive curator networks</li>
+                        <li>Pay with SUTRA for 50% off campaigns</li>
+                        <li>Earn tokens for placements and quality</li>
+                        <li>Stake for lifetime discounts</li>
+                        <li>Vote on platform decisions</li>
+                        <li>Trade on SushiSwap DEX</li>
                     </ul>
                     <div style="margin-top: 2rem;">
-                        <a href="https://music.onezeroeight.ai#sutra" class="btn btn-primary">Learn About SUTRA</a>
+                        <a href="sutra.html" class="btn btn-primary">Learn About SUTRA</a>
                     </div>
                 </div>
                 <div class="sutra-stats">
@@ -610,15 +636,15 @@
                     </div>
                     <div class="stat">
                         <div class="stat-value">40M</div>
-                        <div class="stat-label">Allocated to Music Platform</div>
+                        <div class="stat-label">Music Platform Allocation</div>
                     </div>
                     <div class="stat">
                         <div class="stat-value">10%</div>
-                        <div class="stat-label">Of Fees Used for Token Burns</div>
+                        <div class="stat-label">Quarterly Token Burns</div>
                     </div>
                     <div class="stat">
-                        <div class="stat-value">Coming Soon</div>
-                        <div class="stat-label">DEX Listing (Polygon)</div>
+                        <div class="live-badge">🟢 LIVE</div>
+                        <div class="stat-label">Trading on SushiSwap</div>
                     </div>
                 </div>
             </div>
@@ -634,33 +660,29 @@
             <div class="audience-tabs">
                 <div class="audience-card" id="for-artists">
                     <h3>For AI Music Artists</h3>
-                    <p>Grow your music ethically with transparent promotion and token rewards.</p>
+                    <p>Get your music heard by real curators who appreciate AI-generated content.</p>
                     <ul class="feature-list">
-                        <li>Submit tracks starting at $79 USD or 790 SUTRA</li>
-                        <li>Earn 10 SUTRA per quality submission</li>
-                        <li>Earn 25 SUTRA per playlist placement</li>
-                        <li>Earn 50 SUTRA for hitting stream milestones</li>
-                        <li>Get full transparency on every curator</li>
-                        <li>Money-back guarantee on campaigns</li>
-                        <li>Stake 1,000 SUTRA for 20% lifetime discount</li>
+                        <li>FREE guaranteed playlist placement</li>
+                        <li>Paid campaigns from $79 (10 curators)</li>
+                        <li>Earn 10-50 SUTRA per submission/placement</li>
+                        <li>Full transparency on every curator</li>
+                        <li>Money-back guarantee on paid campaigns</li>
+                        <li>24-48 hour response time</li>
                     </ul>
-                    <a href="#" onclick="openArtistModal(); return false;" target="_blank" class="btn btn-primary">Join Waitlist</a>
-                    <a href="https://music.onezeroeight.ai#pricing" style="display: block; margin-top: 1rem; color: var(--primary); text-decoration: none; font-weight: 600;">View Detailed Pricing →</a>
+                    <a href="free-trial.html" class="btn btn-primary">Start Free Trial</a>
                 </div>
                 <div class="audience-card" id="for-curators">
                     <h3>For Playlist Curators</h3>
-                    <p>Earn fairly while discovering great AI music and building your reputation.</p>
+                    <p>Earn money reviewing AI music and building your reputation.</p>
                     <ul class="feature-list">
-                        <li>Earn $10 USD + 50 SUTRA per review</li>
-                        <li>Bonus 25 SUTRA for successful placements</li>
-                        <li>Monthly bonuses for engaged playlists</li>
-                        <li>Stake 500 SUTRA for verified badge</li>
+                        <li>$2 USD + 50 SUTRA per review</li>
+                        <li>+$1 bonus for placements</li>
+                        <li>+$0.50 for detailed feedback</li>
+                        <li>Volume bonuses (20+ reviews/month)</li>
+                        <li>Weekly PayPal payments</li>
                         <li>Build on-chain reputation</li>
-                        <li>Revenue share at elite curator level</li>
-                        <li>Vote on platform standards and fees</li>
                     </ul>
                     <a href="https://forms.gle/6ZcSqKV6jVtYd1Yp8" target="_blank" class="btn btn-primary">Apply Now</a>
-                    <a href="https://music.onezeroeight.ai#for-curators" style="display: block; margin-top: 1rem; color: var(--primary); text-decoration: none; font-weight: 600;">Learn More About Curating →</a>
                 </div>
             </div>
         </div>
@@ -672,33 +694,33 @@
             <h2>Join the Ethical AI Music Movement</h2>
             <div class="stats-grid">
                 <div class="stat-box">
-                    <h4>2</h4>
-                    <p>Artists Promoting</p>
-                </div>
-                <div class="stat-box">
                     <h4>988</h4>
                     <p>Verified Curators</p>
                 </div>
                 <div class="stat-box">
-                    <h4>0</h4>
-                    <p>Placements This Month</p>
+                    <h4>3</h4>
+                    <p>Artists Promoting</p>
                 </div>
                 <div class="stat-box">
-                    <h4>0</h4>
-                    <p>SUTRA Earned by Community</p>
+                    <h4>1</h4>
+                    <p>Playlist Placement</p>
+                </div>
+                <div class="stat-box">
+                    <h4>$0</h4>
+                    <p>Start Free Today</p>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <!-- Final CTA -->
     <section class="cta-section">
         <div class="container">
-            <h2>Ready to Grow Your AI Music Ethically?</h2>
-            <p>Join the first token economy for AI creators. No bots. No fake streams. Just real growth.</p>
+            <h2>Ready to Get Your Music Heard?</h2>
+            <p>Free guaranteed playlist placement. Real curator feedback. No credit card required.</p>
             <div class="cta-buttons">
-                <a href="#" onclick="openArtistModal(); return false;" target="_blank" class="btn btn-primary">Join Waitlist</a>
-                <a href="https://music.onezeroeight.ai" class="btn btn-secondary">Explore Platform</a>
+                <a href="free-trial.html" class="btn btn-primary">Get Free Placement</a>
+                <a href="https://music.onezeroeight.ai" class="btn btn-secondary">View Paid Plans</a>
             </div>
 
             <div style="margin-top: 3rem;">
@@ -725,86 +747,38 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h4>OneZeroEight.ai</h4>
-                    <p>Building the ethical infrastructure for AI-generated content, starting with music.</p>
+                    <p>The ethical infrastructure for AI-generated music.</p>
                     <p style="margin-top: 1rem;">Powered by SUTRA token on Polygon.</p>
                 </div>
                 <div class="footer-section">
                     <h4>Platform</h4>
+                    <a href="free-trial.html">Free Trial</a>
                     <a href="https://music.onezeroeight.ai">For Artists</a>
-                    <a href="https://music.onezeroeight.ai#for-curators">For Curators</a>
-                    <a href="https://music.onezeroeight.ai#how-it-works">How It Works</a>
+                    <a href="https://music.onezeroeight.ai#curators">For Curators</a>
                     <a href="https://music.onezeroeight.ai#pricing">Pricing</a>
                 </div>
                 <div class="footer-section">
                     <h4>SUTRA Token</h4>
-                    <a href="https://music.onezeroeight.ai#sutra">What is SUTRA?</a>
-                    <a href="https://music.onezeroeight.ai#transparency">Tokenomics</a>
-                    <a href="https://onezeroeight-ai.github.io/homepage/sutra.html">How to Buy</a>
-                    <a href="#">Governance</a>
+                    <a href="sutra.html">About SUTRA</a>
+                    <a href="sutra.html#tokenomics">Tokenomics</a>
+                    <a href="sutra.html#buy">How to Buy</a>
                 </div>
                 <div class="footer-section">
                     <h4>Resources</h4>
-                    <a href="https://onezeroeight-ai.github.io/homepage/docs.html">Documentation</a>
-                    <a href="https://onezeroeight-ai.github.io/homepage/blog.html">Blog</a>
-                    <a href="#">Community</a>
+                    <a href="docs.html">Documentation</a>
+                    <a href="blog.html">Blog</a>
                     <a href="mailto:support@onezeroeight.ai">Support</a>
                 </div>
-
-               <div class="footer-section">
-                    <h4>Community</h4>
-                    <a href="https://discord.gg/4A6ExTnKnK" target="_blank">Discord</a>
-                    <a href="https://x.com/OneZeroEight_ai" target="_blank">Twitter / X</a>
-                    <a href="https://t.me/OneZeroEight_ai" target="_blank">Telegram</a>
-               </div>
-                
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="privacy.html">Privacy Policy</a>
+                </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 OneZeroEight.ai. All rights reserved. | <a href="https://onezeroeight-ai.github.io/homepage/terms.html" style="display: inline; color: inherit;">Terms</a> | <a href="https://onezeroeight-ai.github.io/homepage/privacy.html" style="display: inline; color: inherit;">Privacy</a></p>
+                <p>&copy; 2025 OneZeroEight.ai. All rights reserved.</p>
             </div>
         </div>
     </footer>
-
-    <!-- ARTIST SIGNUP MODAL -->
-    <div id="artistModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;justify-content:center;align-items:center;">
-    <div style="background:#fff;border-radius:16px;max-width:450px;width:90%;max-height:90vh;overflow-y:auto;">
-    <div style="background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;padding:1.5rem;border-radius:16px 16px 0 0;position:relative;">
-    <button onclick="closeArtistModal()" style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;">×</button>
-    <h2 style="margin:0 0 5px 0;">🎵 Join Artist Waitlist</h2>
-    <p style="margin:0;opacity:0.9;font-size:14px;">Get early access to ethical AI music promotion</p>
-    </div>
-    <div style="padding:1.5rem;">
-    <div id="formMsg" style="display:none;padding:12px;border-radius:8px;margin-bottom:15px;"></div>
-    <form id="artistForm" onsubmit="submitForm(event)">
-    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Name *</label><input type="text" id="fname" required style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"></div>
-    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Email *</label><input type="email" id="femail" required style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"></div>
-    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Artist Name *</label><input type="text" id="fartist" required style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"></div>
-    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Spotify Link</label><input type="url" id="fspotify" placeholder="https://open.spotify.com/artist/..." style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"></div>
-    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Genre *</label><select id="fgenre" required style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"><option value="">Select...</option><option>Electronic</option><option>Hip Hop</option><option>Pop</option><option>Lo-Fi</option><option>Ambient</option><option>Other</option></select></div>
-    <div style="margin-bottom:15px;"><label style="display:block;margin-bottom:5px;font-weight:500;">Campaign Tier</label><select id="ftier" style="width:100%;padding:10px;border:2px solid #e5e7eb;border-radius:8px;font-size:16px;"><option value="basic">Basic ($79)</option><option value="growth" selected>Growth ($149)</option><option value="pro">Pro ($299)</option></select></div>
-    <button type="submit" id="submitBtn" style="width:100%;background:#6366f1;color:#fff;padding:12px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;">Join Waitlist 🚀</button>
-    </form>
-    </div>
-    </div>
-    </div>
-
-    <script>
-    function openArtistModal(){document.getElementById('artistModal').style.display='flex';}
-    function closeArtistModal(){document.getElementById('artistModal').style.display='none';document.getElementById('artistForm').reset();document.getElementById('formMsg').style.display='none';}
-    document.getElementById('artistModal').onclick=function(e){if(e.target===this)closeArtistModal();};
-    async function submitForm(e){
-    e.preventDefault();
-    var btn=document.getElementById('submitBtn'),msg=document.getElementById('formMsg');
-    btn.disabled=true;btn.textContent='Submitting...';
-    var data={name:document.getElementById('fname').value,email:document.getElementById('femail').value,artist_name:document.getElementById('fartist').value,spotify_link:document.getElementById('fspotify').value||'https://spotify.com',genre:document.getElementById('fgenre').value,interested_tier:document.getElementById('ftier').value,bio:'',referral_source:'Website'};
-    try{
-    var r=await fetch('https://onezeroeight-backend-production.up.railway.app/api/artists/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-    var j=await r.json();
-    if(r.ok&&j.success){msg.style.display='block';msg.style.background='#d1fae5';msg.style.color='#065f46';msg.textContent='🎉 '+j.message;document.getElementById('artistForm').reset();setTimeout(closeArtistModal,3000);}
-    else{msg.style.display='block';msg.style.background='#fee2e2';msg.style.color='#991b1b';msg.textContent=j.detail||'Error. Try again.';}
-    }catch(err){msg.style.display='block';msg.style.background='#fee2e2';msg.style.color='#991b1b';msg.textContent='Network error.';}
-    btn.disabled=false;btn.textContent='Join Waitlist 🚀';
-    }
-    </script>
-    
 </body>
 </html>
