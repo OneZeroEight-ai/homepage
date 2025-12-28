@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - OneZeroEight.ai</title>
+    <meta name="description" content="Complete documentation for OneZeroEight.ai platform. Learn how to promote AI music, become a curator, and use SUTRA tokens.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1f2937;
+            --darker: #111827;
+            --light: #f9fafb;
+            --text: #374151;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+        }
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: var(--text);
+            background: white;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+        }
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .page-header p { opacity: 0.9; font-size: 1.1rem; }
+
+        .docs-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+            padding: 3rem 0;
+        }
+
+        .docs-sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+        .sidebar-nav { list-style: none; }
+        .sidebar-nav li { margin-bottom: 0.25rem; }
+        .sidebar-nav a {
+            display: block;
+            padding: 0.6rem 1rem;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .sidebar-nav a:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+        .sidebar-nav a.active {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .sidebar-section {
+            margin-bottom: 1.5rem;
+        }
+        .sidebar-section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .docs-content {
+            max-width: 800px;
+        }
+        .docs-content h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 2.5rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            scroll-margin-top: 100px;
+        }
+        .docs-content h2:first-child { margin-top: 0; }
+        .docs-content h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 1.5rem 0 0.75rem;
+            scroll-margin-top: 100px;
+        }
+        .docs-content p {
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+        .docs-content ul, .docs-content ol {
+            margin: 1rem 0 1rem 1.5rem;
+            color: var(--text);
+        }
+        .docs-content li { margin-bottom: 0.5rem; }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid var(--primary);
+            padding: 1.25rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.5rem 0;
+        }
+        .info-box.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--secondary);
+        }
+        .info-box.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: #f59e0b;
+        }
+        .info-box p { margin: 0; }
+        .info-box strong { display: block; margin-bottom: 0.25rem; }
+
+        .pricing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+        .pricing-table th,
+        .pricing-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .pricing-table th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .pricing-table tr:hover { background: rgba(99, 102, 241, 0.03); }
+
+        .code-block {
+            background: var(--darker);
+            color: #e5e7eb;
+            padding: 1.25rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        .code-inline {
+            background: var(--light);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--primary-dark);
+        }
+
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        .faq-question {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--light);
+            border: none;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .faq-question:hover { background: #f3f4f6; }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--primary);
+        }
+        .faq-question.active::after { content: '−'; }
+        .faq-answer {
+            padding: 0 1.25rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .faq-answer.active {
+            padding: 1.25rem;
+            max-height: 500px;
+        }
+
+        footer {
+            background: var(--darker);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 4rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+        .footer-section h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .footer-section p, .footer-section a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .footer-section a:hover { color: white; }
+        .footer-bottom {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        .footer-bottom a { color: rgba(255,255,255,0.5); text-decoration: none; }
+        .footer-bottom a:hover { color: white; }
+
+        @media (max-width: 968px) {
+            .docs-layout {
+                grid-template-columns: 1fr;
+            }
+            .docs-sidebar {
+                position: static;
+                border-bottom: 1px solid var(--border);
+                padding-bottom: 2rem;
+                margin-bottom: 2rem;
+            }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-header h1 { font-size: 2rem; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 480px) {
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="https://onezeroeight.ai" class="logo">OneZeroEight.ai</a>
+            <ul class="nav-links">
+                <li><a href="https://music.onezeroeight.ai">Platform</a></li>
+                <li><a href="https://music.onezeroeight.ai#pricing">Pricing</a></li>
+                <li><a href="sutra.html">SUTRA Token</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Documentation</h1>
+        <p>Everything you need to know about OneZeroEight.ai</p>
+    </header>
+
+    <main class="container">
+        <div class="docs-layout">
+            <aside class="docs-sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">Getting Started</div>
+                    <ul class="sidebar-nav">
+                        <li><a href="#overview" class="active">Overview</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#quick-start">Quick Start</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">For Artists</div>
+                    <ul class="sidebar-nav">
+                        <li><a href="#campaigns">Running Campaigns</a></li>
+                        <li><a href="#pricing">Pricing & Tiers</a></li>
+                        <li><a href="#artist-rewards">Earning SUTRA</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">For Curators</div>
+                    <ul class="sidebar-nav">
+                        <li><a href="#curator-apply">How to Apply</a></li>
+                        <li><a href="#curator-reviews">Reviewing Tracks</a></li>
+                        <li><a href="#curator-payments">Getting Paid</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">SUTRA Token</div>
+                    <ul class="sidebar-nav">
+                        <li><a href="#sutra-basics">Token Basics</a></li>
+                        <li><a href="#sutra-utility">Utility & Benefits</a></li>
+                        <li><a href="#staking">Staking</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">Support</div>
+                    <ul class="sidebar-nav">
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <div class="docs-content">
+                <h2 id="overview">Overview</h2>
+                <p>OneZeroEight.ai is an ethical music promotion platform built specifically for AI-generated music. We connect AI music creators with verified playlist curators for transparent, Spotify-compliant promotion.</p>
+                
+                <div class="info-box">
+                    <p><strong>Our Mission</strong></p>
+                    <p>Build the ethical infrastructure for AI creativity, starting with music. No bots, no fake streams, no black boxes—just real promotion with real results.</p>
+                </div>
+
+                <h3>Key Features</h3>
+                <ul>
+                    <li><strong>Verified Curators:</strong> 988+ real playlist curators who have opted in to review AI music</li>
+                    <li><strong>Full Transparency:</strong> See every curator who reviews your track and their feedback</li>
+                    <li><strong>Money-Back Guarantee:</strong> Zero placements = full refund</li>
+                    <li><strong>SUTRA Rewards:</strong> Earn tokens for quality submissions and placements</li>
+                    <li><strong>100% Spotify Safe:</strong> All promotion is TOS-compliant</li>
+                </ul>
+
+                <h2 id="how-it-works">How It Works</h2>
+                <ol>
+                    <li><strong>Submit Your Track:</strong> Upload your AI-generated music with genre tags and Spotify link</li>
+                    <li><strong>Choose Your Campaign:</strong> Select Basic ($79), Growth ($149), or Pro ($299) tier</li>
+                    <li><strong>Get Matched:</strong> Our algorithm matches you with curators in your genre</li>
+                    <li><strong>Receive Reviews:</strong> Curators provide honest feedback within 24-48 hours</li>
+                    <li><strong>Get Placements:</strong> Accepted tracks are added to real, active playlists</li>
+                    <li><strong>Earn Rewards:</strong> Get SUTRA tokens for quality work and successful placements</li>
+                </ol>
+
+                <h2 id="quick-start">Quick Start Guide</h2>
+                <h3>For Artists</h3>
+                <ol>
+                    <li>Visit <a href="https://music.onezeroeight.ai" style="color: var(--primary);">music.onezeroeight.ai</a></li>
+                    <li>Click "Start Campaign" and fill out the form</li>
+                    <li>Select your campaign tier (we recommend Growth for first-timers)</li>
+                    <li>Submit payment and wait for curator matches</li>
+                    <li>Track your results in real-time</li>
+                </ol>
+
+                <h3>For Curators</h3>
+                <ol>
+                    <li>Apply at <a href="https://forms.gle/6ZcSqKV6jVtYd1Yp8" target="_blank" style="color: var(--primary);">our curator application form</a></li>
+                    <li>We verify your playlist (1,000+ followers required)</li>
+                    <li>Once approved, you'll receive track submissions</li>
+                    <li>Review tracks and provide honest feedback</li>
+                    <li>Get paid weekly ($10 + 50 SUTRA per review)</li>
+                </ol>
+
+                <h2 id="campaigns">Running Campaigns</h2>
+                <p>When you submit a campaign, your track goes through our matching algorithm to find curators who are most likely to appreciate and place your music.</p>
+
+                <div class="info-box success">
+                    <p><strong>Pro Tip</strong></p>
+                    <p>Include accurate genre tags and a compelling artist bio. Curators use this information to decide if your track fits their playlist.</p>
+                </div>
+
+                <h3>Campaign Lifecycle</h3>
+                <ol>
+                    <li><strong>Submission (Day 0):</strong> You submit your track and payment</li>
+                    <li><strong>Matching (Day 0-1):</strong> We match you with relevant curators</li>
+                    <li><strong>Review Period (Day 1-7):</strong> Curators listen and provide feedback</li>
+                    <li><strong>Placement (Day 2-14):</strong> Accepted tracks get added to playlists</li>
+                    <li><strong>Monitoring (Ongoing):</strong> We track playlist status for 30 days</li>
+                </ol>
+
+                <h2 id="pricing">Pricing & Tiers</h2>
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Basic</th>
+                            <th>Growth</th>
+                            <th>Pro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Price (USD)</td>
+                            <td>$79</td>
+                            <td>$149</td>
+                            <td>$299</td>
+                        </tr>
+                        <tr>
+                            <td>Price (SUTRA)</td>
+                            <td>790 SUTRA</td>
+                            <td>1,200 SUTRA</td>
+                            <td>2,400 SUTRA</td>
+                        </tr>
+                        <tr>
+                            <td>Curator Reviews</td>
+                            <td>10</td>
+                            <td>20</td>
+                            <td>35+</td>
+                        </tr>
+                        <tr>
+                            <td>Expected Placements</td>
+                            <td>2-3</td>
+                            <td>4-6</td>
+                            <td>8-12</td>
+                        </tr>
+                        <tr>
+                            <td>Review Time</td>
+                            <td>48 hours</td>
+                            <td>24 hours</td>
+                            <td>12 hours</td>
+                        </tr>
+                        <tr>
+                            <td>Money-Back Guarantee</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <p><strong>SUTRA Discount</strong></p>
+                    <p>Pay with SUTRA tokens and get 50% off the USD price. Plus, staking 1,000+ SUTRA gives you an additional 20% lifetime discount.</p>
+                </div>
+
+                <h2 id="artist-rewards">Earning SUTRA (Artists)</h2>
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>SUTRA Earned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Quality submission approved</td>
+                            <td>+10 SUTRA</td>
+                        </tr>
+                        <tr>
+                            <td>Per playlist placement</td>
+                            <td>+25 SUTRA</td>
+                        </tr>
+                        <tr>
+                            <td>Stream milestone (1,000 streams)</td>
+                            <td>+50 SUTRA</td>
+                        </tr>
+                        <tr>
+                            <td>5-star curator rating</td>
+                            <td>+5 SUTRA</td>
+                        </tr>
+                        <tr>
+                            <td>Community participation</td>
+                            <td>+5 SUTRA</td>
+                        </tr>
+                        <tr>
+                            <td>Refer a verified curator</td>
+                            <td>+100 SUTRA</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2 id="curator-apply">How to Apply (Curators)</h2>
+                <h3>Requirements</h3>
+                <ul>
+                    <li>Spotify playlist with 1,000+ followers</li>
+                    <li>Engagement rate above 5%</li>
+                    <li>Open to reviewing AI-generated music</li>
+                    <li>Ability to stake 500 SUTRA (optional, for verified badge)</li>
+                </ul>
+
+                <h3>Application Process</h3>
+                <ol>
+                    <li>Fill out the <a href="https://forms.gle/6ZcSqKV6jVtYd1Yp8" target="_blank" style="color: var(--primary);">curator application form</a></li>
+                    <li>We analyze your playlist metrics (48-72 hours)</li>
+                    <li>If approved, you receive onboarding email</li>
+                    <li>Start receiving track submissions</li>
+                </ol>
+
+                <h2 id="curator-reviews">Reviewing Tracks (Curators)</h2>
+                <p>When you receive a track submission:</p>
+                <ol>
+                    <li>Listen to the full track (minimum 60 seconds)</li>
+                    <li>Evaluate fit for your playlist's genre and vibe</li>
+                    <li>Provide written feedback (required)</li>
+                    <li>Decision: Accept (add to playlist) or Decline (with reason)</li>
+                </ol>
+
+                <div class="info-box warning">
+                    <p><strong>Quality Standards</strong></p>
+                    <p>Honest reviews are required. Curators who accept tracks without listening, or provide low-quality feedback, will have their accounts suspended.</p>
+                </div>
+
+                <h2 id="curator-payments">Getting Paid (Curators)</h2>
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Payment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Per honest review</td>
+                            <td>$10 USD + 50 SUTRA</td>
+                        </tr>
+                        <tr>
+                            <td>Successful placement bonus</td>
+                            <td>+25 SUTRA</td>
+                        </tr>
+                        <tr>
+                            <td>Quality feedback bonus</td>
+                            <td>+10 SUTRA</td>
+                        </tr>
+                        <tr>
+                            <td>Quarterly ethical rating bonus</td>
+                            <td>+200 SUTRA</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Payments are processed weekly via PayPal or cryptocurrency.</p>
+
+                <h2 id="sutra-basics">SUTRA Token Basics</h2>
+                <p>SUTRA is a utility token on the Polygon network that powers the OneZeroEight.ai ecosystem.</p>
+                <ul>
+                    <li><strong>Total Supply:</strong> 108,000,000 SUTRA</li>
+                    <li><strong>Network:</strong> Polygon (low fees, fast transactions)</li>
+                    <li><strong>Music Platform Allocation:</strong> 40,000,000 SUTRA (37%)</li>
+                </ul>
+                <p>For detailed tokenomics, see the <a href="sutra.html" style="color: var(--primary);">SUTRA Token page</a>.</p>
+
+                <h2 id="sutra-utility">SUTRA Utility & Benefits</h2>
+                <ul>
+                    <li><strong>Payment:</strong> Pay for campaigns at 50% discount vs USD</li>
+                    <li><strong>Rewards:</strong> Earn for quality work and community participation</li>
+                    <li><strong>Staking:</strong> Lock tokens for permanent benefits</li>
+                    <li><strong>Governance:</strong> Vote on platform decisions</li>
+                </ul>
+
+                <h2 id="staking">Staking Benefits</h2>
+                <table class="pricing-table">
+                    <thead>
+                        <tr>
+                            <th>Stake Amount</th>
+                            <th>Benefits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1,000 SUTRA</td>
+                            <td>20% lifetime discount, priority support, analytics dashboard</td>
+                        </tr>
+                        <tr>
+                            <td>5,000 SUTRA</td>
+                            <td>All above + free premium campaign/month, governance proposals, 5% revenue share</td>
+                        </tr>
+                        <tr>
+                            <td>10,000+ SUTRA</td>
+                            <td>All above + white-label access, direct curator relationships, 10% revenue share</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2 id="faq">Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">Is this safe for my Spotify account?</button>
+                    <div class="faq-answer">
+                        <p>Yes, 100%. We use only real curators with real playlists. No bots, no fake streams, no artificial engagement. Our process is fully compliant with Spotify's Terms of Service. We're building relationships, not gaming algorithms.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">What if I get zero placements?</button>
+                    <div class="faq-answer">
+                        <p>We offer a full money-back guarantee. If your campaign results in zero playlist placements, we'll refund your entire payment. You must request the refund within 30 days of campaign completion.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">Do curators accept AI-generated music?</button>
+                    <div class="faq-answer">
+                        <p>Yes! Our curator network is specifically built for AI music. All curators have opted in to review AI-generated tracks. Many specialize in AI music playlists. You'll never be rejected just for using AI.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">How do I get SUTRA tokens?</button>
+                    <div class="faq-answer">
+                        <p>Currently, you can earn SUTRA through platform activity (submissions, placements, reviews). DEX listing is planned for Q2 2025, after which you'll be able to buy SUTRA directly. Sign up for notifications on our <a href="sutra.html" style="color: var(--primary);">token page</a>.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">How long does a campaign take?</button>
+                    <div class="faq-answer">
+                        <p>Most campaigns complete within 5-7 days. Review times depend on your tier: Basic (48 hours), Growth (24 hours), Pro (12 hours). Placements can continue to come in for 2-4 weeks after initial reviews.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">What genres do you support?</button>
+                    <div class="faq-answer">
+                        <p>We have curators across all major genres: Electronic, Hip Hop, Pop, R&B, Rock, Lo-Fi, Ambient, Classical, Jazz, and more. During submission, select your genre and we'll match you with relevant curators.</p>
+                    </div>
+                </div>
+
+                <h2 id="contact">Contact Us</h2>
+                <p>Need help? We're here for you.</p>
+                <ul>
+                    <li><strong>Email:</strong> <a href="mailto:support@onezeroeight.ai" style="color: var(--primary);">support@onezeroeight.ai</a></li>
+                    <li><strong>Discord:</strong> <a href="https://discord.gg/4A6ExTnKnK" target="_blank" style="color: var(--primary);">Join our server</a></li>
+                    <li><strong>Twitter:</strong> <a href="https://x.com/OneZeroEight_ai" target="_blank" style="color: var(--primary);">@OneZeroEight_ai</a></li>
+                    <li><strong>Telegram:</strong> <a href="https://t.me/OneZeroEight_ai" target="_blank" style="color: var(--primary);">@OneZeroEight_ai</a></li>
+                </ul>
+
+                <div class="info-box" style="margin-top: 2rem;">
+                    <p><strong>Response Times</strong></p>
+                    <p>We aim to respond to all inquiries within 24 hours. Pro tier customers receive priority support with 12-hour response times.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>OneZeroEight.ai</h4>
+                    <p>Building the ethical infrastructure for AI-generated content, starting with music.</p>
+                    <p style="margin-top: 1rem;">Powered by SUTRA token on Polygon.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Platform</h4>
+                    <a href="https://music.onezeroeight.ai">For Artists</a>
+                    <a href="https://music.onezeroeight.ai#curators">For Curators</a>
+                    <a href="https://music.onezeroeight.ai#process">How It Works</a>
+                    <a href="https://music.onezeroeight.ai#pricing">Pricing</a>
+                </div>
+                <div class="footer-section">
+                    <h4>SUTRA Token</h4>
+                    <a href="sutra.html">What is SUTRA?</a>
+                    <a href="sutra.html#tokenomics">Tokenomics</a>
+                    <a href="sutra.html#utility">Token Utility</a>
+                    <a href="sutra.html#roadmap">Roadmap</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <a href="docs.html">Documentation</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="mailto:support@onezeroeight.ai">Support</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Community</h4>
+                    <a href="https://discord.gg/4A6ExTnKnK" target="_blank">Discord</a>
+                    <a href="https://x.com/OneZeroEight_ai" target="_blank">Twitter / X</a>
+                    <a href="https://t.me/OneZeroEight_ai" target="_blank">Telegram</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 OneZeroEight.ai. All rights reserved. | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(button) {
+            const answer = button.nextElementSibling;
+            const isActive = button.classList.contains('active');
+            
+            // Close all
+            document.querySelectorAll('.faq-question').forEach(q => q.classList.remove('active'));
+            document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('active'));
+            
+            // Open clicked one if it wasn't active
+            if (!isActive) {
+                button.classList.add('active');
+                answer.classList.add('active');
+            }
+        }
+
+        // Highlight active sidebar link on scroll
+        const sections = document.querySelectorAll('h2[id], h3[id]');
+        const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
