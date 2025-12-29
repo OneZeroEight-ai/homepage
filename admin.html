@@ -480,6 +480,19 @@
     </div>
 
     <script>
+        // Password protection
+        (function() {
+            var storedAuth = sessionStorage.getItem('108admin');
+            if (storedAuth !== 'authenticated') {
+                var password = prompt('Enter admin password:');
+                if (password !== 'Sutra108!') {
+                    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;"><h1 style="color:#ef4444;">Access Denied</h1></div>';
+                    throw new Error('Unauthorized');
+                }
+                sessionStorage.setItem('108admin', 'authenticated');
+            }
+        })();
+
         var API = 'https://onezeroeight-backend-production.up.railway.app/api';
         var artists = [];
         var curators = [];
