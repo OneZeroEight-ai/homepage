@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - OneZeroEight.ai</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -23,27 +20,23 @@
             --border: #e5e7eb;
         }
         body {
-            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--light);
             color: var(--text);
             min-height: 100vh;
         }
-
-        /* Sidebar */
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 250px;
+            width: 220px;
             background: var(--darker);
             color: white;
-            padding: 1.5rem;
-            overflow-y: auto;
+            padding: 1.5rem 1rem;
         }
         .sidebar-logo {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: white;
             text-decoration: none;
@@ -51,7 +44,7 @@
             margin-bottom: 2rem;
         }
         .sidebar-nav { list-style: none; }
-        .sidebar-nav li { margin-bottom: 0.5rem; }
+        .sidebar-nav li { margin-bottom: 0.25rem; }
         .sidebar-nav a {
             display: flex;
             align-items: center;
@@ -60,129 +53,62 @@
             color: rgba(255,255,255,0.7);
             text-decoration: none;
             border-radius: 8px;
-            transition: all 0.2s;
+            cursor: pointer;
         }
-        .sidebar-nav a:hover,
-        .sidebar-nav a.active {
+        .sidebar-nav a:hover, .sidebar-nav a.active {
             background: rgba(255,255,255,0.1);
             color: white;
         }
-        .sidebar-nav a.active {
-            background: var(--primary);
-        }
+        .sidebar-nav a.active { background: var(--primary); }
         .sidebar-section {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             color: rgba(255,255,255,0.4);
-            margin: 1.5rem 0 0.75rem;
+            margin: 1.5rem 0 0.5rem;
             padding-left: 1rem;
         }
-
-        /* Main Content */
         .main {
-            margin-left: 250px;
-            padding: 2rem;
+            margin-left: 220px;
+            padding: 1.5rem;
         }
-
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
-        .header h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--dark);
-        }
-        .header-actions {
-            display: flex;
-            gap: 1rem;
-        }
+        .header h1 { font-size: 1.5rem; font-weight: 700; color: var(--dark); }
         .btn {
-            padding: 0.625rem 1.25rem;
-            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
             font-weight: 600;
-            font-size: 0.9rem;
-            text-decoration: none;
+            font-size: 0.85rem;
             border: none;
             cursor: pointer;
-            transition: all 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
+        .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-dark); }
-        .btn-secondary {
-            background: white;
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-        .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
-        .btn-success { background: var(--secondary); color: white; }
-        .btn-warning { background: var(--warning); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-sm { padding: 0.4rem 0.75rem; font-size: 0.8rem; }
-
-        /* Stats Grid */
+        .btn-secondary { background: white; color: var(--text); border: 1px solid var(--border); }
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
         .stat-card {
             background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
+            border-radius: 10px;
+            padding: 1.25rem;
             border: 1px solid var(--border);
         }
-        .stat-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        .stat-card-title {
-            font-size: 0.85rem;
-            color: var(--text-light);
-        }
-        .stat-card-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-        }
-        .stat-card-icon.blue { background: rgba(99, 102, 241, 0.1); }
-        .stat-card-icon.green { background: rgba(16, 185, 129, 0.1); }
-        .stat-card-icon.yellow { background: rgba(245, 158, 11, 0.1); }
-        .stat-card-icon.purple { background: rgba(139, 92, 246, 0.1); }
-        .stat-card-value {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark);
-        }
-        .stat-card-change {
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-        }
-        .stat-card-change.positive { color: var(--secondary); }
-        .stat-card-change.negative { color: var(--danger); }
-
-        /* Table Card */
+        .stat-card-title { font-size: 0.8rem; color: var(--text-light); }
+        .stat-card-value { font-size: 2rem; font-weight: 700; color: var(--dark); margin-top: 0.25rem; }
         .table-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid var(--border);
             overflow: hidden;
         }
@@ -190,359 +116,63 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.25rem 1.5rem;
+            padding: 1rem 1.25rem;
             border-bottom: 1px solid var(--border);
         }
-        .table-header h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-        .table-filters {
-            display: flex;
-            gap: 0.75rem;
-        }
-        .filter-select {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.85rem;
-            background: white;
-            cursor: pointer;
-        }
+        .table-header h2 { font-size: 1rem; font-weight: 600; color: var(--dark); }
         .search-input {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 0.75rem;
             border: 1px solid var(--border);
             border-radius: 6px;
             font-size: 0.85rem;
-            width: 250px;
+            width: 200px;
         }
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        /* Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 1rem 1.5rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        th {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-light);
-            text-transform: uppercase;
-            background: var(--light);
-        }
-        td {
-            font-size: 0.9rem;
-        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem 1.25rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { font-size: 0.75rem; font-weight: 600; color: var(--text-light); text-transform: uppercase; background: var(--light); }
+        td { font-size: 0.9rem; }
         tr:hover { background: rgba(99, 102, 241, 0.02); }
-        tr:last-child td { border-bottom: none; }
-
-        /* Status Badges */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.35rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-        .status-new {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
-        }
-        .status-placed {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--secondary);
-        }
-        .status-reviewing {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--warning);
-        }
-        .status-completed {
-            background: rgba(107, 114, 128, 0.1);
-            color: var(--text-light);
-        }
-        .status-paid {
-            background: rgba(139, 92, 246, 0.1);
-            color: #8b5cf6;
-        }
-
-        /* Tier Badges */
-        .tier-badge {
+        .badge {
+            display: inline-block;
             padding: 0.2rem 0.6rem;
-            border-radius: 4px;
+            border-radius: 50px;
             font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .tier-free { background: var(--secondary); color: white; }
-        .tier-basic { background: #e5e7eb; color: var(--dark); }
-        .tier-growth { background: var(--primary); color: white; }
-        .tier-pro { background: #8b5cf6; color: white; }
-
-        /* Artist Info */
-        .artist-info {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        .artist-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-        .artist-details h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-        .artist-details p {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-
-        /* Actions */
-        .actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .action-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
-        }
-        .action-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal {
-            background: white;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-        .modal-header h2 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: none;
-            background: var(--light);
-            cursor: pointer;
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-body { padding: 1.5rem; }
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            padding: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-        .form-group label {
-            display: block;
             font-weight: 500;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
         }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-family: inherit;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        /* Detail View */
-        .detail-section {
-            margin-bottom: 1.5rem;
-        }
-        .detail-section h3 {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-light);
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-        }
-        .detail-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-        .detail-item {
-            background: var(--light);
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-        }
-        .detail-item label {
-            font-size: 0.75rem;
-            color: var(--text-light);
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-        .detail-item span {
-            font-weight: 500;
-            color: var(--dark);
-        }
-        .detail-item a {
+        .badge-green { background: rgba(16, 185, 129, 0.1); color: var(--secondary); }
+        .badge-blue { background: rgba(99, 102, 241, 0.1); color: var(--primary); }
+        .badge-yellow { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .badge-gray { background: rgba(107, 114, 128, 0.1); color: var(--text-light); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .empty-state { text-align: center; padding: 3rem; color: var(--text-light); }
+        .actions a, .actions button {
             color: var(--primary);
             text-decoration: none;
+            margin-right: 0.75rem;
+            font-size: 0.85rem;
+            background: none;
+            border: none;
+            cursor: pointer;
         }
-        .detail-item a:hover { text-decoration: underline; }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-        }
-        .empty-state-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .empty-state h3 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-        .empty-state p {
-            color: var(--text-light);
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--dark);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            display: none;
-            align-items: center;
-            gap: 0.75rem;
-            z-index: 2000;
-            animation: slideIn 0.3s ease;
-        }
-        .toast.active { display: flex; }
-        .toast.success { background: var(--secondary); }
-        .toast.error { background: var(--danger); }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+        .actions a:hover, .actions button:hover { text-decoration: underline; }
         @media (max-width: 900px) {
             .sidebar { display: none; }
             .main { margin-left: 0; }
-        }
-        @media (max-width: 600px) {
-            .stats-grid { grid-template-columns: 1fr; }
-            .table-filters { flex-direction: column; }
-            .form-row { grid-template-columns: 1fr; }
-            .detail-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
     <aside class="sidebar">
         <a href="https://onezeroeight.ai" class="sidebar-logo">🎵 OneZeroEight</a>
-        
         <nav>
             <ul class="sidebar-nav">
-                <li><a href="#" class="active">📊 Dashboard</a></li>
-                <li><a href="#artists">👨‍🎤 Artists</a></li>
-                <li><a href="#trials">🎁 Free Trials</a></li>
-                <li><a href="#campaigns">📋 Campaigns</a></li>
+                <li><a onclick="showTab('dashboard')" class="active" id="nav-dashboard">📊 Dashboard</a></li>
+                <li><a onclick="showTab('artists')" id="nav-artists">👨‍🎤 Artists</a></li>
+                <li><a onclick="showTab('curators')" id="nav-curators">👥 Curators</a></li>
+                <li><a onclick="showTab('campaigns')" id="nav-campaigns">📋 Campaigns</a></li>
             </ul>
-
-            <div class="sidebar-section">Management</div>
-            <ul class="sidebar-nav">
-                <li><a href="#curators">👥 Curators</a></li>
-                <li><a href="#playlists">🎧 Playlists</a></li>
-                <li><a href="#payments">💰 Payments</a></li>
-            </ul>
-
             <div class="sidebar-section">Links</div>
             <ul class="sidebar-nav">
                 <li><a href="https://onezeroeight.ai" target="_blank">🌐 Website</a></li>
@@ -552,602 +182,293 @@
         </nav>
     </aside>
 
-    <!-- Main Content -->
     <main class="main">
-        <!-- Header -->
-        <div class="header">
-            <h1>Dashboard</h1>
-            <div class="header-actions">
-                <button class="btn btn-secondary" onclick="exportData()">📥 Export CSV</button>
-                <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh</button>
+        <div id="tab-dashboard" class="tab-content active">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <button class="btn btn-primary" onclick="loadAll()">🔄 Refresh</button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-title">Total Artists</div>
+                    <div class="stat-card-value" id="stat-artists">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Verified Curators</div>
+                    <div class="stat-card-value" id="stat-curators">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Campaigns</div>
+                    <div class="stat-card-value" id="stat-campaigns">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Placements</div>
+                    <div class="stat-card-value" id="stat-placements">-</div>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-title">Revenue</div>
+                    <div class="stat-card-value" id="stat-revenue">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">SUTRA Distributed</div>
+                    <div class="stat-card-value" id="stat-sutra">0</div>
+                </div>
             </div>
         </div>
 
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Total Artists</span>
-                    <div class="stat-card-icon blue">👨‍🎤</div>
-                </div>
-                <div class="stat-card-value" id="stat-artists">-</div>
-                <div class="stat-card-change positive">Loading...</div>
+        <div id="tab-artists" class="tab-content">
+            <div class="header">
+                <h1>Artists</h1>
+                <button class="btn btn-secondary" onclick="exportArtists()">📥 Export CSV</button>
             </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Free Trials</span>
-                    <div class="stat-card-icon green">🎁</div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>All Artists</h2>
+                    <input type="text" class="search-input" placeholder="Search..." oninput="filterArtists(this.value)">
                 </div>
-                <div class="stat-card-value" id="stat-trials">-</div>
-                <div class="stat-card-change positive">Active</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Paid Campaigns</span>
-                    <div class="stat-card-icon yellow">💰</div>
-                </div>
-                <div class="stat-card-value" id="stat-campaigns">-</div>
-                <div class="stat-card-change">This month</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-card-header">
-                    <span class="stat-card-title">Placements</span>
-                    <div class="stat-card-icon purple">🎧</div>
-                </div>
-                <div class="stat-card-value" id="stat-placements">1</div>
-                <div class="stat-card-change positive">Bongo Flava 2025</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Artist Name</th>
+                            <th>Email</th>
+                            <th>Genre</th>
+                            <th>SUTRA</th>
+                            <th>Placements</th>
+                            <th>Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody id="artists-table"></tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Artists Table -->
-        <div class="table-card">
-            <div class="table-header">
-                <h2>Recent Signups</h2>
-                <div class="table-filters">
-                    <select class="filter-select" id="filterTier" onchange="filterTable()">
-                        <option value="">All Tiers</option>
-                        <option value="free_trial">Free Trial</option>
-                        <option value="basic">Basic</option>
-                        <option value="growth">Growth</option>
-                        <option value="pro">Pro</option>
-                    </select>
-                    <select class="filter-select" id="filterStatus" onchange="filterTable()">
-                        <option value="">All Status</option>
-                        <option value="new">New</option>
-                        <option value="placed">Placed</option>
-                        <option value="reviewing">Reviewing</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                    <input type="text" class="search-input" placeholder="Search artists..." id="searchInput" oninput="filterTable()">
-                </div>
+        <div id="tab-curators" class="tab-content">
+            <div class="header">
+                <h1>Curators</h1>
+                <button class="btn btn-secondary" onclick="exportCurators()">📥 Export CSV</button>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Artist</th>
-                        <th>Track</th>
-                        <th>Tier</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="artistsTable">
-                    <tr>
-                        <td colspan="6">
-                            <div class="empty-state">
-                                <div class="empty-state-icon">⏳</div>
-                                <h3>Loading...</h3>
-                                <p>Fetching artist data from your backend</p>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>Verified Curators (<span id="curator-count">0</span>)</h2>
+                    <input type="text" class="search-input" placeholder="Search..." oninput="filterCurators(this.value)">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Followers</th>
+                            <th>Status</th>
+                            <th>Contacted</th>
+                            <th>Placements</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="curators-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="tab-campaigns" class="tab-content">
+            <div class="header">
+                <h1>Campaigns</h1>
+            </div>
+            <div class="table-card">
+                <div class="table-header">
+                    <h2>All Campaigns</h2>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Artist</th>
+                            <th>Track</th>
+                            <th>Tier</th>
+                            <th>Status</th>
+                            <th>Placements</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="campaigns-table"></tbody>
+                </table>
+            </div>
         </div>
     </main>
 
-    <!-- Detail Modal -->
-    <div class="modal-overlay" id="detailModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Artist Details</h2>
-                <button class="modal-close" onclick="closeModal('detailModal')">×</button>
-            </div>
-            <div class="modal-body" id="detailContent">
-                <!-- Populated by JS -->
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('detailModal')">Close</button>
-                <button class="btn btn-success" onclick="markAsPlaced()">✓ Mark as Placed</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Modal -->
-    <div class="modal-overlay" id="editModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Update Status</h2>
-                <button class="modal-close" onclick="closeModal('editModal')">×</button>
-            </div>
-            <div class="modal-body">
-                <form id="editForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select id="editStatus">
-                                <option value="new">New</option>
-                                <option value="placed">Placed on Playlist</option>
-                                <option value="reviewing">Under Review</option>
-                                <option value="completed">Completed</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Placements</label>
-                            <input type="number" id="editPlacements" value="0" min="0">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Notes</label>
-                        <textarea id="editNotes" rows="3" placeholder="Add internal notes..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Playlist Placed On (if any)</label>
-                        <input type="text" id="editPlaylist" placeholder="e.g., OneZeroEight Discoveries">
-                    </div>
-                    <input type="hidden" id="editId">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('editModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <span id="toastMessage">Action completed</span>
-    </div>
-
     <script>
-        // Configuration - Your Railway API
-        const API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
-        
-        // State
+        const API = 'https://onezeroeight-backend-production.up.railway.app/api';
         let artists = [];
         let curators = [];
         let campaigns = [];
-        let stats = {};
-        let selectedArtist = null;
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            loadDashboard();
-        });
+        document.addEventListener('DOMContentLoaded', loadAll);
 
-        // Load all dashboard data
-        async function loadDashboard() {
-            await Promise.all([
-                loadStats(),
-                loadArtists(),
-                loadCurators(),
-                loadCampaigns()
-            ]);
+        async function loadAll() {
+            await Promise.all([loadStats(), loadArtists(), loadCurators(), loadCampaigns()]);
         }
 
-        // Load platform stats
         async function loadStats() {
             try {
-                const response = await fetch(`${API_BASE}/admin/stats`);
-                if (response.ok) {
-                    stats = await response.json();
-                    updateStatsDisplay();
-                }
-            } catch (error) {
-                console.error('Error loading stats:', error);
-            }
+                const res = await fetch(API + '/admin/stats');
+                const data = await res.json();
+                document.getElementById('stat-artists').textContent = data.total_artists || 0;
+                document.getElementById('stat-curators').textContent = data.total_curators || 0;
+                document.getElementById('stat-campaigns').textContent = data.active_campaigns || 0;
+                document.getElementById('stat-placements').textContent = data.total_placements || 0;
+                document.getElementById('stat-revenue').textContent = '$' + (data.total_revenue || 0).toFixed(2);
+                document.getElementById('stat-sutra').textContent = (data.sutra_distributed || 0).toFixed(0);
+            } catch (e) { console.error('Stats error:', e); }
         }
 
-        // Load artists from API
         async function loadArtists() {
             try {
-                const response = await fetch(`${API_BASE}/admin/artists`);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    artists = data.artists || data || [];
-                    renderTable();
-                } else {
-                    console.error('Failed to load artists');
-                    showToast('Failed to load artists', 'error');
-                }
-            } catch (error) {
-                console.error('Error loading artists:', error);
-                showToast('Error connecting to API', 'error');
-            }
+                const res = await fetch(API + '/admin/artists');
+                const data = await res.json();
+                artists = data.artists || [];
+                renderArtists(artists);
+            } catch (e) { console.error('Artists error:', e); }
         }
 
-        // Load curators
         async function loadCurators() {
             try {
-                const response = await fetch(`${API_BASE}/admin/curators`);
-                if (response.ok) {
-                    const data = await response.json();
-                    curators = data.curators || data || [];
-                }
-            } catch (error) {
-                console.error('Error loading curators:', error);
-            }
+                const res = await fetch(API + '/admin/curators');
+                const data = await res.json();
+                curators = data.curators || [];
+                document.getElementById('curator-count').textContent = curators.length;
+                renderCurators(curators);
+            } catch (e) { console.error('Curators error:', e); }
         }
 
-        // Load campaigns
         async function loadCampaigns() {
             try {
-                const response = await fetch(`${API_BASE}/admin/campaigns`);
-                if (response.ok) {
-                    const data = await response.json();
-                    campaigns = data.campaigns || data || [];
-                }
-            } catch (error) {
-                console.error('Error loading campaigns:', error);
-            }
+                const res = await fetch(API + '/admin/campaigns');
+                const data = await res.json();
+                campaigns = data.campaigns || [];
+                renderCampaigns(campaigns);
+            } catch (e) { console.error('Campaigns error:', e); }
         }
 
-        // Update stats display
-        function updateStatsDisplay() {
-            document.getElementById('stat-artists').textContent = stats.total_artists || artists.length || 0;
-            document.getElementById('stat-trials').textContent = stats.free_trials || 0;
-            document.getElementById('stat-campaigns').textContent = stats.total_campaigns || campaigns.length || 0;
-            document.getElementById('stat-placements').textContent = stats.total_placements || 1;
-            
-            // Update curator count in sidebar if element exists
-            const curatorStat = document.getElementById('stat-curators');
-            if (curatorStat) {
-                curatorStat.textContent = stats.total_curators || curators.length || 988;
-            }
-        }
-
-        // Render table
-        function renderTable() {
-            const tbody = document.getElementById('artistsTable');
-            
-            if (artists.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="6">
-                            <div class="empty-state">
-                                <div class="empty-state-icon">📭</div>
-                                <h3>No artists yet</h3>
-                                <p>Signups will appear here</p>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+        function renderArtists(list) {
+            const tbody = document.getElementById('artists-table');
+            if (!list.length) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No artists yet</td></tr>';
                 return;
             }
-
-            const filtered = filterArtists();
-            
-            tbody.innerHTML = filtered.map(artist => `
-                <tr data-id="${artist.id}">
-                    <td>
-                        <div class="artist-info">
-                            <div class="artist-avatar">${getInitials(artist.artist_name || artist.name)}</div>
-                            <div class="artist-details">
-                                <h4>${artist.artist_name || artist.name}</h4>
-                                <p>${artist.email}</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <a href="${artist.spotify_link}" target="_blank" style="color: var(--primary); text-decoration: none;">
-                            ${artist.genre || 'Unknown'} Track 🔗
-                        </a>
-                    </td>
-                    <td>
-                        <span class="tier-badge tier-${getTierClass(artist.interested_tier)}">
-                            ${formatTier(artist.interested_tier)}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="status-badge status-${artist.status || 'new'}">
-                            ${formatStatus(artist.status || 'new')}
-                        </span>
-                    </td>
-                    <td>${formatDate(artist.created_at)}</td>
-                    <td>
-                        <div class="actions">
-                            <button class="action-btn" onclick="viewArtist(${artist.id})" title="View Details">👁️</button>
-                            <button class="action-btn" onclick="editArtist(${artist.id})" title="Edit">✏️</button>
-                            <button class="action-btn" onclick="copySpotify('${artist.spotify_link}')" title="Copy Spotify Link">🔗</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = list.map(a => '<tr>' +
+                '<td>' + a.id + '</td>' +
+                '<td>' + (a.name || '-') + '</td>' +
+                '<td>' + (a.artist_name || '-') + '</td>' +
+                '<td>' + (a.email || '-') + '</td>' +
+                '<td>' + (a.genre || '-') + '</td>' +
+                '<td>' + (a.sutra_balance || 0) + '</td>' +
+                '<td>' + (a.total_placements || 0) + '</td>' +
+                '<td>' + formatDate(a.created_at) + '</td>' +
+                '</tr>').join('');
         }
 
-        // Filter artists
-        function filterArtists() {
-            const tier = document.getElementById('filterTier').value;
-            const status = document.getElementById('filterStatus').value;
-            const search = document.getElementById('searchInput').value.toLowerCase();
+        function renderCurators(list) {
+            const tbody = document.getElementById('curators-table');
+            if (!list.length) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No curators yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = list.map(c => '<tr>' +
+                '<td>' + c.id + '</td>' +
+                '<td>' + (c.name || '-') + '</td>' +
+                '<td>' + (c.email || '-') + '</td>' +
+                '<td>' + (c.total_followers || 0).toLocaleString() + '</td>' +
+                '<td><span class="badge badge-' + (c.status === 'verified' ? 'green' : 'gray') + '">' + c.status + '</span></td>' +
+                '<td>' + (c.times_contacted || 0) + '</td>' +
+                '<td>' + (c.placements_made || 0) + '</td>' +
+                '<td class="actions">' +
+                    '<a href="' + (c.spotify_profile_url || '#') + '" target="_blank">Spotify</a>' +
+                    '<button onclick="copyEmail(\'' + c.email + '\')">Copy</button>' +
+                '</td>' +
+                '</tr>').join('');
+        }
 
-            return artists.filter(a => {
-                if (tier && !a.interested_tier?.includes(tier)) return false;
-                if (status && a.status !== status) return false;
-                if (search) {
-                    const searchStr = `${a.name} ${a.artist_name} ${a.email} ${a.genre}`.toLowerCase();
-                    if (!searchStr.includes(search)) return false;
-                }
-                return true;
+        function renderCampaigns(list) {
+            const tbody = document.getElementById('campaigns-table');
+            if (!list.length) {
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No campaigns yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = list.map(c => '<tr>' +
+                '<td>' + c.id + '</td>' +
+                '<td>' + (c.artist_name || '-') + '</td>' +
+                '<td>' + (c.track_title || '-') + '</td>' +
+                '<td><span class="badge badge-blue">' + (c.tier || '-') + '</span></td>' +
+                '<td><span class="badge badge-' + (c.status === 'completed' ? 'green' : 'yellow') + '">' + c.status + '</span></td>' +
+                '<td>' + (c.placements_count || 0) + '</td>' +
+                '<td>' + formatDate(c.created_at) + '</td>' +
+                '</tr>').join('');
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+            document.querySelectorAll('.sidebar-nav a').forEach(function(el) { el.classList.remove('active'); });
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('nav-' + tab).classList.add('active');
+        }
+
+        function filterArtists(q) {
+            q = q.toLowerCase();
+            var filtered = artists.filter(function(a) {
+                return (a.name || '').toLowerCase().includes(q) ||
+                       (a.email || '').toLowerCase().includes(q) ||
+                       (a.artist_name || '').toLowerCase().includes(q);
             });
+            renderArtists(filtered);
         }
 
-        function filterTable() {
-            renderTable();
+        function filterCurators(q) {
+            q = q.toLowerCase();
+            var filtered = curators.filter(function(c) {
+                return (c.name || '').toLowerCase().includes(q) ||
+                       (c.email || '').toLowerCase().includes(q);
+            });
+            renderCurators(filtered);
         }
 
-        // Refresh data
-        function refreshData() {
-            loadDashboard();
-            showToast('Data refreshed');
+        function copyEmail(email) {
+            navigator.clipboard.writeText(email);
+            alert('Copied: ' + email);
         }
 
-        // View artist details
-        function viewArtist(id) {
-            const artist = artists.find(a => a.id === id);
-            if (!artist) return;
-            
-            selectedArtist = artist;
-            
-            document.getElementById('detailContent').innerHTML = `
-                <div class="detail-section">
-                    <h3>Artist Information</h3>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <label>Name</label>
-                            <span>${artist.name}</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Artist Name</label>
-                            <span>${artist.artist_name}</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Email</label>
-                            <span><a href="mailto:${artist.email}">${artist.email}</a></span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Genre</label>
-                            <span>${artist.genre || 'Not specified'}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="detail-section">
-                    <h3>Submission</h3>
-                    <div class="detail-grid">
-                        <div class="detail-item">
-                            <label>Spotify Link</label>
-                            <span><a href="${artist.spotify_link}" target="_blank">Open in Spotify 🔗</a></span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Tier</label>
-                            <span>${formatTier(artist.interested_tier)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Status</label>
-                            <span>${formatStatus(artist.status || 'new')}</span>
-                        </div>
-                        <div class="detail-item">
-                            <label>Placements</label>
-                            <span>${artist.placements || 0}</span>
-                        </div>
-                    </div>
-                </div>
-                ${artist.playlist ? `
-                <div class="detail-section">
-                    <h3>Playlist</h3>
-                    <div class="detail-item" style="width: 100%;">
-                        <label>Placed On</label>
-                        <span>${artist.playlist}</span>
-                    </div>
-                </div>
-                ` : ''}
-                ${artist.notes ? `
-                <div class="detail-section">
-                    <h3>Notes</h3>
-                    <div class="detail-item" style="width: 100%;">
-                        <span>${artist.notes}</span>
-                    </div>
-                </div>
-                ` : ''}
-                <div class="detail-section">
-                    <h3>Timeline</h3>
-                    <div class="detail-item" style="width: 100%;">
-                        <label>Signed Up</label>
-                        <span>${new Date(artist.created_at).toLocaleString()}</span>
-                    </div>
-                </div>
-            `;
-            
-            openModal('detailModal');
+        function formatDate(d) {
+            if (!d) return '-';
+            return new Date(d).toLocaleDateString();
         }
 
-        // Edit artist
-        function editArtist(id) {
-            const artist = artists.find(a => a.id === id);
-            if (!artist) return;
-            
-            selectedArtist = artist;
-            
-            document.getElementById('editStatus').value = artist.status || 'new';
-            document.getElementById('editPlacements').value = artist.placements || 0;
-            document.getElementById('editNotes').value = artist.notes || '';
-            document.getElementById('editPlaylist').value = artist.playlist || '';
-            document.getElementById('editId').value = artist.id;
-            
-            openModal('editModal');
+        function exportArtists() {
+            var csv = 'ID,Name,Artist Name,Email,Genre,SUTRA,Placements,Created\n';
+            artists.forEach(function(a) {
+                csv += [a.id, a.name, a.artist_name, a.email, a.genre, a.sutra_balance, a.total_placements, a.created_at].join(',') + '\n';
+            });
+            downloadCSV(csv, 'artists.csv');
         }
 
-        // Save edit
-        async function saveEdit() {
-            const id = document.getElementById('editId').value;
-            const updates = {
-                status: document.getElementById('editStatus').value,
-                placements: parseInt(document.getElementById('editPlacements').value),
-                notes: document.getElementById('editNotes').value,
-                playlist: document.getElementById('editPlaylist').value
-            };
-
-            // Try to update via API
-            try {
-                const response = await fetch(`${API_BASE}/artists/${id}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updates)
-                });
-                
-                if (!response.ok) throw new Error('API update failed');
-            } catch (error) {
-                console.log('API unavailable, updating local state only');
-            }
-
-            // Update local state
-            const artist = artists.find(a => a.id == id);
-            if (artist) {
-                Object.assign(artist, updates);
-                renderTable();
-                updateStats();
-            }
-
-            closeModal('editModal');
-            showToast('Artist updated successfully');
+        function exportCurators() {
+            var csv = 'ID,Name,Email,Followers,Status,Contacted,Placements\n';
+            curators.forEach(function(c) {
+                csv += [c.id, c.name, c.email, c.total_followers, c.status, c.times_contacted, c.placements_made].join(',') + '\n';
+            });
+            downloadCSV(csv, 'curators.csv');
         }
 
-        // Mark as placed (quick action)
-        function markAsPlaced() {
-            if (!selectedArtist) return;
-            
-            selectedArtist.status = 'placed';
-            selectedArtist.placements = (selectedArtist.placements || 0) + 1;
-            selectedArtist.playlist = 'OneZeroEight Discoveries';
-            
-            renderTable();
-            updateStats();
-            closeModal('detailModal');
-            showToast('Marked as placed on OneZeroEight Discoveries');
-        }
-
-        // Copy Spotify link
-        function copySpotify(link) {
-            navigator.clipboard.writeText(link);
-            showToast('Spotify link copied!');
-        }
-
-        // Export to CSV
-        function exportData() {
-            const headers = ['Name', 'Email', 'Artist Name', 'Genre', 'Tier', 'Status', 'Placements', 'Spotify Link', 'Date'];
-            const rows = artists.map(a => [
-                a.name,
-                a.email,
-                a.artist_name,
-                a.genre,
-                formatTier(a.interested_tier),
-                a.status || 'new',
-                a.placements || 0,
-                a.spotify_link,
-                formatDate(a.created_at)
-            ]);
-            
-            const csv = [headers, ...rows].map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
+        function downloadCSV(csv, filename) {
+            var blob = new Blob([csv], { type: 'text/csv' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
             a.href = url;
-            a.download = `onezeroeight-artists-${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = filename;
             a.click();
-            
-            showToast('CSV exported successfully');
         }
-
-        // Refresh data
-        function refreshData() {
-            loadArtists();
-            showToast('Data refreshed');
-        }
-
-        // Utility functions
-        function getInitials(name) {
-            return name?.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() || '??';
-        }
-
-        function getTierClass(tier) {
-            if (!tier) return 'basic';
-            if (tier.includes('free')) return 'free';
-            if (tier.includes('pro')) return 'pro';
-            if (tier.includes('growth')) return 'growth';
-            return 'basic';
-        }
-
-        function formatTier(tier) {
-            if (!tier) return 'Unknown';
-            if (tier.includes('free')) return 'Free Trial';
-            if (tier.includes('pro')) return 'Pro';
-            if (tier.includes('growth')) return 'Growth';
-            if (tier.includes('basic')) return 'Basic';
-            return tier;
-        }
-
-        function formatStatus(status) {
-            const map = {
-                'new': '🆕 New',
-                'placed': '✅ Placed',
-                'reviewing': '⏳ Reviewing',
-                'completed': '✓ Completed',
-                'paid': '💰 Paid'
-            };
-            return map[status] || status;
-        }
-
-        function formatDate(date) {
-            if (!date) return 'N/A';
-            return new Date(date).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        }
-
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-            
-            toast.className = `toast active ${type}`;
-            toastMessage.textContent = message;
-            
-            setTimeout(() => {
-                toast.classList.remove('active');
-            }, 3000);
-        }
-
-        // Close modals on outside click
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('active');
-                }
-            });
-        });
     </script>
 </body>
 </html>
