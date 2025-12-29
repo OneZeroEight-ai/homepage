@@ -127,9 +127,10 @@
             font-size: 0.85rem;
             width: 200px;
         }
+        .table-container { max-height: 600px; overflow-y: auto; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 0.75rem 1.25rem; text-align: left; border-bottom: 1px solid var(--border); }
-        th { font-size: 0.75rem; font-weight: 600; color: var(--text-light); text-transform: uppercase; background: var(--light); }
+        th { font-size: 0.75rem; font-weight: 600; color: var(--text-light); text-transform: uppercase; background: var(--light); position: sticky; top: 0; }
         td { font-size: 0.9rem; }
         tr:hover { background: rgba(99, 102, 241, 0.02); }
         .badge {
@@ -156,6 +157,7 @@
             cursor: pointer;
         }
         .actions a:hover, .actions button:hover { text-decoration: underline; }
+        .error { color: var(--danger); padding: 1rem; background: rgba(239,68,68,0.1); border-radius: 8px; margin-bottom: 1rem; }
         @media (max-width: 900px) {
             .sidebar { display: none; }
             .main { margin-left: 0; }
@@ -188,6 +190,7 @@
                 <h1>Dashboard</h1>
                 <button class="btn btn-primary" onclick="loadAll()">🔄 Refresh</button>
             </div>
+            <div id="error-msg"></div>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-card-title">Total Artists</div>
@@ -225,24 +228,24 @@
             </div>
             <div class="table-card">
                 <div class="table-header">
-                    <h2>All Artists</h2>
+                    <h2>All Artists (<span id="artist-count">0</span>)</h2>
                     <input type="text" class="search-input" placeholder="Search..." oninput="filterArtists(this.value)">
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Artist Name</th>
-                            <th>Email</th>
-                            <th>Genre</th>
-                            <th>SUTRA</th>
-                            <th>Placements</th>
-                            <th>Joined</th>
-                        </tr>
-                    </thead>
-                    <tbody id="artists-table"></tbody>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Artist Name</th>
+                                <th>Email</th>
+                                <th>Genre</th>
+                                <th>SUTRA</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="artists-table"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -253,24 +256,25 @@
             </div>
             <div class="table-card">
                 <div class="table-header">
-                    <h2>Verified Curators (<span id="curator-count">0</span>)</h2>
+                    <h2>All Curators (<span id="curator-count">0</span>)</h2>
                     <input type="text" class="search-input" placeholder="Search..." oninput="filterCurators(this.value)">
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Followers</th>
-                            <th>Status</th>
-                            <th>Contacted</th>
-                            <th>Placements</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="curators-table"></tbody>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Followers</th>
+                                <th>Status</th>
+                                <th>Contacted</th>
+                                <th>Placements</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="curators-table"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -280,138 +284,178 @@
             </div>
             <div class="table-card">
                 <div class="table-header">
-                    <h2>All Campaigns</h2>
+                    <h2>All Campaigns (<span id="campaign-count">0</span>)</h2>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Artist</th>
-                            <th>Track</th>
-                            <th>Tier</th>
-                            <th>Status</th>
-                            <th>Placements</th>
-                            <th>Created</th>
-                        </tr>
-                    </thead>
-                    <tbody id="campaigns-table"></tbody>
-                </table>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Artist</th>
+                                <th>Track</th>
+                                <th>Tier</th>
+                                <th>Status</th>
+                                <th>Placements</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody id="campaigns-table"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
-        const API = 'https://onezeroeight-backend-production.up.railway.app/api';
-        let artists = [];
-        let curators = [];
-        let campaigns = [];
+        var API = 'https://onezeroeight-backend-production.up.railway.app/api';
+        var artists = [];
+        var curators = [];
+        var campaigns = [];
 
         document.addEventListener('DOMContentLoaded', loadAll);
 
-        async function loadAll() {
-            await Promise.all([loadStats(), loadArtists(), loadCurators(), loadCampaigns()]);
+        function loadAll() {
+            loadStats();
+            loadArtists();
+            loadCurators();
+            loadCampaigns();
         }
 
-        async function loadStats() {
-            try {
-                const res = await fetch(API + '/admin/curators?page_size=1000');
-                const data = await res.json();
-                document.getElementById('stat-artists').textContent = data.total_artists || 0;
-                document.getElementById('stat-curators').textContent = data.total_curators || 0;
-                document.getElementById('stat-campaigns').textContent = data.active_campaigns || 0;
-                document.getElementById('stat-placements').textContent = data.total_placements || 0;
-                document.getElementById('stat-revenue').textContent = '$' + (data.total_revenue || 0).toFixed(2);
-                document.getElementById('stat-sutra').textContent = (data.sutra_distributed || 0).toFixed(0);
-            } catch (e) { console.error('Stats error:', e); }
+        function showError(msg) {
+            document.getElementById('error-msg').innerHTML = '<div class="error">' + msg + '</div>';
         }
 
-        async function loadArtists() {
-            try {
-                const res = await fetch(API + '/admin/artists');
-                const data = await res.json();
-                artists = data.artists || [];
-                renderArtists(artists);
-            } catch (e) { console.error('Artists error:', e); }
+        function loadStats() {
+            fetch(API + '/admin/stats')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    document.getElementById('stat-artists').textContent = data.total_artists || 0;
+                    document.getElementById('stat-curators').textContent = data.total_curators || 0;
+                    document.getElementById('stat-campaigns').textContent = data.active_campaigns || 0;
+                    document.getElementById('stat-placements').textContent = data.total_placements || 0;
+                    document.getElementById('stat-revenue').textContent = '$' + (data.total_revenue || 0).toFixed(2);
+                    document.getElementById('stat-sutra').textContent = (data.sutra_distributed || 0);
+                })
+                .catch(function(e) {
+                    console.error('Stats error:', e);
+                    showError('Failed to load stats: ' + e.message);
+                });
         }
 
-        async function loadCurators() {
-            try {
-                const res = await fetch(API + '/admin/curators');
-                const data = await res.json();
-                curators = data.curators || [];
-                document.getElementById('curator-count').textContent = curators.length;
-                renderCurators(curators);
-            } catch (e) { console.error('Curators error:', e); }
+        function loadArtists() {
+            fetch(API + '/admin/artists?page_size=1000')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    artists = data.artists || [];
+                    document.getElementById('artist-count').textContent = artists.length;
+                    renderArtists(artists);
+                })
+                .catch(function(e) { console.error('Artists error:', e); });
         }
 
-        async function loadCampaigns() {
-            try {
-                const res = await fetch(API + '/admin/campaigns');
-                const data = await res.json();
-                campaigns = data.campaigns || [];
-                renderCampaigns(campaigns);
-            } catch (e) { console.error('Campaigns error:', e); }
+        function loadCurators() {
+            fetch(API + '/admin/curators?page_size=1000')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    curators = data.curators || [];
+                    document.getElementById('curator-count').textContent = curators.length;
+                    renderCurators(curators);
+                })
+                .catch(function(e) { console.error('Curators error:', e); });
+        }
+
+        function loadCampaigns() {
+            fetch(API + '/admin/campaigns?page_size=1000')
+                .then(function(res) { return res.json(); })
+                .then(function(data) {
+                    campaigns = data.campaigns || [];
+                    document.getElementById('campaign-count').textContent = campaigns.length;
+                    renderCampaigns(campaigns);
+                })
+                .catch(function(e) { console.error('Campaigns error:', e); });
         }
 
         function renderArtists(list) {
-            const tbody = document.getElementById('artists-table');
+            var tbody = document.getElementById('artists-table');
             if (!list.length) {
-                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No artists yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No artists yet</td></tr>';
                 return;
             }
-            tbody.innerHTML = list.map(a => '<tr>' +
-                '<td>' + a.id + '</td>' +
-                '<td>' + (a.name || '-') + '</td>' +
-                '<td>' + (a.artist_name || '-') + '</td>' +
-                '<td>' + (a.email || '-') + '</td>' +
-                '<td>' + (a.genre || '-') + '</td>' +
-                '<td>' + (a.sutra_balance || 0) + '</td>' +
-                '<td>' + (a.total_placements || 0) + '</td>' +
-                '<td>' + formatDate(a.created_at) + '</td>' +
-                '</tr>').join('');
+            var html = '';
+            for (var i = 0; i < list.length; i++) {
+                var a = list[i];
+                html += '<tr>';
+                html += '<td>' + (a.name || '-') + '</td>';
+                html += '<td>' + (a.artist_name || '-') + '</td>';
+                html += '<td>' + (a.email || '-') + '</td>';
+                html += '<td>' + (a.genre || '-') + '</td>';
+                html += '<td>' + (a.sutra_balance || 0) + '</td>';
+                html += '<td>' + formatDate(a.created_at) + '</td>';
+                html += '</tr>';
+            }
+            tbody.innerHTML = html;
         }
 
         function renderCurators(list) {
-            const tbody = document.getElementById('curators-table');
+            var tbody = document.getElementById('curators-table');
             if (!list.length) {
-                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">No curators yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No curators yet</td></tr>';
                 return;
             }
-            tbody.innerHTML = list.map(c => '<tr>' +
-                '<td>' + c.id + '</td>' +
-                '<td>' + (c.name || '-') + '</td>' +
-                '<td>' + (c.email || '-') + '</td>' +
-                '<td>' + (c.total_followers || 0).toLocaleString() + '</td>' +
-                '<td><span class="badge badge-' + (c.status === 'verified' ? 'green' : 'gray') + '">' + c.status + '</span></td>' +
-                '<td>' + (c.times_contacted || 0) + '</td>' +
-                '<td>' + (c.placements_made || 0) + '</td>' +
-                '<td class="actions">' +
-                    '<a href="' + (c.spotify_profile_url || '#') + '" target="_blank">Spotify</a>' +
-                    '<button onclick="copyEmail(\'' + c.email + '\')">Copy</button>' +
-                '</td>' +
-                '</tr>').join('');
+            var html = '';
+            for (var i = 0; i < list.length; i++) {
+                var c = list[i];
+                var statusClass = c.status === 'active' ? 'green' : 'gray';
+                html += '<tr>';
+                html += '<td>' + (c.name || '-') + '</td>';
+                html += '<td>' + (c.email || '-') + '</td>';
+                html += '<td>' + (c.total_followers || 0).toLocaleString() + '</td>';
+                html += '<td><span class="badge badge-' + statusClass + '">' + c.status + '</span></td>';
+                html += '<td>' + (c.times_contacted || 0) + '</td>';
+                html += '<td>' + (c.placements_made || 0) + '</td>';
+                html += '<td class="actions">';
+                if (c.spotify_profile_url) {
+                    html += '<a href="' + c.spotify_profile_url + '" target="_blank">Spotify</a>';
+                }
+                html += '<button onclick="copyEmail(\'' + c.email + '\')">Copy</button>';
+                html += '</td>';
+                html += '</tr>';
+            }
+            tbody.innerHTML = html;
         }
 
         function renderCampaigns(list) {
-            const tbody = document.getElementById('campaigns-table');
+            var tbody = document.getElementById('campaigns-table');
             if (!list.length) {
                 tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No campaigns yet</td></tr>';
                 return;
             }
-            tbody.innerHTML = list.map(c => '<tr>' +
-                '<td>' + c.id + '</td>' +
-                '<td>' + (c.artist_name || '-') + '</td>' +
-                '<td>' + (c.track_title || '-') + '</td>' +
-                '<td><span class="badge badge-blue">' + (c.tier || '-') + '</span></td>' +
-                '<td><span class="badge badge-' + (c.status === 'completed' ? 'green' : 'yellow') + '">' + c.status + '</span></td>' +
-                '<td>' + (c.placements_count || 0) + '</td>' +
-                '<td>' + formatDate(c.created_at) + '</td>' +
-                '</tr>').join('');
+            var html = '';
+            for (var i = 0; i < list.length; i++) {
+                var c = list[i];
+                var statusClass = c.status === 'completed' ? 'green' : 'yellow';
+                html += '<tr>';
+                html += '<td>' + (c.id || '-').substring(0, 8) + '</td>';
+                html += '<td>' + (c.artist_name || '-') + '</td>';
+                html += '<td>' + (c.track_title || '-') + '</td>';
+                html += '<td><span class="badge badge-blue">' + (c.tier || '-') + '</span></td>';
+                html += '<td><span class="badge badge-' + statusClass + '">' + c.status + '</span></td>';
+                html += '<td>' + (c.placements_count || 0) + '</td>';
+                html += '<td>' + formatDate(c.created_at) + '</td>';
+                html += '</tr>';
+            }
+            tbody.innerHTML = html;
         }
 
         function showTab(tab) {
-            document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
-            document.querySelectorAll('.sidebar-nav a').forEach(function(el) { el.classList.remove('active'); });
+            var contents = document.querySelectorAll('.tab-content');
+            for (var i = 0; i < contents.length; i++) {
+                contents[i].classList.remove('active');
+            }
+            var navs = document.querySelectorAll('.sidebar-nav a');
+            for (var i = 0; i < navs.length; i++) {
+                navs[i].classList.remove('active');
+            }
             document.getElementById('tab-' + tab).classList.add('active');
             document.getElementById('nav-' + tab).classList.add('active');
         }
@@ -419,9 +463,9 @@
         function filterArtists(q) {
             q = q.toLowerCase();
             var filtered = artists.filter(function(a) {
-                return (a.name || '').toLowerCase().includes(q) ||
-                       (a.email || '').toLowerCase().includes(q) ||
-                       (a.artist_name || '').toLowerCase().includes(q);
+                return (a.name || '').toLowerCase().indexOf(q) !== -1 ||
+                       (a.email || '').toLowerCase().indexOf(q) !== -1 ||
+                       (a.artist_name || '').toLowerCase().indexOf(q) !== -1;
             });
             renderArtists(filtered);
         }
@@ -429,8 +473,8 @@
         function filterCurators(q) {
             q = q.toLowerCase();
             var filtered = curators.filter(function(c) {
-                return (c.name || '').toLowerCase().includes(q) ||
-                       (c.email || '').toLowerCase().includes(q);
+                return (c.name || '').toLowerCase().indexOf(q) !== -1 ||
+                       (c.email || '').toLowerCase().indexOf(q) !== -1;
             });
             renderCurators(filtered);
         }
@@ -446,18 +490,20 @@
         }
 
         function exportArtists() {
-            var csv = 'ID,Name,Artist Name,Email,Genre,SUTRA,Placements,Created\n';
-            artists.forEach(function(a) {
-                csv += [a.id, a.name, a.artist_name, a.email, a.genre, a.sutra_balance, a.total_placements, a.created_at].join(',') + '\n';
-            });
+            var csv = 'Name,Artist Name,Email,Genre,SUTRA,Created\n';
+            for (var i = 0; i < artists.length; i++) {
+                var a = artists[i];
+                csv += [a.name, a.artist_name, a.email, a.genre, a.sutra_balance, a.created_at].join(',') + '\n';
+            }
             downloadCSV(csv, 'artists.csv');
         }
 
         function exportCurators() {
-            var csv = 'ID,Name,Email,Followers,Status,Contacted,Placements\n';
-            curators.forEach(function(c) {
-                csv += [c.id, c.name, c.email, c.total_followers, c.status, c.times_contacted, c.placements_made].join(',') + '\n';
-            });
+            var csv = 'Name,Email,Followers,Status,Contacted,Placements\n';
+            for (var i = 0; i < curators.length; i++) {
+                var c = curators[i];
+                csv += [c.name, c.email, c.total_followers, c.status, c.times_contacted, c.placements_made].join(',') + '\n';
+            }
             downloadCSV(csv, 'curators.csv');
         }
 
