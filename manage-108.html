@@ -369,6 +369,7 @@
         <div id="tab-campaigns" class="tab-content">
             <div class="header">
                 <h1>Campaigns <span style="font-weight:normal;color:var(--text-light)">(<span id="campaign-count">0</span>)</span></h1>
+                <button class="btn btn-primary" onclick="openModal('createCampaignModal')">+ Create Campaign</button>
             </div>
             <div class="table-card">
                 <div class="table-header">
@@ -433,6 +434,64 @@
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal('editArtistModal')">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Campaign Modal -->
+    <div class="modal" id="createCampaignModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create Campaign</h3>
+                <button class="modal-close" onclick="closeModal('createCampaignModal')">&times;</button>
+            </div>
+            <form onsubmit="saveCampaign(event)">
+                <div class="form-group">
+                    <label>Artist Email *</label>
+                    <input type="email" id="campaign-email" required placeholder="artist@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Artist Name</label>
+                    <input type="text" id="campaign-artist-name" placeholder="Artist Name">
+                </div>
+                <div class="form-group">
+                    <label>Track Title *</label>
+                    <input type="text" id="campaign-track" required placeholder="Song Title">
+                </div>
+                <div class="form-group">
+                    <label>Spotify Link *</label>
+                    <input type="url" id="campaign-spotify" required placeholder="https://open.spotify.com/track/...">
+                </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    <select id="campaign-genre">
+                        <option value="Electronic">Electronic</option>
+                        <option value="Hip Hop">Hip Hop</option>
+                        <option value="Pop">Pop</option>
+                        <option value="Lo-Fi">Lo-Fi</option>
+                        <option value="Ambient">Ambient</option>
+                        <option value="Rock">Rock</option>
+                        <option value="R&B">R&B</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tier</label>
+                    <select id="campaign-tier">
+                        <option value="free">Free Trial (3 curators)</option>
+                        <option value="basic">Basic - $79 (10 curators)</option>
+                        <option value="growth" selected>Growth - $149 (20 curators)</option>
+                        <option value="pro">Pro - $299 (35 curators)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount Paid ($)</label>
+                    <input type="number" id="campaign-paid" value="0" step="0.01">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('createCampaignModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Campaign</button>
                 </div>
             </form>
         </div>
@@ -800,6 +859,46 @@
             })
             .catch(function(e) {
                 alert('Error updating curator: ' + e.message);
+            });
+        }
+
+        // Create Campaign
+        function saveCampaign(e) {
+            e.preventDefault();
+            var tierCurators = { 'free': 3, 'basic': 10, 'growth': 20, 'pro': 35 };
+            var tier = document.getElementById('campaign-tier').value;
+            
+            var data = {
+                email: document.getElementById('campaign-email').value,
+                artist_name: document.getElementById('campaign-artist-name').value,
+                name: document.getElementById('campaign-artist-name').value,
+                track_title: document.getElementById('campaign-track').value,
+                spotify_link: document.getElementById('campaign-spotify').value,
+                genre: document.getElementById('campaign-genre').value,
+                tier: tier,
+                usd_paid: parseFloat(document.getElementById('campaign-paid').value) || 0,
+                curators_count: tierCurators[tier] || 10
+            };
+            
+            fetch(API + '/admin/campaigns/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(function(res) { return res.json(); })
+            .then(function(result) {
+                if (result.success) {
+                    closeModal('createCampaignModal');
+                    showSuccess('Campaign created successfully!');
+                    loadCampaigns();
+                    loadStats();
+                    document.getElementById('createCampaignModal').querySelector('form').reset();
+                } else {
+                    alert('Error: ' + (result.detail || 'Unknown error'));
+                }
+            })
+            .catch(function(e) {
+                alert('Error creating campaign: ' + e.message);
             });
         }
 
