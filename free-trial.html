@@ -93,10 +93,7 @@
             max-width: 600px;
             margin: 0 auto 1rem;
         }
-        .hero-subtext {
-            font-size: 1rem;
-            opacity: 0.85;
-        }
+        .hero-subtext { font-size: 1rem; opacity: 0.85; }
         .trial-section { padding: 4rem 0; }
         .trial-grid {
             display: grid;
@@ -254,6 +251,11 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
         }
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
         .form-footer {
             text-align: center;
             margin-top: 1.25rem;
@@ -269,6 +271,28 @@
             gap: 0.5rem;
             color: var(--secondary);
             font-weight: 500;
+        }
+        .form-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            display: none;
+        }
+        .form-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .form-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .form-message.info {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.3);
         }
         .how-section { padding: 4rem 0; background: var(--light); }
         .how-section h2 {
@@ -382,6 +406,23 @@
             gap: 0.5rem;
         }
         .pricing-features li::before { content: '✓'; color: var(--secondary); font-weight: 700; }
+        .btn-pricing {
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-pricing:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        .btn-pricing:disabled { opacity: 0.7; cursor: not-allowed; }
         footer {
             background: var(--darker);
             color: white;
@@ -493,6 +534,7 @@
                             <h2>Start Your Free Trial</h2>
                             <p>Playlist placement in 24 hours</p>
                         </div>
+                        <div id="formMessage" class="form-message"></div>
                         <form id="trialForm" onsubmit="submitTrialForm(event)">
                             <div class="form-group">
                                 <label for="name">Your Name *</label>
@@ -525,7 +567,7 @@
                                     <option value="other">Other</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn-submit">Get My Free Placement →</button>
+                            <button type="submit" class="btn-submit" id="submitBtn">Get My Free Placement →</button>
                             <div class="form-footer">
                                 <span>No credit card required</span>
                                 <span class="secure">🔒 Your data is secure</span>
@@ -578,6 +620,7 @@
                         <li>Detailed feedback</li>
                         <li>Earn SUTRA tokens</li>
                     </ul>
+                    <button class="btn-pricing" onclick="startCheckout('basic')">Get Started →</button>
                 </div>
                 <div class="pricing-card popular">
                     <div class="popular-badge">Most Popular</div>
@@ -590,6 +633,7 @@
                         <li>Detailed feedback + tips</li>
                         <li>Earn SUTRA tokens</li>
                     </ul>
+                    <button class="btn-pricing" onclick="startCheckout('growth')">Get Started →</button>
                 </div>
                 <div class="pricing-card">
                     <h3>Pro</h3>
@@ -601,6 +645,7 @@
                         <li>Video feedback option</li>
                         <li>Dedicated manager</li>
                     </ul>
+                    <button class="btn-pricing" onclick="startCheckout('pro')">Get Started →</button>
                 </div>
             </div>
         </div>
@@ -611,13 +656,46 @@
         </div>
     </footer>
     <script>
+        var API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
+        
+        function showMessage(type, text) {
+            var msg = document.getElementById('formMessage');
+            msg.className = 'form-message ' + type;
+            msg.textContent = text;
+            msg.style.display = 'block';
+        }
+        
+        function hideMessage() {
+            document.getElementById('formMessage').style.display = 'none';
+        }
+        
+        async function submitWithRetry(url, options, maxRetries, onRetry) {
+            var lastError;
+            for (var i = 0; i < maxRetries; i++) {
+                try {
+                    var response = await fetch(url, options);
+                    return response;
+                } catch (error) {
+                    lastError = error;
+                    if (i < maxRetries - 1) {
+                        if (onRetry) onRetry(i + 1);
+                        await new Promise(function(resolve) { setTimeout(resolve, 2000); });
+                    }
+                }
+            }
+            throw lastError;
+        }
+        
         async function submitTrialForm(e) {
             e.preventDefault();
-            const btn = document.querySelector('.btn-submit');
-            const originalText = btn.textContent;
+            hideMessage();
+            
+            var btn = document.getElementById('submitBtn');
+            var originalText = btn.textContent;
             btn.disabled = true;
-            btn.textContent = 'Submitting...';
-            const data = {
+            btn.textContent = 'Waking up servers...';
+            
+            var data = {
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 artist_name: document.getElementById('artist').value,
@@ -627,24 +705,87 @@
                 bio: '',
                 referral_source: 'Guaranteed Placement Trial Page'
             };
+            
             try {
-                const response = await fetch('https://onezeroeight-backend-production.up.railway.app/api/artists/signup', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                });
-                const result = await response.json();
+                var response = await submitWithRetry(
+                    API_BASE + '/artists/signup',
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    },
+                    3,
+                    function(attempt) {
+                        btn.textContent = 'Connecting... (attempt ' + (attempt + 1) + '/3)';
+                    }
+                );
+                
+                btn.textContent = 'Processing...';
+                
+                var result = await response.json();
+                
                 if (response.ok && result.success) {
                     window.location.href = 'trial-success.html';
+                } else if (result.message && result.message.indexOf('already') !== -1) {
+                    showMessage('info', '🎵 You\'re already signed up! Check your email for next steps, or contact support@onezeroeight.ai if you need help.');
+                    btn.disabled = false;
+                    btn.textContent = originalText;
                 } else {
-                    alert(result.detail || 'Something went wrong. Please try again.');
+                    showMessage('error', result.detail || result.message || 'Something went wrong. Please try again.');
                     btn.disabled = false;
                     btn.textContent = originalText;
                 }
             } catch (error) {
-                alert('Network error. Please try again.');
+                showMessage('error', 'Connection error. Our servers may be waking up - please try again in a moment.');
                 btn.disabled = false;
                 btn.textContent = originalText;
+            }
+        }
+        
+        async function startCheckout(tier) {
+            var email = document.getElementById('email').value;
+            var artistName = document.getElementById('artist').value;
+            
+            if (!email) {
+                showMessage('error', 'Please fill in your email address first.');
+                document.getElementById('email').focus();
+                return;
+            }
+            
+            var btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Loading...';
+            
+            try {
+                var response = await submitWithRetry(
+                    API_BASE + '/stripe/create-checkout',
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            tier: tier,
+                            email: email,
+                            artist_name: artistName || 'Artist',
+                            success_url: window.location.origin + '/payment-success.html',
+                            cancel_url: window.location.href
+                        })
+                    },
+                    3
+                );
+                
+                var result = await response.json();
+                
+                if (result.checkout_url) {
+                    window.location.href = result.checkout_url;
+                } else {
+                    showMessage('error', result.detail || 'Could not start checkout. Please try again.');
+                    btn.disabled = false;
+                    btn.textContent = 'Get Started →';
+                }
+            } catch (error) {
+                showMessage('error', 'Connection error. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Get Started →';
             }
         }
     </script>
