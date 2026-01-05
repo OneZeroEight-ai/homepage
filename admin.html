@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - OneZeroEight.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f3f4f6; color: #374151; line-height: 1.6; }
+        
+        .header { background: linear-gradient(135deg, #1f2937, #374151); color: white; padding: 20px 32px; position: sticky; top: 0; z-index: 100; }
+        .header h1 { font-size: 1.5rem; font-weight: 700; }
+        .header p { opacity: 0.8; font-size: 0.9rem; }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+        .stat-card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .stat-card .value { font-size: 2rem; font-weight: 700; color: #6366f1; }
+        .stat-card .label { font-size: 0.9rem; color: #6b7280; margin-top: 4px; }
+        
+        .tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid #e5e7eb; padding-bottom: 16px; }
+        .tab { padding: 10px 20px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        .tab:hover { background: #f9fafb; }
+        .tab.active { background: #6366f1; color: white; border-color: #6366f1; }
+        
+        .panel { display: none; }
+        .panel.active { display: block; }
+        
+        .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px; overflow: hidden; }
+        .card-header { padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+        .card-header h2 { font-size: 1.1rem; font-weight: 600; }
+        .card-body { padding: 24px; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+        th { font-weight: 600; color: #6b7280; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        tr:hover { background: #f9fafb; }
+        
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 600; }
+        .badge-free { background: #dbeafe; color: #1e40af; }
+        .badge-pro { background: #fef3c7; color: #92400e; }
+        .badge-active { background: #d1fae5; color: #065f46; }
+        .badge-pending { background: #fef3c7; color: #92400e; }
+        .badge-completed { background: #e0e7ff; color: #4338ca; }
+        
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 0.9rem; cursor: pointer; border: none; transition: all 0.2s; }
+        .btn-primary { background: #6366f1; color: white; }
+        .btn-primary:hover { background: #4f46e5; }
+        .btn-secondary { background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
+        .btn-secondary:hover { background: #e5e7eb; }
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
+        .btn-success { background: #10b981; color: white; }
+        .btn-success:hover { background: #059669; }
+        
+        .actions { display: flex; gap: 8px; }
+        
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.95rem; font-family: inherit; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #6366f1; }
+        
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal { background: white; border-radius: 16px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; }
+        .modal-header { padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+        .modal-header h3 { font-size: 1.1rem; font-weight: 600; }
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280; }
+        .modal-body { padding: 24px; }
+        
+        .alert { padding: 16px; border-radius: 8px; margin-bottom: 16px; }
+        .alert-success { background: #d1fae5; color: #065f46; }
+        .alert-error { background: #fee2e2; color: #991b1b; }
+        .alert-info { background: #dbeafe; color: #1e40af; }
+        
+        .link { color: #6366f1; text-decoration: none; }
+        .link:hover { text-decoration: underline; }
+        
+        .agent-output { background: #1f2937; color: #e5e7eb; padding: 16px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+        
+        .empty-state { text-align: center; padding: 48px; color: #6b7280; }
+        .empty-state p { margin-bottom: 16px; }
+        
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .tabs { flex-wrap: wrap; }
+            table { font-size: 0.85rem; }
+            th, td { padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🎛️ OneZeroEight.ai Admin</h1>
+    <p>Campaign & Agent Management</p>
+</div>
+
+<div class="container">
+    <!-- Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="value" id="statArtists">-</div>
+            <div class="label">Total Artists</div>
+        </div>
+        <div class="stat-card">
+            <div class="value" id="statCurators">-</div>
+            <div class="label">Verified Curators</div>
+        </div>
+        <div class="stat-card">
+            <div class="value" id="statCampaigns">-</div>
+            <div class="label">Active Campaigns</div>
+        </div>
+        <div class="stat-card">
+            <div class="value" id="statPlacements">-</div>
+            <div class="label">Total Placements</div>
+        </div>
+        <div class="stat-card">
+            <div class="value" id="statRevenue">-</div>
+            <div class="label">Revenue</div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab active" onclick="showPanel('artists')">Artists</button>
+        <button class="tab" onclick="showPanel('campaigns')">Campaigns</button>
+        <button class="tab" onclick="showPanel('agents')">AI Agents</button>
+        <button class="tab" onclick="showPanel('workflows')">Workflows</button>
+    </div>
+
+    <!-- Artists Panel -->
+    <div class="panel active" id="panel-artists">
+        <div class="card">
+            <div class="card-header">
+                <h2>Recent Signups</h2>
+                <button class="btn btn-secondary btn-sm" onclick="loadArtists()">↻ Refresh</button>
+            </div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Artist</th>
+                            <th>Email</th>
+                            <th>Genre</th>
+                            <th>Spotify</th>
+                            <th>SUTRA</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="artistsTable">
+                        <tr><td colspan="6" class="empty-state">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaigns Panel -->
+    <div class="panel" id="panel-campaigns">
+        <div class="card">
+            <div class="card-header">
+                <h2>All Campaigns</h2>
+                <button class="btn btn-primary btn-sm" onclick="openCreateCampaign()">+ New Campaign</button>
+            </div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Track</th>
+                            <th>Artist</th>
+                            <th>Tier</th>
+                            <th>Status</th>
+                            <th>Placements</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="campaignsTable">
+                        <tr><td colspan="6" class="empty-state">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Agents Panel -->
+    <div class="panel" id="panel-agents">
+        <div class="card">
+            <div class="card-header">
+                <h2>Test AI Agents</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label>Track Title</label>
+                    <input type="text" id="agentTrackTitle" placeholder="Enter track title">
+                </div>
+                <div class="form-group">
+                    <label>Artist Name</label>
+                    <input type="text" id="agentArtistName" placeholder="Enter artist name">
+                </div>
+                <div class="form-group">
+                    <label>Spotify URL</label>
+                    <input type="url" id="agentSpotifyUrl" placeholder="https://open.spotify.com/track/...">
+                </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    <input type="text" id="agentGenre" placeholder="e.g., Electronic, Hip Hop">
+                </div>
+                
+                <div class="actions" style="margin-top: 24px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="runPlaylistAgent()">🎵 Playlist Agent</button>
+                    <button class="btn btn-primary" onclick="runSocialAgent()">📱 Social Agent</button>
+                    <button class="btn btn-primary" onclick="runPRAgent()">📰 PR Agent</button>
+                </div>
+                
+                <div style="margin-top: 24px;">
+                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Agent Output:</label>
+                    <div class="agent-output" id="agentOutput">Run an agent to see output here...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workflows Panel -->
+    <div class="panel" id="panel-workflows">
+        <div class="card">
+            <div class="card-header">
+                <h2>Trigger Workflows</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    Select a campaign and trigger workflow actions. These send real emails and execute agent tasks.
+                </div>
+                
+                <div class="form-group">
+                    <label>Select Campaign</label>
+                    <select id="workflowCampaignId">
+                        <option value="">-- Select Campaign --</option>
+                    </select>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin-top: 24px;">
+                    <div class="card" style="margin: 0;">
+                        <div class="card-body">
+                            <h3 style="font-size: 1rem; margin-bottom: 8px;">📧 Confirm Placement</h3>
+                            <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 16px;">Mark track as placed and notify artist</p>
+                            <div class="form-group">
+                                <input type="text" id="placementPlaylistName" placeholder="Playlist name">
+                            </div>
+                            <div class="form-group">
+                                <input type="url" id="placementPlaylistUrl" placeholder="Playlist URL">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" id="placementFollowers" placeholder="Followers (optional)">
+                            </div>
+                            <button class="btn btn-success btn-sm" onclick="triggerPlacement()">Confirm Placement</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card" style="margin: 0;">
+                        <div class="card-body">
+                            <h3 style="font-size: 1rem; margin-bottom: 8px;">📬 Send Curator Pitches</h3>
+                            <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 16px;">Pro tier only - sends to external curators</p>
+                            <div class="form-group">
+                                <input type="number" id="curatorCount" placeholder="Max curators (default: 50)" value="50">
+                            </div>
+                            <button class="btn btn-primary btn-sm" onclick="triggerCuratorOutreach()">Send Pitches</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card" style="margin: 0;">
+                        <div class="card-body">
+                            <h3 style="font-size: 1rem; margin-bottom: 8px;">✅ Complete Campaign</h3>
+                            <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 16px;">Mark complete and send summary</p>
+                            <div class="form-group">
+                                <input type="number" id="sutraReward" placeholder="SUTRA reward (optional)" value="0">
+                            </div>
+                            <button class="btn btn-secondary btn-sm" onclick="triggerComplete()">Complete Campaign</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 24px;">
+                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Workflow Log:</label>
+                    <div class="agent-output" id="workflowLog">Trigger a workflow to see results...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Campaign Modal -->
+<div class="modal-overlay" id="createCampaignModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Create Campaign</h3>
+            <button class="modal-close" onclick="closeModal('createCampaignModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Artist</label>
+                <select id="newCampaignArtist" required>
+                    <option value="">-- Select Artist --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Track Title</label>
+                <input type="text" id="newCampaignTrack" required placeholder="Enter track title">
+            </div>
+            <div class="form-group">
+                <label>Spotify URL</label>
+                <input type="url" id="newCampaignSpotify" required placeholder="https://open.spotify.com/track/...">
+            </div>
+            <div class="form-group">
+                <label>Tier</label>
+                <select id="newCampaignTier">
+                    <option value="free">Free Trial</option>
+                    <option value="pro">Pro ($99)</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="createCampaign()" style="width: 100%;">Create & Activate Campaign</button>
+        </div>
+    </div>
+</div>
+
+<script>
+const API = 'https://onezeroeight-backend-production.up.railway.app';
+
+// Tab switching
+function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    event.target.classList.add('active');
+}
+
+// Load stats
+async function loadStats() {
+    try {
+        const res = await fetch(API + '/api/admin/stats');
+        const data = await res.json();
+        document.getElementById('statArtists').textContent = data.total_artists || 0;
+        document.getElementById('statCurators').textContent = data.total_curators || 0;
+        document.getElementById('statCampaigns').textContent = data.active_campaigns || 0;
+        document.getElementById('statPlacements').textContent = data.total_placements || 0;
+        document.getElementById('statRevenue').textContent = '$' + ((data.total_revenue || 0) / 100).toFixed(0);
+    } catch (e) {
+        console.error('Error loading stats:', e);
+    }
+}
+
+// Load artists
+async function loadArtists() {
+    try {
+        const res = await fetch(API + '/api/admin/artists?page_size=50');
+        const data = await res.json();
+        const tbody = document.getElementById('artistsTable');
+        
+        if (!data.artists || data.artists.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No artists yet</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = data.artists.map(a => `
+            <tr>
+                <td><strong>${a.artist_name || a.name}</strong></td>
+                <td>${a.email}</td>
+                <td>${a.genre || '-'}</td>
+                <td>${a.spotify_url ? `<a href="${a.spotify_url}" target="_blank" class="link">Open</a>` : '-'}</td>
+                <td>${a.sutra_balance || 0}</td>
+                <td>
+                    <button class="btn btn-secondary btn-sm" onclick="selectArtistForCampaign('${a.id}', '${a.artist_name}')">+ Campaign</button>
+                </td>
+            </tr>
+        `).join('');
+        
+        // Populate artist dropdown
+        const select = document.getElementById('newCampaignArtist');
+        select.innerHTML = '<option value="">-- Select Artist --</option>' + 
+            data.artists.map(a => `<option value="${a.id}">${a.artist_name || a.name} (${a.email})</option>`).join('');
+            
+    } catch (e) {
+        console.error('Error loading artists:', e);
+    }
+}
+
+// Load campaigns
+async function loadCampaigns() {
+    try {
+        const res = await fetch(API + '/api/admin/campaigns?page_size=50');
+        const data = await res.json();
+        const tbody = document.getElementById('campaignsTable');
+        
+        if (!data.campaigns || data.campaigns.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="empty-state">No campaigns yet</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = data.campaigns.map(c => `
+            <tr>
+                <td><strong>${c.track_title || 'Untitled'}</strong></td>
+                <td>${c.artist_name || '-'}</td>
+                <td><span class="badge badge-${c.tier || 'free'}">${(c.tier || 'free').toUpperCase()}</span></td>
+                <td><span class="badge badge-${c.status || 'pending'}">${c.status || 'pending'}</span></td>
+                <td>${c.placements_confirmed || 0}</td>
+                <td>
+                    <div class="actions">
+                        <button class="btn btn-success btn-sm" onclick="quickPlacement('${c.id}')">+ Placement</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+        
+        // Populate workflow dropdown
+        const select = document.getElementById('workflowCampaignId');
+        select.innerHTML = '<option value="">-- Select Campaign --</option>' + 
+            data.campaigns.map(c => `<option value="${c.id}">${c.track_title} - ${c.artist_name}</option>`).join('');
+            
+    } catch (e) {
+        console.error('Error loading campaigns:', e);
+    }
+}
+
+// AI Agent functions
+async function runPlaylistAgent() {
+    const output = document.getElementById('agentOutput');
+    output.textContent = 'Running Playlist Agent...';
+    
+    try {
+        const params = new URLSearchParams({
+            track_title: document.getElementById('agentTrackTitle').value,
+            artist_name: document.getElementById('agentArtistName').value,
+            spotify_url: document.getElementById('agentSpotifyUrl').value,
+            genre: document.getElementById('agentGenre').value
+        });
+        const res = await fetch(API + '/api/workflow/agent/analyze-track?' + params, { method: 'POST' });
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+    } catch (e) {
+        output.textContent = 'Error: ' + e.message;
+    }
+}
+
+async function runSocialAgent() {
+    const output = document.getElementById('agentOutput');
+    output.textContent = 'Running Social Agent...';
+    
+    try {
+        const params = new URLSearchParams({
+            track_title: document.getElementById('agentTrackTitle').value,
+            artist_name: document.getElementById('agentArtistName').value,
+            spotify_url: document.getElementById('agentSpotifyUrl').value,
+            genre: document.getElementById('agentGenre').value
+        });
+        const res = await fetch(API + '/api/workflow/agent/generate-social?' + params, { method: 'POST' });
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+    } catch (e) {
+        output.textContent = 'Error: ' + e.message;
+    }
+}
+
+async function runPRAgent() {
+    const output = document.getElementById('agentOutput');
+    output.textContent = 'Running PR Agent...';
+    
+    try {
+        const params = new URLSearchParams({
+            track_title: document.getElementById('agentTrackTitle').value,
+            artist_name: document.getElementById('agentArtistName').value,
+            spotify_url: document.getElementById('agentSpotifyUrl').value,
+            genre: document.getElementById('agentGenre').value
+        });
+        const res = await fetch(API + '/api/workflow/agent/generate-pr?' + params, { method: 'POST' });
+        const data = await res.json();
+        output.textContent = JSON.stringify(data, null, 2);
+    } catch (e) {
+        output.textContent = 'Error: ' + e.message;
+    }
+}
+
+// Workflow triggers
+async function triggerPlacement() {
+    const log = document.getElementById('workflowLog');
+    const campaignId = document.getElementById('workflowCampaignId').value;
+    
+    if (!campaignId) {
+        log.textContent = 'Error: Select a campaign first';
+        return;
+    }
+    
+    log.textContent = 'Confirming placement...';
+    
+    try {
+        const res = await fetch(API + '/api/workflow/free-trial/confirm-placement', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                campaign_id: campaignId,
+                playlist_name: document.getElementById('placementPlaylistName').value || 'OneZeroEight Discoveries',
+                playlist_url: document.getElementById('placementPlaylistUrl').value || 'https://open.spotify.com/playlist/...',
+                playlist_followers: parseInt(document.getElementById('placementFollowers').value) || 0
+            })
+        });
+        const data = await res.json();
+        log.textContent = JSON.stringify(data, null, 2);
+        loadCampaigns();
+        loadStats();
+    } catch (e) {
+        log.textContent = 'Error: ' + e.message;
+    }
+}
+
+async function triggerCuratorOutreach() {
+    const log = document.getElementById('workflowLog');
+    const campaignId = document.getElementById('workflowCampaignId').value;
+    
+    if (!campaignId) {
+        log.textContent = 'Error: Select a campaign first';
+        return;
+    }
+    
+    log.textContent = 'Sending curator pitches...';
+    
+    try {
+        const res = await fetch(API + '/api/workflow/pro/send-curator-pitches', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                campaign_id: campaignId,
+                max_curators: parseInt(document.getElementById('curatorCount').value) || 50
+            })
+        });
+        const data = await res.json();
+        log.textContent = JSON.stringify(data, null, 2);
+    } catch (e) {
+        log.textContent = 'Error: ' + e.message;
+    }
+}
+
+async function triggerComplete() {
+    const log = document.getElementById('workflowLog');
+    const campaignId = document.getElementById('workflowCampaignId').value;
+    
+    if (!campaignId) {
+        log.textContent = 'Error: Select a campaign first';
+        return;
+    }
+    
+    log.textContent = 'Completing campaign...';
+    
+    try {
+        const res = await fetch(API + '/api/workflow/complete-campaign', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                campaign_id: campaignId,
+                sutra_reward: parseInt(document.getElementById('sutraReward').value) || 0
+            })
+        });
+        const data = await res.json();
+        log.textContent = JSON.stringify(data, null, 2);
+        loadCampaigns();
+    } catch (e) {
+        log.textContent = 'Error: ' + e.message;
+    }
+}
+
+// Modal functions
+function openCreateCampaign() {
+    document.getElementById('createCampaignModal').style.display = 'flex';
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+}
+
+function selectArtistForCampaign(artistId, artistName) {
+    document.getElementById('newCampaignArtist').value = artistId;
+    openCreateCampaign();
+}
+
+async function createCampaign() {
+    const artistId = document.getElementById('newCampaignArtist').value;
+    const tier = document.getElementById('newCampaignTier').value;
+    
+    if (!artistId) {
+        alert('Please select an artist');
+        return;
+    }
+    
+    const endpoint = tier === 'pro' ? '/api/workflow/pro/activate' : '/api/workflow/free-trial/submit-track';
+    
+    try {
+        const res = await fetch(API + endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                artist_id: artistId,
+                track_title: document.getElementById('newCampaignTrack').value,
+                spotify_url: document.getElementById('newCampaignSpotify').value
+            })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+            alert('Campaign created! ' + data.message);
+            closeModal('createCampaignModal');
+            loadCampaigns();
+            loadStats();
+        } else {
+            alert('Error: ' + (data.detail || 'Unknown error'));
+        }
+    } catch (e) {
+        alert('Error: ' + e.message);
+    }
+}
+
+function quickPlacement(campaignId) {
+    document.getElementById('workflowCampaignId').value = campaignId;
+    showPanel('workflows');
+    document.querySelectorAll('.tab')[3].click();
+}
+
+// Initialize
+loadStats();
+loadArtists();
+loadCampaigns();
+</script>
+
+</body>
+</html>
