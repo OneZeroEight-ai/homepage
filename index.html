@@ -1524,14 +1524,35 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
 });
 
+// Retry logic for Railway cold start
+async function submitWithRetry(url, options, maxRetries, onRetry) {
+    let lastError;
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            const response = await fetch(url, options);
+            return response;
+        } catch (error) {
+            lastError = error;
+            if (i < maxRetries - 1) {
+                if (onRetry) onRetry(i + 1);
+                // Wait 2 seconds before retry
+                await new Promise(resolve => setTimeout(resolve, 2000));
+            }
+        }
+    }
+    throw lastError;
+}
+
 async function submitForm(e) {
     e.preventDefault();
     
     const btn = document.getElementById('submitBtn');
     const msg = document.getElementById('formMessage');
+    const originalText = btn.textContent;
     
     btn.disabled = true;
-    btn.textContent = 'Submitting...';
+    btn.textContent = 'Waking up servers...';
+    msg.style.display = 'none';
     
     const data = {
         name: document.getElementById('fname').value,
@@ -1546,11 +1567,18 @@ async function submitForm(e) {
     };
     
     try {
-        const response = await fetch('https://onezeroeight-backend-production.up.railway.app/api/artists/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
+        const response = await submitWithRetry(
+            'https://onezeroeight-backend-production.up.railway.app/api/artists/signup',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            },
+            3, // max retries
+            (attempt) => {
+                btn.textContent = `Connecting... (attempt ${attempt + 1})`;
+            }
+        );
         
         const result = await response.json();
         
@@ -1569,11 +1597,11 @@ async function submitForm(e) {
     } catch (error) {
         msg.className = 'form-message error';
         msg.style.display = 'block';
-        msg.textContent = 'Network error. Please check your connection and try again.';
+        msg.textContent = 'Connection error. Please try again in a moment.';
     }
     
     btn.disabled = false;
-    btn.textContent = 'Start Free Trial →';
+    btn.textContent = originalText;
 }
 
 // Smooth scroll
