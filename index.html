@@ -994,6 +994,111 @@
             color: var(--gray-500);
         }
 
+        /* Spotify Auto-fill Styles */
+        .spotify-input-wrapper {
+            background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+        }
+
+        .spotify-input-wrapper label {
+            color: var(--white) !important;
+            font-weight: 700 !important;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .spotify-input-wrapper input {
+            background: rgba(255,255,255,0.95);
+            border: none;
+        }
+
+        .spotify-input-wrapper input:focus {
+            background: var(--white);
+        }
+
+        .spotify-hint {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .spotify-loading {
+            display: none;
+            margin-top: 12px;
+            color: var(--white);
+            font-size: 0.9rem;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .track-preview {
+            display: none;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .track-preview-inner {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .track-preview img {
+            width: 72px;
+            height: 72px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .track-preview-info {
+            flex: 1;
+        }
+
+        .track-preview-info h4 {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1rem;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .track-preview-info p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .genre-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .steps-grid {
@@ -1436,6 +1541,29 @@
         <div class="modal-body">
             <div class="form-message" id="formMessage"></div>
             <form id="signupForm" onsubmit="submitForm(event)">
+                
+                <!-- Spotify Auto-fill Section -->
+                <div class="spotify-input-wrapper">
+                    <label>🎵 Spotify Track Link</label>
+                    <input type="url" id="fspotify" placeholder="https://open.spotify.com/track/..." onpaste="handleSpotifyPaste(event)" onblur="lookupSpotify()">
+                    <p class="spotify-hint">Paste your Spotify link and we'll auto-fill the rest ✨</p>
+                    <div class="spotify-loading" id="spotifyLoading">
+                        <span class="spinner"></span> Analyzing track with AI...
+                    </div>
+                </div>
+
+                <!-- Track Preview -->
+                <div class="track-preview" id="trackPreview">
+                    <div class="track-preview-inner">
+                        <img id="trackThumbnail" src="" alt="Track artwork">
+                        <div class="track-preview-info">
+                            <h4 id="previewTitle"></h4>
+                            <p id="previewArtist"></p>
+                            <span class="genre-badge" id="previewGenre"></span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label>Name *</label>
                     <input type="text" id="fname" required>
@@ -1449,25 +1577,22 @@
                     <input type="text" id="fartist" required>
                 </div>
                 <div class="form-group">
-                    <label>Spotify Link <span>(optional)</span></label>
-                    <input type="url" id="fspotify" placeholder="https://open.spotify.com/artist/...">
-                </div>
-                <div class="form-group">
                     <label>Primary Genre *</label>
                     <select id="fgenre" required>
                         <option value="">Select your genre...</option>
-                        <option>Electronic / EDM</option>
-                        <option>Hip Hop / Rap</option>
-                        <option>Pop</option>
-                        <option>Lo-Fi / Chill</option>
-                        <option>Rock / Alternative</option>
-                        <option>R&B / Soul</option>
-                        <option>Indie</option>
-                        <option>Ambient / Experimental</option>
-                        <option>Country</option>
-                        <option>Jazz / Blues</option>
-                        <option>Classical</option>
-                        <option>Other</option>
+                        <option value="electronic">Electronic / EDM</option>
+                        <option value="hip-hop">Hip Hop / Rap</option>
+                        <option value="pop">Pop</option>
+                        <option value="lo-fi">Lo-Fi / Chill</option>
+                        <option value="rock">Rock / Alternative</option>
+                        <option value="rnb">R&B / Soul</option>
+                        <option value="indie">Indie</option>
+                        <option value="ambient">Ambient / Experimental</option>
+                        <option value="country">Country</option>
+                        <option value="folk">Folk</option>
+                        <option value="jazz">Jazz / Blues</option>
+                        <option value="classical">Classical</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -1478,7 +1603,14 @@
                         <option value="interested">No, but I'm interested in learning</option>
                     </select>
                 </div>
+                
+                <!-- Hidden fields for AI data -->
                 <input type="hidden" id="ftier" value="free">
+                <input type="hidden" id="ftrackTitle" value="">
+                <input type="hidden" id="faiGenres" value="">
+                <input type="hidden" id="faiMood" value="">
+                <input type="hidden" id="faiPitch" value="">
+                
                 <button type="submit" class="form-submit" id="submitBtn">
                     Start Free Trial →
                 </button>
@@ -1489,6 +1621,8 @@
 </div>
 
 <script>
+const API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
+
 function openModal(tier = 'free') {
     document.getElementById('modal').style.display = 'flex';
     document.getElementById('ftier').value = tier;
@@ -1512,6 +1646,8 @@ function closeModal() {
     document.body.style.overflow = 'auto';
     document.getElementById('signupForm').reset();
     document.getElementById('formMessage').style.display = 'none';
+    document.getElementById('trackPreview').style.display = 'none';
+    document.getElementById('spotifyLoading').style.display = 'none';
 }
 
 // Close on overlay click
@@ -1524,6 +1660,78 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
 });
 
+// Spotify Auto-fill
+function handleSpotifyPaste(event) {
+    setTimeout(lookupSpotify, 100);
+}
+
+async function lookupSpotify() {
+    const spotifyUrl = document.getElementById('fspotify').value.trim();
+    if (!spotifyUrl || !spotifyUrl.includes('spotify.com/track/')) return;
+    
+    const loadingEl = document.getElementById('spotifyLoading');
+    const previewEl = document.getElementById('trackPreview');
+    
+    loadingEl.style.display = 'flex';
+    previewEl.style.display = 'none';
+    
+    try {
+        const response = await fetch(API_BASE + '/workflow/spotify/metadata?spotify_url=' + encodeURIComponent(spotifyUrl));
+        const data = await response.json();
+        
+        if (data.success) {
+            // Store track title
+            if (data.track_title) {
+                document.getElementById('ftrackTitle').value = data.track_title;
+            }
+            
+            // Auto-fill artist name
+            if (data.artist_name) {
+                document.getElementById('fartist').value = data.artist_name;
+            }
+            
+            // Map AI genre to dropdown
+            if (data.primary_genre) {
+                const genreMap = {
+                    'Electronic': 'electronic', 'EDM': 'electronic', 'Dance': 'electronic', 
+                    'House': 'electronic', 'Techno': 'electronic', 'Synth': 'electronic',
+                    'Hip Hop': 'hip-hop', 'Hip-Hop': 'hip-hop', 'Rap': 'hip-hop', 'Trap': 'hip-hop',
+                    'Pop': 'pop', 'Synthpop': 'pop',
+                    'Lo-Fi': 'lo-fi', 'Lo-fi': 'lo-fi', 'Lofi': 'lo-fi', 'Chill': 'lo-fi', 'Chillhop': 'lo-fi',
+                    'Rock': 'rock', 'Alternative': 'rock', 'Alternative Rock': 'rock', 'Punk': 'rock', 'Metal': 'rock',
+                    'R&B': 'rnb', 'Soul': 'rnb', 'RnB': 'rnb',
+                    'Indie': 'indie', 'Indie Pop': 'indie', 'Indie Rock': 'rock', 'Indie Folk': 'folk',
+                    'Folk': 'folk', 'Acoustic': 'folk', 'Singer-Songwriter': 'folk', 'Contemporary Folk': 'folk',
+                    'Ambient': 'ambient', 'Experimental': 'ambient',
+                    'Country': 'country', 'Alternative Country': 'country',
+                    'Jazz': 'jazz', 'Blues': 'jazz',
+                    'Classical': 'classical', 'Orchestral': 'classical'
+                };
+                const mappedGenre = genreMap[data.primary_genre] || 'other';
+                document.getElementById('fgenre').value = mappedGenre;
+            }
+            
+            // Store AI analysis data
+            document.getElementById('faiGenres').value = JSON.stringify(data.suggested_genres || []);
+            document.getElementById('faiMood').value = JSON.stringify(data.mood || []);
+            document.getElementById('faiPitch').value = data.playlist_pitch || '';
+            
+            // Show preview
+            if (data.thumbnail_url) {
+                document.getElementById('trackThumbnail').src = data.thumbnail_url;
+                document.getElementById('previewTitle').textContent = data.track_title || 'Unknown Track';
+                document.getElementById('previewArtist').textContent = data.artist_name || '';
+                document.getElementById('previewGenre').textContent = data.primary_genre || 'Analyzing...';
+                previewEl.style.display = 'block';
+            }
+        }
+    } catch (err) {
+        console.error('Spotify lookup failed:', err);
+    } finally {
+        loadingEl.style.display = 'none';
+    }
+}
+
 // Retry logic for Railway cold start
 async function submitWithRetry(url, options, maxRetries, onRetry) {
     let lastError;
@@ -1535,7 +1743,6 @@ async function submitWithRetry(url, options, maxRetries, onRetry) {
             lastError = error;
             if (i < maxRetries - 1) {
                 if (onRetry) onRetry(i + 1);
-                // Wait 2 seconds before retry
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }
         }
@@ -1563,20 +1770,24 @@ async function submitForm(e) {
         interested_tier: document.getElementById('ftier').value,
         bio: '',
         referral_source: 'Website - Free Trial',
-        has_wallet: document.getElementById('fwallet').value
+        has_wallet: document.getElementById('fwallet').value,
+        track_title: document.getElementById('ftrackTitle').value || '',
+        ai_genres: document.getElementById('faiGenres').value || '[]',
+        ai_mood: document.getElementById('faiMood').value || '[]',
+        ai_pitch: document.getElementById('faiPitch').value || ''
     };
     
     try {
         const response = await submitWithRetry(
-            'https://onezeroeight-backend-production.up.railway.app/api/artists/signup',
+            API_BASE + '/artists/signup',
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             },
-            3, // max retries
+            3,
             (attempt) => {
-                btn.textContent = `Connecting... (attempt ${attempt + 1})`;
+                btn.textContent = 'Connecting... (attempt ' + (attempt + 1) + ')';
             }
         );
         
@@ -1585,8 +1796,9 @@ async function submitForm(e) {
         if (response.ok && result.success) {
             msg.className = 'form-message success';
             msg.style.display = 'block';
-            msg.textContent = '🎉 ' + (result.message || 'You\'re in! Check your email for next steps.');
+            msg.textContent = '🎉 ' + (result.message || "You're in! Check your email for next steps.");
             document.getElementById('signupForm').reset();
+            document.getElementById('trackPreview').style.display = 'none';
             
             setTimeout(closeModal, 3000);
         } else {
