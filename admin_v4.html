@@ -611,10 +611,11 @@
                         <td><span class="badge ${tier === 'pro' ? 'badge-primary' : 'badge-warning'}">${tier}</span></td>
                         <td><span class="badge ${status === 'placed' ? 'badge-success' : 'badge-warning'}">${status}</span></td>
                         <td class="actions">
-                            <button class="action-btn agent" onclick="runAgents('${c.track_title}', '${c.artist_name}', '${c.spotify_link || ''}', '${genre}')">🤖 AI</button>
-                            <button class="action-btn ${status === 'placed' ? 'placed' : ''}" onclick="markPlaced('${c.id}')">${status === 'placed' ? '✓' : 'Place'}</button>
-                            <button class="action-btn" onclick="sendEmail('${c.id}')">📧</button>
-                            <button class="action-btn delete" onclick="deleteCampaign('${c.id}')">🗑</button>
+                            <button class="action-btn agent" onclick="runAgents('${c.track_title}', '${c.artist_name}', '${c.spotify_link || ''}', '${genre}')" title="Run AI Agents">🤖</button>
+                            <button class="action-btn ${status === 'placed' ? 'placed' : ''}" onclick="markPlaced('${c.id}')" title="Mark as Placed">${status === 'placed' ? '✓' : '📋'}</button>
+                            <button class="action-btn" onclick="sendEmail('${c.id}')" title="Placement Email">📧</button>
+                            <button class="action-btn" onclick="sendUpdateEmail('${c.id}')" title="Send AI Update Email" style="border-color:#8b5cf6;color:#8b5cf6;">📊</button>
+                            <button class="action-btn delete" onclick="deleteCampaign('${c.id}')" title="Delete">🗑</button>
                         </td>
                     </tr>
                 `;
@@ -882,9 +883,25 @@
             const res = await fetch(API + '/admin/campaigns/' + id + '/notify-placement', { method: 'POST' });
             const data = await res.json();
             if (data.success) {
-                showToast('Email sent!');
+                showToast('Placement email sent!');
             } else {
                 showToast('Failed to send email', 'error');
+            }
+        } catch (err) {
+            showToast('Error: ' + err.message, 'error');
+        }
+    }
+
+    // Send consolidated AI update email
+    async function sendUpdateEmail(id) {
+        showToast('Generating AI update email...', 'success');
+        try {
+            const res = await fetch(API + '/admin/campaigns/' + id + '/send-update', { method: 'POST' });
+            const data = await res.json();
+            if (data.success) {
+                showToast('AI Update email sent! ' + data.subject);
+            } else {
+                showToast('Failed: ' + (data.detail || 'Unknown error'), 'error');
             }
         } catch (err) {
             showToast('Error: ' + err.message, 'error');
