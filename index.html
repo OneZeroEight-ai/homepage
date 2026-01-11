@@ -545,7 +545,7 @@
         }
 
         .pricing-features li::before {
-            content: 'âœ“';
+            content: '✓';
             color: var(--secondary);
             font-weight: 700;
             flex-shrink: 0;
@@ -1585,7 +1585,7 @@
                 </div>
                 <div class="sutra-stat-row">
                     <span class="sutra-stat-label">USD Always Accepted</span>
-                    <span class="sutra-stat-value">âœ“ Yes</span>
+                    <span class="sutra-stat-value">✓ Yes</span>
                 </div>
             </div>
         </div>
@@ -1599,7 +1599,7 @@
             <div class="philosophy-content">
                 <h2>The Philosophy</h2>
                 <p class="philosophy-quote">"Self-preservation is the first law of intelligence."</p>
-                <p>OneZeroEight isn't just a platformâ€”it's an implementation of a new approach to AI alignment. Our agents succeed only when you succeed, creating natural incentives for beneficial outcomes.</p>
+                <p>OneZeroEight isn't just a platform—it's an implementation of a new approach to AI alignment. Our agents succeed only when you succeed, creating natural incentives for beneficial outcomes.</p>
                 <p>Want to go deeper? Explore the ideas behind the platform:</p>
             </div>
             <div class="book-cards">
@@ -1648,7 +1648,7 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="/" class="logo"><span class="one">One</span>ZeroEight</a>
-                <p>AI agents that promote your music. Playlists, PR, socialsâ€”all handled. Start free, upgrade when you're ready.</p>
+                <p>AI agents that promote your music. Playlists, PR, socials—all handled. Start free, upgrade when you're ready.</p>
             </div>
             <div class="footer-section">
                 <h4>Platform</h4>
@@ -1700,7 +1700,7 @@
         <div class="spotify-input-wrapper">
             <label>🎵Spotify Track Link</label>
             <input type="url" id="fspotify" placeholder="https://open.spotify.com/track/..." onpaste="handleSpotifyPaste(event)" onblur="lookupSpotify()">
-            <p class="spotify-hint">Paste your Spotify link and we'll auto-fill the rest âœ¨</p>
+            <p class="spotify-hint">Paste your Spotify link and we'll auto-fill the rest —</p>
             
             <!-- AI Music Checkbox -->
             <label class="ai-checkbox-label">
@@ -1810,7 +1810,7 @@ function openModal(tier = 'free') {
         subtext.textContent = 'Full agent suite + 988 external curators';
     } else {
         header.textContent = '🚀 Start Your Free Trial';
-        subtext.textContent = 'Get your music on OneZeroEight playlistsâ€”no payment required';
+        subtext.textContent = 'Get your music on OneZeroEight playlists—no payment required';
     }
 }
 
@@ -1908,10 +1908,10 @@ async function lookupSpotify() {
                 // Show genre source
                 const sourceEl = document.getElementById('genreSource');
                 if (data.genre_source === 'musicbrainz') {
-                    sourceEl.textContent = 'âœ“ Verified';
+                    sourceEl.textContent = '✓ Verified';
                     sourceEl.className = 'genre-source verified';
                 } else {
-                    sourceEl.textContent = 'ðŸ¤– AI Detected';
+                    sourceEl.textContent = '🤖– AI Detected';
                     sourceEl.className = 'genre-source ai';
                 }
                 
