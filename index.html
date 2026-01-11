@@ -406,10 +406,10 @@
         }
 
         .agent-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
+          border-color: var(--primary);
+          transform: translateY(-4px);
+          box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
         }
-
         .agent-icon {
             width: 56px;
             height: 56px;
@@ -452,6 +452,17 @@
             border-radius: 50%;
         }
 
+       .agent-image {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 16px;
+       }
+
+       .agent-card {
+            text-decoration: none;
+            cursor: pointer;
+       }
+        
         /* Pricing */
         .pricing-grid {
             display: grid;
@@ -1461,31 +1472,24 @@
 <!-- Copy this entire section and replace the existing agents-grid -->
 
 <div class="agents-grid">
-    <div class="agent-card">
-        <div class="agent-icon">🎵</div>
-        <h3>Playlist Agent</h3>
-        <p>Curates and manages OneZeroEight playlists. Analyzes your track's genre, mood, and vibe to find the perfect playlist fit. Handles placement on our growing network.</p>
+    <a href="#" onclick="openModal(); return false;" class="agent-card">
+        <img src="PlaylistAgent.png" alt="Playlist Agent" class="agent-image">
         <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
-    </div>
-    <div class="agent-card">
-        <div class="agent-icon">📱</div>
-        <h3>Social Agent</h3>
-        <p>Creates promotional content and manages social media outreach. Crafts posts, stories, and engagement campaigns to amplify your release across platforms.</p>
+    </a>
+    <a href="#" onclick="openModal(); return false;" class="agent-card">
+        <img src="SocialAgent.png" alt="Social Agent" class="agent-image">
         <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
-    </div>
-    <div class="agent-card">
-        <div class="agent-icon">📰</div>
-        <h3>PR Agent</h3>
-        <p>Writes press releases and pitches music blogs. Handles outreach to journalists, influencers, and tastemakers who can amplify your reach.</p>
+    </a>
+    <a href="#" onclick="openModal('pro'); return false;" class="agent-card">
+        <img src="PRAgent.png" alt="PR Agent" class="agent-image">
         <div class="agent-status"><span class="dot"></span> Active on Pro Tier</div>
-    </div>
-    <div class="agent-card">
-        <div class="agent-icon">🎯</div>
-        <h3>Curator Agent</h3>
-        <p>Pitches your music to our network of 988+ verified external curators. Crafts personalized pitches based on each curator's preferences and playlist style.</p>
+    </a>
+    <a href="#" onclick="openModal('pro'); return false;" class="agent-card">
+        <img src="CuratorAgent.png" alt="Curator Agent" class="agent-image">
         <div class="agent-status"><span class="dot"></span> Active on Pro Tier</div>
-    </div>
+    </a>
 </div>
+        
     
     </div>
     </div>
