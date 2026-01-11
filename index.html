@@ -390,7 +390,7 @@
             display: none;
         }
 
-        /* Grid */
+        /* Agents Grid */
         .agents-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -401,45 +401,28 @@
             background: var(--gray-800);
             border: 1px solid var(--gray-700);
             border-radius: 16px;
-            padding: 32px;
+            padding: 24px;
             transition: all 0.3s;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         .agent-card:hover {
-          border-color: var(--primary);
-          transform: translateY(-4px);
-          box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
-        }
-        .agent-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
         }
 
-        .agent-card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--white);
-            margin-bottom: 8px;
-        }
-
-        .agent-card p {
-            font-size: 0.95rem;
-            color: var(--gray-400);
-            line-height: 1.6;
+        .agent-image {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 16px;
         }
 
         .agent-status {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            margin-top: 16px;
             font-size: 0.8rem;
             color: var(--secondary);
             font-weight: 500;
@@ -452,17 +435,6 @@
             border-radius: 50%;
         }
 
-       .agent-image {
-            width: 100%;
-            border-radius: 12px;
-            margin-bottom: 16px;
-       }
-
-       .agent-card {
-            text-decoration: none;
-            cursor: pointer;
-       }
-        
         /* Pricing */
         .pricing-grid {
             display: grid;
@@ -471,6 +443,7 @@
             max-width: 1100px;
             margin: 0 auto;
         }
+
         .pricing-card {
             background: var(--white);
             border: 2px solid var(--gray-200);
@@ -704,10 +677,6 @@
         .book-card:hover {
             background: var(--gray-700);
             transform: translateX(8px);
-        }
-
-        .book-icon {
-            font-size: 2.5rem;
         }
 
         .book-cover {
@@ -1012,7 +981,7 @@
             color: var(--gray-500);
         }
 
-        /* Spotify Auto-fill Styles */
+        /* Spotify Input Styles */
         .spotify-input-wrapper {
             background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
             padding: 20px;
@@ -1117,6 +1086,216 @@
             font-weight: 600;
         }
 
+        /* AI Music Checkbox */
+        .ai-checkbox-label {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            cursor: pointer;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+        }
+
+        .ai-checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1db954;
+            cursor: pointer;
+        }
+
+        .ai-checkbox-label span {
+            color: rgba(255,255,255,0.95);
+        }
+
+        /* Genre Source Indicator */
+        .genre-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .genre-source {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            background: var(--gray-100);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .genre-source.verified {
+            color: #059669;
+            background: #d1fae5;
+        }
+
+        .genre-source.ai {
+            color: #6366f1;
+            background: #e0e7ff;
+        }
+
+        /* Mood Pills */
+        .mood-pills {
+            display: none;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .mood-pill {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Album Input Styles */
+        .album-input-wrapper {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+        }
+
+        .album-input-wrapper label {
+            color: var(--white) !important;
+            font-weight: 700 !important;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .album-input-wrapper input {
+            background: rgba(255,255,255,0.95);
+            border: none;
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .album-input-wrapper input:focus {
+            background: var(--white);
+            outline: none;
+        }
+
+        .album-hint {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .album-loading {
+            margin-top: 12px;
+            color: var(--white);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .album-preview {
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .album-header {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .album-header img {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .album-info h4 {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .album-info p {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .track-count {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .album-tracks {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .album-track {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .album-track:hover {
+            background: var(--gray-100);
+        }
+
+        .album-track .track-num {
+            width: 24px;
+            height: 24px;
+            background: var(--gray-200);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            flex-shrink: 0;
+        }
+
+        .album-track .track-title {
+            flex: 1;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .album-track .track-duration {
+            color: var(--gray-500);
+            font-size: 0.8rem;
+        }
+
+        .album-track .track-check {
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .steps-grid {
@@ -1128,6 +1307,10 @@
             }
 
             .agents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -1225,140 +1408,6 @@
                 grid-column: span 1;
             }
         }
-
-        /* AI Music Checkbox */
-.ai-checkbox-label {
-    display: flex !important;
-    align-items: center;
-    gap: 8px;
-    margin-top: 12px;
-    cursor: pointer;
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-}
-
-.ai-checkbox-label input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #1db954;
-    cursor: pointer;
-}
-
-.ai-checkbox-label span {
-    color: rgba(255,255,255,0.95);
-}
-
-/* Genre Source Indicator */
-.genre-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 4px;
-}
-
-.genre-source {
-    font-size: 0.7rem;
-    color: var(--gray-500);
-    background: var(--gray-100);
-    padding: 2px 8px;
-    border-radius: 4px;
-}
-
-.genre-source.verified {
-    color: #059669;
-    background: #d1fae5;
-}
-
-.genre-source.ai {
-    color: #6366f1;
-    background: #e0e7ff;
-}
-
-/* Mood Pills */
-.mood-pills {
-    display: none;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--gray-200);
-}
-
-.mood-pill {
-    background: var(--gray-100);
-    color: var(--gray-700);
-    padding: 4px 10px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-/* AI Music Checkbox */
-.ai-checkbox-label {
-    display: flex !important;
-    align-items: center;
-    gap: 8px;
-    margin-top: 12px;
-    cursor: pointer;
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-}
-
-.ai-checkbox-label input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #1db954;
-    cursor: pointer;
-}
-
-.ai-checkbox-label span {
-    color: rgba(255,255,255,0.95);
-}
-
-/* Genre Source Indicator */
-.genre-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 4px;
-}
-
-.genre-source {
-    font-size: 0.7rem;
-    color: var(--gray-500);
-    background: var(--gray-100);
-    padding: 2px 8px;
-    border-radius: 4px;
-}
-
-.genre-source.verified {
-    color: #059669;
-    background: #d1fae5;
-}
-
-.genre-source.ai {
-    color: #6366f1;
-    background: #e0e7ff;
-}
-
-/* Mood Pills */
-.mood-pills {
-    display: none;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--gray-200);
-}
-
-.mood-pill {
-    background: var(--gray-100);
-    color: var(--gray-700);
-    padding: 4px 10px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 500;
-}
-
     </style>
 </head>
 <body>
@@ -1385,11 +1434,11 @@
         <div class="hero-content">
             <div class="hero-badge">
                 <span class="dot"></span>
-                AI Now Active
+                AI Agents Now Active
             </div>
-            <h1>AI That <span>Promote Your Music</span></h1>
+            <h1>AI Agents That <span>Promote Your Music</span></h1>
             <p class="hero-subtitle">
-                Deploy intelligent to get your music on playlists, blast your socials, and handle PR. Start free. Upgrade when you're ready.
+                Deploy intelligent agents to get your music on playlists, blast your socials, and handle PR. Start free. Upgrade when you're ready.
             </p>
             <div class="hero-ctas">
                 <a href="#" onclick="openModal(); return false;" class="btn btn-primary">
@@ -1401,7 +1450,7 @@
             </div>
             <div class="hero-proof">
                 <div class="proof-item">
-                    <div class="proof-value">3000+</div>
+                    <div class="proof-value">988+</div>
                     <div class="proof-label">Verified Curators</div>
                 </div>
                 <div class="proof-item">
@@ -1441,19 +1490,19 @@
             <div class="step">
                 <div class="step-connector"></div>
                 <div class="step-number">2</div>
-                <h3>Activate</h3>
-                <p>AI analyze your music and add you to OneZeroEight playlists.</p>
+                <h3>Agents Activate</h3>
+                <p>AI agents analyze your music and add you to OneZeroEight playlists.</p>
             </div>
             <div class="step">
                 <div class="step-connector"></div>
                 <div class="step-number">3</div>
                 <h3>Get Promoted</h3>
-                <p>handle social posts, PR outreach, and playlist marketing.</p>
+                <p>Agents handle social posts, PR outreach, and playlist marketing.</p>
             </div>
             <div class="step">
                 <div class="step-number">4</div>
                 <h3>Upgrade for More</h3>
-                <p>Want access to 3000+ external curators? Upgrade when you're ready.</p>
+                <p>Want access to 988+ external curators? Upgrade when you're ready.</p>
             </div>
         </div>
     </div>
@@ -1466,31 +1515,24 @@
             <h2>Meet Your AI Agents</h2>
             <p>A team of specialized agents working around the clock to promote your music.</p>
         </div>
-
-        <!-- AI Agents Section - Replace the agents-grid div in index.html -->
-<!-- Copy this entire section and replace the existing agents-grid -->
-
-<div class="agents-grid">
-    <a href="#" onclick="openModal(); return false;" class="agent-card">
-        <img src="PlaylistAgent.png" alt="Playlist Agent" class="agent-image">
-        <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
-    </a>
-    <a href="#" onclick="openModal(); return false;" class="agent-card">
-        <img src="SocialAgent.png" alt="Social Agent" class="agent-image">
-        <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
-    </a>
-    <a href="#" onclick="openModal('pro'); return false;" class="agent-card">
-        <img src="PRAgent.png" alt="PR Agent" class="agent-image">
-        <div class="agent-status"><span class="dot"></span> Active on Pro Tier</div>
-    </a>
-    <a href="#" onclick="openModal('pro'); return false;" class="agent-card">
-        <img src="CuratorAgent.png" alt="Curator Agent" class="agent-image">
-        <div class="agent-status"><span class="dot"></span> Active on Pro Tier</div>
-    </a>
-</div>
-        
-    
-    </div>
+        <div class="agents-grid">
+            <a href="#" onclick="openModal(); return false;" class="agent-card">
+                <img src="PlaylistAgent.png" alt="Playlist Agent" class="agent-image">
+                <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
+            </a>
+            <a href="#" onclick="openModal(); return false;" class="agent-card">
+                <img src="SocialAgent.png" alt="Social Agent" class="agent-image">
+                <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
+            </a>
+            <a href="#" onclick="openModal('pro'); return false;" class="agent-card">
+                <img src="PRAgent.png" alt="PR Agent" class="agent-image">
+                <div class="agent-status"><span class="dot"></span> Active on Pro Tier</div>
+            </a>
+            <a href="#" onclick="openModal('pro'); return false;" class="agent-card">
+                <img src="CuratorAgent.png" alt="Curator Agent" class="agent-image">
+                <div class="agent-status"><span class="dot"></span> Active on Pro Tier</div>
+            </a>
+        </div>
     </div>
 </section>
 
@@ -1501,55 +1543,53 @@
             <h2>Simple Pricing</h2>
             <p>Start free. Upgrade when you want to scale.</p>
         </div>
-
-<div class="pricing-grid">
-    <div class="pricing-card">
-        <h3>Free Trial</h3>
-        <div class="price">$0</div>
-        <p class="description">Get started with OneZeroEight playlists</p>
-        <ul class="pricing-features">
-            <li>Placement on OneZeroEight playlists</li>
-            <li>Playlist Agent active</li>
-            <li>Social Agent active</li>
-            <li>Basic analytics dashboard</li>
-            <li>Community Discord access</li>
-        </ul>
-        <a href="#" onclick="openModal(); return false;" class="btn btn-secondary">Start Free</a>
-    </div>
-    <div class="pricing-card featured">
-        <div class="pricing-badge">Most Popular</div>
-        <h3>Pro</h3>
-        <div class="price">$49 <span>/ track</span></div>
-        <p class="description">Full agent suite + external curators</p>
-        <ul class="pricing-features">
-            <li>Everything in Free, plus:</li>
-            <li>Access to 988+ external curators</li>
-            <li>PR Agent active</li>
-            <li>Curator Agent active</li>
-            <li>Priority placement</li>
-            <li>Advanced analytics</li>
-            <li>Pay with SUTRA for 20% off</li>
-        </ul>
-        <a href="#" onclick="openModal('pro'); return false;" class="btn btn-primary">Get Started</a>
-    </div>
-    <div class="pricing-card">
-        <div class="pricing-badge" style="background: var(--secondary);">Best Value</div>
-        <h3>Album</h3>
-        <div class="price">$199 <span>/ 10 tracks</span></div>
-        <p class="description">Promote your full album or EP</p>
-        <ul class="pricing-features">
-            <li>Everything in Pro, plus:</li>
-            <li>10 tracks promoted together</li>
-            <li>Individual track campaigns</li>
-            <li>Album-wide PR campaign</li>
-            <li>Coordinated release strategy</li>
-            <li>Dedicated account manager</li>
-            <li>Save $290 vs individual Pro</li>
-        </ul>
-        <a href="#" onclick="openModal('album'); return false;" class="btn btn-primary">Get Started</a>
-    </div>
-</div>
-        
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Free Trial</h3>
+                <div class="price">$0</div>
+                <p class="description">Get started with OneZeroEight playlists</p>
+                <ul class="pricing-features">
+                    <li>Placement on OneZeroEight playlists</li>
+                    <li>Playlist Agent active</li>
+                    <li>Social Agent active</li>
+                    <li>Basic analytics dashboard</li>
+                    <li>Community Discord access</li>
+                </ul>
+                <a href="#" onclick="openModal(); return false;" class="btn btn-secondary">Start Free</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-badge">Most Popular</div>
+                <h3>Pro</h3>
+                <div class="price">$49 <span>/ track</span></div>
+                <p class="description">Full agent suite + external curators</p>
+                <ul class="pricing-features">
+                    <li>Everything in Free, plus:</li>
+                    <li>Access to 988+ external curators</li>
+                    <li>PR Agent active</li>
+                    <li>Curator Agent active</li>
+                    <li>Priority placement</li>
+                    <li>Advanced analytics</li>
+                    <li>Pay with SUTRA for 20% off</li>
+                </ul>
+                <a href="#" onclick="openModal('pro'); return false;" class="btn btn-primary">Get Started</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-badge" style="background: var(--secondary);">Best Value</div>
+                <h3>Album</h3>
+                <div class="price">$199 <span>/ 10 tracks</span></div>
+                <p class="description">Promote your full album or EP</p>
+                <ul class="pricing-features">
+                    <li>Everything in Pro, plus:</li>
+                    <li>10 tracks promoted together</li>
+                    <li>Individual track campaigns</li>
+                    <li>Album-wide PR campaign</li>
+                    <li>Coordinated release strategy</li>
+                    <li>Dedicated account manager</li>
+                    <li>Save $290 vs individual Pro</li>
+                </ul>
+                <a href="#" onclick="openModal('album'); return false;" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -1620,9 +1660,8 @@
                 <p>Want to go deeper? Explore the ideas behind the platform:</p>
             </div>
             <div class="book-cards">
-
                 <a href="https://a.co/d/htCcbRw" target="_blank" class="book-card">
-                    <img src="onezeroeight_cover.png" alt="OneZeroEight Book Cover" class="book-cover">
+                    <img src="onezeroeight_cover.jpg" alt="OneZeroEight Book Cover" class="book-cover">
                     <div class="book-info">
                         <h4>OneZeroEight</h4>
                         <p>Aligning Human and AI Consciousness</p>
@@ -1630,14 +1669,13 @@
                     </div>
                 </a>
                 <a href="https://a.co/d/avN3yHt" target="_blank" class="book-card">
-                    <img src="ZenAI_cover.png" alt="Zen AI Book Cover" class="book-cover">
+                    <img src="ZenAI_cover.jpg" alt="Zen AI Book Cover" class="book-cover">
                     <div class="book-info">
                         <h4>Zen AI</h4>
                         <p>The Philosophical Foundation</p>
                         <span class="author">by JB Wagoner</span>
                     </div>
-                </a>                
-                
+                </a>
             </div>
         </div>
     </div>
@@ -1654,7 +1692,7 @@
         <div class="social-links">
             <a href="https://discord.gg/4A6ExTnKnK" target="_blank" class="social-link">💬 Discord</a>
             <a href="https://x.com/OneZeroEight_ai" target="_blank" class="social-link">𝕏 Twitter</a>
-            <a href="https://t.me/OneZeroEight_ai" target="_blank" class="social-link">✈️¸ Telegram</a>
+            <a href="https://t.me/OneZeroEight_ai" target="_blank" class="social-link">✈️ Telegram</a>
         </div>
     </div>
 </section>
@@ -1696,7 +1734,7 @@
         </div>
         <div class="footer-bottom">
             <p>© 2026 OneZeroEight.ai. All rights reserved.</p>
-            <p><a href="#">Terms</a>· <a href="#">Privacy</a></p>
+            <p><a href="#">Terms</a> · <a href="#">Privacy</a></p>
         </div>
     </div>
 </footer>
@@ -1710,102 +1748,128 @@
             <p>Get your music on OneZeroEight playlists—no payment required</p>
         </div>
         <div class="modal-body">
-    <div class="form-message" id="formMessage"></div>
-    <form id="signupForm" onsubmit="submitForm(event)">
-        
-        <!-- Spotify Auto-fill Section -->
-        <div class="spotify-input-wrapper">
-            <label>🎵Spotify Track Link</label>
-            <input type="url" id="fspotify" placeholder="https://open.spotify.com/track/..." onpaste="handleSpotifyPaste(event)" onblur="lookupSpotify()">
-            <p class="spotify-hint">Paste your Spotify link and we'll auto-fill the rest —</p>
-            
-            <!-- AI Music Checkbox -->
-            <label class="ai-checkbox-label">
-                <input type="checkbox" id="fAiGenerated" onchange="lookupSpotify()">
-                <span>This is AI-generated music (Suno, Udio, etc.)</span>
-            </label>
-            
-            <div class="spotify-loading" id="spotifyLoading">
-                <span class="spinner"></span> Analyzing track...
-            </div>
-        </div>
+            <div class="form-message" id="formMessage"></div>
+            <form id="signupForm" onsubmit="submitForm(event)">
+                
+                <!-- Spotify Track Input (shown for Free/Pro tiers) -->
+                <div id="trackSection">
+                    <div class="spotify-input-wrapper">
+                        <label>🎵 Spotify Track Link</label>
+                        <input type="url" id="fspotify" placeholder="https://open.spotify.com/track/..." onpaste="handleSpotifyPaste(event)" onblur="lookupSpotify()">
+                        <p class="spotify-hint">Paste your Spotify link and we'll auto-fill the rest ✨</p>
+                        
+                        <label class="ai-checkbox-label">
+                            <input type="checkbox" id="fAiGenerated" onchange="lookupSpotify()">
+                            <span>This is AI-generated music (Suno, Udio, etc.)</span>
+                        </label>
+                        
+                        <div class="spotify-loading" id="spotifyLoading">
+                            <span class="spinner"></span> Analyzing track...
+                        </div>
+                    </div>
 
-        <!-- Track Preview -->
-        <div class="track-preview" id="trackPreview">
-            <div class="track-preview-inner">
-                <img id="trackThumbnail" src="" alt="Track artwork">
-                <div class="track-preview-info">
-                    <h4 id="previewTitle"></h4>
-                    <p id="previewArtist"></p>
-                    <div class="genre-row">
-                        <span class="genre-badge" id="previewGenre"></span>
-                        <span class="genre-source" id="genreSource"></span>
+                    <!-- Track Preview -->
+                    <div class="track-preview" id="trackPreview">
+                        <div class="track-preview-inner">
+                            <img id="trackThumbnail" src="" alt="Track artwork">
+                            <div class="track-preview-info">
+                                <h4 id="previewTitle"></h4>
+                                <p id="previewArtist"></p>
+                                <div class="genre-row">
+                                    <span class="genre-badge" id="previewGenre"></span>
+                                    <span class="genre-source" id="genreSource"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mood-pills" id="moodPills"></div>
                     </div>
                 </div>
-            </div>
-            <!-- Mood Pills -->
-            <div class="mood-pills" id="moodPills"></div>
-        </div>
 
-        <div class="form-group">
-            <label>Your Name *</label>
-            <input type="text" id="fname" placeholder="Your full name" required>
-        </div>
-        <div class="form-group">
-            <label>Your Email *</label>
-            <input type="email" id="femail" placeholder="you@email.com" required>
-        </div>
-        <div class="form-group">
-            <label>Artist / Project Name *</label>
-            <input type="text" id="fartist" placeholder="Your artist or band name" required>
-        </div>
-        
-        <div class="form-group">
-            <label>Primary Genre *</label>
-            <select id="fgenre" required>
-                <option value="">Select your genre...</option>
-                <option value="electronic">Electronic / EDM</option>
-                <option value="hip-hop">Hip Hop / Rap</option>
-                <option value="pop">Pop</option>
-                <option value="lo-fi">Lo-Fi / Chill</option>
-                <option value="rock">Rock / Alternative</option>
-                <option value="rnb">R&B / Soul</option>
-                <option value="indie">Indie</option>
-                <option value="folk">Folk / Singer-Songwriter</option>
-                <option value="ambient">Ambient / Experimental</option>
-                <option value="country">Country</option>
-                <option value="jazz">Jazz / Blues</option>
-                <option value="classical">Classical</option>
-                <option value="metal">Metal</option>
-                <option value="latin">Latin</option>
-                <option value="world">World</option>
-                <option value="other">Other</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>Do you have a crypto wallet? <span>(optional)</span></label>
-            <select id="fwallet">
-                <option value="no">No / Not sure</option>
-                <option value="yes">Yes, I have a wallet</option>
-                <option value="interested">No, but I'm interested in learning</option>
-            </select>
-        </div>
-        
-        <!-- Hidden fields -->
-        <input type="hidden" id="ftier" value="free">
-        <input type="hidden" id="ftrackTitle" value="">
-        <input type="hidden" id="faiGenres" value="">
-        <input type="hidden" id="faiMood" value="">
-        <input type="hidden" id="faiPitch" value="">
-        <input type="hidden" id="fgenreSource" value="">
-        <input type="hidden" id="fvibesTags" value="">
-        <input type="hidden" id="fsimilarArtists" value="">
-        
-        <button type="submit" class="form-submit" id="submitBtn">
-            Start Free Trial →
-        </button>
-        <p class="form-note">No credit card required. We'll email you next steps.</p>
-    </form>
+                <!-- Album Input Section (shown only for Album tier) -->
+                <div id="albumSection" style="display: none;">
+                    <div class="album-input-wrapper">
+                        <label>💿 Spotify Album Link</label>
+                        <input type="url" id="falbum" placeholder="https://open.spotify.com/album/..." onpaste="handleAlbumPaste(event)" onblur="lookupAlbum()">
+                        <p class="album-hint">Paste your Spotify album link and we'll show all tracks ✨</p>
+                        
+                        <div class="album-loading" id="albumLoading" style="display: none;">
+                            <span class="spinner"></span> Loading album tracks...
+                        </div>
+                    </div>
+                    
+                    <!-- Album Preview -->
+                    <div class="album-preview" id="albumPreview" style="display: none;">
+                        <div class="album-header">
+                            <img id="albumThumbnail" src="" alt="Album artwork">
+                            <div class="album-info">
+                                <h4 id="albumTitle"></h4>
+                                <p id="albumArtist"></p>
+                                <span class="track-count" id="trackCount"></span>
+                            </div>
+                        </div>
+                        <div class="album-tracks" id="albumTracks"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" id="fname" placeholder="Your full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Your Email *</label>
+                    <input type="email" id="femail" placeholder="you@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Artist / Project Name *</label>
+                    <input type="text" id="fartist" placeholder="Your artist or band name" required>
+                </div>
+                <div class="form-group">
+                    <label>Primary Genre *</label>
+                    <select id="fgenre" required>
+                        <option value="">Select your genre...</option>
+                        <option value="electronic">Electronic / EDM</option>
+                        <option value="hip-hop">Hip Hop / Rap</option>
+                        <option value="pop">Pop</option>
+                        <option value="lo-fi">Lo-Fi / Chill</option>
+                        <option value="rock">Rock / Alternative</option>
+                        <option value="rnb">R&B / Soul</option>
+                        <option value="indie">Indie</option>
+                        <option value="folk">Folk / Singer-Songwriter</option>
+                        <option value="ambient">Ambient / Experimental</option>
+                        <option value="country">Country</option>
+                        <option value="jazz">Jazz / Blues</option>
+                        <option value="classical">Classical</option>
+                        <option value="metal">Metal</option>
+                        <option value="latin">Latin</option>
+                        <option value="world">World</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Do you have a crypto wallet? <span>(optional)</span></label>
+                    <select id="fwallet">
+                        <option value="no">No / Not sure</option>
+                        <option value="yes">Yes, I have a wallet</option>
+                        <option value="interested">No, but I'm interested in learning</option>
+                    </select>
+                </div>
+                
+                <!-- Hidden fields -->
+                <input type="hidden" id="ftier" value="free">
+                <input type="hidden" id="ftrackTitle" value="">
+                <input type="hidden" id="faiGenres" value="">
+                <input type="hidden" id="faiMood" value="">
+                <input type="hidden" id="faiPitch" value="">
+                <input type="hidden" id="fgenreSource" value="">
+                <input type="hidden" id="fvibesTags" value="">
+                <input type="hidden" id="fsimilarArtists" value="">
+                <input type="hidden" id="falbumTracks" value="">
+                
+                <button type="submit" class="form-submit" id="submitBtn">
+                    Start Free Trial →
+                </button>
+                <p class="form-note">No credit card required. We'll email you next steps.</p>
+            </form>
         </div>
     </div>
 </div>
@@ -1820,16 +1884,28 @@ function openModal(tier = 'free') {
     
     const header = document.querySelector('.modal-header h2');
     const subtext = document.querySelector('.modal-header p');
+    const albumSection = document.getElementById('albumSection');
+    const trackSection = document.getElementById('trackSection');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    // Reset visibility
+    albumSection.style.display = 'none';
+    trackSection.style.display = 'block';
     
     if (tier === 'pro') {
         header.textContent = '🚀 Get Pro Access';
         subtext.textContent = 'Full agent suite + 988 external curators — $49/track';
+        submitBtn.textContent = 'Get Pro Access →';
     } else if (tier === 'album') {
         header.textContent = '💿 Album Package';
         subtext.textContent = '10 tracks promoted together — $199';
+        albumSection.style.display = 'block';
+        trackSection.style.display = 'none';
+        submitBtn.textContent = 'Get Album Package →';
     } else {
         header.textContent = '🚀 Start Your Free Trial';
         subtext.textContent = 'Get your music on OneZeroEight playlists—no payment required';
+        submitBtn.textContent = 'Start Free Trial →';
     }
 }
 
@@ -1840,6 +1916,8 @@ function closeModal() {
     document.getElementById('formMessage').style.display = 'none';
     document.getElementById('trackPreview').style.display = 'none';
     document.getElementById('spotifyLoading').style.display = 'none';
+    document.getElementById('albumPreview').style.display = 'none';
+    document.getElementById('albumLoading').style.display = 'none';
 }
 
 // Close on overlay click
@@ -1852,7 +1930,7 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
 });
 
-// Spotify Auto-fill
+// Spotify Track Lookup
 function handleSpotifyPaste(event) {
     setTimeout(lookupSpotify, 100);
 }
@@ -1874,17 +1952,14 @@ async function lookupSpotify() {
         const data = await response.json();
         
         if (data.success) {
-            // Auto-fill artist name
             if (data.artist_name) {
                 document.getElementById('fartist').value = data.artist_name;
             }
             
-            // Store track title
             if (data.track_title) {
                 document.getElementById('ftrackTitle').value = data.track_title;
             }
             
-            // Map genre to dropdown
             if (data.primary_genre) {
                 const genreMap = {
                     'Electronic': 'electronic', 'Edm': 'electronic', 'Dance': 'electronic', 
@@ -1909,7 +1984,6 @@ async function lookupSpotify() {
                 document.getElementById('fgenre').value = mappedGenre;
             }
             
-            // Store AI analysis data
             document.getElementById('faiGenres').value = JSON.stringify(data.suggested_genres || []);
             document.getElementById('faiMood').value = JSON.stringify(data.mood || []);
             document.getElementById('faiPitch').value = data.playlist_pitch || '';
@@ -1917,27 +1991,24 @@ async function lookupSpotify() {
             document.getElementById('fvibesTags').value = JSON.stringify(data.vibe_tags || []);
             document.getElementById('fsimilarArtists').value = JSON.stringify(data.similar_artists || []);
             
-            // Show preview
             if (data.thumbnail_url) {
                 document.getElementById('trackThumbnail').src = data.thumbnail_url;
                 document.getElementById('previewTitle').textContent = data.track_title || 'Unknown Track';
                 document.getElementById('previewArtist').textContent = data.artist_name || '';
                 document.getElementById('previewGenre').textContent = data.primary_genre || 'Analyzing...';
                 
-                // Show genre source
                 const sourceEl = document.getElementById('genreSource');
                 if (data.genre_source === 'musicbrainz') {
                     sourceEl.textContent = '✓ Verified';
                     sourceEl.className = 'genre-source verified';
                 } else {
-                    sourceEl.textContent = '🤖– AI Detected';
+                    sourceEl.textContent = '🤖 AI Detected';
                     sourceEl.className = 'genre-source ai';
                 }
                 
                 previewEl.style.display = 'block';
             }
             
-            // Show mood pills
             const moodContainer = document.getElementById('moodPills');
             if (data.mood && data.mood.length > 0) {
                 moodContainer.innerHTML = data.mood.map(m => 
@@ -1954,7 +2025,65 @@ async function lookupSpotify() {
         loadingEl.style.display = 'none';
     }
 }
+
+// Album Lookup
+function handleAlbumPaste(event) {
+    setTimeout(lookupAlbum, 100);
+}
+
+async function lookupAlbum() {
+    const albumUrl = document.getElementById('falbum').value.trim();
+    if (!albumUrl || !albumUrl.includes('spotify.com/album/')) return;
     
+    const loadingEl = document.getElementById('albumLoading');
+    const previewEl = document.getElementById('albumPreview');
+    
+    loadingEl.style.display = 'flex';
+    previewEl.style.display = 'none';
+    
+    try {
+        const url = API_BASE + '/workflow/spotify/album?album_url=' + encodeURIComponent(albumUrl);
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.success) {
+            if (data.artist_name) {
+                document.getElementById('fartist').value = data.artist_name;
+            }
+            
+            document.getElementById('falbumTracks').value = JSON.stringify(data.tracks || []);
+            
+            document.getElementById('albumThumbnail').src = data.thumbnail_url || '';
+            document.getElementById('albumTitle').textContent = data.album_name || 'Unknown Album';
+            document.getElementById('albumArtist').textContent = data.artist_name || '';
+            document.getElementById('trackCount').textContent = (data.tracks?.length || 0) + ' tracks';
+            
+            const tracksContainer = document.getElementById('albumTracks');
+            tracksContainer.innerHTML = (data.tracks || []).map((track, i) => `
+                <div class="album-track">
+                    <span class="track-num">${i + 1}</span>
+                    <span class="track-title">${track.name}</span>
+                    <span class="track-duration">${formatDuration(track.duration_ms)}</span>
+                    <span class="track-check">✓</span>
+                </div>
+            `).join('');
+            
+            previewEl.style.display = 'block';
+        }
+    } catch (err) {
+        console.error('Album lookup failed:', err);
+    } finally {
+        loadingEl.style.display = 'none';
+    }
+}
+
+function formatDuration(ms) {
+    if (!ms) return '--:--';
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
 // Retry logic for Railway cold start
 async function submitWithRetry(url, options, maxRetries, onRetry) {
     let lastError;
@@ -1984,20 +2113,23 @@ async function submitForm(e) {
     btn.textContent = 'Waking up servers...';
     msg.style.display = 'none';
     
+    const tier = document.getElementById('ftier').value;
+    
     const data = {
         name: document.getElementById('fname').value,
         email: document.getElementById('femail').value,
         artist_name: document.getElementById('fartist').value,
-        spotify_link: document.getElementById('fspotify').value || '',
+        spotify_link: tier === 'album' ? (document.getElementById('falbum').value || '') : (document.getElementById('fspotify').value || ''),
         genre: document.getElementById('fgenre').value,
-        interested_tier: document.getElementById('ftier').value,
+        interested_tier: tier,
         bio: '',
-        referral_source: 'Website - Free Trial',
+        referral_source: 'Website - ' + tier.charAt(0).toUpperCase() + tier.slice(1),
         has_wallet: document.getElementById('fwallet').value,
         track_title: document.getElementById('ftrackTitle').value || '',
         ai_genres: document.getElementById('faiGenres').value || '[]',
         ai_mood: document.getElementById('faiMood').value || '[]',
-        ai_pitch: document.getElementById('faiPitch').value || ''
+        ai_pitch: document.getElementById('faiPitch').value || '',
+        album_tracks: document.getElementById('falbumTracks').value || ''
     };
     
     try {
@@ -2022,6 +2154,7 @@ async function submitForm(e) {
             msg.textContent = '🎉 ' + (result.message || "You're in! Check your email for next steps.");
             document.getElementById('signupForm').reset();
             document.getElementById('trackPreview').style.display = 'none';
+            document.getElementById('albumPreview').style.display = 'none';
             
             setTimeout(closeModal, 3000);
         } else {
@@ -2058,5 +2191,3 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 </body>
 </html>
-
-
