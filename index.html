@@ -466,12 +466,11 @@
         /* Pricing */
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
-            max-width: 900px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1100px;
             margin: 0 auto;
         }
-
         .pricing-card {
             background: var(--white);
             border: 2px solid var(--gray-200);
@@ -1502,37 +1501,55 @@
             <h2>Simple Pricing</h2>
             <p>Start free. Upgrade when you want to scale.</p>
         </div>
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <h3>Free Trial</h3>
-                <div class="price">$0</div>
-                <p class="description">Get started with OneZeroEight playlists</p>
-                <ul class="pricing-features">
-                    <li>Placement on OneZeroEight playlists</li>
-                    <li>Playlist Agent active</li>
-                    <li>Social Agent active</li>
-                    <li>Basic analytics dashboard</li>
-                    <li>Community Discord access</li>
-                </ul>
-                <a href="#" onclick="openModal(); return false;" class="btn btn-secondary">Start Free</a>
-            </div>
-            <div class="pricing-card featured">
-                <div class="pricing-badge">Most Popular</div>
-                <h3>Pro</h3>
-                <div class="price">$99 <span>/ track</span></div>
-                <p class="description">Full agent suite + external curators</p>
-                <ul class="pricing-features">
-                    <li>Everything in Free, plus:</li>
-                    <li>Access to over 3000+ external curators</li>
-                    <li>PR Agent active</li>
-                    <li>Curator Agent active</li>
-                    <li>Priority placement</li>
-                    <li>Advanced analytics</li>
-                    <li>Pay with SUTRA for 20% off</li>
-                </ul>
-                <a href="#" onclick="openModal('pro'); return false;" class="btn btn-primary">Get Started</a>
-            </div>
-        </div>
+
+<div class="pricing-grid">
+    <div class="pricing-card">
+        <h3>Free Trial</h3>
+        <div class="price">$0</div>
+        <p class="description">Get started with OneZeroEight playlists</p>
+        <ul class="pricing-features">
+            <li>Placement on OneZeroEight playlists</li>
+            <li>Playlist Agent active</li>
+            <li>Social Agent active</li>
+            <li>Basic analytics dashboard</li>
+            <li>Community Discord access</li>
+        </ul>
+        <a href="#" onclick="openModal(); return false;" class="btn btn-secondary">Start Free</a>
+    </div>
+    <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <h3>Pro</h3>
+        <div class="price">$49 <span>/ track</span></div>
+        <p class="description">Full agent suite + external curators</p>
+        <ul class="pricing-features">
+            <li>Everything in Free, plus:</li>
+            <li>Access to 988+ external curators</li>
+            <li>PR Agent active</li>
+            <li>Curator Agent active</li>
+            <li>Priority placement</li>
+            <li>Advanced analytics</li>
+            <li>Pay with SUTRA for 20% off</li>
+        </ul>
+        <a href="#" onclick="openModal('pro'); return false;" class="btn btn-primary">Get Started</a>
+    </div>
+    <div class="pricing-card">
+        <div class="pricing-badge" style="background: var(--secondary);">Best Value</div>
+        <h3>Album</h3>
+        <div class="price">$199 <span>/ 10 tracks</span></div>
+        <p class="description">Promote your full album or EP</p>
+        <ul class="pricing-features">
+            <li>Everything in Pro, plus:</li>
+            <li>10 tracks promoted together</li>
+            <li>Individual track campaigns</li>
+            <li>Album-wide PR campaign</li>
+            <li>Coordinated release strategy</li>
+            <li>Dedicated account manager</li>
+            <li>Save $290 vs individual Pro</li>
+        </ul>
+        <a href="#" onclick="openModal('album'); return false;" class="btn btn-primary">Get Started</a>
+    </div>
+</div>
+        
     </div>
 </section>
 
@@ -1801,13 +1818,15 @@ function openModal(tier = 'free') {
     document.getElementById('ftier').value = tier;
     document.body.style.overflow = 'hidden';
     
-    // Update modal header based on tier
     const header = document.querySelector('.modal-header h2');
     const subtext = document.querySelector('.modal-header p');
     
     if (tier === 'pro') {
         header.textContent = '🚀 Get Pro Access';
-        subtext.textContent = 'Full agent suite + 988 external curators';
+        subtext.textContent = 'Full agent suite + 988 external curators — $49/track';
+    } else if (tier === 'album') {
+        header.textContent = '💿 Album Package';
+        subtext.textContent = '10 tracks promoted together — $199';
     } else {
         header.textContent = '🚀 Start Your Free Trial';
         subtext.textContent = 'Get your music on OneZeroEight playlists—no payment required';
