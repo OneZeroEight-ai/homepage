@@ -556,9 +556,15 @@
     // Load stats
     async function loadStats() {
         try {
+            // Get artist count directly from artists list for accuracy
+            const artistRes = await fetch(API + '/admin/artists?page_size=1000');
+            const artistData = await artistRes.json();
+            const artistCount = (artistData.artists || []).length;
+            document.getElementById('statArtists').textContent = artistCount;
+            
+            // Get other stats
             const res = await fetch(API + '/admin/stats');
             const data = await res.json();
-            document.getElementById('statArtists').textContent = data.total_artists || 0;
             document.getElementById('statCurators').textContent = data.total_curators || 0;
             document.getElementById('statPlacements').textContent = data.total_placements || 0;
             
@@ -780,9 +786,14 @@
     }
 
     // Create campaign from artist
-    function createCampaign(email, artistName, spotifyLink, genre) {
-        const trackTitle = prompt('Enter track title:');
-        if (!trackTitle) return;
+    async function createCampaign(email, artistName, spotifyLink, genre) {
+        // Confirm before creating
+        if (!confirm(`Create campaign for ${artistName}?\n\nSpotify: ${spotifyLink || 'None'}\nGenre: ${genre || 'Not set'}`)) {
+            return;
+        }
+        
+        // Use artist name as track placeholder - AI agents will analyze the actual track
+        let trackTitle = artistName + ' - Submitted Track';
         
         const data = {
             track_title: trackTitle,
@@ -792,22 +803,24 @@
             payment_method: 'usd'
         };
         
-        fetch(API + '/campaigns/create?artist_email=' + encodeURIComponent(email), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-        .then(res => res.json())
-        .then(result => {
+        try {
+            const res = await fetch(API + '/campaigns/create?artist_email=' + encodeURIComponent(email), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            
             if (result.id) {
-                showToast('Campaign created!');
+                showToast('Campaign created for ' + artistName + '!');
                 loadSubmissions();
                 loadStats();
             } else {
                 showToast('Failed: ' + (result.detail || 'Unknown error'), 'error');
             }
-        })
-        .catch(err => showToast('Error: ' + err.message, 'error'));
+        } catch (err) {
+            showToast('Error: ' + err.message, 'error');
+        }
     }
 
     // Run AI agents
