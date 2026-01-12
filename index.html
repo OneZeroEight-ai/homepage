@@ -1296,6 +1296,16 @@
             font-weight: 700;
         }
 
+        .album-track .track-genre {
+            background: var(--primary);
+            color: var(--white);
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
         /* Responsive */
         @media (max-width: 1024px) {
             .steps-grid {
@@ -1454,7 +1464,7 @@
                     <div class="proof-label">Verified Curators</div>
                 </div>
                 <div class="proof-item">
-                    <div class="proof-value">20M+</div>
+                    <div class="proof-value">15M+</div>
                     <div class="proof-label">Playlist Listeners</div>
                 </div>
                 <div class="proof-item">
@@ -1854,6 +1864,32 @@
                     </select>
                 </div>
                 
+                <!-- Promo Code (shown for paid tiers) -->
+                <div class="form-group" id="promoSection" style="display: none;">
+                    <label>Promo Code <span>(optional)</span></label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="fpromo" placeholder="Enter promo code" style="flex: 1;">
+                        <button type="button" onclick="applyPromoCode()" class="btn btn-secondary" style="padding: 14px 20px;">Apply</button>
+                    </div>
+                    <div id="promoMessage" style="margin-top: 8px; font-size: 0.85rem;"></div>
+                </div>
+                
+                <!-- Price Summary (shown for paid tiers) -->
+                <div id="priceSummary" style="display: none; background: var(--gray-50); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: var(--gray-600);">Subtotal:</span>
+                        <span id="subtotalPrice" style="font-weight: 600;">$49.00</span>
+                    </div>
+                    <div id="discountRow" style="display: none; justify-content: space-between; margin-bottom: 8px; color: var(--secondary);">
+                        <span>Discount:</span>
+                        <span id="discountAmount">-$0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px solid var(--gray-200);">
+                        <span style="font-weight: 700;">Total:</span>
+                        <span id="totalPrice" style="font-weight: 700; font-size: 1.25rem;">$49.00</span>
+                    </div>
+                </div>
+                
                 <!-- Hidden fields -->
                 <input type="hidden" id="ftier" value="free">
                 <input type="hidden" id="ftrackTitle" value="">
@@ -1864,6 +1900,8 @@
                 <input type="hidden" id="fvibesTags" value="">
                 <input type="hidden" id="fsimilarArtists" value="">
                 <input type="hidden" id="falbumTracks" value="">
+                <input type="hidden" id="fpromoValid" value="">
+                <input type="hidden" id="ffinalPrice" value="0">
                 
                 <button type="submit" class="form-submit" id="submitBtn">
                     Start Free Trial →
@@ -1887,25 +1925,49 @@ function openModal(tier = 'free') {
     const albumSection = document.getElementById('albumSection');
     const trackSection = document.getElementById('trackSection');
     const submitBtn = document.getElementById('submitBtn');
+    const promoSection = document.getElementById('promoSection');
+    const priceSummary = document.getElementById('priceSummary');
+    
+    // Reset promo
+    document.getElementById('fpromo').value = '';
+    document.getElementById('promoMessage').innerHTML = '';
+    document.getElementById('fpromoValid').value = '';
+    document.getElementById('discountRow').style.display = 'none';
     
     // Reset visibility
     albumSection.style.display = 'none';
     trackSection.style.display = 'block';
     
+    // Pricing
+    const prices = { free: 0, pro: 49, album: 199 };
+    
     if (tier === 'pro') {
         header.textContent = '🚀 Get Pro Access';
-        subtext.textContent = 'Full agent suite 3000+ external curators — $49/track';
-        submitBtn.textContent = 'Get Pro Access →';
+        subtext.textContent = 'Full agent suite + 3000 external curators — $49/track';
+        submitBtn.textContent = 'Continue to Payment →';
+        promoSection.style.display = 'block';
+        priceSummary.style.display = 'block';
+        document.getElementById('subtotalPrice').textContent = '$49.00';
+        document.getElementById('totalPrice').textContent = '$49.00';
+        document.getElementById('ffinalPrice').value = '4900';
     } else if (tier === 'album') {
         header.textContent = '💿 Album Package';
         subtext.textContent = '10 tracks promoted together — $199';
         albumSection.style.display = 'block';
         trackSection.style.display = 'none';
-        submitBtn.textContent = 'Get Album Package →';
+        submitBtn.textContent = 'Continue to Payment →';
+        promoSection.style.display = 'block';
+        priceSummary.style.display = 'block';
+        document.getElementById('subtotalPrice').textContent = '$199.00';
+        document.getElementById('totalPrice').textContent = '$199.00';
+        document.getElementById('ffinalPrice').value = '19900';
     } else {
         header.textContent = '🚀 Start Your Free Trial';
         subtext.textContent = 'Get your music on OneZeroEight playlists—no payment required';
         submitBtn.textContent = 'Start Free Trial →';
+        promoSection.style.display = 'none';
+        priceSummary.style.display = 'none';
+        document.getElementById('ffinalPrice').value = '0';
     }
 }
 
@@ -1937,19 +1999,33 @@ function handleSpotifyPaste(event) {
 
 async function lookupSpotify() {
     const spotifyUrl = document.getElementById('fspotify').value.trim();
-    if (!spotifyUrl || !spotifyUrl.includes('spotify.com/track/')) return;
+    if (!spotifyUrl) return;
+    
+    // Validate URL format
+    if (!spotifyUrl.includes('spotify.com/track/')) {
+        showTrackError('Please enter a valid Spotify track URL (e.g., https://open.spotify.com/track/...)');
+        return;
+    }
     
     const isAiGenerated = document.getElementById('fAiGenerated').checked;
     const loadingEl = document.getElementById('spotifyLoading');
     const previewEl = document.getElementById('trackPreview');
+    const errorEl = document.getElementById('trackError');
     
     loadingEl.style.display = 'flex';
     previewEl.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'none';
     
     try {
         const url = API_BASE + '/workflow/spotify/metadata?spotify_url=' + encodeURIComponent(spotifyUrl) + '&is_ai_generated=' + isAiGenerated;
         const response = await fetch(url);
         const data = await response.json();
+        
+        if (!data.success || !data.track_title) {
+            showTrackError('Could not find this track on Spotify. Please check the URL and try again.');
+            loadingEl.style.display = 'none';
+            return;
+        }
         
         if (data.success) {
             if (data.artist_name) {
@@ -2021,9 +2097,23 @@ async function lookupSpotify() {
         }
     } catch (err) {
         console.error('Spotify lookup failed:', err);
+        showTrackError('Could not connect to Spotify. Please try again.');
     } finally {
         loadingEl.style.display = 'none';
     }
+}
+
+function showTrackError(message) {
+    let errorEl = document.getElementById('trackError');
+    if (!errorEl) {
+        errorEl = document.createElement('div');
+        errorEl.id = 'trackError';
+        errorEl.style.cssText = 'background:#fee2e2;color:#991b1b;padding:12px 16px;border-radius:10px;margin-top:12px;font-size:0.9rem;display:flex;align-items:center;gap:8px;';
+        const wrapper = document.querySelector('.spotify-input-wrapper');
+        wrapper.appendChild(errorEl);
+    }
+    errorEl.innerHTML = '⚠️ ' + message;
+    errorEl.style.display = 'flex';
 }
 
 // Album Lookup
@@ -2033,18 +2123,31 @@ function handleAlbumPaste(event) {
 
 async function lookupAlbum() {
     const albumUrl = document.getElementById('falbum').value.trim();
-    if (!albumUrl || !albumUrl.includes('spotify.com/album/')) return;
+    if (!albumUrl) return;
+    
+    // Validate URL format
+    if (!albumUrl.includes('spotify.com/album/')) {
+        showAlbumError('Please enter a valid Spotify album URL (e.g., https://open.spotify.com/album/...)');
+        return;
+    }
     
     const loadingEl = document.getElementById('albumLoading');
     const previewEl = document.getElementById('albumPreview');
     
     loadingEl.style.display = 'flex';
     previewEl.style.display = 'none';
+    hideAlbumError();
     
     try {
         const url = API_BASE + '/workflow/spotify/album?album_url=' + encodeURIComponent(albumUrl);
         const response = await fetch(url);
         const data = await response.json();
+        
+        if (!data.success || !data.album_name) {
+            showAlbumError('Could not find this album on Spotify. Please check the URL and try again.');
+            loadingEl.style.display = 'none';
+            return;
+        }
         
         if (data.success) {
             if (data.artist_name) {
@@ -2063,6 +2166,7 @@ async function lookupAlbum() {
                 <div class="album-track">
                     <span class="track-num">${i + 1}</span>
                     <span class="track-title">${track.name}</span>
+                    <span class="track-genre">${track.genre || data.primary_genre || 'Analyzing...'}</span>
                     <span class="track-duration">${formatDuration(track.duration_ms)}</span>
                     <span class="track-check">✓</span>
                 </div>
@@ -2072,9 +2176,28 @@ async function lookupAlbum() {
         }
     } catch (err) {
         console.error('Album lookup failed:', err);
+        showAlbumError('Could not connect to Spotify. Please try again.');
     } finally {
         loadingEl.style.display = 'none';
     }
+}
+
+function showAlbumError(message) {
+    let errorEl = document.getElementById('albumError');
+    if (!errorEl) {
+        errorEl = document.createElement('div');
+        errorEl.id = 'albumError';
+        errorEl.style.cssText = 'background:#fee2e2;color:#991b1b;padding:12px 16px;border-radius:10px;margin-top:12px;font-size:0.9rem;display:flex;align-items:center;gap:8px;';
+        const wrapper = document.querySelector('.album-input-wrapper');
+        wrapper.appendChild(errorEl);
+    }
+    errorEl.innerHTML = '⚠️ ' + message;
+    errorEl.style.display = 'flex';
+}
+
+function hideAlbumError() {
+    const errorEl = document.getElementById('albumError');
+    if (errorEl) errorEl.style.display = 'none';
 }
 
 function formatDuration(ms) {
@@ -2082,6 +2205,52 @@ function formatDuration(ms) {
     const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Apply promo code
+async function applyPromoCode() {
+    const code = document.getElementById('fpromo').value.trim();
+    const tier = document.getElementById('ftier').value;
+    const msgEl = document.getElementById('promoMessage');
+    
+    if (!code) {
+        msgEl.innerHTML = '<span style="color: var(--gray-500);">Enter a promo code</span>';
+        return;
+    }
+    
+    try {
+        const response = await fetch(API_BASE + '/payments/validate-promo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code: code, tier: tier })
+        });
+        
+        const data = await response.json();
+        
+        if (data.valid) {
+            document.getElementById('fpromoValid').value = code;
+            document.getElementById('ffinalPrice').value = data.final_price;
+            
+            // Update price display
+            const discountRow = document.getElementById('discountRow');
+            discountRow.style.display = 'flex';
+            document.getElementById('discountAmount').textContent = '-$' + (data.discount_amount / 100).toFixed(2);
+            document.getElementById('totalPrice').textContent = data.is_free ? 'FREE' : '$' + (data.final_price / 100).toFixed(2);
+            
+            // Update button text
+            const submitBtn = document.getElementById('submitBtn');
+            if (data.is_free) {
+                submitBtn.textContent = 'Activate Free Access →';
+            }
+            
+            msgEl.innerHTML = '<span style="color: var(--secondary);">✓ ' + data.discount_description + ' applied!</span>';
+        } else {
+            document.getElementById('fpromoValid').value = '';
+            msgEl.innerHTML = '<span style="color: #ef4444;">Invalid promo code</span>';
+        }
+    } catch (err) {
+        msgEl.innerHTML = '<span style="color: #ef4444;">Error validating code</span>';
+    }
 }
 
 // Retry logic for Railway cold start
@@ -2110,10 +2279,81 @@ async function submitForm(e) {
     const originalText = btn.textContent;
     
     btn.disabled = true;
-    btn.textContent = 'Waking up servers...';
+    btn.textContent = 'Processing...';
     msg.style.display = 'none';
     
     const tier = document.getElementById('ftier').value;
+    const promoCode = document.getElementById('fpromoValid')?.value || '';
+    const finalPrice = parseInt(document.getElementById('ffinalPrice')?.value) || 0;
+    
+    // For paid tiers with payment required, use Stripe checkout
+    if (tier !== 'free' && finalPrice > 0) {
+        try {
+            const paymentData = {
+                tier: tier,
+                email: document.getElementById('femail').value,
+                artist_name: document.getElementById('fartist').value,
+                spotify_link: tier === 'album' ? (document.getElementById('falbum').value || '') : (document.getElementById('fspotify').value || ''),
+                genre: document.getElementById('fgenre').value,
+                promo_code: promoCode || null,
+                track_title: document.getElementById('ftrackTitle').value || '',
+                album_tracks: document.getElementById('falbumTracks').value || ''
+            };
+            
+            const response = await fetch(API_BASE + '/payments/create-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(paymentData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                if (result.free) {
+                    // Promo made it free - show success
+                    msg.className = 'form-message success';
+                    msg.style.display = 'block';
+                    msg.innerHTML = `
+                        <div style="margin-bottom:12px;">🎉 ${result.message}</div>
+                        <button onclick="closeModal()" style="background:#065f46;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;">
+                            Got it!
+                        </button>
+                    `;
+                    document.getElementById('signupForm').reset();
+                } else {
+                    // Redirect to Stripe checkout
+                    btn.textContent = 'Redirecting to checkout...';
+                    window.location.href = result.checkout_url;
+                    return;
+                }
+            } else {
+                msg.className = 'form-message error';
+                msg.style.display = 'block';
+                msg.innerHTML = `
+                    <div style="margin-bottom:12px;">❌ ${result.detail || 'Payment error. Please try again.'}</div>
+                    <button onclick="document.getElementById('formMessage').style.display='none'" style="background:#991b1b;color:white;border:none;padding:8px 16px;border-radius:6px;font-weight:500;cursor:pointer;">
+                        Dismiss
+                    </button>
+                `;
+            }
+        } catch (error) {
+            msg.className = 'form-message error';
+            msg.style.display = 'block';
+            msg.innerHTML = `
+                <div style="margin-bottom:12px;">❌ Connection error. Please try again.</div>
+                <button onclick="document.getElementById('formMessage').style.display='none'" style="background:#991b1b;color:white;border:none;padding:8px 16px;border-radius:6px;font-weight:500;cursor:pointer;">
+                    Dismiss
+                </button>
+            `;
+        }
+        
+        btn.disabled = false;
+        btn.textContent = originalText;
+        return;
+    }
+    
+    // For free tier or promo-code-free, use regular signup flow
+    btn.textContent = 'Waking up servers...';
     
     const data = {
         name: document.getElementById('fname').value,
@@ -2123,7 +2363,7 @@ async function submitForm(e) {
         genre: document.getElementById('fgenre').value,
         interested_tier: tier,
         bio: '',
-        referral_source: 'Website - ' + tier.charAt(0).toUpperCase() + tier.slice(1),
+        referral_source: 'Website - ' + tier.charAt(0).toUpperCase() + tier.slice(1) + (promoCode ? ' (Promo: ' + promoCode + ')' : ''),
         has_wallet: document.getElementById('fwallet').value,
         track_title: document.getElementById('ftrackTitle').value || '',
         ai_genres: document.getElementById('faiGenres').value || '[]',
@@ -2151,21 +2391,54 @@ async function submitForm(e) {
         if (response.ok && result.success) {
             msg.className = 'form-message success';
             msg.style.display = 'block';
-            msg.textContent = '🎉 ' + (result.message || "You're in! Check your email for next steps.");
-            document.getElementById('signupForm').reset();
-            document.getElementById('trackPreview').style.display = 'none';
-            document.getElementById('albumPreview').style.display = 'none';
             
-            setTimeout(closeModal, 3000);
+            // Check if this is a returning user message
+            const isReturningUser = result.message && result.message.includes('Welcome back');
+            
+            if (isReturningUser) {
+                // Show persistent message with button for returning users
+                msg.innerHTML = `
+                    <div style="margin-bottom:12px;">🎉 ${result.message}</div>
+                    <button onclick="closeModal()" style="background:#065f46;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;">
+                        Got it! Close
+                    </button>
+                `;
+                // Scroll message into view
+                msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                // New user - show success and auto-close
+                msg.innerHTML = `
+                    <div style="margin-bottom:12px;">🎉 ${result.message || "You're in! Check your email for next steps."}</div>
+                    <button onclick="closeModal()" style="background:#065f46;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;">
+                        Got it!
+                    </button>
+                `;
+                msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                document.getElementById('signupForm').reset();
+                document.getElementById('trackPreview').style.display = 'none';
+                document.getElementById('albumPreview').style.display = 'none';
+            }
         } else {
             msg.className = 'form-message error';
             msg.style.display = 'block';
-            msg.textContent = result.detail || 'Something went wrong. Please try again.';
+            msg.innerHTML = `
+                <div style="margin-bottom:12px;">❌ ${result.detail || 'Something went wrong. Please try again.'}</div>
+                <button onclick="document.getElementById('formMessage').style.display='none'" style="background:#991b1b;color:white;border:none;padding:8px 16px;border-radius:6px;font-weight:500;cursor:pointer;">
+                    Dismiss
+                </button>
+            `;
+            msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     } catch (error) {
         msg.className = 'form-message error';
         msg.style.display = 'block';
-        msg.textContent = 'Connection error. Please try again in a moment.';
+        msg.innerHTML = `
+            <div style="margin-bottom:12px;">❌ Connection error. Please try again in a moment.</div>
+            <button onclick="document.getElementById('formMessage').style.display='none'" style="background:#991b1b;color:white;border:none;padding:8px 16px;border-radius:6px;font-weight:500;cursor:pointer;">
+                Dismiss
+            </button>
+        `;
+        msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     
     btn.disabled = false;
