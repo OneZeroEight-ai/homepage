@@ -352,9 +352,9 @@ MIT License — see <LICENSE> for details.
 
 ## 📧 Contact
 
-- **General:** hello@onezeroeight.ai
+- **General:** info@onezeroeight.ai
 - **Support:** support@onezeroeight.ai
-- **Research inquiries:** jb@onezeroeight.ai
+- **Research inquiries:** jbw@onezeroeight.ai
 
 -----
 
