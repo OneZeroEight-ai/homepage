@@ -1,7 +1,7 @@
 # OneZeroEight.ai
 
 <p align="center">
-  <img src="logo.png" alt="OneZeroEight.ai Logo" width="200"/>
+  <img src="logobw.png" alt="OneZeroEight.ai Logo" width="200"/>
 </p>
 
 <p align="center">
