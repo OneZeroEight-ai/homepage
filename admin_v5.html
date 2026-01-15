@@ -22,8 +22,6 @@
         .header-left h1 { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
         .header-left p { opacity: 0.9; font-size: 0.875rem; margin-top: 2px; }
         .header-right { display: flex; align-items: center; gap: 16px; }
-        .discord-status { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 500; }
-        .discord-status .dot { width: 8px; height: 8px; background: #57F287; border-radius: 50%; animation: pulse 2s infinite; }
         .api-status { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 500; }
         .api-status .dot { width: 8px; height: 8px; border-radius: 50%; }
         .api-status .dot.ok { background: #57F287; }
@@ -39,8 +37,6 @@
         .stat-card .icon { font-size: 1.5rem; margin-bottom: 8px; }
         .stat-card .value { font-size: 2rem; font-weight: 700; color: var(--dark); font-family: 'JetBrains Mono', monospace; }
         .stat-card .label { font-size: 0.85rem; color: var(--gray-500); margin-top: 4px; font-weight: 500; }
-        .stat-card .trend { font-size: 0.75rem; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .stat-card .trend.up { color: var(--secondary); }
         .tabs { display: flex; gap: 8px; margin-bottom: 24px; background: var(--white); padding: 8px; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid var(--gray-200); flex-wrap: wrap; }
         .tab { padding: 12px 24px; background: transparent; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; display: flex; align-items: center; gap: 8px; color: var(--gray-600); font-family: inherit; }
         .tab:hover { background: var(--gray-100); color: var(--dark); }
@@ -52,12 +48,10 @@
         .card { background: var(--white); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 24px; overflow: hidden; border: 1px solid var(--gray-200); }
         .card-header { padding: 20px 24px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; background: var(--gray-50); flex-wrap: wrap; gap: 12px; }
         .card-header h2 { font-size: 1.1rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 10px; }
-        .card-header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         .card-body { padding: 0; }
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--gray-100); }
-        th { font-weight: 600; color: var(--gray-500); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--gray-50); position: sticky; top: 0; }
-        tr { transition: background 0.15s; }
+        th { font-weight: 600; color: var(--gray-500); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--gray-50); }
         tr:hover { background: var(--gray-50); }
         .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; }
         .badge-primary { background: #e0e7ff; color: #4338ca; }
@@ -86,7 +80,6 @@
         .btn-primary:hover { background: var(--primary-dark); }
         .btn-success { background: var(--secondary); color: white; }
         .btn-danger { background: var(--danger); color: white; }
-        .btn-discord { background: var(--discord); color: white; }
         .btn-ghost { background: transparent; color: var(--gray-600); border: 1px solid var(--gray-300); }
         .btn-ghost:hover { background: var(--gray-100); }
         .btn-sm { padding: 8px 14px; font-size: 0.8rem; }
@@ -105,10 +98,33 @@
         .modal-header h3 { font-size: 1.25rem; font-weight: 700; color: var(--dark); }
         .modal-close { background: var(--gray-200); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.25rem; color: var(--gray-600); }
         .modal-body { padding: 24px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--gray-700); font-size: 0.9rem; }
-        .form-group select, .form-group input, .form-group textarea { width: 100%; padding: 12px 16px; border: 2px solid var(--gray-200); border-radius: 10px; font-size: 0.95rem; font-family: inherit; }
-        .form-group textarea { min-height: 100px; resize: vertical; }
+        .confirm-modal { max-width: 450px; }
+        .confirm-modal .modal-body { text-align: center; padding: 32px; }
+        .confirm-modal .confirm-icon { font-size: 3rem; margin-bottom: 16px; }
+        .confirm-modal .confirm-title { font-size: 1.25rem; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+        .confirm-modal .confirm-message { color: var(--gray-600); margin-bottom: 24px; line-height: 1.6; }
+        .confirm-modal .confirm-details { background: var(--gray-50); padding: 16px; border-radius: 12px; margin-bottom: 24px; text-align: left; }
+        .confirm-modal .confirm-details p { margin: 4px 0; font-size: 0.9rem; }
+        .confirm-modal .confirm-details strong { color: var(--dark); }
+        .confirm-modal .confirm-buttons { display: flex; gap: 12px; justify-content: center; }
+        .confirm-modal .confirm-buttons .btn { min-width: 120px; justify-content: center; }
+        .artist-detail { background: var(--gray-50); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .artist-detail-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--gray-200); }
+        .artist-detail-avatar { width: 64px; height: 64px; background: linear-gradient(135deg, var(--primary), #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: white; }
+        .artist-detail-name h4 { font-size: 1.1rem; font-weight: 700; color: var(--dark); }
+        .artist-detail-name p { color: var(--gray-500); font-size: 0.9rem; }
+        .artist-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .artist-detail-item label { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--gray-500); font-weight: 600; margin-bottom: 4px; }
+        .artist-detail-item p { color: var(--dark); font-weight: 500; word-break: break-all; }
+        .artist-detail-item a { color: var(--spotify); text-decoration: none; font-weight: 600; }
+        .music-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200); }
+        .music-section h5 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        .music-item { background: white; border: 1px solid var(--gray-200); border-radius: 10px; padding: 12px 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+        .music-item-icon { width: 40px; height: 40px; background: var(--spotify); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; }
+        .music-item-info { flex: 1; }
+        .music-item-info .title { font-weight: 600; color: var(--dark); font-size: 0.9rem; }
+        .music-item-info .url { font-size: 0.75rem; color: var(--gray-500); word-break: break-all; }
+        .music-item-info .url a { color: var(--spotify); }
         .agent-output { background: #1f2937; color: #e5e7eb; padding: 20px; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; white-space: pre-wrap; max-height: 400px; overflow-y: auto; margin-top: 16px; }
         .toast { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 16px 24px; border-radius: 12px; z-index: 2000; display: none; font-weight: 500; max-width: 400px; }
         .toast.success { background: var(--secondary); }
@@ -122,32 +138,22 @@
         .debug-panel .error { color: #ef4444; }
         .debug-panel .warn { color: #f59e0b; }
         @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 768px) { .header { flex-direction: column; gap: 16px; padding: 16px; } .stats-grid { grid-template-columns: repeat(2, 1fr); } table { font-size: 0.85rem; } th, td { padding: 12px; } }
+        @media (max-width: 768px) { .header { flex-direction: column; gap: 16px; padding: 16px; } .stats-grid { grid-template-columns: repeat(2, 1fr); } table { font-size: 0.85rem; } th, td { padding: 12px; } .artist-detail-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-
 <div class="header">
     <div class="header-left">
         <h1>🎛️ OneZeroEight Admin</h1>
         <p>Artists, Campaigns & Platform Management</p>
     </div>
     <div class="header-right">
-        <div class="api-status" id="apiStatus">
-            <span class="dot loading"></span>
-            <span>Checking API...</span>
-        </div>
+        <div class="api-status" id="apiStatus"><span class="dot loading"></span><span>Checking API...</span></div>
         <button class="btn btn-ghost btn-sm" onclick="testAPI()">🔄 Test API</button>
     </div>
 </div>
-
 <div class="container">
-    <!-- Debug Panel -->
-    <div class="debug-panel" id="debugPanel">
-        <strong>🔧 Debug Console</strong> (check browser console for full details)<br>
-        <span id="debugLog">Initializing...</span>
-    </div>
-
+    <div class="debug-panel" id="debugPanel"><strong>🔧 Debug Console</strong><br><span id="debugLog">Initializing...</span></div>
     <div class="stats-grid">
         <div class="stat-card"><div class="icon">🎤</div><div class="value" id="statArtists">-</div><div class="label">Artists</div></div>
         <div class="stat-card"><div class="icon">📥</div><div class="value" id="statSubmissions">-</div><div class="label">Campaigns</div></div>
@@ -156,72 +162,33 @@
         <div class="stat-card"><div class="icon">🎵</div><div class="value" id="statPlaylists">15</div><div class="label">Playlists</div></div>
         <div class="stat-card"><div class="icon">💬</div><div class="value" id="statDiscord">0</div><div class="label">Discord</div></div>
     </div>
-
     <div class="tabs">
         <button class="tab active" onclick="showPanel('submissions')">📥 Campaigns <span class="count" id="tabSubmissions">0</span></button>
         <button class="tab" onclick="showPanel('artists')">🎤 Artists <span class="count" id="tabArtists">0</span></button>
         <button class="tab" onclick="showPanel('curators')">📋 Curators <span class="count" id="tabCurators">0</span></button>
         <button class="tab" onclick="showPanel('playlists')">🎵 Playlists <span class="count">15</span></button>
     </div>
-
-    <!-- Campaigns Panel -->
     <div class="panel active" id="panel-submissions">
-        <div class="card">
-            <div class="card-header">
-                <h2>📥 Campaign Submissions</h2>
-                <div class="card-header-actions">
-                    <button class="btn btn-primary btn-sm" onclick="loadSubmissions()">↻ Refresh</button>
-                </div>
-            </div>
-            <div class="card-body">
-                <table><thead><tr><th>Track</th><th>Artist</th><th>Genre</th><th>Playlist</th><th>Tier</th><th>Status</th><th>Actions</th></tr></thead><tbody id="submissionsTable"><tr><td colspan="7" class="loading"><div class="spinner"></div>Loading...</td></tr></tbody></table>
-            </div>
-        </div>
+        <div class="card"><div class="card-header"><h2>📥 Campaign Submissions</h2><button class="btn btn-primary btn-sm" onclick="loadSubmissions()">↻ Refresh</button></div>
+        <div class="card-body"><table><thead><tr><th>Track</th><th>Artist</th><th>Genre</th><th>Playlist</th><th>Tier</th><th>Status</th><th>Actions</th></tr></thead><tbody id="submissionsTable"><tr><td colspan="7" class="loading"><div class="spinner"></div>Loading...</td></tr></tbody></table></div></div>
     </div>
-
-    <!-- Artists Panel -->
     <div class="panel" id="panel-artists">
-        <div class="card">
-            <div class="card-header">
-                <h2>🎤 Artist Directory</h2>
-                <button class="btn btn-primary btn-sm" onclick="loadArtists()">↻ Refresh</button>
-            </div>
-            <div class="card-body">
-                <table><thead><tr><th>Name</th><th>Email</th><th>Artist Name</th><th>Genre</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="artistsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div>Loading...</td></tr></tbody></table>
-            </div>
-        </div>
+        <div class="card"><div class="card-header"><h2>🎤 Artist Directory</h2><button class="btn btn-primary btn-sm" onclick="loadArtists()">↻ Refresh</button></div>
+        <div class="card-body"><table><thead><tr><th>Name</th><th>Email</th><th>Artist Name</th><th>Genre</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="artistsTable"><tr><td colspan="6" class="loading"><div class="spinner"></div>Loading...</td></tr></tbody></table></div></div>
     </div>
-
-    <!-- Curators Panel -->
     <div class="panel" id="panel-curators">
-        <div class="card">
-            <div class="card-header">
-                <h2>📋 Curator Network</h2>
-                <span id="curatorCount" style="color: var(--gray-500);"></span>
-                <button class="btn btn-primary btn-sm" onclick="loadCurators()">↻ Refresh</button>
-            </div>
-            <div class="card-body">
-                <table><thead><tr><th>Name</th><th>Email</th><th>Followers</th><th>Status</th><th>Actions</th></tr></thead><tbody id="curatorsTable"><tr><td colspan="5" class="loading"><div class="spinner"></div>Loading...</td></tr></tbody></table>
-            </div>
-        </div>
+        <div class="card"><div class="card-header"><h2>📋 Curator Network</h2><span id="curatorCount" style="color: var(--gray-500);"></span><button class="btn btn-primary btn-sm" onclick="loadCurators()">↻ Refresh</button></div>
+        <div class="card-body"><table><thead><tr><th>Name</th><th>Email</th><th>Followers</th><th>Status</th><th>Actions</th></tr></thead><tbody id="curatorsTable"><tr><td colspan="5" class="loading"><div class="spinner"></div>Loading...</td></tr></tbody></table></div></div>
     </div>
-
-    <!-- Playlists Panel -->
     <div class="panel" id="panel-playlists">
-        <div class="card">
-            <div class="card-header"><h2>🎵 OneZeroEight Playlists</h2></div>
-            <div class="card-body"><table><thead><tr><th>Playlist</th><th>Genres</th><th>Spotify ID</th><th>Actions</th></tr></thead><tbody id="playlistsTable"></tbody></table></div>
-        </div>
+        <div class="card"><div class="card-header"><h2>🎵 OneZeroEight Playlists</h2></div><div class="card-body"><table><thead><tr><th>Playlist</th><th>Genres</th><th>Spotify ID</th><th>Actions</th></tr></thead><tbody id="playlistsTable"></tbody></table></div></div>
     </div>
 </div>
-
-<!-- Modals -->
-<div class="modal-overlay" id="artistModal"><div class="modal"><div class="modal-header"><h3>🎤 Edit Artist</h3><button class="modal-close" onclick="closeModal('artistModal')">×</button></div><div class="modal-body" id="artistModalContent"></div></div></div>
+<div class="modal-overlay" id="artistModal"><div class="modal"><div class="modal-header"><h3>🎤 Artist Details</h3><button class="modal-close" onclick="closeModal('artistModal')">×</button></div><div class="modal-body" id="artistModalContent"></div></div></div>
 <div class="modal-overlay" id="agentModal"><div class="modal"><div class="modal-header"><h3>🤖 AI Agent Results</h3><button class="modal-close" onclick="closeModal('agentModal')">×</button></div><div class="modal-body" id="agentModalContent"></div></div></div>
+<div class="modal-overlay" id="confirmModal"><div class="modal confirm-modal"><div class="modal-body"><div class="confirm-icon" id="confirmIcon">⚠️</div><div class="confirm-title" id="confirmTitle">Confirm Action</div><div class="confirm-message" id="confirmMessage">Are you sure?</div><div class="confirm-details" id="confirmDetails" style="display:none;"></div><div class="confirm-buttons"><button class="btn btn-ghost" onclick="closeModal('confirmModal')">Cancel</button><button class="btn btn-primary" id="confirmButton" onclick="executeConfirmedAction()">Confirm</button></div></div></div></div>
 <div class="toast" id="toast"></div>
-
 <script>
-// Password protection
 (function(){
     var s = sessionStorage.getItem('108admin');
     if (s !== 'authenticated') {
@@ -236,6 +203,7 @@
 
 const API = 'https://onezeroeight-backend-production.up.railway.app/api';
 let allCampaigns = [], allArtists = [], allCurators = [];
+let pendingAction = null;
 
 const PLAYLISTS = {
     discoveries: {id:"2DjGILNUx6ZKj6UFANaWrH", name:"OneZeroEight: Discoveries", emoji:"🎵"},
@@ -295,6 +263,39 @@ function showToast(m, t) {
 
 function closeModal(id) {
     document.getElementById(id).classList.remove('active');
+    if (id === 'confirmModal') {
+        pendingAction = null;
+    }
+}
+
+// Confirmation Dialog System
+function showConfirmation(options) {
+    pendingAction = options.action;
+    
+    document.getElementById('confirmIcon').textContent = options.icon || '⚠️';
+    document.getElementById('confirmTitle').textContent = options.title || 'Confirm Action';
+    document.getElementById('confirmMessage').textContent = options.message || 'Are you sure?';
+    
+    var detailsEl = document.getElementById('confirmDetails');
+    if (options.details) {
+        detailsEl.innerHTML = options.details;
+        detailsEl.style.display = 'block';
+    } else {
+        detailsEl.style.display = 'none';
+    }
+    
+    var confirmBtn = document.getElementById('confirmButton');
+    confirmBtn.textContent = options.confirmText || 'Confirm';
+    confirmBtn.className = 'btn ' + (options.confirmClass || 'btn-primary');
+    
+    document.getElementById('confirmModal').classList.add('active');
+}
+
+function executeConfirmedAction() {
+    if (pendingAction && typeof pendingAction === 'function') {
+        pendingAction();
+    }
+    closeModal('confirmModal');
 }
 
 function showPanel(n) {
@@ -332,8 +333,7 @@ async function testAPI() {
             debugLog('API is online! Status: ' + data.status, 'info');
             loadStats();
         } else {
-            // Still try to load stats even if health format is unexpected
-            updateApiStatus('warn', 'API Status Unknown');
+            updateApiStatus('ok', 'API Online');
             debugLog('Unexpected health response, trying to load anyway: ' + JSON.stringify(data), 'warn');
             loadStats();
         }
@@ -347,40 +347,28 @@ async function loadStats() {
     debugLog('Loading stats...', 'info');
     
     try {
-        // Load artists count
         debugLog('Fetching artists...', 'info');
         var artistRes = await fetch(API + '/admin/artists?page_size=1000');
-        debugLog('Artists response status: ' + artistRes.status, 'info');
         var artistData = await artistRes.json();
-        debugLog('Artists data: ' + JSON.stringify(artistData).substring(0, 200), 'info');
-        
-        var artistCount = (artistData.artists || []).length;
+        allArtists = artistData.artists || [];
+        var artistCount = allArtists.length;
         document.getElementById('statArtists').textContent = artistCount;
         document.getElementById('tabArtists').textContent = artistCount;
-        debugLog('Artists count: ' + artistCount, 'info');
         
-        // Load stats
         debugLog('Fetching stats...', 'info');
         var statsRes = await fetch(API + '/admin/stats');
-        debugLog('Stats response status: ' + statsRes.status, 'info');
         var statsData = await statsRes.json();
-        debugLog('Stats data: ' + JSON.stringify(statsData), 'info');
-        
         document.getElementById('statCurators').textContent = statsData.total_curators || 0;
         document.getElementById('tabCurators').textContent = statsData.total_curators || 0;
         document.getElementById('statPlacements').textContent = statsData.total_placements || 0;
         
-        // Load campaigns count
         debugLog('Fetching campaigns...', 'info');
         var campRes = await fetch(API + '/admin/campaigns?page_size=100');
-        debugLog('Campaigns response status: ' + campRes.status, 'info');
         var campData = await campRes.json();
-        debugLog('Campaigns data: ' + JSON.stringify(campData).substring(0, 200), 'info');
-        
-        var campCount = (campData.campaigns || []).length;
+        allCampaigns = campData.campaigns || [];
+        var campCount = allCampaigns.length;
         document.getElementById('statSubmissions').textContent = campCount;
         document.getElementById('tabSubmissions').textContent = campCount;
-        debugLog('Campaigns count: ' + campCount, 'info');
         
         updateApiStatus('ok', 'API Online');
         
@@ -393,16 +381,11 @@ async function loadStats() {
 async function loadSubmissions() {
     var tbody = document.getElementById('submissionsTable');
     tbody.innerHTML = '<tr><td colspan="7" class="loading"><div class="spinner"></div>Loading campaigns...</td></tr>';
-    debugLog('Loading submissions...', 'info');
     
     try {
         var response = await fetch(API + '/admin/campaigns?page_size=50');
-        debugLog('Campaigns response: ' + response.status, 'info');
         var data = await response.json();
-        debugLog('Campaigns data received: ' + JSON.stringify(data).substring(0, 300), 'info');
-        
         allCampaigns = data.campaigns || [];
-        debugLog('Parsed campaigns: ' + allCampaigns.length, 'info');
         
         if (allCampaigns.length === 0) {
             tbody.innerHTML = '<tr><td colspan="7" class="empty-state">📭 No campaigns yet</td></tr>';
@@ -415,6 +398,10 @@ async function loadSubmissions() {
             var pl = PLAYLISTS[pk] || PLAYLISTS.discoveries;
             var st = c.status || 'draft';
             var ti = c.tier || 'free';
+            var cid = c.id || '';
+            var tt = (c.track_title || 'Untitled').replace(/'/g, "\\'");
+            var an = (c.artist_name || '-').replace(/'/g, "\\'");
+            var sl = (c.spotify_link || '').replace(/'/g, "\\'");
             
             return '<tr>' +
                 '<td><strong>' + escapeHtml(c.track_title || 'Untitled') + '</strong>' +
@@ -425,9 +412,9 @@ async function loadSubmissions() {
                 '<td><span class="badge ' + (ti === 'pro' ? 'badge-primary' : 'badge-warning') + '">' + ti + '</span></td>' +
                 '<td><span class="badge ' + (st === 'placed' ? 'badge-success' : 'badge-warning') + '">' + st + '</span></td>' +
                 '<td class="actions">' +
-                '<button class="action-btn agent" onclick="runAgents(\'' + escapeHtml(c.track_title) + '\',\'' + escapeHtml(c.artist_name) + '\',\'' + escapeHtml(c.spotify_link || '') + '\',\'' + escapeHtml(g) + '\')">🤖</button>' +
-                '<button class="action-btn ' + (st === 'placed' ? 'placed' : '') + '" onclick="markPlaced(\'' + c.id + '\')">' + (st === 'placed' ? '✓' : '📋') + '</button>' +
-                '<button class="action-btn delete" onclick="deleteCampaign(\'' + c.id + '\')">🗑</button>' +
+                '<button class="action-btn agent" onclick="confirmRunAgents(\'' + tt + '\',\'' + an + '\',\'' + sl + '\',\'' + escapeHtml(g) + '\')" title="Run AI Agents">🤖</button>' +
+                '<button class="action-btn ' + (st === 'placed' ? 'placed' : '') + '" onclick="confirmMarkPlaced(\'' + cid + '\', \'' + tt + '\', \'' + an + '\')" title="Mark as Placed">' + (st === 'placed' ? '✓' : '📋') + '</button>' +
+                '<button class="action-btn delete" onclick="confirmDeleteCampaign(\'' + cid + '\', \'' + tt + '\', \'' + an + '\')" title="Delete Campaign">🗑</button>' +
                 '</td></tr>';
         }).join('');
         
@@ -440,16 +427,11 @@ async function loadSubmissions() {
 async function loadArtists() {
     var tbody = document.getElementById('artistsTable');
     tbody.innerHTML = '<tr><td colspan="6" class="loading"><div class="spinner"></div>Loading artists...</td></tr>';
-    debugLog('Loading artists...', 'info');
     
     try {
         var response = await fetch(API + '/admin/artists?page_size=100');
-        debugLog('Artists response: ' + response.status, 'info');
         var data = await response.json();
-        debugLog('Artists data received: ' + JSON.stringify(data).substring(0, 300), 'info');
-        
         allArtists = data.artists || [];
-        debugLog('Parsed artists: ' + allArtists.length, 'info');
         
         if (allArtists.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="empty-state">👤 No artists yet</td></tr>';
@@ -458,6 +440,7 @@ async function loadArtists() {
         
         tbody.innerHTML = allArtists.map(function(a) {
             var jd = a.created_at ? new Date(a.created_at).toLocaleDateString() : '-';
+            var nm = (a.name || a.artist_name || '-').replace(/'/g, "\\'");
             return '<tr>' +
                 '<td><strong>' + escapeHtml(a.name || '-') + '</strong></td>' +
                 '<td>' + escapeHtml(a.email || '-') + '</td>' +
@@ -465,8 +448,8 @@ async function loadArtists() {
                 '<td>' + (a.genre ? '<span class="badge badge-info">' + escapeHtml(a.genre) + '</span>' : '-') + '</td>' +
                 '<td>' + jd + '</td>' +
                 '<td class="actions">' +
-                '<button class="action-btn" onclick="editArtist(\'' + a.id + '\')">✏️</button>' +
-                '<button class="action-btn delete" onclick="deleteArtist(\'' + a.id + '\')">🗑</button>' +
+                '<button class="action-btn" onclick="viewArtist(\'' + a.id + '\')" title="View Details">👁️</button>' +
+                '<button class="action-btn delete" onclick="confirmDeleteArtist(\'' + a.id + '\', \'' + nm + '\')" title="Delete Artist">🗑</button>' +
                 '</td></tr>';
         }).join('');
         
@@ -479,17 +462,12 @@ async function loadArtists() {
 async function loadCurators() {
     var tbody = document.getElementById('curatorsTable');
     tbody.innerHTML = '<tr><td colspan="5" class="loading"><div class="spinner"></div>Loading curators...</td></tr>';
-    debugLog('Loading curators...', 'info');
     
     try {
         var response = await fetch(API + '/admin/curators?page_size=50');
-        debugLog('Curators response: ' + response.status, 'info');
         var data = await response.json();
-        debugLog('Curators data received: ' + JSON.stringify(data).substring(0, 300), 'info');
-        
         allCurators = data.curators || [];
         document.getElementById('curatorCount').textContent = '(' + (data.total || allCurators.length) + ' total)';
-        debugLog('Parsed curators: ' + allCurators.length, 'info');
         
         if (allCurators.length === 0) {
             tbody.innerHTML = '<tr><td colspan="5" class="empty-state">📋 No curators yet</td></tr>';
@@ -529,25 +507,125 @@ function loadPlaylists() {
     }).join('');
 }
 
-function editArtist(id) {
+// Enhanced Artist View with Music Details
+function viewArtist(id) {
     var a = allArtists.find(function(x) { return x.id === id; });
     if (!a) return;
     
+    // Find campaigns for this artist
+    var artistCampaigns = allCampaigns.filter(function(c) {
+        return c.artist_name === a.artist_name || c.artist_email === a.email;
+    });
+    
     var content = document.getElementById('artistModalContent');
-    content.innerHTML = '<p><strong>ID:</strong> ' + a.id + '</p>' +
-        '<p><strong>Name:</strong> ' + escapeHtml(a.name) + '</p>' +
-        '<p><strong>Email:</strong> ' + escapeHtml(a.email) + '</p>' +
-        '<p><strong>Artist Name:</strong> ' + escapeHtml(a.artist_name) + '</p>' +
-        '<p><strong>Genre:</strong> ' + escapeHtml(a.genre) + '</p>' +
-        '<p><strong>Spotify:</strong> ' + (a.spotify_link ? '<a href="' + escapeHtml(a.spotify_link) + '" target="_blank">Open</a>' : 'N/A') + '</p>';
+    
+    var musicHtml = '<div class="music-section"><h5>🎵 Music & Submissions</h5>';
+    
+    // Show artist's main spotify link
+    if (a.spotify_link) {
+        musicHtml += '<div class="music-item">' +
+            '<div class="music-item-icon">🎵</div>' +
+            '<div class="music-item-info">' +
+            '<div class="title">Artist Profile / Latest Track</div>' +
+            '<div class="url"><a href="' + escapeHtml(a.spotify_link) + '" target="_blank">' + escapeHtml(a.spotify_link) + '</a></div>' +
+            '</div></div>';
+    }
+    
+    // Show campaigns/tracks
+    if (artistCampaigns.length > 0) {
+        artistCampaigns.forEach(function(c) {
+            var statusBadge = c.status === 'placed' ? '<span class="badge badge-success" style="margin-left:8px;">Placed</span>' : '<span class="badge badge-warning" style="margin-left:8px;">' + (c.status || 'Pending') + '</span>';
+            musicHtml += '<div class="music-item">' +
+                '<div class="music-item-icon">🎶</div>' +
+                '<div class="music-item-info">' +
+                '<div class="title">' + escapeHtml(c.track_title || 'Untitled Track') + statusBadge + '</div>' +
+                (c.spotify_link ? '<div class="url"><a href="' + escapeHtml(c.spotify_link) + '" target="_blank">' + escapeHtml(c.spotify_link) + '</a></div>' : '<div class="url" style="color:var(--gray-400);">No Spotify link</div>') +
+                '</div></div>';
+        });
+    } else if (!a.spotify_link) {
+        musicHtml += '<p style="color:var(--gray-500);font-size:0.9rem;">No music submissions yet</p>';
+    }
+    
+    musicHtml += '</div>';
+    
+    content.innerHTML = '<div class="artist-detail">' +
+        '<div class="artist-detail-header">' +
+        '<div class="artist-detail-avatar">🎤</div>' +
+        '<div class="artist-detail-name">' +
+        '<h4>' + escapeHtml(a.artist_name || a.name || 'Unknown Artist') + '</h4>' +
+        '<p>' + escapeHtml(a.email) + '</p>' +
+        '</div></div>' +
+        '<div class="artist-detail-grid">' +
+        '<div class="artist-detail-item"><label>Full Name</label><p>' + escapeHtml(a.name || '-') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Artist Name</label><p>' + escapeHtml(a.artist_name || '-') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Genre</label><p>' + (a.genre ? '<span class="badge badge-info">' + escapeHtml(a.genre) + '</span>' : '-') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Joined</label><p>' + (a.created_at ? new Date(a.created_at).toLocaleDateString() : '-') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Has Wallet</label><p>' + (a.has_wallet || 'Unknown') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Tier</label><p>' + (a.interested_tier || 'Free') + '</p></div>' +
+        '</div>' +
+        musicHtml +
+        '</div>' +
+        '<div style="display:flex;gap:12px;margin-top:20px;">' +
+        '<button class="btn btn-danger" onclick="confirmDeleteArtist(\'' + a.id + '\', \'' + escapeHtml((a.name || a.artist_name || '').replace(/'/g, "\\'")) + '\'); closeModal(\'artistModal\');">🗑 Delete Artist</button>' +
+        '</div>';
+    
     document.getElementById('artistModal').classList.add('active');
 }
 
+// Confirmation functions for each action
+function confirmDeleteArtist(id, name) {
+    showConfirmation({
+        icon: '🗑️',
+        title: 'Delete Artist?',
+        message: 'This action cannot be undone. The artist and all associated data will be permanently removed.',
+        details: '<p><strong>Artist:</strong> ' + escapeHtml(name) + '</p><p><strong>ID:</strong> ' + id + '</p>',
+        confirmText: 'Delete Artist',
+        confirmClass: 'btn-danger',
+        action: function() { deleteArtist(id); }
+    });
+}
+
+function confirmDeleteCampaign(id, trackTitle, artistName) {
+    showConfirmation({
+        icon: '🗑️',
+        title: 'Delete Campaign?',
+        message: 'This will permanently remove the campaign submission.',
+        details: '<p><strong>Track:</strong> ' + escapeHtml(trackTitle) + '</p><p><strong>Artist:</strong> ' + escapeHtml(artistName) + '</p>',
+        confirmText: 'Delete Campaign',
+        confirmClass: 'btn-danger',
+        action: function() { deleteCampaign(id); }
+    });
+}
+
+function confirmMarkPlaced(id, trackTitle, artistName) {
+    showConfirmation({
+        icon: '✅',
+        title: 'Mark as Placed?',
+        message: 'This will update the campaign status to "placed" and may trigger a Discord notification.',
+        details: '<p><strong>Track:</strong> ' + escapeHtml(trackTitle) + '</p><p><strong>Artist:</strong> ' + escapeHtml(artistName) + '</p>',
+        confirmText: 'Mark Placed',
+        confirmClass: 'btn-success',
+        action: function() { markPlaced(id); }
+    });
+}
+
+function confirmRunAgents(trackTitle, artistName, spotifyUrl, genre) {
+    showConfirmation({
+        icon: '🤖',
+        title: 'Run AI Agents?',
+        message: 'This will analyze the track and generate social media content. This may take 30-60 seconds.',
+        details: '<p><strong>Track:</strong> ' + escapeHtml(trackTitle) + '</p><p><strong>Artist:</strong> ' + escapeHtml(artistName) + '</p>' + (spotifyUrl ? '<p><strong>Spotify:</strong> <a href="' + escapeHtml(spotifyUrl) + '" target="_blank" style="color:var(--spotify);">Open Link</a></p>' : ''),
+        confirmText: 'Run Agents',
+        confirmClass: 'btn-primary',
+        action: function() { runAgents(trackTitle, artistName, spotifyUrl, genre); }
+    });
+}
+
+// Actual action functions (called after confirmation)
 async function deleteArtist(id) {
-    if (!confirm('Delete this artist?')) return;
     try {
         await fetch(API + '/admin/artists/' + id, { method: 'DELETE' });
-        showToast('Artist deleted');
+        showToast('Artist deleted successfully');
         loadArtists();
         loadStats();
     } catch (err) {
@@ -555,22 +633,14 @@ async function deleteArtist(id) {
     }
 }
 
-async function runAgents(trackTitle, artistName, spotifyUrl, genre) {
-    var content = document.getElementById('agentModalContent');
-    content.innerHTML = '<p>Running AI agents for: <strong>' + escapeHtml(trackTitle) + '</strong></p><div class="agent-output" id="agentOutput">Initializing...</div>';
-    document.getElementById('agentModal').classList.add('active');
-    
-    var output = document.getElementById('agentOutput');
-    
+async function deleteCampaign(id) {
     try {
-        output.textContent = '🔍 Running track analysis...';
-        var ar = await fetch(API + '/workflow/agent/analyze-track?track_title=' + encodeURIComponent(trackTitle) + '&artist_name=' + encodeURIComponent(artistName) + '&spotify_url=' + encodeURIComponent(spotifyUrl), { method: 'POST' });
-        var analysis = await ar.json();
-        output.textContent += '\n✅ Analysis complete!\n\n' + JSON.stringify(analysis, null, 2);
-        showToast('AI agents completed!');
+        await fetch(API + '/admin/campaigns/' + id, { method: 'DELETE' });
+        showToast('Campaign deleted successfully');
+        loadSubmissions();
+        loadStats();
     } catch (err) {
-        output.textContent += '\n\n❌ Error: ' + err.message;
-        showToast('Agent error', 'error');
+        showToast('Error: ' + err.message, 'error');
     }
 }
 
@@ -581,22 +651,56 @@ async function markPlaced(id) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'placed' })
         });
-        showToast('Marked as placed!');
+        showToast('Marked as placed! Discord notified.');
         loadSubmissions();
     } catch (err) {
         showToast('Error: ' + err.message, 'error');
     }
 }
 
-async function deleteCampaign(id) {
-    if (!confirm('Delete this campaign?')) return;
+async function runAgents(trackTitle, artistName, spotifyUrl, genre) {
+    var content = document.getElementById('agentModalContent');
+    content.innerHTML = '<p>Running AI agents for: <strong>' + escapeHtml(trackTitle) + '</strong> by <strong>' + escapeHtml(artistName) + '</strong></p>' +
+        (spotifyUrl ? '<p style="margin-top:8px;"><a href="' + escapeHtml(spotifyUrl) + '" target="_blank" style="color:var(--spotify);">🎵 View on Spotify</a></p>' : '') +
+        '<div class="agent-output" id="agentOutput">Initializing AI agents...</div>';
+    document.getElementById('agentModal').classList.add('active');
+    
+    var output = document.getElementById('agentOutput');
+    
     try {
-        await fetch(API + '/admin/campaigns/' + id, { method: 'DELETE' });
-        showToast('Campaign deleted');
-        loadSubmissions();
-        loadStats();
+        output.textContent = '🔍 Running track analysis...';
+        var ar = await fetch(API + '/workflow/agent/analyze-track?track_title=' + encodeURIComponent(trackTitle) + '&artist_name=' + encodeURIComponent(artistName) + '&spotify_url=' + encodeURIComponent(spotifyUrl), { method: 'POST' });
+        var analysis = await ar.json();
+        
+        output.textContent += '\n✅ Analysis complete!\n\n';
+        output.textContent += '--- Track Analysis ---\n';
+        if (analysis.analysis) {
+            output.textContent += 'Genre Tags: ' + (analysis.analysis.genre_tags?.join(', ') || 'N/A') + '\n';
+            output.textContent += 'Mood: ' + (analysis.analysis.mood?.join(', ') || 'N/A') + '\n';
+            output.textContent += 'Energy: ' + (analysis.analysis.energy_level || 'N/A') + '/10\n';
+            output.textContent += 'Target Audience: ' + (analysis.analysis.target_audience || 'N/A') + '\n';
+            output.textContent += '\nPlaylist Pitch:\n' + (analysis.analysis.playlist_pitch || 'N/A') + '\n';
+        } else {
+            output.textContent += JSON.stringify(analysis, null, 2);
+        }
+        
+        output.textContent += '\n\n🐦 Generating social posts...';
+        var sr = await fetch(API + '/workflow/agent/generate-social?track_title=' + encodeURIComponent(trackTitle) + '&artist_name=' + encodeURIComponent(artistName) + '&spotify_url=' + encodeURIComponent(spotifyUrl) + '&genre=' + encodeURIComponent(genre), { method: 'POST' });
+        var social = await sr.json();
+        
+        output.textContent += '\n✅ Social posts generated!\n\n';
+        if (social.posts) {
+            output.textContent += '--- Twitter ---\n' + (social.posts.twitter || 'N/A') + '\n\n';
+            output.textContent += '--- Instagram ---\n' + (social.posts.instagram || 'N/A') + '\n\n';
+            output.textContent += '--- Discord ---\n' + (social.posts.discord || 'N/A');
+        } else {
+            output.textContent += JSON.stringify(social, null, 2);
+        }
+        
+        showToast('AI agents completed successfully!');
     } catch (err) {
-        showToast('Error: ' + err.message, 'error');
+        output.textContent += '\n\n❌ Error: ' + err.message;
+        showToast('Agent error: ' + err.message, 'error');
     }
 }
 
@@ -607,16 +711,373 @@ function emailCurator(email) {
 // Modal close on overlay click
 document.querySelectorAll('.modal-overlay').forEach(function(m) {
     m.addEventListener('click', function(e) {
-        if (e.target === this) this.classList.remove('active');
+        if (e.target === this) {
+            this.classList.remove('active');
+            if (this.id === 'confirmModal') {
+                pendingAction = null;
+            }
+        }
     });
+});
+
+// Escape key to close modals
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(function(m) {
+            m.classList.remove('active');
+        });
+        pendingAction = null;
+    }
 });
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
-    debugLog('Dashboard loaded', 'info');
+    debugLog('Dashboard v5 loaded', 'info');
     testAPI();
     loadPlaylists();
 });
+</script>
+</body>
+</html>f1mEm", name:"OneZeroEight: Classical & Cinematic", emoji:"🎻"},
+    latin: {id:"2FouNlNr5Z86JkGqH1Z9lq", name:"OneZeroEight: Latin", emoji:"🔥"},
+    world: {id:"0P4mQy5bjTz5QUXnh9XAxC", name:"OneZeroEight: World & Global", emoji:"🌍"},
+    country: {id:"5H31gmiH3MD9nflKmQtkS1", name:"OneZeroEight: Country", emoji:"🤠"},
+    gospel: {id:"0qs0ALpOZEQyPZl54ZketH", name:"OneZeroEight: Gospel & Christian", emoji:"🙏"}
+};
+
+const GENRE_MAP = {
+    'electronic':'electronic','edm':'electronic','house':'electronic','techno':'electronic',
+    'lo-fi':'lofi','lofi':'lofi','chillhop':'lofi','chill':'lofi',
+    'hip hop':'hiphop','hip-hop':'hiphop','rap':'hiphop','trap':'hiphop',
+    'pop':'pop','r&b':'rnb','rnb':'rnb','soul':'rnb',
+    'ambient':'ambient','rock':'rock','alternative':'rock',
+    'indie':'indie','folk':'indie','jazz':'jazz','blues':'jazz',
+    'classical':'classical','latin':'latin','world':'world','country':'country','gospel':'gospel'
+};
+
+function getPlaylistKey(g) { return g ? (GENRE_MAP[g.toLowerCase()] || 'discoveries') : 'discoveries'; }
+function escapeHtml(t) { return t ? t.toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]) : ''; }
+
+function debugLog(msg, type) {
+    var el = document.getElementById('debugLog');
+    var time = new Date().toLocaleTimeString();
+    el.innerHTML += '<br><span class="' + (type === 'error' ? 'error' : type === 'warn' ? 'warn' : '') + '">[' + time + '] ' + msg + '</span>';
+    el.scrollTop = el.scrollHeight;
+    console.log('[' + type + ']', msg);
+}
+
+function showToast(m, t) {
+    var toast = document.getElementById('toast');
+    toast.textContent = m;
+    toast.className = 'toast ' + (t || 'success') + ' show';
+    setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function closeModal(id) {
+    document.getElementById(id).classList.remove('active');
+    if (id === 'confirmModal') pendingAction = null;
+}
+
+function showConfirmation(opts) {
+    pendingAction = opts.action;
+    document.getElementById('confirmIcon').textContent = opts.icon || '⚠️';
+    document.getElementById('confirmTitle').textContent = opts.title || 'Confirm Action';
+    document.getElementById('confirmMessage').textContent = opts.message || 'Are you sure?';
+    var det = document.getElementById('confirmDetails');
+    if (opts.details) { det.innerHTML = opts.details; det.style.display = 'block'; } else { det.style.display = 'none'; }
+    var btn = document.getElementById('confirmButton');
+    btn.textContent = opts.confirmText || 'Confirm';
+    btn.className = 'btn ' + (opts.confirmClass || 'btn-primary');
+    document.getElementById('confirmModal').classList.add('active');
+}
+
+function executeConfirmedAction() {
+    if (pendingAction) pendingAction();
+    closeModal('confirmModal');
+}
+
+function showPanel(n) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + n).classList.add('active');
+    if (event && event.target) { var tab = event.target.closest('.tab'); if (tab) tab.classList.add('active'); }
+    if (n === 'submissions') loadSubmissions();
+    if (n === 'artists') loadArtists();
+    if (n === 'curators') loadCurators();
+    if (n === 'playlists') loadPlaylists();
+}
+
+function updateApiStatus(status, msg) {
+    var el = document.getElementById('apiStatus');
+    el.querySelector('.dot').className = 'dot ' + status;
+    el.querySelector('span:last-child').textContent = msg;
+}
+
+async function testAPI() {
+    debugLog('Testing API...', 'info');
+    updateApiStatus('loading', 'Testing...');
+    try {
+        var r = await fetch(API.replace('/api', '') + '/health');
+        var d = await r.json();
+        debugLog('Health: ' + JSON.stringify(d), 'info');
+        if (d.status === 'operational' || d.status === 'healthy') {
+            updateApiStatus('ok', 'API Online');
+            loadStats();
+        } else {
+            updateApiStatus('ok', 'API Online');
+            loadStats();
+        }
+    } catch (e) {
+        updateApiStatus('error', 'API Offline');
+        debugLog('Health failed: ' + e.message, 'error');
+    }
+}
+
+async function loadStats() {
+    try {
+        var ar = await fetch(API + '/admin/artists?page_size=1000');
+        var ad = await ar.json();
+        var ac = (ad.artists || []).length;
+        document.getElementById('statArtists').textContent = ac;
+        document.getElementById('tabArtists').textContent = ac;
+        
+        var sr = await fetch(API + '/admin/stats');
+        var sd = await sr.json();
+        document.getElementById('statCurators').textContent = sd.total_curators || 0;
+        document.getElementById('tabCurators').textContent = sd.total_curators || 0;
+        document.getElementById('statPlacements').textContent = sd.total_placements || 0;
+        
+        var cr = await fetch(API + '/admin/campaigns?page_size=100');
+        var cd = await cr.json();
+        var cc = (cd.campaigns || []).length;
+        document.getElementById('statSubmissions').textContent = cc;
+        document.getElementById('tabSubmissions').textContent = cc;
+        updateApiStatus('ok', 'API Online');
+    } catch (e) {
+        debugLog('Stats error: ' + e.message, 'error');
+        updateApiStatus('error', 'Load Failed');
+    }
+}
+
+async function loadSubmissions() {
+    var tbody = document.getElementById('submissionsTable');
+    tbody.innerHTML = '<tr><td colspan="7" class="loading"><div class="spinner"></div>Loading...</td></tr>';
+    try {
+        var r = await fetch(API + '/admin/campaigns?page_size=50');
+        var d = await r.json();
+        allCampaigns = d.campaigns || [];
+        if (allCampaigns.length === 0) { tbody.innerHTML = '<tr><td colspan="7" class="empty-state">📭 No campaigns yet</td></tr>'; return; }
+        tbody.innerHTML = allCampaigns.map(c => {
+            var g = c.genre || c.track_genre || 'Unknown';
+            var pk = getPlaylistKey(g);
+            var pl = PLAYLISTS[pk] || PLAYLISTS.discoveries;
+            var st = c.status || 'draft';
+            var ti = c.tier || 'free';
+            return '<tr><td><strong>' + escapeHtml(c.track_title || 'Untitled') + '</strong>' +
+                (c.spotify_link ? '<br><a href="' + escapeHtml(c.spotify_link) + '" target="_blank" style="font-size:0.75rem;color:var(--spotify);">🎵 Spotify</a>' : '') + '</td>' +
+                '<td>' + escapeHtml(c.artist_name || '-') + '</td>' +
+                '<td><span class="badge badge-info">' + escapeHtml(g) + '</span></td>' +
+                '<td><span class="playlist-badge playlist-' + pk + '">' + pl.emoji + ' ' + pl.name.replace('OneZeroEight: ', '') + '</span></td>' +
+                '<td><span class="badge ' + (ti === 'pro' ? 'badge-primary' : 'badge-warning') + '">' + ti + '</span></td>' +
+                '<td><span class="badge ' + (st === 'placed' ? 'badge-success' : 'badge-warning') + '">' + st + '</span></td>' +
+                '<td class="actions">' +
+                '<button class="action-btn agent" onclick="confirmRunAgents(\'' + escapeHtml(c.track_title) + '\',\'' + escapeHtml(c.artist_name) + '\',\'' + escapeHtml(c.spotify_link || '') + '\',\'' + escapeHtml(g) + '\')" title="Run AI">🤖</button>' +
+                '<button class="action-btn ' + (st === 'placed' ? 'placed' : '') + '" onclick="confirmMarkPlaced(\'' + c.id + '\',\'' + escapeHtml(c.track_title) + '\',\'' + escapeHtml(c.artist_name) + '\')" title="Mark Placed">' + (st === 'placed' ? '✓' : '📋') + '</button>' +
+                '<button class="action-btn delete" onclick="confirmDeleteCampaign(\'' + c.id + '\',\'' + escapeHtml(c.track_title) + '\',\'' + escapeHtml(c.artist_name) + '\')" title="Delete">🗑</button></td></tr>';
+        }).join('');
+    } catch (e) {
+        debugLog('Submissions error: ' + e.message, 'error');
+        tbody.innerHTML = '<tr><td colspan="7" class="empty-state">⚠️ Failed: ' + e.message + '</td></tr>';
+    }
+}
+
+async function loadArtists() {
+    var tbody = document.getElementById('artistsTable');
+    tbody.innerHTML = '<tr><td colspan="6" class="loading"><div class="spinner"></div>Loading...</td></tr>';
+    try {
+        var r = await fetch(API + '/admin/artists?page_size=100');
+        var d = await r.json();
+        allArtists = d.artists || [];
+        if (allArtists.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="empty-state">👤 No artists yet</td></tr>'; return; }
+        tbody.innerHTML = allArtists.map(a => {
+            var jd = a.created_at ? new Date(a.created_at).toLocaleDateString() : '-';
+            return '<tr><td><strong>' + escapeHtml(a.name || '-') + '</strong></td>' +
+                '<td>' + escapeHtml(a.email || '-') + '</td>' +
+                '<td>' + escapeHtml(a.artist_name || '-') + '</td>' +
+                '<td>' + (a.genre ? '<span class="badge badge-info">' + escapeHtml(a.genre) + '</span>' : '-') + '</td>' +
+                '<td>' + jd + '</td>' +
+                '<td class="actions">' +
+                '<button class="action-btn" onclick="viewArtist(\'' + a.id + '\')" title="View">👁️</button>' +
+                '<button class="action-btn delete" onclick="confirmDeleteArtist(\'' + a.id + '\',\'' + escapeHtml(a.name || a.artist_name) + '\')" title="Delete">🗑</button></td></tr>';
+        }).join('');
+    } catch (e) {
+        debugLog('Artists error: ' + e.message, 'error');
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-state">⚠️ Failed: ' + e.message + '</td></tr>';
+    }
+}
+
+async function loadCurators() {
+    var tbody = document.getElementById('curatorsTable');
+    tbody.innerHTML = '<tr><td colspan="5" class="loading"><div class="spinner"></div>Loading...</td></tr>';
+    try {
+        var r = await fetch(API + '/admin/curators?page_size=50');
+        var d = await r.json();
+        allCurators = d.curators || [];
+        document.getElementById('curatorCount').textContent = '(' + (d.total || allCurators.length) + ' total)';
+        if (allCurators.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="empty-state">📋 No curators</td></tr>'; return; }
+        tbody.innerHTML = allCurators.map(c => '<tr><td><strong>' + escapeHtml(c.name || '-') + '</strong></td>' +
+            '<td>' + escapeHtml(c.email || '-') + '</td>' +
+            '<td>' + (c.total_followers || 0).toLocaleString() + '</td>' +
+            '<td><span class="badge ' + (c.status === 'active' ? 'badge-success' : 'badge-warning') + '">' + (c.status || 'new') + '</span></td>' +
+            '<td class="actions"><button class="action-btn" onclick="emailCurator(\'' + escapeHtml(c.email) + '\')">📧</button></td></tr>').join('');
+    } catch (e) {
+        debugLog('Curators error: ' + e.message, 'error');
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">⚠️ Failed: ' + e.message + '</td></tr>';
+    }
+}
+
+function loadPlaylists() {
+    document.getElementById('playlistsTable').innerHTML = Object.entries(PLAYLISTS).map(([k, p]) => {
+        var genres = Object.entries(GENRE_MAP).filter(([g, v]) => v === k).map(([g]) => g).slice(0, 4);
+        return '<tr><td><span class="playlist-badge playlist-' + k + '">' + p.emoji + ' ' + p.name + '</span></td>' +
+            '<td>' + genres.map(g => '<span class="badge badge-info" style="margin:2px;">' + g + '</span>').join(' ') + '</td>' +
+            '<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:var(--gray-500);">' + p.id + '</td>' +
+            '<td><a href="https://open.spotify.com/playlist/' + p.id + '" target="_blank" class="action-btn">🎵 Open</a></td></tr>';
+    }).join('');
+}
+
+function viewArtist(id) {
+    var a = allArtists.find(x => x.id === id);
+    if (!a) return;
+    var artistCampaigns = allCampaigns.filter(c => c.artist_name === a.artist_name || c.artist_email === a.email);
+    var musicHtml = '';
+    if (a.spotify_link || artistCampaigns.length > 0) {
+        musicHtml = '<div class="music-section"><h5>🎵 Music & Submissions</h5>';
+        if (a.spotify_link) {
+            musicHtml += '<div class="music-item"><div class="music-item-icon">🎵</div><div class="music-item-info">' +
+                '<div class="title">Artist Profile / Track</div>' +
+                '<div class="url"><a href="' + escapeHtml(a.spotify_link) + '" target="_blank">' + escapeHtml(a.spotify_link) + '</a></div></div></div>';
+        }
+        artistCampaigns.forEach(c => {
+            var badge = c.status === 'placed' ? '<span class="badge badge-success" style="margin-left:8px;">Placed</span>' : '<span class="badge badge-warning" style="margin-left:8px;">' + (c.status || 'Pending') + '</span>';
+            musicHtml += '<div class="music-item"><div class="music-item-icon">🎶</div><div class="music-item-info">' +
+                '<div class="title">' + escapeHtml(c.track_title || 'Untitled') + badge + '</div>' +
+                (c.spotify_link ? '<div class="url"><a href="' + escapeHtml(c.spotify_link) + '" target="_blank">' + escapeHtml(c.spotify_link) + '</a></div>' : '<div class="url" style="color:var(--gray-400);">No Spotify link</div>') +
+                '</div></div>';
+        });
+        if (!a.spotify_link && artistCampaigns.length === 0) musicHtml += '<p style="color:var(--gray-500);font-size:0.9rem;">No music submissions yet</p>';
+        musicHtml += '</div>';
+    }
+    document.getElementById('artistModalContent').innerHTML = '<div class="artist-detail">' +
+        '<div class="artist-detail-header"><div class="artist-detail-avatar">🎤</div><div class="artist-detail-name">' +
+        '<h4>' + escapeHtml(a.artist_name || a.name || 'Unknown') + '</h4><p>' + escapeHtml(a.email) + '</p></div></div>' +
+        '<div class="artist-detail-grid">' +
+        '<div class="artist-detail-item"><label>Full Name</label><p>' + escapeHtml(a.name || '-') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Artist Name</label><p>' + escapeHtml(a.artist_name || '-') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Genre</label><p>' + (a.genre ? '<span class="badge badge-info">' + escapeHtml(a.genre) + '</span>' : '-') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Joined</label><p>' + (a.created_at ? new Date(a.created_at).toLocaleDateString() : '-') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Has Wallet</label><p>' + (a.has_wallet || 'Unknown') + '</p></div>' +
+        '<div class="artist-detail-item"><label>Tier</label><p>' + (a.interested_tier || 'Free') + '</p></div></div>' +
+        musicHtml + '</div>' +
+        '<div style="display:flex;gap:12px;margin-top:20px;">' +
+        '<button class="btn btn-danger" onclick="confirmDeleteArtist(\'' + a.id + '\',\'' + escapeHtml(a.name || a.artist_name) + '\'); closeModal(\'artistModal\');">🗑 Delete Artist</button></div>';
+    document.getElementById('artistModal').classList.add('active');
+}
+
+// Confirmation functions
+function confirmDeleteArtist(id, name) {
+    showConfirmation({
+        icon: '🗑️', title: 'Delete Artist?',
+        message: 'This action cannot be undone. The artist will be permanently removed.',
+        details: '<p><strong>Artist:</strong> ' + escapeHtml(name) + '</p><p><strong>ID:</strong> ' + id + '</p>',
+        confirmText: 'Delete Artist', confirmClass: 'btn-danger',
+        action: () => deleteArtist(id)
+    });
+}
+
+function confirmDeleteCampaign(id, track, artist) {
+    showConfirmation({
+        icon: '🗑️', title: 'Delete Campaign?',
+        message: 'This will permanently remove the campaign submission.',
+        details: '<p><strong>Track:</strong> ' + escapeHtml(track) + '</p><p><strong>Artist:</strong> ' + escapeHtml(artist) + '</p>',
+        confirmText: 'Delete Campaign', confirmClass: 'btn-danger',
+        action: () => deleteCampaign(id)
+    });
+}
+
+function confirmMarkPlaced(id, track, artist) {
+    showConfirmation({
+        icon: '✅', title: 'Mark as Placed?',
+        message: 'This updates status to "placed" and may trigger Discord notification.',
+        details: '<p><strong>Track:</strong> ' + escapeHtml(track) + '</p><p><strong>Artist:</strong> ' + escapeHtml(artist) + '</p>',
+        confirmText: 'Mark Placed', confirmClass: 'btn-success',
+        action: () => markPlaced(id)
+    });
+}
+
+function confirmRunAgents(track, artist, url, genre) {
+    showConfirmation({
+        icon: '🤖', title: 'Run AI Agents?',
+        message: 'This will analyze the track and generate social content. Takes 30-60 seconds.',
+        details: '<p><strong>Track:</strong> ' + escapeHtml(track) + '</p><p><strong>Artist:</strong> ' + escapeHtml(artist) + '</p>' + (url ? '<p><strong>Spotify:</strong> <a href="' + escapeHtml(url) + '" target="_blank" style="color:var(--spotify);">Open</a></p>' : ''),
+        confirmText: 'Run Agents', confirmClass: 'btn-primary',
+        action: () => runAgents(track, artist, url, genre)
+    });
+}
+
+async function deleteArtist(id) {
+    try { await fetch(API + '/admin/artists/' + id, { method: 'DELETE' }); showToast('Artist deleted'); loadArtists(); loadStats(); }
+    catch (e) { showToast('Error: ' + e.message, 'error'); }
+}
+
+async function deleteCampaign(id) {
+    try { await fetch(API + '/admin/campaigns/' + id, { method: 'DELETE' }); showToast('Campaign deleted'); loadSubmissions(); loadStats(); }
+    catch (e) { showToast('Error: ' + e.message, 'error'); }
+}
+
+async function markPlaced(id) {
+    try { await fetch(API + '/admin/campaigns/' + id + '/status', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status: 'placed' }) }); showToast('Marked as placed!'); loadSubmissions(); }
+    catch (e) { showToast('Error: ' + e.message, 'error'); }
+}
+
+async function runAgents(track, artist, url, genre) {
+    var content = document.getElementById('agentModalContent');
+    content.innerHTML = '<p>Running AI for: <strong>' + escapeHtml(track) + '</strong> by <strong>' + escapeHtml(artist) + '</strong></p>' +
+        (url ? '<p style="margin-top:8px;"><a href="' + escapeHtml(url) + '" target="_blank" style="color:var(--spotify);">🎵 Spotify</a></p>' : '') +
+        '<div class="agent-output" id="agentOutput">Initializing...</div>';
+    document.getElementById('agentModal').classList.add('active');
+    var out = document.getElementById('agentOutput');
+    try {
+        out.textContent = '🔍 Analyzing track...';
+        var ar = await fetch(API + '/workflow/agent/analyze-track?track_title=' + encodeURIComponent(track) + '&artist_name=' + encodeURIComponent(artist) + '&spotify_url=' + encodeURIComponent(url), { method: 'POST' });
+        var ad = await ar.json();
+        out.textContent += '\n✅ Analysis done!\n\n';
+        if (ad.analysis) {
+            out.textContent += 'Genre: ' + (ad.analysis.genre_tags?.join(', ') || 'N/A') + '\n';
+            out.textContent += 'Mood: ' + (ad.analysis.mood?.join(', ') || 'N/A') + '\n';
+            out.textContent += 'Energy: ' + (ad.analysis.energy_level || 'N/A') + '/10\n';
+            out.textContent += 'Pitch: ' + (ad.analysis.playlist_pitch || 'N/A') + '\n';
+        } else out.textContent += JSON.stringify(ad, null, 2);
+        out.textContent += '\n\n🐦 Generating socials...';
+        var sr = await fetch(API + '/workflow/agent/generate-social?track_title=' + encodeURIComponent(track) + '&artist_name=' + encodeURIComponent(artist) + '&spotify_url=' + encodeURIComponent(url) + '&genre=' + encodeURIComponent(genre), { method: 'POST' });
+        var sd = await sr.json();
+        out.textContent += '\n✅ Social posts ready!\n\n';
+        if (sd.posts) {
+            out.textContent += '--- Twitter ---\n' + (sd.posts.twitter || 'N/A') + '\n\n';
+            out.textContent += '--- Instagram ---\n' + (sd.posts.instagram || 'N/A') + '\n\n';
+            out.textContent += '--- Discord ---\n' + (sd.posts.discord || 'N/A');
+        } else out.textContent += JSON.stringify(sd, null, 2);
+        showToast('AI agents completed!');
+    } catch (e) { out.textContent += '\n\n❌ Error: ' + e.message; showToast('Agent error', 'error'); }
+}
+
+function emailCurator(email) { window.location.href = 'mailto:' + email; }
+
+document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) { m.classList.remove('active'); if (m.id === 'confirmModal') pendingAction = null; } });
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active')); pendingAction = null; } });
+document.addEventListener('DOMContentLoaded', () => { debugLog('Admin v5 loaded', 'info'); testAPI(); loadPlaylists(); });
 </script>
 </body>
 </html>
