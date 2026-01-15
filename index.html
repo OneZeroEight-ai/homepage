@@ -1995,6 +1995,178 @@
         </div>
     </div>
 </div>
+
+<script>
+const API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
+
+function openModal(tier = 'free') {
+    document.getElementById('modal').style.display = 'flex';
+    document.getElementById('ftier').value = tier;
+    document.body.style.overflow = 'hidden';
+    
+    const header = document.querySelector('.modal-header h2');
+    const subtext = document.querySelector('.modal-header p');
+    const albumSection = document.getElementById('albumSection');
+    const trackSection = document.getElementById('trackSection');
+    const submitBtn = document.getElementById('submitBtn');
+    const promoSection = document.getElementById('promoSection');
+    const priceSummary = document.getElementById('priceSummary');
+    
+    // Reset promo
+    document.getElementById('fpromo').value = '';
+    document.getElementById('promoMessage').innerHTML = '';
+    document.getElementById('fpromoValid').value = '';
+    document.getElementById('discountRow').style.display = 'none';
+    
+    // Reset visibility
+    albumSection.style.display = 'none';
+    trackSection.style.display = 'block';
+    
+    if (tier === 'pro') {
+        header.textContent = '🚀 Get Pro Access';
+        subtext.textContent = 'Full agent suite + 3000 external curators — $49/track';
+        submitBtn.textContent = 'Continue to Payment →';
+        promoSection.style.display = 'block';
+        priceSummary.style.display = 'block';
+        document.getElementById('subtotalPrice').textContent = '$49.00';
+        document.getElementById('totalPrice').textContent = '$49.00';
+        document.getElementById('ffinalPrice').value = '4900';
+    } else if (tier === 'album') {
+        header.textContent = '💿 Album Package';
+        subtext.textContent = '10 tracks promoted together — $199';
+        albumSection.style.display = 'block';
+        trackSection.style.display = 'none';
+        submitBtn.textContent = 'Continue to Payment →';
+        promoSection.style.display = 'block';
+        priceSummary.style.display = 'block';
+        document.getElementById('subtotalPrice').textContent = '$199.00';
+        document.getElementById('totalPrice').textContent = '$199.00';
+        document.getElementById('ffinalPrice').value = '19900';
+    } else {
+        header.textContent = '🚀 Start Your Free Trial';
+        subtext.textContent = 'Get your music on OneZeroEight playlists—no payment required';
+        submitBtn.textContent = 'Start Free Trial →';
+        promoSection.style.display = 'none';
+        priceSummary.style.display = 'none';
+        document.getElementById('ffinalPrice').value = '0';
+    }
+}
+
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+    document.getElementById('signupForm').reset();
+    document.getElementById('formMessage').style.display = 'none';
+    document.getElementById('trackPreview').style.display = 'none';
+    document.getElementById('spotifyLoading').style.display = 'none';
+    document.getElementById('albumPreview').style.display = 'none';
+    document.getElementById('albumLoading').style.display = 'none';
+}
+
+// Close on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+// Close on Escape
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+});
+
+// Spotify Track Lookup
+function handleSpotifyPaste(event) {
+    setTimeout(lookupSpotify, 100);
+}
+
+async function lookupSpotify() {
+    const spotifyUrl = document.getElementById('fspotify').value.trim();
+    if (!spotifyUrl) return;
+    
+    if (!spotifyUrl.includes('spotify.com/track/')) {
+        showTrackError('Please enter a valid Spotify track URL');
+        return;
+    }
+    
+    const isAiGenerated = document.getElementById('fAiGenerated').checked;
+    const loadingEl = document.getElementById('spotifyLoading');
+    const previewEl = document.getElementById('trackPreview');
+    const errorEl = document.getElementById('trackError');
+    
+    loadingEl.style.display = 'flex';
+    previewEl.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'none';
+    
+    try {
+        const url = API_BASE + '/workflow/spotify/metadata?spotify_url=' + encodeURIComponent(spotifyUrl) + '&is_ai_generated=' + isAiGenerated;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (!data.success || !data.track_title) {
+            showTrackError('Could not find this track on Spotify.');
+            loadingEl.style.display = 'none';
+            return;
+        }
+        
+        if (data.artist_name) document.getElementById('fartist').value = data.artist_name;
+        if (data.track_title) document.getElementById('ftrackTitle').value = data.track_title;
+        
+        if (data.primary_genre) {
+            const genreMap = {
+                'Electronic': 'electronic', 'Edm': 'electronic', 'Dance': 'electronic',
+                'Hip Hop': 'hip-hop', 'Hip-Hop': 'hip-hop', 'Rap': 'hip-hop',
+                'Pop': 'pop', 'Lo-Fi': 'lo-fi', 'Chillhop': 'lo-fi',
+                'Rock': 'rock', 'Alternative': 'rock',
+                'R&B': 'rnb', 'Soul': 'rnb',
+                'Indie': 'indie', 'Folk': 'folk',
+                'Ambient': 'ambient', 'Country': 'country',
+                'Jazz': 'jazz', 'Classical': 'classical',
+                'Metal': 'metal', 'Latin': 'latin', 'World': 'world'
+            };
+            const mappedGenre = genreMap[data.primary_genre] || 'other';
+            document.getElementById('fgenre').value = mappedGenre;
+        }
+        
+        document.getElementById('faiGenres').value = JSON.stringify(data.suggested_genres || []);
+        document.getElementById('faiMood').value = JSON.stringify(data.mood || []);
+        document.getElementById('faiPitch').value = data.playlist_pitch || '';
+        document.getElementById('fgenreSource').value = data.genre_source || 'ai';
+        
+        if (data.thumbnail_url) {
+            document.getElementById('trackThumbnail').src = data.thumbnail_url;
+            document.getElementById('previewTitle').textContent = data.track_title || 'Unknown Track';
+            document.getElementById('previewArtist').textContent = data.artist_name || '';
+            document.getElementById('previewGenre').textContent = data.primary_genre || 'Analyzing...';
+            
+            const sourceEl = document.getElementById('genreSource');
+            if (data.genre_source === 'musicbrainz') {
+                sourceEl.textContent = '✓ Verified';
+                sourceEl.className = 'genre-source verified';
+            } else {
+                sourceEl.textContent = '🤖 AI Detected';
+                sourceEl.className = 'genre-source ai';
+            }
+            previewEl.style.display = 'block';
+        }
+        
+        const moodContainer = document.getElementById('moodPills');
+        if (data.mood && data.mood.length > 0) {
+            moodContainer.innerHTML = data.mood.map(m => '<span class="mood-pill">' + m + '</span>').join('');
+            moodContainer.style.display = 'flex';
+        } else {
+            moodContainer.style.display = 'none';
+        }
+    } catch (err) {
+        console.error('Spotify lookup failed:', err);
+        showTrackError('Could not connect to Spotify.');
+    } finally {
+        loadingEl.style.display = 'none';
+    }
+}
+
+function showTrackError(message) {
+    let errorEl = document.getElementById('trackError');
+    if (!errorEl) {
+        errorEl = document.createElement('div');
         errorEl.id = 'trackError';
         errorEl.style.cssText = 'background:#fee2e2;color:#991b1b;padding:12px 16px;border-radius:10px;margin-top:12px;font-size:0.9rem;';
         document.querySelector('.spotify-input-wrapper').appendChild(errorEl);
