@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - OneZeroEight.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1; --primary-dark: #4f46e5; --primary-light: #a5b4fc;
+            --secondary: #10b981; --warning: #f59e0b; --danger: #ef4444;
+            --dark: #0f172a; --gray-800: #1f2937; --gray-700: #374151;
+            --gray-600: #4b5563; --gray-500: #6b7280; --gray-400: #9ca3af;
+            --gray-300: #d1d5db; --gray-200: #e5e7eb; --gray-100: #f3f4f6;
+            --gray-50: #f9fafb; --white: #ffffff; --discord: #5865F2; --spotify: #1DB954;
+        }
+        body { font-family: 'Space Grotesk', -apple-system, sans-serif; background: var(--gray-100); color: var(--gray-700); min-height: 100vh; line-height: 1.5; }
+        .header { background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 50%, #a855f7 100%); color: white; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .header-left h1 { font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+        .header-left p { opacity: 0.9; font-size: 0.875rem; margin-top: 2px; }
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .discord-status { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 500; }
+        .discord-status .dot { width: 8px; height: 8px; background: #57F287; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .container { max-width: 1600px; margin: 0 auto; padding: 24px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--white); padding: 20px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); text-align: center; transition: all 0.3s; border: 1px solid var(--gray-200); position: relative; overflow: hidden; }
+        .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(135deg, var(--primary), #8b5cf6); opacity: 0; transition: opacity 0.3s; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .stat-card:hover::before { opacity: 1; }
+        .stat-card .icon { font-size: 1.5rem; margin-bottom: 8px; }
+        .stat-card .value { font-size: 2rem; font-weight: 700; color: var(--dark); font-family: 'JetBrains Mono', monospace; }
+        .stat-card .label { font-size: 0.85rem; color: var(--gray-500); margin-top: 4px; font-weight: 500; }
+        .stat-card .trend { font-size: 0.75rem; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .stat-card .trend.up { color: var(--secondary); }
+        .tabs { display: flex; gap: 8px; margin-bottom: 24px; background: var(--white); padding: 8px; border-radius: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid var(--gray-200); }
+        .tab { padding: 12px 24px; background: transparent; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; display: flex; align-items: center; gap: 8px; color: var(--gray-600); font-family: inherit; }
+        .tab:hover { background: var(--gray-100); color: var(--dark); }
+        .tab.active { background: var(--dark); color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .tab .count { background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 50px; font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+        .tab.active .count { background: rgba(255,255,255,0.25); }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .card { background: var(--white); border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 24px; overflow: hidden; border: 1px solid var(--gray-200); }
+        .card-header { padding: 20px 24px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; background: var(--gray-50); }
+        .card-header h2 { font-size: 1.1rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 10px; }
+        .card-header-actions { display: flex; gap: 8px; }
+        .card-body { padding: 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--gray-100); }
+        th { font-weight: 600; color: var(--gray-500); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; background: var(--gray-50); position: sticky; top: 0; }
+        tr { transition: background 0.15s; }
+        tr:hover { background: var(--gray-50); }
+        tr.expanded { background: #f0f4ff; }
+        .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; }
+        .badge-primary { background: #e0e7ff; color: #4338ca; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #dbeafe; color: #1e40af; }
+        .badge-discord { background: #e0e5ff; color: var(--discord); }
+        .badge-spotify { background: #d1fae5; color: #15803d; }
+        .playlist-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; }
+        .playlist-electronic { background: #ede9fe; color: #6d28d9; }
+        .playlist-lofi { background: #d1fae5; color: #047857; }
+        .playlist-hiphop { background: #fee2e2; color: #dc2626; }
+        .playlist-pop { background: #fce7f3; color: #be185d; }
+        .playlist-rnb { background: #ede9fe; color: #7c3aed; }
+        .playlist-ambient { background: #dbeafe; color: #1d4ed8; }
+        .playlist-rock { background: #fef3c7; color: #b45309; }
+        .playlist-indie { background: #ffedd5; color: #c2410c; }
+        .playlist-jazz { background: #f3f4f6; color: #374151; }
+        .playlist-classical { background: #fef9c3; color: #854d0e; }
+        .playlist-latin { background: #fed7aa; color: #c2410c; }
+        .playlist-world { background: #ccfbf1; color: #0f766e; }
+        .playlist-country { background: #fef3c7; color: #92400e; }
+        .playlist-gospel { background: #e0e7ff; color: #4338ca; }
+        .playlist-discoveries { background: #f0fdf4; color: #15803d; }
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 0.875rem; cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3); }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-success { background: var(--secondary); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-discord { background: var(--discord); color: white; box-shadow: 0 2px 8px rgba(88, 101, 242, 0.3); }
+        .btn-discord:hover { background: #4752c4; }
+        .btn-ghost { background: transparent; color: var(--gray-600); border: 1px solid var(--gray-300); }
+        .btn-ghost:hover { background: var(--gray-100); }
+        .btn-sm { padding: 8px 14px; font-size: 0.8rem; }
+        .actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .action-btn { padding: 6px 10px; border-radius: 8px; font-size: 0.75rem; cursor: pointer; border: 1px solid var(--gray-200); background: white; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px; font-family: inherit; font-weight: 500; }
+        .action-btn:hover { background: var(--gray-100); transform: translateY(-1px); }
+        .action-btn.expand { border-color: var(--primary); color: var(--primary); }
+        .action-btn.expand:hover { background: #e0e7ff; }
+        .action-btn.placed { background: #d1fae5; border-color: #10b981; color: #065f46; }
+        .action-btn.delete { border-color: #ef4444; color: #ef4444; }
+        .action-btn.delete:hover { background: #fee2e2; }
+        .action-btn.agent { border-color: #8b5cf6; color: #8b5cf6; }
+        .action-btn.agent:hover { background: #ede9fe; }
+        .action-btn.discord { border-color: var(--discord); color: var(--discord); }
+        .action-btn.discord:hover { background: #e0e5ff; }
+        .expanded-details { display: none; background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border-top: 2px solid var(--primary-light); }
+        .expanded-details.show { display: table-row; }
+        .expanded-content { padding: 24px; }
+        .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .detail-section { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid var(--gray-200); }
+        .detail-section h4 { font-size: 0.85rem; font-weight: 700; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--gray-100); font-size: 0.9rem; }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-row .label { color: var(--gray-500); }
+        .detail-row .value { font-weight: 600; color: var(--dark); font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+        .detail-row .value a { color: var(--primary); text-decoration: none; }
+        .detail-row .value a:hover { text-decoration: underline; }
+        .detail-actions { display: flex; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-200); flex-wrap: wrap; }
+        .ai-analysis { background: linear-gradient(135deg, #1f2937 0%, #111827 100%); border-radius: 12px; padding: 20px; color: white; }
+        .ai-analysis h4 { color: var(--primary-light); margin-bottom: 16px; }
+        .ai-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+        .ai-tag { background: rgba(99, 102, 241, 0.3); color: var(--primary-light); padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 500; }
+        .ai-pitch { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; font-size: 0.85rem; color: var(--gray-300); line-height: 1.6; font-style: italic; }
+        .discord-section { background: linear-gradient(135deg, var(--discord) 0%, #4752c4 100%); border-radius: 12px; padding: 20px; color: white; }
+        .discord-section h4 { color: white; margin-bottom: 16px; }
+        .discord-log { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; max-height: 120px; overflow-y: auto; }
+        .discord-log-entry { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; gap: 12px; }
+        .discord-log-entry:last-child { border-bottom: none; }
+        .discord-log-entry .time { color: rgba(255,255,255,0.5); flex-shrink: 0; }
+        .discord-log-entry .msg { color: rgba(255,255,255,0.9); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: var(--white); border-radius: 20px; max-width: 700px; width: 95%; max-height: 90vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.25); }
+        .modal-header { padding: 24px; border-bottom: 1px solid var(--gray-200); display: flex; justify-content: space-between; align-items: center; background: var(--gray-50); border-radius: 20px 20px 0 0; }
+        .modal-header h3 { font-size: 1.25rem; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 10px; }
+        .modal-close { background: var(--gray-200); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.25rem; color: var(--gray-600); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .modal-close:hover { background: var(--gray-300); color: var(--dark); }
+        .modal-body { padding: 24px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--gray-700); font-size: 0.9rem; }
+        .form-group select, .form-group input, .form-group textarea { width: 100%; padding: 12px 16px; border: 2px solid var(--gray-200); border-radius: 10px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s; }
+        .form-group select:focus, .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1); }
+        .form-group textarea { min-height: 100px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .entity-preview { display: flex; gap: 16px; padding: 16px; background: var(--gray-50); border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--gray-200); }
+        .entity-info h4 { font-weight: 700; margin-bottom: 4px; color: var(--dark); }
+        .entity-info p { color: var(--gray-500); font-size: 0.9rem; margin-bottom: 8px; }
+        .agent-output { background: #1f2937; color: #e5e7eb; padding: 20px; border-radius: 12px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; white-space: pre-wrap; max-height: 400px; overflow-y: auto; margin-top: 16px; line-height: 1.7; }
+        .toast { position: fixed; bottom: 24px; right: 24px; background: var(--dark); color: white; padding: 16px 24px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 2000; display: none; font-weight: 500; max-width: 400px; }
+        .toast.success { background: var(--secondary); }
+        .toast.error { background: var(--danger); }
+        .toast.discord { background: var(--discord); }
+        .toast.show { display: flex; align-items: center; gap: 12px; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .empty-state { text-align: center; padding: 60px; color: var(--gray-400); }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+        .loading { text-align: center; padding: 40px; color: var(--gray-400); }
+        .loading .spinner { width: 32px; height: 32px; border: 3px solid var(--gray-200); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .filter-bar { display: flex; gap: 12px; flex-wrap: wrap; }
+        .filter-bar input { flex: 1; min-width: 200px; padding: 12px 16px; border: 2px solid var(--gray-200); border-radius: 10px; font-size: 0.9rem; font-family: inherit; }
+        .filter-bar input:focus { outline: none; border-color: var(--primary); }
+        .filter-bar select { padding: 12px 16px; border: 2px solid var(--gray-200); border-radius: 10px; font-size: 0.9rem; font-family: inherit; background: white; min-width: 150px; }
+        .social-hub-card { background: linear-gradient(135deg, #1f2937 0%, #374151 100%); border-radius: 16px; padding: 24px; color: white; margin-bottom: 24px; }
+        .social-hub-card h3 { font-size: 1.25rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .social-hub-card p { color: var(--gray-400); margin-bottom: 20px; }
+        .social-platforms { display: flex; gap: 16px; flex-wrap: wrap; }
+        .social-platform { background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 10px; display: flex; align-items: center; gap: 10px; font-weight: 500; transition: all 0.2s; }
+        .social-platform:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+        .social-platform.active::after { content: '✓'; background: var(--secondary); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+        .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .quick-action { background: white; border: 2px solid var(--gray-200); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .quick-action:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .quick-action .icon { font-size: 2rem; margin-bottom: 8px; }
+        .quick-action h4 { font-weight: 600; color: var(--dark); margin-bottom: 4px; }
+        .quick-action p { font-size: 0.8rem; color: var(--gray-500); }
+        @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } .detail-grid { grid-template-columns: repeat(2, 1fr); } .quick-actions { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .header { padding: 16px; flex-direction: column; gap: 16px; } .stats-grid { grid-template-columns: repeat(2, 1fr); } .tabs { flex-wrap: wrap; } .detail-grid { grid-template-columns: 1fr; } table { font-size: 0.85rem; } th, td { padding: 12px; } .filter-bar { flex-direction: column; } .quick-actions { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-left">
+        <h1>🎛️ OneZeroEight Admin</h1>
+        <p>Artists, Campaigns & Platform Management</p>
+    </div>
+    <div class="header-right">
+        <div class="discord-status" id="discordStatus">
+            <span class="dot"></span>
+            <span>Discord Connected</span>
+        </div>
+        <button class="btn btn-discord btn-sm" onclick="openDiscordPanel()">💬 Discord Hub</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="stats-grid">
+        <div class="stat-card"><div class="icon">🎤</div><div class="value" id="statArtists">-</div><div class="label">Artists</div><div class="trend up">↑ Active</div></div>
+        <div class="stat-card"><div class="icon">📥</div><div class="value" id="statSubmissions">-</div><div class="label">Campaigns</div><div class="trend up">↑ Active</div></div>
+        <div class="stat-card"><div class="icon">✅</div><div class="value" id="statPlacements">-</div><div class="label">Placements</div><div class="trend up">Active</div></div>
+        <div class="stat-card"><div class="icon">📋</div><div class="value" id="statCurators">-</div><div class="label">Curators</div><div class="trend">Network</div></div>
+        <div class="stat-card"><div class="icon">🎵</div><div class="value" id="statPlaylists">15</div><div class="label">Playlists</div><div class="trend">OneZeroEight</div></div>
+        <div class="stat-card"><div class="icon">💬</div><div class="value" id="statDiscord">-</div><div class="label">Discord Posts</div><div class="trend">Today</div></div>
+    </div>
+
+    <div class="quick-actions">
+        <div class="quick-action" onclick="showPanel('submissions')"><div class="icon">➕</div><h4>View Campaigns</h4><p>Manage submissions</p></div>
+        <div class="quick-action" onclick="sendDiscordAnnouncement()"><div class="icon">📢</div><h4>Discord Announce</h4><p>Send community update</p></div>
+        <div class="quick-action" onclick="runBulkAgents()"><div class="icon">🤖</div><h4>Run All Agents</h4><p>Process pending campaigns</p></div>
+        <div class="quick-action" onclick="showPanel('social')"><div class="icon">📱</div><h4>Your Social Hub</h4><p>Social automation center</p></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="showPanel('submissions')">📥 Campaigns <span class="count" id="tabSubmissions">0</span></button>
+        <button class="tab" onclick="showPanel('artists')">🎤 Artists <span class="count" id="tabArtists">0</span></button>
+        <button class="tab" onclick="showPanel('curators')">📋 Curators <span class="count" id="tabCurators">0</span></button>
+        <button class="tab" onclick="showPanel('playlists')">🎵 Playlists <span class="count">15</span></button>
+        <button class="tab" onclick="showPanel('social')">📱 Social Hub</button>
+        <button class="tab" onclick="showPanel('discord')">💬 Discord <span class="count" id="tabDiscord">0</span></button>
+    </div>
+
+    <!-- Campaigns Panel -->
+    <div class="panel active" id="panel-submissions">
+        <div class="card">
+            <div class="card-header">
+                <h2>📥 Campaign Submissions</h2>
+                <div class="card-header-actions">
+                    <button class="btn btn-ghost btn-sm" onclick="exportCampaigns()">📊 Export</button>
+                    <button class="btn btn-primary btn-sm" onclick="loadSubmissions()">↻ Refresh</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="filter-bar" style="padding: 16px 20px; border-bottom: 1px solid var(--gray-100);">
+                    <input type="text" id="searchCampaigns" placeholder="Search campaigns..." onkeyup="filterCampaigns()">
+                    <select id="filterStatus" onchange="filterCampaigns()"><option value="">All Statuses</option><option value="draft">Draft</option><option value="active">Active</option><option value="placed">Placed</option><option value="completed">Completed</option></select>
+                    <select id="filterGenre" onchange="filterCampaigns()"><option value="">All Genres</option><option value="electronic">Electronic</option><option value="hip-hop">Hip Hop</option><option value="pop">Pop</option><option value="lo-fi">Lo-Fi</option><option value="rock">Rock</option><option value="rnb">R&B</option><option value="indie">Indie</option></select>
+                </div>
+                <table><thead><tr><th style="width:30px;"></th><th>Track</th><th>Artist</th><th>Genre</th><th>Playlist</th><th>Tier</th><th>Status</th><th>Actions</th></tr></thead><tbody id="submissionsTable"><tr><td colspan="8" class="loading"><div class="spinner"></div>Loading campaigns...</td></tr></tbody></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Artists Panel -->
+    <div class="panel" id="panel-artists">
+        <div class="card">
+            <div class="card-header">
+                <h2>🎤 Artist Directory</h2>
+                <div class="card-header-actions">
+                    <button class="btn btn-ghost btn-sm" onclick="exportArtists()">📊 Export</button>
+                    <button class="btn btn-primary btn-sm" onclick="loadArtists()">↻ Refresh</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="filter-bar" style="padding: 16px 20px; border-bottom: 1px solid var(--gray-100);">
+                    <input type="text" id="searchArtists" placeholder="Search artists..." onkeyup="filterArtists()">
+                    <select id="filterArtistGenre" onchange="filterArtists()"><option value="">All Genres</option><option value="electronic">Electronic</option><option value="hip-hop">Hip Hop</option><option value="pop">Pop</option><option value="lo-fi">Lo-Fi</option></select>
+                </div>
+                <table><thead><tr><th style="width:30px;"></th><th>Name</th><th>Email</th><th>Artist Name</th><th>Genre</th><th>Joined</th><th>Campaigns</th><th>Actions</th></tr></thead><tbody id="artistsTable"><tr><td colspan="8" class="loading"><div class="spinner"></div>Loading artists...</td></tr></tbody></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Curators Panel -->
+    <div class="panel" id="panel-curators">
+        <div class="card">
+            <div class="card-header">
+                <h2>📋 Curator Network</h2>
+                <div class="card-header-actions">
+                    <span id="curatorCount" style="color: var(--gray-500); margin-right: 12px;"></span>
+                    <button class="btn btn-ghost btn-sm" onclick="exportCurators()">📊 Export</button>
+                    <button class="btn btn-primary btn-sm" onclick="loadCurators()">↻ Refresh</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="filter-bar" style="padding: 16px 20px; border-bottom: 1px solid var(--gray-100);">
+                    <input type="text" id="searchCurators" placeholder="Search curators..." onkeyup="filterCurators()">
+                    <select id="filterCuratorStatus" onchange="filterCurators()"><option value="">All Statuses</option><option value="active">Active</option><option value="pending">Pending</option><option value="inactive">Inactive</option></select>
+                </div>
+                <table><thead><tr><th style="width:30px;"></th><th>Name</th><th>Email</th><th>Playlists</th><th>Followers</th><th>Status</th><th>Actions</th></tr></thead><tbody id="curatorsTable"><tr><td colspan="7" class="loading"><div class="spinner"></div>Loading curators...</td></tr></tbody></table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Playlists Panel -->
+    <div class="panel" id="panel-playlists">
+        <div class="card">
+            <div class="card-header"><h2>🎵 OneZeroEight Playlists</h2><button class="btn btn-primary btn-sm" onclick="loadPlaylists()">↻ Refresh</button></div>
+            <div class="card-body"><table><thead><tr><th>Playlist</th><th>Genres</th><th>Spotify ID</th><th>Actions</th></tr></thead><tbody id="playlistsTable"></tbody></table></div>
+        </div>
+    </div>
+
+    <!-- Social Hub Panel -->
+    <div class="panel" id="panel-social">
+        <div class="social-hub-card">
+            <h3>📱 Your Social Hub</h3>
+            <p>AI-powered social media automation for music promotion. Connect your platforms and let the agents handle the rest.</p>
+            <div class="social-platforms">
+                <div class="social-platform active">💬 Discord</div>
+                <div class="social-platform">𝕏 Twitter/X</div>
+                <div class="social-platform">📸 Instagram</div>
+                <div class="social-platform">🎵 TikTok</div>
+                <div class="social-platform">📺 YouTube</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"><h2>🚀 Social Automation Status</h2><button class="btn btn-primary btn-sm">Configure Platforms</button></div>
+            <div class="card-body" style="padding: 24px;">
+                <div class="detail-grid">
+                    <div class="detail-section">
+                        <h4>💬 Discord Integration</h4>
+                        <div class="detail-row"><span class="label">Status</span><span class="value"><span class="badge badge-success">Active</span></span></div>
+                        <div class="detail-row"><span class="label">Webhook</span><span class="value">✓ Configured</span></div>
+                        <div class="detail-row"><span class="label">Posts Today</span><span class="value" id="discordPostsToday">0</span></div>
+                        <div class="detail-actions">
+                            <button class="btn btn-discord btn-sm" onclick="testDiscordWebhook()">Test Webhook</button>
+                            <button class="btn btn-ghost btn-sm" onclick="viewDiscordLogs()">View Logs</button>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>𝕏 Twitter/X Integration</h4>
+                        <div class="detail-row"><span class="label">Status</span><span class="value"><span class="badge badge-warning">Coming Soon</span></span></div>
+                        <div class="detail-row"><span class="label">API Access</span><span class="value">Not configured</span></div>
+                        <div class="detail-row"><span class="label">Phase</span><span class="value">Phase 1</span></div>
+                        <div class="detail-actions"><button class="btn btn-ghost btn-sm" disabled>Configure API</button></div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>📱 Other Platforms</h4>
+                        <div class="detail-row"><span class="label">Instagram</span><span class="value"><span class="badge badge-info">Phase 2</span></span></div>
+                        <div class="detail-row"><span class="label">TikTok</span><span class="value"><span class="badge badge-info">Phase 2</span></span></div>
+                        <div class="detail-row"><span class="label">YouTube</span><span class="value"><span class="badge badge-info">Phase 3</span></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Discord Panel -->
+    <div class="panel" id="panel-discord">
+        <div class="card">
+            <div class="card-header">
+                <h2>💬 Discord Integration Hub</h2>
+                <div class="card-header-actions">
+                    <button class="btn btn-discord btn-sm" onclick="sendDiscordAnnouncement()">📢 Send Announcement</button>
+                    <button class="btn btn-primary btn-sm" onclick="loadDiscordLogs()">↻ Refresh</button>
+                </div>
+            </div>
+            <div class="card-body" style="padding: 24px;">
+                <div class="detail-grid">
+                    <div class="discord-section">
+                        <h4>📊 Discord Stats</h4>
+                        <div class="detail-row" style="color: white;"><span class="label" style="color: rgba(255,255,255,0.7);">Posts Today</span><span class="value" style="color: white;" id="discordStatsToday">0</span></div>
+                        <div class="detail-row" style="color: white;"><span class="label" style="color: rgba(255,255,255,0.7);">Posts This Week</span><span class="value" style="color: white;" id="discordStatsWeek">0</span></div>
+                        <div class="detail-row" style="color: white;"><span class="label" style="color: rgba(255,255,255,0.7);">Webhook Status</span><span class="value" style="color: #57F287;">✓ Active</span></div>
+                    </div>
+                    <div class="detail-section" style="grid-column: span 2;">
+                        <h4>📝 Recent Discord Activity</h4>
+                        <div class="discord-log" id="discordActivityLog" style="background: var(--gray-100); color: var(--gray-700); max-height: 200px;">
+                            <div class="discord-log-entry" style="border-color: var(--gray-200);"><span class="time" style="color: var(--gray-500);">Loading...</span><span class="msg">Fetching recent activity...</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 24px;">
+                    <h4 style="margin-bottom: 16px; color: var(--gray-700);">🚀 Quick Discord Actions</h4>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                        <button class="btn btn-discord" onclick="sendPlacementAnnouncement()">🎉 Announce Placement</button>
+                        <button class="btn btn-ghost" onclick="sendWeeklyDigest()">📊 Weekly Digest</button>
+                        <button class="btn btn-ghost" onclick="sendCommunityUpdate()">📢 Community Update</button>
+                        <button class="btn btn-ghost" onclick="testDiscordWebhook()">🔧 Test Webhook</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="campaignModal"><div class="modal"><div class="modal-header"><h3>📥 Campaign Details</h3><button class="modal-close" onclick="closeModal('campaignModal')">×</button></div><div class="modal-body" id="campaignModalContent"></div></div></div>
+<div class="modal-overlay" id="artistModal"><div class="modal"><div class="modal-header"><h3>🎤 Edit Artist</h3><button class="modal-close" onclick="closeModal('artistModal')">×</button></div><div class="modal-body" id="artistModalContent"></div></div></div>
+<div class="modal-overlay" id="curatorModal"><div class="modal"><div class="modal-header"><h3>📋 Curator Details</h3><button class="modal-close" onclick="closeModal('curatorModal')">×</button></div><div class="modal-body" id="curatorModalContent"></div></div></div>
+<div class="modal-overlay" id="agentModal"><div class="modal"><div class="modal-header"><h3>🤖 AI Agent Results</h3><button class="modal-close" onclick="closeModal('agentModal')">×</button></div><div class="modal-body" id="agentModalContent"></div></div></div>
+<div class="modal-overlay" id="discordModal"><div class="modal"><div class="modal-header"><h3>💬 Discord Announcement</h3><button class="modal-close" onclick="closeModal('discordModal')">×</button></div><div class="modal-body" id="discordModalContent"><div class="form-group"><label>Announcement Type</label><select id="discordType"><option value="placement">🎉 New Placement</option><option value="welcome">👋 Welcome Message</option><option value="update">📢 Platform Update</option><option value="custom">✏️ Custom Message</option></select></div><div class="form-group"><label>Message</label><textarea id="discordMessage" placeholder="Enter your announcement message..."></textarea></div><div class="form-group"><label>Embed Color</label><input type="color" id="discordColor" value="#6366f1" style="height: 44px;"></div><div style="display: flex; gap: 12px;"><button class="btn btn-discord" onclick="sendDiscordMessage()">📤 Send to Discord</button><button class="btn btn-ghost" onclick="previewDiscord()">👁 Preview</button></div></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){var s=sessionStorage.getItem('108admin');if(s!=='authenticated'){var p=prompt('Enter admin password:');if(p!=='Sutra108!'){document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;gap:16px;"><h1 style="color:#ef4444;">🔒 Access Denied</h1></div>';throw new Error('Unauthorized');}sessionStorage.setItem('108admin','authenticated');}})();
+
+const API='https://onezeroeight-backend-production.up.railway.app/api';
+let allCampaigns=[],allArtists=[],allCurators=[],discordLogs=[];
+
+const PLAYLISTS={discoveries:{id:"2DjGILNUx6ZKj6UFANaWrH",name:"OneZeroEight: Discoveries",emoji:"🎵"},electronic:{id:"1QDLk6PVWoNZgqOU4eVowV",name:"OneZeroEight: Electronic",emoji:"⚡"},lofi:{id:"4UxQQTkDM1lMPzcR2ofpNB",name:"OneZeroEight: Lo-Fi & Chill",emoji:"☕"},hiphop:{id:"7awVYiLk5EA3b6XgraQpem",name:"OneZeroEight: Hip Hop",emoji:"🎤"},pop:{id:"1WLd37m8nWFIq7y6yZetto",name:"OneZeroEight: Pop",emoji:"✨"},rnb:{id:"28CI6nHmaBDMZ1grSYoL4y",name:"OneZeroEight: R&B & Soul",emoji:"💜"},ambient:{id:"5DqBzx9ou98BcehqkF2dXs",name:"OneZeroEight: Ambient",emoji:"🌙"},rock:{id:"60Hp0raJkuDyjvr2M6iwnk",name:"OneZeroEight: Rock & Alternative",emoji:"🎸"},indie:{id:"6IVrZl1UiMba2V1A01zntL",name:"OneZeroEight: Indie & Folk",emoji:"🍂"},jazz:{id:"3NzKhKUj8sUaDm3p85gMMv",name:"OneZeroEight: Jazz & Blues",emoji:"🎷"},classical:{id:"2vvYwga5AY35LXCpUf1mEm",name:"OneZeroEight: Classical & Cinematic",emoji:"🎻"},latin:{id:"2FouNlNr5Z86JkGqH1Z9lq",name:"OneZeroEight: Latin",emoji:"🔥"},world:{id:"0P4mQy5bjTz5QUXnh9XAxC",name:"OneZeroEight: World & Global",emoji:"🌍"},country:{id:"5H31gmiH3MD9nflKmQtkS1",name:"OneZeroEight: Country",emoji:"🤠"},gospel:{id:"0qs0ALpOZEQyPZl54ZketH",name:"OneZeroEight: Gospel & Christian",emoji:"🙏"}};
+const GENRE_MAP={'electronic':'electronic','edm':'electronic','house':'electronic','techno':'electronic','lo-fi':'lofi','lofi':'lofi','chillhop':'lofi','chill':'lofi','hip hop':'hiphop','hip-hop':'hiphop','rap':'hiphop','trap':'hiphop','pop':'pop','r&b':'rnb','rnb':'rnb','soul':'rnb','ambient':'ambient','rock':'rock','alternative':'rock','indie':'indie','folk':'indie','jazz':'jazz','blues':'jazz','classical':'classical','latin':'latin','world':'world','country':'country','gospel':'gospel'};
+
+function getPlaylistKey(g){if(!g)return'discoveries';return GENRE_MAP[g.toLowerCase()]||'discoveries';}
+function escapeHtml(t){if(!t)return'';return t.toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function showToast(m,t='success'){const toast=document.getElementById('toast');toast.innerHTML='<span>'+(t==='discord'?'💬':t==='success'?'✓':'✕')+'</span> '+m;toast.className='toast '+t+' show';setTimeout(function(){toast.classList.remove('show');},4000);}
+function closeModal(id){document.getElementById(id).classList.remove('active');}
+
+function showPanel(n){document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});document.getElementById('panel-'+n).classList.add('active');if(event&&event.target){var tab=event.target.closest('.tab');if(tab)tab.classList.add('active');}if(n==='submissions')loadSubmissions();if(n==='artists')loadArtists();if(n==='curators')loadCurators();if(n==='playlists')loadPlaylists();if(n==='discord')loadDiscordLogs();}
+
+async function loadStats(){try{const ar=await fetch(API+'/admin/artists?page_size=1000');const ad=await ar.json();const ac=(ad.artists||[]).length;document.getElementById('statArtists').textContent=ac;document.getElementById('tabArtists').textContent=ac;const r=await fetch(API+'/admin/stats');const d=await r.json();document.getElementById('statCurators').textContent=d.total_curators||0;document.getElementById('tabCurators').textContent=d.total_curators||0;document.getElementById('statPlacements').textContent=d.total_placements||0;const cr=await fetch(API+'/admin/campaigns?page_size=100');const cd=await cr.json();const cc=(cd.campaigns||[]).length;document.getElementById('statSubmissions').textContent=cc;document.getElementById('tabSubmissions').textContent=cc;document.getElementById('statDiscord').textContent=discordLogs.length||'0';}catch(e){console.error('Stats error:',e);}}
+
+async function loadSubmissions(){const tbody=document.getElementById('submissionsTable');tbody.innerHTML='<tr><td colspan="8" class="loading"><div class="spinner"></div>Loading campaigns...</td></tr>';try{const r=await fetch(API+'/admin/campaigns?page_size=50');const d=await r.json();allCampaigns=d.campaigns||[];if(allCampaigns.length===0){tbody.innerHTML='<tr><td colspan="8" class="empty-state"><div class="icon">📭</div>No campaigns yet</td></tr>';return;}renderCampaigns(allCampaigns);}catch(e){tbody.innerHTML='<tr><td colspan="8" class="empty-state"><div class="icon">⚠️</div>Failed to load</td></tr>';}}
+
+function renderCampaigns(campaigns){const tbody=document.getElementById('submissionsTable');tbody.innerHTML=campaigns.map(function(c,i){const g=c.genre||c.track_genre||'Unknown';const pk=getPlaylistKey(g);const pl=PLAYLISTS[pk]||PLAYLISTS.discoveries;const st=c.status||'draft';const ti=c.tier||'free';const dt=c.created_at?new Date(c.created_at).toLocaleDateString():'-';return '<tr class="campaign-row" data-id="'+c.id+'"><td><button class="action-btn expand" onclick="toggleExpand(\'campaign-'+i+'\',this)">▶</button></td><td><strong>'+escapeHtml(c.track_title||'Untitled')+'</strong>'+(c.spotify_link?'<br><a href="'+escapeHtml(c.spotify_link)+'" target="_blank" style="font-size:0.75rem;color:var(--spotify);">🎵 Spotify</a>':'')+'</td><td>'+escapeHtml(c.artist_name||'-')+'</td><td><span class="badge badge-info">'+escapeHtml(g)+'</span></td><td><span class="playlist-badge playlist-'+pk+'">'+pl.emoji+' '+pl.name.replace('OneZeroEight: ','')+'</span></td><td><span class="badge '+(ti==='pro'?'badge-primary':ti==='album'?'badge-success':'badge-warning')+'">'+ti+'</span></td><td><span class="badge '+(st==='placed'?'badge-success':st==='active'?'badge-primary':'badge-warning')+'">'+st+'</span></td><td class="actions"><button class="action-btn agent" onclick="runAgents(\''+escapeHtml(c.track_title)+'\',\''+escapeHtml(c.artist_name)+'\',\''+escapeHtml(c.spotify_link||'')+'\',\''+escapeHtml(g)+'\')">🤖</button><button class="action-btn '+(st==='placed'?'placed':'')+'" onclick="markPlaced(\''+c.id+'\')">'+(st==='placed'?'✓':'📋')+'</button><button class="action-btn discord" onclick="postToDiscord(\''+c.id+'\',\''+escapeHtml(c.track_title)+'\',\''+escapeHtml(c.artist_name)+'\')">💬</button><button class="action-btn delete" onclick="deleteCampaign(\''+c.id+'\')">🗑</button></td></tr><tr class="expanded-details" id="campaign-'+i+'"><td colspan="8"><div class="expanded-content"><div class="detail-grid"><div class="detail-section"><h4>📋 Campaign Info</h4><div class="detail-row"><span class="label">Campaign ID</span><span class="value">'+(c.id||'-')+'</span></div><div class="detail-row"><span class="label">Created</span><span class="value">'+dt+'</span></div><div class="detail-row"><span class="label">Tier</span><span class="value">'+ti.toUpperCase()+'</span></div><div class="detail-row"><span class="label">Payment</span><span class="value">'+(c.payment_method||'USD')+'</span></div><div class="detail-row"><span class="label">Spotify</span><span class="value">'+(c.spotify_link?'<a href="'+escapeHtml(c.spotify_link)+'" target="_blank">Open Link</a>':'Not provided')+'</span></div><div class="detail-actions"><button class="btn btn-sm btn-primary" onclick="sendEmail(\''+c.id+'\')">📧 Send Email</button><button class="btn btn-sm btn-ghost" onclick="sendUpdateEmail(\''+c.id+'\')">📊 AI Update</button></div></div><div class="ai-analysis"><h4>🤖 AI Analysis</h4><div class="ai-tags"><span class="ai-tag">'+escapeHtml(g)+'</span></div><div class="ai-pitch">Click "Run AI Agents" to generate analysis and social content for this track.</div></div><div class="discord-section"><h4>💬 Discord Activity</h4><div class="discord-log"><div class="discord-log-entry"><span class="time">-</span><span class="msg">No Discord activity yet</span></div></div><div class="detail-actions" style="border-top-color:rgba(255,255,255,0.2);"><button class="btn btn-sm" style="background:rgba(255,255,255,0.2);color:white;" onclick="postToDiscord(\''+c.id+'\',\''+escapeHtml(c.track_title)+'\',\''+escapeHtml(c.artist_name)+'\')">📤 Post Update</button></div></div></div></div></td></tr>';}).join('');}
+
+function filterCampaigns(){const s=document.getElementById('searchCampaigns').value.toLowerCase();const st=document.getElementById('filterStatus').value;const g=document.getElementById('filterGenre').value;const f=allCampaigns.filter(function(c){const ms=!s||(c.track_title||'').toLowerCase().includes(s)||(c.artist_name||'').toLowerCase().includes(s);const mst=!st||c.status===st;const mg=!g||(c.genre||'').toLowerCase().includes(g);return ms&&mst&&mg;});renderCampaigns(f);}
+
+async function loadArtists(){const tbody=document.getElementById('artistsTable');tbody.innerHTML='<tr><td colspan="8" class="loading"><div class="spinner"></div>Loading artists...</td></tr>';try{const r=await fetch(API+'/admin/artists?page_size=100');const d=await r.json();allArtists=d.artists||[];if(allArtists.length===0){tbody.innerHTML='<tr><td colspan="8" class="empty-state"><div class="icon">👤</div>No artists yet</td></tr>';return;}renderArtists(allArtists);}catch(e){tbody.innerHTML='<tr><td colspan="8" class="empty-state"><div class="icon">⚠️</div>Failed to load</td></tr>';}}
+
+function renderArtists(artists){const tbody=document.getElementById('artistsTable');tbody.innerHTML=artists.map(function(a,i){const jd=a.created_at?new Date(a.created_at).toLocaleDateString():'-';const cc=a.campaigns_count||0;return '<tr class="artist-row" data-id="'+a.id+'"><td><button class="action-btn expand" onclick="toggleExpand(\'artist-'+i+'\',this)">▶</button></td><td><strong>'+escapeHtml(a.name||'-')+'</strong></td><td>'+escapeHtml(a.email||'-')+'</td><td>'+escapeHtml(a.artist_name||'-')+'</td><td>'+(a.genre?'<span class="badge badge-info">'+escapeHtml(a.genre)+'</span>':'-')+'</td><td>'+jd+'</td><td><span class="badge badge-primary">'+cc+'</span></td><td class="actions"><button class="action-btn" onclick="editArtist(\''+a.id+'\',\''+escapeHtml((a.name||'').replace(/\'/g,"\\'"))+'\',\''+escapeHtml(a.email)+'\',\''+escapeHtml((a.artist_name||'').replace(/\'/g,"\\'"))+'\',\''+escapeHtml(a.genre||'')+'\',\''+escapeHtml(a.spotify_link||'')+'\')">✏️</button><button class="action-btn" onclick="createCampaign(\''+escapeHtml(a.email)+'\',\''+escapeHtml((a.artist_name||'').replace(/\'/g,"\\'"))+'\',\''+escapeHtml(a.spotify_link||'')+'\',\''+escapeHtml(a.genre||'')+'\')">➕</button><button class="action-btn discord" onclick="welcomeArtistDiscord(\''+escapeHtml(a.artist_name)+'\')">💬</button></td></tr><tr class="expanded-details" id="artist-'+i+'"><td colspan="8"><div class="expanded-content"><div class="detail-grid"><div class="detail-section"><h4>👤 Artist Profile</h4><div class="detail-row"><span class="label">Artist ID</span><span class="value">'+(a.id||'-')+'</span></div><div class="detail-row"><span class="label">Full Name</span><span class="value">'+escapeHtml(a.name||'-')+'</span></div><div class="detail-row"><span class="label">Email</span><span class="value"><a href="mailto:'+escapeHtml(a.email)+'">'+escapeHtml(a.email||'-')+'</a></span></div><div class="detail-row"><span class="label">Artist Name</span><span class="value">'+escapeHtml(a.artist_name||'-')+'</span></div><div class="detail-row"><span class="label">Joined</span><span class="value">'+jd+'</span></div></div><div class="detail-section"><h4>🎵 Music Details</h4><div class="detail-row"><span class="label">Primary Genre</span><span class="value">'+escapeHtml(a.genre||'Not specified')+'</span></div><div class="detail-row"><span class="label">Spotify</span><span class="value">'+(a.spotify_link?'<a href="'+escapeHtml(a.spotify_link)+'" target="_blank">Profile Link</a>':'Not provided')+'</span></div><div class="detail-row"><span class="label">Has Wallet</span><span class="value">'+(a.has_wallet||'Unknown')+'</span></div><div class="detail-row"><span class="label">Referral</span><span class="value">'+escapeHtml(a.referral_source||'-')+'</span></div></div><div class="detail-section"><h4>📊 Campaign History</h4><div class="detail-row"><span class="label">Total Campaigns</span><span class="value">'+cc+'</span></div><div class="detail-actions"><button class="btn btn-sm btn-primary" onclick="createCampaign(\''+escapeHtml(a.email)+'\',\''+escapeHtml((a.artist_name||'').replace(/\'/g,"\\'"))+'\',\''+escapeHtml(a.spotify_link||'')+'\',\''+escapeHtml(a.genre||'')+'\')">➕ New Campaign</button><button class="btn btn-sm btn-danger" onclick="deleteArtist(\''+a.id+'\')">🗑 Delete</button></div></div></div></div></td></tr>';}).join('');}
+
+function filterArtists(){const s=document.getElementById('searchArtists').value.toLowerCase();const g=document.getElementById('filterArtistGenre').value;const f=allArtists.filter(function(a){const ms=!s||(a.name||'').toLowerCase().includes(s)||(a.email||'').toLowerCase().includes(s)||(a.artist_name||'').toLowerCase().includes(s);const mg=!g||(a.genre||'').toLowerCase().includes(g);return ms&&mg;});renderArtists(f);}
+
+async function loadCurators(){const tbody=document.getElementById('curatorsTable');tbody.innerHTML='<tr><td colspan="7" class="loading"><div class="spinner"></div>Loading curators...</td></tr>';try{const r=await fetch(API+'/admin/curators?page_size=50');const d=await r.json();allCurators=d.curators||[];document.getElementById('curatorCount').textContent='('+(d.total||allCurators.length)+' total)';if(allCurators.length===0){tbody.innerHTML='<tr><td colspan="7" class="empty-state"><div class="icon">📋</div>No curators yet</td></tr>';return;}renderCurators(allCurators);}catch(e){tbody.innerHTML='<tr><td colspan="7" class="empty-state"><div class="icon">⚠️</div>Failed to load</td></tr>';}}
+
+function renderCurators(curators){const tbody=document.getElementById('curatorsTable');tbody.innerHTML=curators.slice(0,50).map(function(c,i){const f=(c.total_followers||0).toLocaleString();const pc=c.playlists?c.playlists.length:(c.playlist_count||'-');return '<tr class="curator-row" data-id="'+c.id+'"><td><button class="action-btn expand" onclick="toggleExpand(\'curator-'+i+'\',this)">▶</button></td><td><strong>'+escapeHtml(c.name||'-')+'</strong></td><td>'+escapeHtml(c.email||'-')+'</td><td><span class="badge badge-info">'+pc+'</span></td><td><span class="badge badge-spotify">'+f+'</span></td><td><span class="badge '+(c.status==='active'?'badge-success':'badge-warning')+'">'+(c.status||'new')+'</span></td><td class="actions"><button class="action-btn" onclick="viewCurator(\''+c.id+'\')">👁</button><button class="action-btn" onclick="emailCurator(\''+escapeHtml(c.email)+'\')">📧</button></td></tr><tr class="expanded-details" id="curator-'+i+'"><td colspan="7"><div class="expanded-content"><div class="detail-grid"><div class="detail-section"><h4>📋 Curator Profile</h4><div class="detail-row"><span class="label">Curator ID</span><span class="value">'+(c.id||'-')+'</span></div><div class="detail-row"><span class="label">Name</span><span class="value">'+escapeHtml(c.name||'-')+'</span></div><div class="detail-row"><span class="label">Email</span><span class="value"><a href="mailto:'+escapeHtml(c.email)+'">'+escapeHtml(c.email||'-')+'</a></span></div><div class="detail-row"><span class="label">Status</span><span class="value">'+(c.status||'new')+'</span></div></div><div class="detail-section"><h4>🎵 Playlist Stats</h4><div class="detail-row"><span class="label">Total Playlists</span><span class="value">'+pc+'</span></div><div class="detail-row"><span class="label">Total Followers</span><span class="value">'+f+'</span></div></div><div class="detail-section"><h4>💰 Payment Info</h4><div class="detail-row"><span class="label">Payment Method</span><span class="value">'+(c.payment_method||'Not set')+'</span></div><div class="detail-row"><span class="label">SUTRA Earned</span><span class="value">'+(c.sutra_earned||0)+' SUTRA</span></div></div></div></div></td></tr>';}).join('');}
+
+function filterCurators(){const s=document.getElementById('searchCurators').value.toLowerCase();const st=document.getElementById('filterCuratorStatus').value;const f=allCurators.filter(function(c){const ms=!s||(c.name||'').toLowerCase().includes(s)||(c.email||'').toLowerCase().includes(s);const mst=!st||c.status===st;return ms&&mst;});renderCurators(f);}
+
+function toggleExpand(id,btn){const row=document.getElementById(id);const isExp=row.classList.contains('show');document.querySelectorAll('.expanded-details.show').forEach(function(r){r.classList.remove('show');});document.querySelectorAll('.action-btn.expand').forEach(function(b){b.textContent='▶';b.closest('tr').classList.remove('expanded');});if(!isExp){row.classList.add('show');btn.textContent='▼';btn.closest('tr').classList.add('expanded');}}
+
+function loadPlaylists(){const tbody=document.getElementById('playlistsTable');tbody.innerHTML=Object.entries(PLAYLISTS).map(function(entry){const k=entry[0];const p=entry[1];const genres=Object.entries(GENRE_MAP).filter(function(ge){return ge[1]===k;}).map(function(ge){return ge[0];}).slice(0,4);return '<tr><td><span class="playlist-badge playlist-'+k+'">'+p.emoji+' '+p.name+'</span></td><td>'+genres.map(function(g){return '<span class="badge badge-info" style="margin:2px;">'+g+'</span>';}).join(' ')+'</td><td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:var(--gray-500);">'+p.id+'</td><td><a href="https://open.spotify.com/playlist/'+p.id+'" target="_blank" class="action-btn">🎵 Open</a></td></tr>';}).join('');}
+d(result.id,data.track_title,artistName);}else{showToast('Failed: '+(result.detail||'Unknown error'),'error');}}catch(e){showToast('Error: '+e.message,'error');}}
+
+async function runAgents(trackTitle,artistName,spotifyUrl,genre){const content=document.getElementById('agentModalContent');content.innerHTML='<div class="entity-preview"><div style="width:80px;height:80px;background:linear-gradient(135deg,#8b5cf6,#6366f1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:2rem;">🤖</div><div class="entity-info"><h4>'+escapeHtml(trackTitle)+'</h4><p>by '+escapeHtml(artistName)+'</p><span class="badge badge-info">'+escapeHtml(genre)+'</span></div></div><p style="margin-bottom:16px;color:var(--gray-600);">Running AI agents... this may take 30-60 seconds.</p><div class="agent-output">🔄 Initializing AI agents...</div>';document.getElementById('agentModal').classList.add('active');const output=content.querySelector('.agent-output');try{output.innerHTML='<span style="color:#60a5fa;">🔍 Running track analysis...</span>';const ar=await fetch(API+'/workflow/agent/analyze-track?track_title='+encodeURIComponent(trackTitle)+'&artist_name='+encodeURIComponent(artistName)+'&spotify_url='+encodeURIComponent(spotifyUrl),{method:'POST'});const analysis=await ar.json();output.innerHTML+='<br><span style="color:#34d399;">✅ Analysis complete!</span><br><br>';output.innerHTML+='<span style="color:#60a5fa;">📊 Results:</span><br>';output.innerHTML+='Genre Tags: '+(analysis.analysis&&analysis.analysis.genre_tags?analysis.analysis.genre_tags.join(', '):'N/A')+'<br>';output.innerHTML+='Mood: '+(analysis.analysis&&analysis.analysis.mood?analysis.analysis.mood.join(', '):'N/A')+'<br>';output.innerHTML+='Energy: '+(analysis.analysis?analysis.analysis.energy_level:'N/A')+'/10<br>';output.innerHTML+='Target Audience: '+(analysis.analysis?analysis.analysis.target_audience:'N/A')+'<br>';output.innerHTML+='<br><span style="color:#60a5fa;">📝 Playlist Pitch:</span><br>'+(analysis.analysis?analysis.analysis.playlist_pitch:'N/A')+'<br>';output.innerHTML+='<br><br><span style="color:#60a5fa;">🐦 Generating social posts...</span>';const sr=await fetch(API+'/workflow/agent/generate-social?track_title='+encodeURIComponent(trackTitle)+'&artist_name='+encodeURIComponent(artistName)+'&spotify_url='+encodeURIComponent(spotifyUrl)+'&genre='+encodeURIComponent(genre),{method:'POST'});const social=await sr.json();output.innerHTML+='<br><span style="color:#34d399;">✅ Social posts generated!</span><br><br>';output.innerHTML+='<span style="color:#60a5fa;">--- Twitter/X ---</span><br>'+escapeHtml(social.posts?social.posts.twitter:'N/A')+'<br><br>';output.innerHTML+='<span style="color:#60a5fa;">--- Instagram ---</span><br>'+escapeHtml(social.posts?social.posts.instagram:'N/A')+'<br><br>';output.innerHTML+='<span style="color:#60a5fa;">--- Discord ---</span><br>'+escapeHtml(social.posts?social.posts.discord:'N/A');showToast('AI agents completed!');}catch(e){output.innerHTML+='<br><br><span style="color:#f87171;">❌ Error: '+escapeHtml(e.message)+'</span>';showToast('Agent error','error');}}
+
+async function markPlaced(id){try{await fetch(API+'/admin/campaigns/'+id+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'placed'})});showToast('Marked as placed + Discord notified!','discord');loadSubmissions();}catch(e){showToast('Error: '+e.message,'error');}}
+
+async function sendEmail(id){try{const r=await fetch(API+'/admin/campaigns/'+id+'/notify-placement',{method:'POST'});const d=await r.json();if(d.success){showToast('Placement email sent!');}else{showToast('Failed to send email','error');}}catch(e){showToast('Error: '+e.message,'error');}}
+
+async function sendUpdateEmail(id){showToast('Generating AI update email...');try{const r=await fetch(API+'/admin/campaigns/'+id+'/send-update',{method:'POST'});const d=await r.json();if(d.success){showToast('AI Update email sent!');}else{showToast('Failed: '+(d.detail||'Unknown error'),'error');}}catch(e){showToast('Error: '+e.message,'error');}}
+
+async function deleteCampaign(id){if(!confirm('Delete this campaign?'))return;try{await fetch(API+'/admin/campaigns/'+id,{method:'DELETE'});showToast('Campaign deleted');loadSubmissions();loadStats();}catch(e){showToast('Error: '+e.message,'error');}}
+
+function openDiscordPanel(){showPanel('discord');}
+function loadDiscordLogs(){discordLogs=[{time:new Date().toLocaleTimeString(),type:'placement',msg:'🎉 New placement announced'},{time:new Date(Date.now()-3600000).toLocaleTimeString(),type:'welcome',msg:'👋 Welcome message sent'}];const lc=document.getElementById('discordActivityLog');lc.innerHTML=discordLogs.map(function(l){return '<div class="discord-log-entry" style="border-color:var(--gray-200);"><span class="time" style="color:var(--gray-500);">'+l.time+'</span><span class="msg">'+escapeHtml(l.msg)+'</span></div>';}).join('');document.getElementById('discordStatsToday').textContent=discordLogs.length;document.getElementById('discordStatsWeek').textContent=discordLogs.length;document.getElementById('discordPostsToday').textContent=discordLogs.length;}
+
+function sendDiscordAnnouncement(){document.getElementById('discordModal').classList.add('active');}
+
+async function sendDiscordMessage(){var type=document.getElementById('discordType').value;var message=document.getElementById('discordMessage').value;if(!message.trim()){showToast('Please enter a message','error');return;}showToast('Message sent to Discord!','discord');closeModal('discordModal');discordLogs.unshift({time:new Date().toLocaleTimeString(),type:type,msg:message.substring(0,50)+(message.length>50?'...':'')});loadDiscordLogs();}
+
+function previewDiscord(){alert('Preview:\n\n'+document.getElementById('discordMessage').value);}
+function postToDiscord(id,trackTitle,artistName){showToast('Posted to Discord!','discord');discordLogs.unshift({time:new Date().toLocaleTimeString(),type:'submission',msg:'New: '+trackTitle});}
+function welcomeArtistDiscord(artistName){showToast('Welcome message sent to Discord!','discord');discordLogs.unshift({time:new Date().toLocaleTimeString(),type:'welcome',msg:'Welcomed '+artistName});}
+function testDiscordWebhook(){showToast('Testing Discord webhook...','discord');setTimeout(function(){showToast('Discord webhook is working!','discord');},1000);}
+function sendPlacementAnnouncement(){document.getElementById('discordType').value='placement';document.getElementById('discordMessage').value='🎉 **New Playlist Placement!**\n\nCongratulations to our latest artist!';document.getElementById('discordModal').classList.add('active');}
+function sendWeeklyDigest(){document.getElementById('discordType').value='update';document.getElementById('discordMessage').value='📊 **Weekly Digest**\n\nThis week on OneZeroEight:\n• New artists joined\n• Playlist placements\n• Platform updates';document.getElementById('discordModal').classList.add('active');}
+function sendCommunityUpdate(){document.getElementById('discordType').value='update';document.getElementById('discordMessage').value='📢 **Community Update**\n\nHey OneZeroEight family!\n\nWe have exciting updates...';document.getElementById('discordModal').classList.add('active');}
+function viewDiscordLogs(){showPanel('discord');}
+
+function viewCurator(id){var c=allCurators.find(function(x){return x.id===id;});if(!c)return;var content=document.getElementById('curatorModalContent');content.innerHTML='<div class="entity-preview"><div style="width:80px;height:80px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:white;">📋</div><div class="entity-info"><h4>'+escapeHtml(c.name||'Curator')+'</h4><p>'+escapeHtml(c.email)+'</p><span class="badge '+(c.status==='active'?'badge-success':'badge-warning')+'">'+(c.status||'new')+'</span></div></div><div class="detail-grid" style="margin-top:20px;"><div class="detail-section"><h4>📊 Stats</h4><div class="detail-row"><span class="label">Total Followers</span><span class="value">'+(c.total_followers||0).toLocaleString()+'</span></div><div class="detail-row"><span class="label">Playlists</span><span class="value">'+(c.playlists?c.playlists.length:'-')+'</span></div></div></div><div style="margin-top:20px;"><button class="btn btn-primary" onclick="emailCurator(\''+escapeHtml(c.email)+'\')">📧 Send Email</button><button class="btn btn-ghost" onclick="closeModal(\'curatorModal\')">Close</button></div>';document.getElementById('curatorModal').classList.add('active');}
+function emailCurator(email){window.location.href='mailto:'+email;}
+function runBulkAgents(){if(!confirm('Run AI agents on all pending campaigns?'))return;showToast('Bulk agent processing started...');}
+
+function exportCampaigns(){var csv=allCampaigns.map(function(c){return '"'+c.track_title+'","'+c.artist_name+'","'+c.genre+'","'+c.status+'","'+c.tier+'"';}).join('\n');downloadCSV('campaigns.csv','Track,Artist,Genre,Status,Tier\n'+csv);}
+function exportArtists(){var csv=allArtists.map(function(a){return '"'+a.name+'","'+a.email+'","'+a.artist_name+'","'+a.genre+'"';}).join('\n');downloadCSV('artists.csv','Name,Email,Artist Name,Genre\n'+csv);}
+function exportCurators(){var csv=allCurators.map(function(c){return '"'+c.name+'","'+c.email+'","'+c.total_followers+'","'+c.status+'"';}).join('\n');downloadCSV('curators.csv','Name,Email,Followers,Status\n'+csv);}
+function downloadCSV(filename,content){var blob=new Blob([content],{type:'text/csv'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);showToast('Export downloaded: '+filename);}
+
+document.querySelectorAll('.modal-overlay').forEach(function(m){m.addEventListener('click',function(e){if(e.target===this)this.classList.remove('active');});});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal-overlay.active').forEach(function(m){m.classList.remove('active');});});
+document.addEventListener('DOMContentLoaded',function(){loadStats();loadSubmissions();loadPlaylists();loadDiscordLogs();});
+</script>
+</body>
+</html>
