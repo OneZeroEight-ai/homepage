@@ -327,13 +327,15 @@ async function testAPI() {
         var data = await response.json();
         debugLog('Health check: ' + JSON.stringify(data), 'info');
         
-        if (data.status === 'operational') {
+        if (data.status === 'operational' || data.status === 'healthy') {
             updateApiStatus('ok', 'API Online');
-            debugLog('API is operational!', 'info');
+            debugLog('API is online! Status: ' + data.status, 'info');
             loadStats();
         } else {
-            updateApiStatus('error', 'API Error');
-            debugLog('Unexpected health response: ' + JSON.stringify(data), 'error');
+            // Still try to load stats even if health format is unexpected
+            updateApiStatus('warn', 'API Status Unknown');
+            debugLog('Unexpected health response, trying to load anyway: ' + JSON.stringify(data), 'warn');
+            loadStats();
         }
     } catch (err) {
         updateApiStatus('error', 'API Offline');
