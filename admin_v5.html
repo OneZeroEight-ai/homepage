@@ -211,6 +211,7 @@
 
 <div class="modal-overlay" id="artistModal"><div class="modal"><div class="modal-header"><h3>🎤 Artist Details</h3><button class="modal-close" onclick="closeModal('artistModal')">×</button></div><div class="modal-body" id="artistModalContent"></div></div></div>
 <div class="modal-overlay" id="agentModal"><div class="modal"><div class="modal-header"><h3>🤖 AI Agent Results</h3><button class="modal-close" onclick="closeModal('agentModal')">×</button></div><div class="modal-body" id="agentModalContent"></div></div></div>
+<div class="modal-overlay" id="placementModal"><div class="modal" style="max-width:600px;"><div class="modal-header" style="background:linear-gradient(135deg,var(--spotify),#1ed760);"><h3 style="color:white;">📍 Place Track on Playlist</h3><button class="modal-close" onclick="closeModal('placementModal')" style="background:rgba(255,255,255,0.2);color:white;">×</button></div><div class="modal-body" id="placementModalContent"></div></div></div>
 <div class="modal-overlay" id="confirmModal"><div class="modal confirm-modal"><div class="modal-body"><div class="confirm-icon" id="confirmIcon">⚠️</div><div class="confirm-title" id="confirmTitle">Confirm Action</div><div class="confirm-message" id="confirmMessage">Are you sure?</div><div class="confirm-details" id="confirmDetails" style="display:none;"></div><div class="confirm-buttons"><button class="btn btn-ghost" onclick="closeModal('confirmModal')">Cancel</button><button class="btn btn-primary" id="confirmButton" onclick="executeConfirmedAction()">Confirm</button></div></div></div></div>
 <div class="toast" id="toast"></div>
 
@@ -390,6 +391,7 @@ async function loadSubmissions() {
                 '<td><span class="badge ' + (ti === 'pro' ? 'badge-primary' : 'badge-warning') + '">' + ti + '</span></td>' +
                 '<td><span class="badge ' + (st === 'placed' ? 'badge-success' : 'badge-warning') + '">' + st + '</span></td>' +
                 '<td class="actions">' +
+                '<button class="action-btn" onclick="showPlacementPrompt(\'' + escapeHtml(c.track_title).replace(/'/g, "\\'") + '\',\'' + escapeHtml(c.artist_name).replace(/'/g, "\\'") + '\',\'' + escapeHtml(c.spotify_link || '').replace(/'/g, "\\'") + '\',\'' + escapeHtml(g) + '\')" title="Place on Playlist">📍</button>' +
                 '<button class="action-btn agent" onclick="confirmRunAgents(\'' + escapeHtml(c.track_title).replace(/'/g, "\\'") + '\',\'' + escapeHtml(c.artist_name).replace(/'/g, "\\'") + '\',\'' + escapeHtml(c.spotify_link || '').replace(/'/g, "\\'") + '\',\'' + escapeHtml(g) + '\')">🤖</button>' +
                 '<button class="action-btn ' + (st === 'placed' ? 'placed' : '') + '" onclick="confirmMarkPlaced(\'' + c.id + '\',\'' + escapeHtml(c.track_title).replace(/'/g, "\\'") + '\',\'' + escapeHtml(c.artist_name).replace(/'/g, "\\'") + '\')">' + (st === 'placed' ? '✓' : '📋') + '</button>' +
                 '<button class="action-btn delete" onclick="confirmDeleteCampaign(\'' + c.id + '\',\'' + escapeHtml(c.track_title).replace(/'/g, "\\'") + '\',\'' + escapeHtml(c.artist_name).replace(/'/g, "\\'") + '\')">🗑</button></td></tr>';
@@ -534,6 +536,69 @@ async function runAgents(track, artist, url, genre) {
         out.textContent += '\n✅ Social posts generated!\n\n' + JSON.stringify(s, null, 2);
         showToast('AI agents completed!');
     } catch(e) { out.textContent += '\n\n❌ Error: ' + e.message; showToast('Agent error', 'error'); }
+}
+
+function showPlacementPrompt(track, artist, spotifyUrl, genre) {
+    var pk = getPlaylistKey(genre);
+    var pl = PLAYLISTS[pk] || PLAYLISTS.discoveries;
+    var playlistUrl = 'https://open.spotify.com/playlist/' + pl.id;
+    
+    var content = document.getElementById('placementModalContent');
+    content.innerHTML = 
+        '<div style="margin-bottom:20px;">' +
+        '<p style="color:var(--gray-600);margin-bottom:16px;">Follow these steps to manually add the track to the OneZeroEight playlist:</p>' +
+        '</div>' +
+        
+        '<div style="background:var(--gray-50);border-radius:12px;padding:20px;margin-bottom:20px;">' +
+        '<h4 style="font-size:0.85rem;text-transform:uppercase;color:var(--gray-500);margin-bottom:12px;">Step 1: Open the Track</h4>' +
+        '<div style="display:flex;align-items:center;gap:12px;background:white;padding:12px 16px;border-radius:8px;border:1px solid var(--gray-200);">' +
+        '<div style="width:40px;height:40px;background:var(--spotify);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;">🎵</div>' +
+        '<div style="flex:1;min-width:0;">' +
+        '<div style="font-weight:600;color:var(--dark);">' + escapeHtml(track) + '</div>' +
+        '<div style="font-size:0.85rem;color:var(--gray-500);">by ' + escapeHtml(artist) + '</div>' +
+        '</div>' +
+        '</div>' +
+        (spotifyUrl ? '<a href="' + escapeHtml(spotifyUrl) + '" target="_blank" class="btn btn-success" style="width:100%;justify-content:center;margin-top:12px;">Open Track in Spotify →</a>' : '<p style="color:var(--danger);margin-top:12px;">⚠️ No Spotify URL available</p>') +
+        '</div>' +
+        
+        '<div style="background:var(--gray-50);border-radius:12px;padding:20px;margin-bottom:20px;">' +
+        '<h4 style="font-size:0.85rem;text-transform:uppercase;color:var(--gray-500);margin-bottom:12px;">Step 2: Open the Target Playlist</h4>' +
+        '<div style="display:flex;align-items:center;gap:12px;background:white;padding:12px 16px;border-radius:8px;border:1px solid var(--gray-200);">' +
+        '<span class="playlist-badge playlist-' + pk + '" style="white-space:nowrap;">' + pl.emoji + ' ' + pl.name + '</span>' +
+        '</div>' +
+        '<a href="' + playlistUrl + '" target="_blank" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px;">Open Playlist in Spotify →</a>' +
+        '</div>' +
+        
+        '<div style="background:#fef3c7;border-radius:12px;padding:20px;margin-bottom:20px;">' +
+        '<h4 style="font-size:0.85rem;text-transform:uppercase;color:#92400e;margin-bottom:12px;">Step 3: Add to Playlist</h4>' +
+        '<ol style="color:#92400e;padding-left:20px;line-height:1.8;">' +
+        '<li>In Spotify, click the <strong>⋯</strong> (three dots) on the track</li>' +
+        '<li>Select <strong>"Add to playlist"</strong></li>' +
+        '<li>Choose <strong>"' + escapeHtml(pl.name) + '"</strong></li>' +
+        '<li>Come back here and click <strong>Mark as Placed</strong></li>' +
+        '</ol>' +
+        '</div>' +
+        
+        '<div style="background:var(--gray-800);border-radius:12px;padding:16px;margin-bottom:20px;">' +
+        '<h4 style="font-size:0.75rem;text-transform:uppercase;color:var(--gray-400);margin-bottom:8px;">Quick Copy - Track URL</h4>' +
+        '<div style="display:flex;gap:8px;">' +
+        '<input type="text" id="trackUrlCopy" value="' + escapeHtml(spotifyUrl || 'No URL') + '" readonly style="flex:1;background:var(--gray-700);border:none;color:white;padding:10px 12px;border-radius:6px;font-family:JetBrains Mono,monospace;font-size:0.8rem;">' +
+        '<button onclick="copyToClipboard(\'trackUrlCopy\')" class="btn btn-ghost" style="border-color:var(--gray-600);color:white;">📋</button>' +
+        '</div>' +
+        '</div>' +
+        
+        '<div style="display:flex;gap:12px;">' +
+        '<button onclick="closeModal(\'placementModal\')" class="btn btn-ghost" style="flex:1;justify-content:center;">Close</button>' +
+        '</div>';
+    
+    document.getElementById('placementModal').classList.add('active');
+}
+
+function copyToClipboard(inputId) {
+    var input = document.getElementById(inputId);
+    input.select();
+    document.execCommand('copy');
+    showToast('Copied to clipboard!');
 }
 
 function emailCurator(email) { window.location.href = 'mailto:' + email; }
