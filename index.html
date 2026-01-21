@@ -177,7 +177,394 @@
             color: var(--gray-600);
             margin-bottom: 40px;
             line-height: 1.7;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
+
+        /* Spotify Card - Inline Form */
+        .spotify-card {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 700px;
+            margin: 0 auto 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        .spotify-card-inner {
+            position: relative;
+        }
+        .spotify-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+        .label-icon {
+            font-size: 1.25rem;
+        }
+        .spotify-input-row {
+            display: flex;
+            gap: 12px;
+        }
+        .spotify-input-row input {
+            flex: 1;
+            padding: 16px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .spotify-input-row input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .analyze-btn {
+            padding: 16px 28px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .analyze-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        .spotify-error {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #fee2e2;
+            color: #991b1b;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        /* Analyzing State */
+        .analyzing-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 40px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+        .analyzing-state .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Track Preview Inline */
+        .track-preview-inline {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        .track-art-inline {
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .track-info-inline {
+            flex: 1;
+        }
+        .track-info-inline h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+        .track-info-inline p {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+        .ai-detected {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+        .ai-label {
+            color: var(--primary);
+        }
+        .change-track-btn {
+            padding: 8px 16px;
+            background: var(--white);
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .change-track-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        /* Genre Section */
+        .genre-section {
+            margin-bottom: 24px;
+        }
+        .genre-section-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+        .genre-section-label span {
+            font-weight: 400;
+            color: var(--gray-500);
+        }
+        .genre-section-hint {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-bottom: 16px;
+        }
+
+        /* Genre Toggle Buttons */
+        .genre-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .genre-btn {
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--gray-700);
+        }
+        .genre-btn:hover {
+            border-color: var(--primary);
+            background: #f5f5ff;
+        }
+        .genre-btn.active {
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--white);
+        }
+        .genre-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .genre-btn .emoji {
+            font-size: 1rem;
+        }
+        .genre-counter {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--gray-500);
+        }
+
+        /* Contact Fields */
+        .contact-fields {
+            margin-bottom: 24px;
+        }
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .field label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+        .field input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .field input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .ai-checkbox-row {
+            margin-top: 8px;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px 28px;
+            background: var(--dark);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+        .submit-btn:hover {
+            background: var(--gray-800);
+            transform: translateY(-1px);
+        }
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .submit-note {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+        .submit-note-small {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--gray-400);
+        }
+
+        /* Success State */
+        .success-state {
+            text-align: center;
+            padding: 20px 0;
+        }
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+        .success-state h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+        .success-state > p {
+            font-size: 1.1rem;
+            color: var(--gray-600);
+            margin-bottom: 24px;
+        }
+        .next-steps {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+        .next-steps h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+        .next-steps ol {
+            margin-left: 20px;
+            color: var(--gray-600);
+        }
+        .next-steps li {
+            margin-bottom: 8px;
+        }
+        .success-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        .trust-badge {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        /* Responsive for Spotify Card */
+        @media (max-width: 767px) {
+            .spotify-card {
+                padding: 20px;
+            }
+            .spotify-input-row {
+                flex-direction: column;
+            }
+            .analyze-btn {
+                width: 100%;
+            }
+            .genre-buttons {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+            .trust-badges {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+        }
+        @media (max-width: 479px) {
+            .genre-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .genre-btn {
+                padding: 10px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
         .hero-ctas {
             display: flex;
             gap: 16px;
@@ -1469,32 +1856,141 @@
             <li><a href="#social-hub">Social Hub</a></li>
             <li><a href="#pricing">Pricing</a></li>
             <li><a href="#sutra">SUTRA</a></li>
-            <li><a href="#" onclick="openModal(); return false;" class="nav-cta">Start Free</a></li>
+            <li><a href="#" onclick="scrollToForm(); return false;" class="nav-cta">Start Free</a></li>
         </ul>
-        <button class="mobile-menu-btn" onclick="openModal()">☰</button>
+        <button class="mobile-menu-btn" onclick="scrollToForm()">☰</button>
     </div>
 </nav>
 
-<!-- Hero -->
+<!-- Hero - Spotify First -->
 <section class="hero">
     <div class="container">
         <div class="hero-content">
             <div class="hero-badge">
                 <span class="dot"></span>
-                AI Agents Now Active
+                AI Analysis Available
             </div>
-            <h1>AI Agents That <span>Promote Your Music</span></h1>
+            <h1>Get Your Track Analyzed & Placed on Playlists<br><span>— Free —</span></h1>
             <p class="hero-subtitle">
-                Deploy intelligent agents to get your music on playlists, blast your socials, and handle PR. Start free. Upgrade when you're ready.
+                Paste your Spotify link. Our AI analyzes your track's genre, mood, and energy — then matches it with the perfect playlists from our network.
             </p>
-            <div class="hero-ctas">
-                <a href="#" onclick="openModal(); return false;" class="btn btn-primary">
-                    Start Free Trial →
-                </a>
-                <a href="#how-it-works" class="btn btn-secondary">
-                    See How It Works
-                </a>
+
+            <!-- Spotify Input Card -->
+            <div class="spotify-card" id="spotifyCard">
+                <div class="spotify-card-inner">
+                    <div class="spotify-input-section" id="spotifyInputSection">
+                        <label class="spotify-label">
+                            <span class="label-icon">🎧</span>
+                            Paste your Spotify track link
+                        </label>
+                        <div class="spotify-input-row">
+                            <input type="url" id="spotifyInput" placeholder="https://open.spotify.com/track/..."
+                                   onpaste="handleSpotifyPaste(event)" onblur="analyzeTrack()">
+                            <button type="button" class="analyze-btn" onclick="analyzeTrack()">
+                                Analyze My Track →
+                            </button>
+                        </div>
+                        <div class="spotify-error" id="spotifyError" style="display: none;"></div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div class="analyzing-state" id="analyzingState" style="display: none;">
+                        <div class="spinner"></div>
+                        <span>Analyzing your track...</span>
+                    </div>
+
+                    <!-- Expanded Form (hidden until Spotify analyzed) -->
+                    <div class="expanded-form" id="expandedForm" style="display: none;">
+                        <!-- Track Preview -->
+                        <div class="track-preview-inline" id="trackPreviewInline">
+                            <img src="" alt="Album Art" id="trackArtInline" class="track-art-inline">
+                            <div class="track-info-inline">
+                                <h3 id="trackTitleInline">Track Title</h3>
+                                <p id="trackArtistInline">Artist Name</p>
+                                <div class="ai-detected" id="aiDetectedGenres">
+                                    <span class="ai-label">🤖 AI Detected:</span>
+                                    <span class="ai-genres"></span>
+                                </div>
+                            </div>
+                            <button type="button" class="change-track-btn" onclick="resetForm()">Change</button>
+                        </div>
+
+                        <!-- Genre Toggle Buttons -->
+                        <div class="genre-section">
+                            <label class="genre-section-label">Select Your Genres <span>(up to 3)</span></label>
+                            <p class="genre-section-hint">Based on your track's sound profile, we recommend these playlists:</p>
+                            <div class="genre-buttons" id="genreButtons">
+                                <!-- Generated by JavaScript -->
+                            </div>
+                            <div class="genre-counter" id="genreCounter">0/3 selected</div>
+                        </div>
+
+                        <!-- Contact Fields -->
+                        <div class="contact-fields">
+                            <div class="field-row">
+                                <div class="field">
+                                    <label for="emailInput">Your Email *</label>
+                                    <input type="email" id="emailInput" placeholder="you@email.com" required>
+                                </div>
+                                <div class="field">
+                                    <label for="artistInput">Artist Name *</label>
+                                    <input type="text" id="artistInput" placeholder="Your artist name" required>
+                                </div>
+                            </div>
+                            <div class="ai-checkbox-row">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="aiGeneratedCheckbox">
+                                    <span>This is AI-generated music (Suno, Udio, etc.)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="button" class="submit-btn" id="submitBtn" onclick="submitInlineForm()">
+                            🚀 Get Free Analysis & Placement
+                        </button>
+                        <p class="submit-note">No credit card required. Upgrade to Pro anytime.</p>
+                        <p class="submit-note-small">Free tier includes placement on OneZeroEight playlists. Upgrade to Pro ($49) for access to 3,000+ external curators.</p>
+                    </div>
+
+                    <!-- Success State -->
+                    <div class="success-state" id="successState" style="display: none;">
+                        <div class="success-icon">🎉</div>
+                        <h2>You're In!</h2>
+                        <p>We're analyzing <strong id="successTrackTitle">"Track Title"</strong> and matching it with playlists.</p>
+                        <div class="next-steps">
+                            <h3>What happens next:</h3>
+                            <ol>
+                                <li>AI agents analyze your track (1-2 minutes)</li>
+                                <li>We match you with relevant playlists</li>
+                                <li>You'll get an email when placed</li>
+                            </ol>
+                        </div>
+                        <div class="success-actions">
+                            <button onclick="resetForm()" class="btn btn-secondary">Submit Another Track</button>
+                            <a href="#pricing" class="btn btn-primary">Upgrade to Pro for 3,000+ Curators →</a>
+                        </div>
+                    </div>
+
+                    <!-- Hidden Fields -->
+                    <input type="hidden" id="fgenres" value="[]">
+                    <input type="hidden" id="fgenre" value="">
+                    <input type="hidden" id="ftier" value="free">
+                    <input type="hidden" id="ftrackTitle" value="">
+                    <input type="hidden" id="faiGenres" value="">
+                    <input type="hidden" id="faiMood" value="">
+                    <input type="hidden" id="fgenreSource" value="">
+                </div>
             </div>
+
+            <!-- Trust Badges -->
+            <div class="trust-badges">
+                <div class="trust-badge">✓ 3,000+ Verified Curators</div>
+                <div class="trust-badge">✓ 15M+ Playlist Listeners</div>
+                <div class="trust-badge">✓ No Credit Card Required</div>
+                <div class="trust-badge">✓ Real Placements, Not Bots</div>
+            </div>
+
             <div class="hero-proof">
                 <div class="proof-item">
                     <div class="proof-value">3000+</div>
@@ -1510,13 +2006,6 @@
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-<!-- Free Banner -->
-<section class="free-banner">
-    <div class="container">
-        <p>🎉 Free Trial: Get placed on OneZeroEight playlists. <span>No credit card required.</span></p>
     </div>
 </section>
 
@@ -1563,12 +2052,12 @@
             <p>A team of specialized agents working around the clock to promote your music.</p>
         </div>
         <div class="agents-grid">
-            <a href="#" onclick="openModal(); return false;" class="agent-card">
+            <a href="#" onclick="scrollToForm(); return false;" class="agent-card">
                 <img src="PlaylistAgent.png" alt="Playlist Agent" class="agent-image">
                 <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
                 <p class="agent-description">Analyzes your track and matches it with the perfect playlists from our curated network.</p>
             </a>
-            <a href="#" onclick="openModal(); return false;" class="agent-card">
+            <a href="#" onclick="scrollToForm(); return false;" class="agent-card">
                 <img src="SocialAgent.png" alt="Social Agent" class="agent-image">
                 <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
                 <p class="agent-description">Generates platform-optimized content for Twitter, Instagram, TikTok, and Discord.</p>
@@ -1698,7 +2187,7 @@
                     <li>Basic analytics dashboard</li>
                     <li>Community Discord access</li>
                 </ul>
-                <a href="#" onclick="openModal(); return false;" class="btn btn-secondary">Start Free</a>
+                <a href="#" onclick="scrollToForm(); return false;" class="btn btn-secondary">Start Free</a>
             </div>
             <div class="pricing-card featured">
                 <div class="pricing-badge">Most Popular</div>
@@ -1845,7 +2334,7 @@
     <div class="container">
         <h2>Ready to Deploy Your Agents?</h2>
         <p>Start free today. Get real playlist placements. Upgrade when you want more reach.</p>
-        <a href="#" onclick="openModal(); return false;" class="btn btn-primary">
+        <a href="#" onclick="scrollToForm(); return false;" class="btn btn-primary">
             Start Free Trial →
         </a>
         <div class="social-links">
@@ -2054,27 +2543,23 @@
 <script>
 const API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
 
-// Genre configuration - easily expandable
+// Genre configuration - 15 genres matching playlists
 const GENRES = [
-    { key: 'electronic', label: 'Electronic / EDM', emoji: '⚡' },
-    { key: 'lofi', label: 'Lo-Fi / Chill', emoji: '☕' },
-    { key: 'hiphop', label: 'Hip Hop / Rap', emoji: '🎤' },
+    { key: 'electronic', label: 'Electronic', emoji: '⚡' },
+    { key: 'lofi', label: 'Lo-Fi', emoji: '☕' },
+    { key: 'hiphop', label: 'Hip Hop', emoji: '🎤' },
     { key: 'pop', label: 'Pop', emoji: '✨' },
-    { key: 'rnb', label: 'R&B / Soul', emoji: '💜' },
+    { key: 'rnb', label: 'R&B', emoji: '💜' },
     { key: 'ambient', label: 'Ambient', emoji: '🌙' },
-    { key: 'rock', label: 'Rock / Alt', emoji: '🎸' },
-    { key: 'indie', label: 'Indie / Folk', emoji: '🍂' },
-    { key: 'jazz', label: 'Jazz / Blues', emoji: '🎷' },
+    { key: 'rock', label: 'Rock', emoji: '🎸' },
+    { key: 'indie', label: 'Indie', emoji: '🍂' },
+    { key: 'jazz', label: 'Jazz', emoji: '🎷' },
     { key: 'classical', label: 'Classical', emoji: '🎻' },
     { key: 'latin', label: 'Latin', emoji: '🔥' },
     { key: 'world', label: 'World', emoji: '🌍' },
     { key: 'country', label: 'Country', emoji: '🤠' },
     { key: 'gospel', label: 'Gospel', emoji: '🙏' },
-    { key: 'metal', label: 'Metal', emoji: '🤘' },
-    { key: 'reggae', label: 'Reggae', emoji: '🇯🇲' },
-    { key: 'punk', label: 'Punk', emoji: '⚡' },
-    { key: 'funk', label: 'Funk / Disco', emoji: '🕺' },
-    { key: 'other', label: 'Other', emoji: '🎵' },
+    { key: 'discoveries', label: 'Other', emoji: '🎵' },
 ];
 
 const MAX_GENRES = 3;
@@ -2097,12 +2582,83 @@ const AI_GENRE_MAP = {
     'world': 'world', 'afrobeats': 'world', 'african': 'world',
     'country': 'country', 'americana': 'country', 'bluegrass': 'country', 'western': 'country',
     'gospel': 'gospel', 'christian': 'gospel', 'worship': 'gospel', 'ccm': 'gospel',
-    'metal': 'metal', 'heavy metal': 'metal', 'death metal': 'metal', 'black metal': 'metal',
-    'reggae': 'reggae', 'dancehall': 'reggae', 'dub': 'reggae',
-    'punk': 'punk', 'punk rock': 'punk', 'pop punk': 'punk',
-    'funk': 'funk', 'disco': 'funk', 'boogie': 'funk'
+    'metal': 'rock', 'heavy metal': 'rock', 'punk': 'rock', 'punk rock': 'rock',
+    'reggae': 'world', 'dancehall': 'world', 'funk': 'rnb', 'disco': 'pop'
 };
 
+// Initialize genre toggle buttons (for inline form)
+function initGenreButtons() {
+    const container = document.getElementById('genreButtons');
+    if (!container) return;
+    container.innerHTML = GENRES.map(g => `
+        <button type="button" class="genre-btn" data-genre="${g.key}" onclick="toggleGenre('${g.key}')">
+            <span class="emoji">${g.emoji}</span>
+            <span>${g.label}</span>
+        </button>
+    `).join('');
+}
+
+function toggleGenre(genre) {
+    const btn = document.querySelector(`.genre-btn[data-genre="${genre}"]`);
+    if (!btn) return;
+
+    if (btn.classList.contains('active')) {
+        // Deselect
+        selectedGenres = selectedGenres.filter(g => g !== genre);
+        btn.classList.remove('active');
+    } else if (selectedGenres.length < MAX_GENRES) {
+        // Select
+        selectedGenres.push(genre);
+        btn.classList.add('active');
+    }
+    updateGenreButtonStates();
+}
+
+function updateGenreButtonStates() {
+    const atMax = selectedGenres.length >= MAX_GENRES;
+
+    document.querySelectorAll('.genre-btn').forEach(btn => {
+        if (!btn.classList.contains('active')) {
+            btn.classList.toggle('disabled', atMax);
+        }
+    });
+
+    // Update counter
+    const counter = document.getElementById('genreCounter');
+    if (counter) {
+        counter.textContent = `${selectedGenres.length}/${MAX_GENRES} selected`;
+    }
+
+    // Update hidden inputs
+    document.getElementById('fgenres').value = JSON.stringify(selectedGenres);
+    document.getElementById('fgenre').value = selectedGenres[0] || '';
+}
+
+// Pre-select genres from AI detection (for toggle buttons)
+function preselectGenres(detectedGenres) {
+    // Clear current selection
+    selectedGenres = [];
+    document.querySelectorAll('.genre-btn').forEach(btn => btn.classList.remove('active', 'disabled'));
+
+    // Map AI genres to our keys
+    const mappedGenres = detectedGenres
+        .map(g => AI_GENRE_MAP[g.toLowerCase()] || null)
+        .filter(g => g !== null)
+        .filter((g, i, arr) => arr.indexOf(g) === i)
+        .slice(0, MAX_GENRES);
+
+    // Select mapped genres
+    mappedGenres.forEach(g => {
+        const btn = document.querySelector(`.genre-btn[data-genre="${g}"]`);
+        if (btn) {
+            btn.classList.add('active');
+            selectedGenres.push(g);
+        }
+    });
+    updateGenreButtonStates();
+}
+
+// Legacy function for modal genre grid (checkboxes)
 function initGenreGrid() {
     const grid = document.getElementById('genreGrid');
     if (!grid) return;
@@ -2114,6 +2670,195 @@ function initGenreGrid() {
         </label>
     `).join('');
 }
+
+// ========== INLINE FORM FUNCTIONS ==========
+
+function handleSpotifyPaste(event) {
+    setTimeout(analyzeTrack, 100);
+}
+
+async function analyzeTrack() {
+    const spotifyUrl = document.getElementById('spotifyInput').value.trim();
+    const errorEl = document.getElementById('spotifyError');
+    const analyzingEl = document.getElementById('analyzingState');
+    const inputSection = document.getElementById('spotifyInputSection');
+    const expandedForm = document.getElementById('expandedForm');
+
+    // Reset error
+    errorEl.style.display = 'none';
+
+    if (!spotifyUrl) return;
+
+    // Validate URL
+    if (!spotifyUrl.includes('spotify.com/track/')) {
+        errorEl.textContent = '⚠️ Please enter a valid Spotify track URL';
+        errorEl.style.display = 'block';
+        return;
+    }
+
+    // Show loading
+    inputSection.style.display = 'none';
+    analyzingEl.style.display = 'flex';
+
+    try {
+        const isAiGenerated = document.getElementById('aiGeneratedCheckbox')?.checked || false;
+        const response = await fetch(
+            `${API_BASE}/workflow/spotify/metadata?spotify_url=${encodeURIComponent(spotifyUrl)}&is_ai_generated=${isAiGenerated}`
+        );
+        const data = await response.json();
+
+        if (data.success && data.track_title) {
+            // Show track preview
+            document.getElementById('trackArtInline').src = data.thumbnail_url || '';
+            document.getElementById('trackTitleInline').textContent = data.track_title || 'Unknown Track';
+            document.getElementById('trackArtistInline').textContent = data.artist_name || '';
+            document.getElementById('ftrackTitle').value = data.track_title || '';
+
+            // Auto-fill artist name
+            if (data.artist_name) {
+                document.getElementById('artistInput').value = data.artist_name;
+            }
+
+            // Show AI detected genres
+            if (data.suggested_genres && data.suggested_genres.length > 0) {
+                document.querySelector('#aiDetectedGenres .ai-genres').textContent = data.suggested_genres.slice(0, 3).join(', ');
+                document.getElementById('aiDetectedGenres').style.display = 'block';
+            } else {
+                document.getElementById('aiDetectedGenres').style.display = 'none';
+            }
+
+            // Store AI data
+            document.getElementById('faiGenres').value = JSON.stringify(data.suggested_genres || []);
+            document.getElementById('faiMood').value = JSON.stringify(data.mood || []);
+            document.getElementById('fgenreSource').value = data.genre_source || 'ai';
+
+            // Initialize genre buttons and pre-select
+            initGenreButtons();
+            if (data.suggested_genres && data.suggested_genres.length > 0) {
+                preselectGenres(data.suggested_genres);
+            }
+
+            // Show expanded form
+            analyzingEl.style.display = 'none';
+            expandedForm.style.display = 'block';
+        } else {
+            throw new Error('Could not find track');
+        }
+    } catch (err) {
+        console.error('Spotify lookup failed:', err);
+        analyzingEl.style.display = 'none';
+        inputSection.style.display = 'block';
+        errorEl.textContent = '⚠️ Could not find this track on Spotify. Please check the URL.';
+        errorEl.style.display = 'block';
+    }
+}
+
+function resetForm() {
+    // Reset to initial state
+    document.getElementById('spotifyInput').value = '';
+    document.getElementById('emailInput').value = '';
+    document.getElementById('artistInput').value = '';
+    document.getElementById('aiGeneratedCheckbox').checked = false;
+    selectedGenres = [];
+
+    // Hide all states
+    document.getElementById('spotifyError').style.display = 'none';
+    document.getElementById('analyzingState').style.display = 'none';
+    document.getElementById('expandedForm').style.display = 'none';
+    document.getElementById('successState').style.display = 'none';
+
+    // Show input section
+    document.getElementById('spotifyInputSection').style.display = 'block';
+
+    // Clear hidden fields
+    document.getElementById('fgenres').value = '[]';
+    document.getElementById('fgenre').value = '';
+    document.getElementById('ftrackTitle').value = '';
+    document.getElementById('faiGenres').value = '';
+    document.getElementById('faiMood').value = '';
+}
+
+async function submitInlineForm() {
+    const btn = document.getElementById('submitBtn');
+    const email = document.getElementById('emailInput').value.trim();
+    const artistName = document.getElementById('artistInput').value.trim();
+    const spotifyLink = document.getElementById('spotifyInput').value.trim();
+    const trackTitle = document.getElementById('ftrackTitle').value;
+
+    // Validation
+    if (!email) {
+        alert('Please enter your email');
+        return;
+    }
+    if (!artistName) {
+        alert('Please enter your artist name');
+        return;
+    }
+    if (selectedGenres.length === 0) {
+        alert('Please select at least 1 genre');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    const data = {
+        name: artistName,
+        email: email,
+        artist_name: artistName,
+        spotify_link: spotifyLink,
+        genres: selectedGenres,
+        genre: selectedGenres[0],
+        interested_tier: 'free',
+        bio: '',
+        referral_source: 'Website - Landing Page',
+        has_wallet: 'no',
+        track_title: trackTitle,
+        ai_genres: document.getElementById('faiGenres').value || '[]',
+        ai_mood: document.getElementById('faiMood').value || '[]',
+        ai_pitch: ''
+    };
+
+    try {
+        const response = await fetch(`${API_BASE}/artists/signup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Show success state
+            document.getElementById('successTrackTitle').textContent = `"${trackTitle || 'Your Track'}"`;
+            document.getElementById('expandedForm').style.display = 'none';
+            document.getElementById('successState').style.display = 'block';
+        } else {
+            alert(result.message || 'Something went wrong. Please try again.');
+            btn.disabled = false;
+            btn.textContent = '🚀 Get Free Analysis & Placement';
+        }
+    } catch (err) {
+        console.error('Submit failed:', err);
+        alert('Connection error. Please try again.');
+        btn.disabled = false;
+        btn.textContent = '🚀 Get Free Analysis & Placement';
+    }
+}
+
+// Scroll to inline form
+function scrollToForm() {
+    const formCard = document.getElementById('spotifyCard');
+    if (formCard) {
+        formCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.getElementById('spotifyInput').focus();
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initGenreButtons();
+});
 
 function handleGenreChange(checkbox) {
     const genre = checkbox.value;
