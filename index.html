@@ -406,7 +406,8 @@
             color: var(--gray-700);
             margin-bottom: 8px;
         }
-        .field input {
+        .field input,
+        .field select {
             width: 100%;
             padding: 14px 16px;
             border: 2px solid var(--gray-200);
@@ -414,8 +415,10 @@
             font-size: 1rem;
             font-family: inherit;
             transition: border-color 0.2s;
+            background: var(--white);
         }
-        .field input:focus {
+        .field input:focus,
+        .field select:focus {
             outline: none;
             border-color: var(--primary);
         }
@@ -1937,6 +1940,23 @@
                                     <input type="text" id="artistInput" placeholder="Your artist name" required>
                                 </div>
                             </div>
+                            <div class="field-row">
+                                <div class="field">
+                                    <label for="titleInput">Your Role *</label>
+                                    <select id="titleInput" required>
+                                        <option value="">Select your role...</option>
+                                        <option value="artist">Artist</option>
+                                        <option value="producer">Producer</option>
+                                        <option value="band_manager">Band Manager</option>
+                                        <option value="artist_rep">Artist Rep / Label</option>
+                                        <option value="fan">Fan / Supporter</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label for="nameInput">Your Name *</label>
+                                    <input type="text" id="nameInput" placeholder="Your full name" required>
+                                </div>
+                            </div>
                             <div class="ai-checkbox-row">
                                 <label class="checkbox-label">
                                     <input type="checkbox" id="aiGeneratedCheckbox">
@@ -2758,6 +2778,8 @@ function resetForm() {
     document.getElementById('spotifyInput').value = '';
     document.getElementById('emailInput').value = '';
     document.getElementById('artistInput').value = '';
+    document.getElementById('titleInput').value = '';
+    document.getElementById('nameInput').value = '';
     document.getElementById('aiGeneratedCheckbox').checked = false;
     selectedGenres = [];
 
@@ -2782,6 +2804,8 @@ async function submitInlineForm() {
     const btn = document.getElementById('submitBtn');
     const email = document.getElementById('emailInput').value.trim();
     const artistName = document.getElementById('artistInput').value.trim();
+    const title = document.getElementById('titleInput').value;
+    const name = document.getElementById('nameInput').value.trim();
     const spotifyLink = document.getElementById('spotifyInput').value.trim();
     const trackTitle = document.getElementById('ftrackTitle').value;
 
@@ -2791,7 +2815,15 @@ async function submitInlineForm() {
         return;
     }
     if (!artistName) {
-        alert('Please enter your artist name');
+        alert('Please enter the artist name');
+        return;
+    }
+    if (!title) {
+        alert('Please select your role');
+        return;
+    }
+    if (!name) {
+        alert('Please enter your name');
         return;
     }
     if (selectedGenres.length === 0) {
@@ -2803,7 +2835,7 @@ async function submitInlineForm() {
     btn.textContent = 'Submitting...';
 
     const data = {
-        name: artistName,
+        name: name,
         email: email,
         artist_name: artistName,
         spotify_link: spotifyLink,
@@ -2814,6 +2846,7 @@ async function submitInlineForm() {
         referral_source: 'Website - Landing Page',
         has_wallet: 'no',
         track_title: trackTitle,
+        title: title,
         ai_genres: document.getElementById('faiGenres').value || '[]',
         ai_mood: document.getElementById('faiMood').value || '[]',
         ai_pitch: ''
