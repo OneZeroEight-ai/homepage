@@ -169,7 +169,7 @@
         <div class="stat-card"><div class="icon">📥</div><div class="value" id="statSubmissions">-</div><div class="label">Campaigns</div></div>
         <div class="stat-card"><div class="icon">✅</div><div class="value" id="statPlacements">-</div><div class="label">Placements</div></div>
         <div class="stat-card"><div class="icon">📋</div><div class="value" id="statCurators">-</div><div class="label">Curators</div></div>
-        <div class="stat-card"><div class="icon">🎵</div><div class="value" id="statPlaylists">15</div><div class="label">Playlists</div></div>
+        <div class="stat-card"><div class="icon">🎵</div><div class="value" id="statPlaylists">-</div><div class="label">Playlists</div></div>
         <div class="stat-card"><div class="icon">💬</div><div class="value" id="statDiscord">0</div><div class="label">Discord</div></div>
     </div>
 
@@ -177,7 +177,7 @@
         <button class="tab active" onclick="showPanel('submissions')">📥 Campaigns <span class="count" id="tabSubmissions">0</span></button>
         <button class="tab" onclick="showPanel('artists')">🎤 Artists <span class="count" id="tabArtists">0</span></button>
         <button class="tab" onclick="showPanel('curators')">📋 Curators <span class="count" id="tabCurators">0</span></button>
-        <button class="tab" onclick="showPanel('playlists')">🎵 Playlists <span class="count">15</span></button>
+        <button class="tab" onclick="showPanel('playlists')">🎵 Playlists <span class="count" id="tabPlaylists">-</span></button>
     </div>
 
     <div class="panel active" id="panel-submissions">
@@ -203,8 +203,28 @@
 
     <div class="panel" id="panel-playlists">
         <div class="card">
-            <div class="card-header"><h2>🎵 OneZeroEight Playlists</h2></div>
+            <div class="card-header"><h2>🎵 OneZeroEight Playlists</h2><span style="color:var(--gray-500);">(For artist placements)</span></div>
             <div class="card-body"><table><thead><tr><th>Playlist</th><th>Genres</th><th>Spotify ID</th><th>Actions</th></tr></thead><tbody id="playlistsTable"></tbody></table></div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h2>📋 Curator Playlists</h2>
+                <span id="curatorPlaylistCount" style="color:var(--gray-500);"></span>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <select id="genreFilter" onchange="loadCuratorPlaylists(1)" style="padding:8px 12px;border:1px solid var(--gray-300);border-radius:8px;font-size:0.85rem;">
+                        <option value="">All Genres</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm" onclick="loadCuratorPlaylists(1)">↻ Refresh</button>
+                </div>
+            </div>
+            <div class="card-body"><table><thead><tr><th>Playlist</th><th>Curator</th><th>Followers</th><th>Genres</th><th>Actions</th></tr></thead><tbody id="curatorPlaylistsTable"><tr><td colspan="5" class="loading"><div class="spinner"></div>Loading...</td></tr></tbody></table></div>
+            <div style="padding:16px 20px;border-top:1px solid var(--gray-200);display:flex;justify-content:space-between;align-items:center;">
+                <span id="curatorPlaylistPagination" style="color:var(--gray-500);font-size:0.85rem;"></span>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-ghost btn-sm" id="prevPageBtn" onclick="loadCuratorPlaylists(curatorPlaylistPage - 1)" disabled>← Prev</button>
+                    <button class="btn btn-ghost btn-sm" id="nextPageBtn" onclick="loadCuratorPlaylists(curatorPlaylistPage + 1)">Next →</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -361,6 +381,10 @@ async function loadStats() {
         document.getElementById('statCurators').textContent = sd.total_curators || 0;
         document.getElementById('tabCurators').textContent = sd.total_curators || 0;
         document.getElementById('statPlacements').textContent = sd.total_placements || 0;
+        if (sd.total_playlists) {
+            document.getElementById('statPlaylists').textContent = sd.total_playlists.toLocaleString();
+            document.getElementById('tabPlaylists').textContent = sd.total_playlists.toLocaleString();
+        }
 
         updateApiStatus('ok', 'API Online');
     } catch (e) {
@@ -468,6 +492,68 @@ function loadPlaylists() {
             '<td style="font-family:JetBrains Mono,monospace;font-size:0.8rem;color:var(--gray-500);">' + p.id + '</td>' +
             '<td><a href="https://open.spotify.com/playlist/' + p.id + '" target="_blank" class="action-btn">🎵 Open</a></td></tr>';
     }).join('');
+    // Also load curator playlists and populate genre filter
+    loadCuratorPlaylists(1);
+    populateGenreFilter();
+}
+
+let curatorPlaylistPage = 1;
+const CURATOR_PLAYLIST_PAGE_SIZE = 50;
+const ALL_GENRES = ['hip-hop','pop','folk','rock','electronic','edm','house','techno','r&b','rnb','jazz','classical','country','indie','alternative','metal','punk','soul','funk','reggae','latin','blues','ambient','chill','lofi','lo-fi','dance','disco','trap','dubstep','acoustic','k-pop','kpop','j-pop','world','afrobeat','reggaeton','rap','singer-songwriter','spiritual','meditation'];
+
+function populateGenreFilter() {
+    var select = document.getElementById('genreFilter');
+    select.innerHTML = '<option value="">All Genres</option>' + ALL_GENRES.map(g => '<option value="' + g + '">' + g + '</option>').join('');
+}
+
+async function loadCuratorPlaylists(page) {
+    curatorPlaylistPage = page || 1;
+    var tbody = document.getElementById('curatorPlaylistsTable');
+    tbody.innerHTML = '<tr><td colspan="5" class="loading"><div class="spinner"></div>Loading...</td></tr>';
+
+    var genre = document.getElementById('genreFilter').value;
+    var url = API + '/admin/playlists?page=' + curatorPlaylistPage + '&page_size=' + CURATOR_PLAYLIST_PAGE_SIZE;
+    if (genre) url += '&genre=' + encodeURIComponent(genre);
+
+    try {
+        var r = await fetch(url);
+        var d = await r.json();
+        var playlists = d.playlists || [];
+        var total = d.total || 0;
+
+        document.getElementById('curatorPlaylistCount').textContent = '(' + total.toLocaleString() + ' total)';
+        document.getElementById('statPlaylists').textContent = total.toLocaleString();
+        document.getElementById('tabPlaylists').textContent = total.toLocaleString();
+
+        // Update pagination
+        var start = (curatorPlaylistPage - 1) * CURATOR_PLAYLIST_PAGE_SIZE + 1;
+        var end = Math.min(curatorPlaylistPage * CURATOR_PLAYLIST_PAGE_SIZE, total);
+        document.getElementById('curatorPlaylistPagination').textContent = 'Showing ' + start + '-' + end + ' of ' + total.toLocaleString();
+        document.getElementById('prevPageBtn').disabled = curatorPlaylistPage <= 1;
+        document.getElementById('nextPageBtn').disabled = end >= total;
+
+        if (playlists.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="empty-state">📭 No playlists found</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = playlists.map(p => {
+            var genres = (p.genres || []).slice(0, 3).map(g => '<span class="badge badge-info" style="margin:2px;">' + escapeHtml(g) + '</span>').join('');
+            var spotifyUrl = p.spotify_url || ('https://open.spotify.com/playlist/' + p.spotify_playlist_id);
+            return '<tr>' +
+                '<td><strong>' + escapeHtml(p.name || 'Untitled') + '</strong><br><span style="font-size:0.75rem;color:var(--gray-500);">' + escapeHtml(p.spotify_playlist_id) + '</span></td>' +
+                '<td>' + escapeHtml(p.curator_name || '-') + '<br><span style="font-size:0.75rem;color:var(--gray-500);">' + escapeHtml(p.curator_email || p.submission_email || '') + '</span></td>' +
+                '<td style="font-family:JetBrains Mono,monospace;">' + (p.followers || 0).toLocaleString() + '</td>' +
+                '<td>' + (genres || '-') + '</td>' +
+                '<td class="actions">' +
+                '<a href="' + escapeHtml(spotifyUrl) + '" target="_blank" class="action-btn">🎵 Open</a>' +
+                (p.submission_email ? '<button class="action-btn" onclick="emailCurator(\'' + escapeHtml(p.submission_email) + '\')">📧</button>' : '') +
+                '</td></tr>';
+        }).join('');
+    } catch (e) {
+        debugLog('Load curator playlists error: ' + e.message, 'error');
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">⚠️ Failed: ' + e.message + '</td></tr>';
+    }
 }
 
 function viewArtist(id) {
