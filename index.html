@@ -1480,9 +1480,12 @@
         /* Genre Checkbox Grid */
         .genre-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
             margin-top: 12px;
+            max-height: 320px;
+            overflow-y: auto;
+            padding-right: 8px;
         }
         .genre-item {
             display: flex;
@@ -1531,9 +1534,16 @@
         .genre-counter.full {
             color: var(--danger);
         }
+        @media (max-width: 768px) {
+            .genre-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-height: 280px;
+            }
+        }
         @media (max-width: 600px) {
             .genre-grid {
                 grid-template-columns: repeat(2, 1fr);
+                max-height: 240px;
             }
             .genre-item {
                 padding: 10px;
@@ -2563,23 +2573,37 @@
 <script>
 const API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
 
-// Genre configuration - 15 genres matching playlists
+// Genre configuration - all genres from curator database
 const GENRES = [
-    { key: 'electronic', label: 'Electronic', emoji: '⚡' },
-    { key: 'lofi', label: 'Lo-Fi', emoji: '☕' },
-    { key: 'hiphop', label: 'Hip Hop', emoji: '🎤' },
+    // Most popular in database
+    { key: 'rap', label: 'Rap', emoji: '🎤' },
+    { key: 'hip-hop', label: 'Hip Hop', emoji: '🔊' },
+    { key: 'techno', label: 'Techno', emoji: '🎧' },
+    { key: 'trap', label: 'Trap', emoji: '💎' },
+    { key: 'edm', label: 'EDM', emoji: '⚡' },
+    { key: 'rock', label: 'Rock', emoji: '🎸' },
+    { key: 'indie', label: 'Indie', emoji: '🍂' },
+    { key: 'electronic', label: 'Electronic', emoji: '🤖' },
+    { key: 'funk', label: 'Funk', emoji: '🕺' },
+    { key: 'reggaeton', label: 'Reggaeton', emoji: '🔥' },
+    { key: 'metal', label: 'Metal', emoji: '🤘' },
+    { key: 'country', label: 'Country', emoji: '🤠' },
+    { key: 'alternative', label: 'Alternative', emoji: '🌀' },
+    { key: 'world', label: 'World', emoji: '🌍' },
+    { key: 'latin', label: 'Latin', emoji: '💃' },
+    { key: 'lo-fi', label: 'Lo-Fi', emoji: '☕' },
+    { key: 'disco', label: 'Disco', emoji: '🪩' },
+    { key: 'acoustic', label: 'Acoustic', emoji: '🪕' },
+    { key: 'jazz', label: 'Jazz', emoji: '🎷' },
+    { key: 'reggae', label: 'Reggae', emoji: '🟢' },
+    { key: 'meditation', label: 'Meditation', emoji: '🧘' },
+    { key: 'kpop', label: 'K-Pop', emoji: '🇰🇷' },
+    { key: 'classical', label: 'Classical', emoji: '🎻' },
+    { key: 'folk', label: 'Folk', emoji: '🪶' },
     { key: 'pop', label: 'Pop', emoji: '✨' },
     { key: 'rnb', label: 'R&B', emoji: '💜' },
     { key: 'ambient', label: 'Ambient', emoji: '🌙' },
-    { key: 'rock', label: 'Rock', emoji: '🎸' },
-    { key: 'indie', label: 'Indie', emoji: '🍂' },
-    { key: 'jazz', label: 'Jazz', emoji: '🎷' },
-    { key: 'classical', label: 'Classical', emoji: '🎻' },
-    { key: 'latin', label: 'Latin', emoji: '🔥' },
-    { key: 'world', label: 'World', emoji: '🌍' },
-    { key: 'country', label: 'Country', emoji: '🤠' },
-    { key: 'gospel', label: 'Gospel', emoji: '🙏' },
-    { key: 'discoveries', label: 'Other', emoji: '🎵' },
+    { key: 'other', label: 'Other', emoji: '🎵' },
 ];
 
 const MAX_GENRES = 3;
@@ -2587,23 +2611,35 @@ let selectedGenres = [];
 
 // AI genre mapping to our playlist keys
 const AI_GENRE_MAP = {
-    'electronic': 'electronic', 'edm': 'electronic', 'house': 'electronic', 'techno': 'electronic',
-    'trance': 'electronic', 'synthwave': 'electronic', 'dubstep': 'electronic', 'drum and bass': 'electronic',
-    'lo-fi': 'lofi', 'lofi': 'lofi', 'chillhop': 'lofi', 'chill': 'lofi', 'downtempo': 'lofi',
-    'hip hop': 'hiphop', 'hip-hop': 'hiphop', 'rap': 'hiphop', 'trap': 'hiphop', 'drill': 'hiphop',
+    // Rap & Hip Hop
+    'rap': 'rap', 'hip hop': 'hip-hop', 'hip-hop': 'hip-hop', 'hiphop': 'hip-hop',
+    'trap': 'trap', 'drill': 'trap',
+    // Electronic
+    'electronic': 'electronic', 'edm': 'edm', 'house': 'edm', 'techno': 'techno',
+    'trance': 'edm', 'synthwave': 'electronic', 'dubstep': 'edm', 'drum and bass': 'edm',
+    // Lo-Fi & Chill
+    'lo-fi': 'lo-fi', 'lofi': 'lo-fi', 'chillhop': 'lo-fi', 'chill': 'lo-fi', 'downtempo': 'lo-fi',
+    // Pop & R&B
     'pop': 'pop', 'indie pop': 'pop', 'synth pop': 'pop', 'electropop': 'pop', 'dance pop': 'pop',
     'r&b': 'rnb', 'rnb': 'rnb', 'soul': 'rnb', 'neo-soul': 'rnb',
-    'ambient': 'ambient', 'atmospheric': 'ambient', 'meditation': 'ambient', 'drone': 'ambient',
-    'rock': 'rock', 'alternative': 'rock', 'indie rock': 'rock',
-    'indie': 'indie', 'folk': 'indie', 'acoustic': 'indie', 'singer-songwriter': 'indie',
+    // Rock & Alternative
+    'rock': 'rock', 'alternative': 'alternative', 'indie rock': 'indie', 'alt rock': 'alternative',
+    'metal': 'metal', 'heavy metal': 'metal', 'punk': 'rock', 'punk rock': 'rock',
+    // Indie & Folk
+    'indie': 'indie', 'folk': 'folk', 'acoustic': 'acoustic', 'singer-songwriter': 'folk',
+    // Jazz & Classical
     'jazz': 'jazz', 'blues': 'jazz', 'smooth jazz': 'jazz',
     'classical': 'classical', 'orchestral': 'classical', 'cinematic': 'classical', 'piano': 'classical',
-    'latin': 'latin', 'reggaeton': 'latin', 'salsa': 'latin', 'bachata': 'latin',
+    // Latin & World
+    'latin': 'latin', 'reggaeton': 'reggaeton', 'salsa': 'latin', 'bachata': 'latin',
     'world': 'world', 'afrobeats': 'world', 'african': 'world',
+    'reggae': 'reggae', 'dancehall': 'reggae',
+    // Other
     'country': 'country', 'americana': 'country', 'bluegrass': 'country', 'western': 'country',
-    'gospel': 'gospel', 'christian': 'gospel', 'worship': 'gospel', 'ccm': 'gospel',
-    'metal': 'rock', 'heavy metal': 'rock', 'punk': 'rock', 'punk rock': 'rock',
-    'reggae': 'world', 'dancehall': 'world', 'funk': 'rnb', 'disco': 'pop'
+    'funk': 'funk', 'disco': 'disco',
+    'ambient': 'ambient', 'atmospheric': 'ambient', 'meditation': 'meditation', 'drone': 'ambient',
+    'kpop': 'kpop', 'k-pop': 'kpop',
+    'gospel': 'other', 'christian': 'other', 'worship': 'other'
 };
 
 // Initialize genre toggle buttons (for inline form)
