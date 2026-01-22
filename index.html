@@ -2561,7 +2561,7 @@
                 <input type="hidden" id="fpromoValid" value="">
                 <input type="hidden" id="ffinalPrice" value="0">
                 
-                <button type="submit" class="form-submit" id="submitBtn">
+                <button type="submit" class="form-submit" id="modalSubmitBtn">
                     Start Free Trial →
                 </button>
                 <p class="form-note">No credit card required. We'll email you next steps.</p>
@@ -3014,7 +3014,7 @@ function openModal(tier = 'free') {
     const subtext = document.querySelector('.modal-header p');
     const albumSection = document.getElementById('albumSection');
     const trackSection = document.getElementById('trackSection');
-    const submitBtn = document.getElementById('submitBtn');
+    const modalSubmitBtn = document.getElementById('modalSubmitBtn');
     const promoSection = document.getElementById('promoSection');
     const priceSummary = document.getElementById('priceSummary');
 
@@ -3027,11 +3027,11 @@ function openModal(tier = 'free') {
     // Reset visibility
     albumSection.style.display = 'none';
     trackSection.style.display = 'block';
-    
+
     if (tier === 'pro') {
         header.textContent = '🚀 Get Pro Access';
         subtext.textContent = 'Full agent suite + 3000 external curators — $49/track';
-        submitBtn.textContent = 'Continue to Payment →';
+        modalSubmitBtn.textContent = 'Continue to Payment →';
         promoSection.style.display = 'block';
         priceSummary.style.display = 'block';
         document.getElementById('subtotalPrice').textContent = '$49.00';
@@ -3042,7 +3042,7 @@ function openModal(tier = 'free') {
         subtext.textContent = '10 tracks promoted together — $199';
         albumSection.style.display = 'block';
         trackSection.style.display = 'none';
-        submitBtn.textContent = 'Continue to Payment →';
+        modalSubmitBtn.textContent = 'Continue to Payment →';
         promoSection.style.display = 'block';
         priceSummary.style.display = 'block';
         document.getElementById('subtotalPrice').textContent = '$199.00';
@@ -3051,7 +3051,7 @@ function openModal(tier = 'free') {
     } else {
         header.textContent = '🚀 Start Your Free Trial';
         subtext.textContent = 'Get your music on OneZeroEight playlists—no payment required';
-        submitBtn.textContent = 'Start Free Trial →';
+        modalSubmitBtn.textContent = 'Start Free Trial →';
         promoSection.style.display = 'none';
         priceSummary.style.display = 'none';
         document.getElementById('ffinalPrice').value = '0';
@@ -3249,7 +3249,7 @@ async function applyPromoCode() {
             document.getElementById('discountRow').style.display = 'flex';
             document.getElementById('discountAmount').textContent = '-$' + (data.discount_amount / 100).toFixed(2);
             document.getElementById('totalPrice').textContent = data.is_free ? 'FREE' : '$' + (data.final_price / 100).toFixed(2);
-            if (data.is_free) document.getElementById('submitBtn').textContent = 'Activate Free Access →';
+            if (data.is_free) document.getElementById('modalSubmitBtn').textContent = 'Activate Free Access →';
             msgEl.innerHTML = '<span style="color: var(--secondary);">✓ ' + data.discount_description + ' applied!</span>';
         } else {
             document.getElementById('fpromoValid').value = '';
@@ -3326,7 +3326,7 @@ async function submitWithRetry(url, options, maxRetries, onRetry) {
 async function submitForm(e) {
     e.preventDefault();
 
-    const btn = document.getElementById('submitBtn');
+    const btn = document.getElementById('modalSubmitBtn');
     const msg = document.getElementById('formMessage');
     const originalText = btn.textContent;
 
