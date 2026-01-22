@@ -1855,7 +1855,142 @@
             .footer-grid { grid-template-columns: 1fr; }
             .footer-brand { grid-column: span 1; }
         }
+
+        /* Wallet Button Styles */
+        .wallet-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            background: linear-gradient(135deg, #f6851b, #e2761b);
+            color: white !important;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .wallet-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(246, 133, 27, 0.3);
+        }
+        .wallet-btn.connected {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .wallet-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+        .sutra-balance {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .wallet-address {
+            color: var(--gray-600);
+            font-family: monospace;
+            font-size: 0.75rem;
+        }
+        .disconnect-btn {
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 2px 4px;
+            font-size: 0.9rem;
+        }
+        .disconnect-btn:hover {
+            color: #ef4444;
+        }
+        .sutra-discount-banner {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sutra-discount-banner .icon {
+            font-size: 1.5rem;
+        }
+        .sutra-discount-banner .text {
+            flex: 1;
+        }
+        .sutra-discount-banner .discount {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+        /* Payment Methods */
+        .payment-methods {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .payment-option {
+            flex: 1;
+            cursor: pointer;
+        }
+        .payment-option input {
+            display: none;
+        }
+        .payment-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .payment-option input:checked + .payment-card {
+            border-color: var(--primary);
+            background: #f0f0ff;
+        }
+        .payment-card.sutra-pay {
+            background: linear-gradient(135deg, #f8f7ff, #f0edff);
+        }
+        .payment-option input:checked + .payment-card.sutra-pay {
+            border-color: #8b5cf6;
+            background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+        }
+        .payment-icon {
+            font-size: 1.3rem;
+            margin-bottom: 6px;
+        }
+        .payment-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.85rem;
+        }
+        .payment-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .payment-balance {
+            font-size: 0.7rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+        .insufficient-balance {
+            color: #ef4444 !important;
+        }
+        @media (max-width: 768px) {
+            .wallet-btn { padding: 6px 10px; font-size: 0.8rem; }
+            .wallet-status { display: none; }
+        }
     </style>
+    <!-- Ethers.js for Web3/MetaMask interaction -->
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
 </head>
 <body>
 
@@ -1869,6 +2004,12 @@
             <li><a href="#social-hub">Social Hub</a></li>
             <li><a href="#pricing">Pricing</a></li>
             <li><a href="#sutra">SUTRA</a></li>
+            <li>
+                <button id="walletBtn" class="wallet-btn" onclick="connectWallet()">
+                    <span id="walletIcon">&#129418;</span>
+                    <span id="walletText">Connect Wallet</span>
+                </button>
+            </li>
             <li><a href="#" onclick="scrollToForm(); return false;" class="nav-cta">Start Free</a></li>
         </ul>
         <button class="mobile-menu-btn" onclick="scrollToForm()">☰</button>
@@ -2560,6 +2701,33 @@
                 <input type="hidden" id="falbumTracks" value="">
                 <input type="hidden" id="fpromoValid" value="">
                 <input type="hidden" id="ffinalPrice" value="0">
+                <input type="hidden" id="fpaymentMethod" value="usd">
+                <input type="hidden" id="fholderDiscount" value="0">
+                <input type="hidden" id="fwalletAddress" value="">
+
+                <!-- Payment Method Selection (shown when wallet connected + paid tier) -->
+                <div id="paymentMethodSection" class="form-group" style="display: none;">
+                    <label>Payment Method</label>
+                    <div class="payment-methods">
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="usd" checked onchange="updatePaymentMethod()">
+                            <span class="payment-card">
+                                <span class="payment-icon">&#128179;</span>
+                                <span class="payment-name">Pay with Card</span>
+                                <span class="payment-price" id="usdPrice">$39.20</span>
+                            </span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="sutra" onchange="updatePaymentMethod()">
+                            <span class="payment-card sutra-pay">
+                                <span class="payment-icon">&#127802;</span>
+                                <span class="payment-name">Pay with SUTRA</span>
+                                <span class="payment-price" id="sutraPrice">392 SUTRA</span>
+                                <span class="payment-balance">Balance: <span id="paymentSutraBalance">0</span></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
                 
                 <button type="submit" class="form-submit" id="modalSubmitBtn">
                     Start Free Trial →
@@ -2572,6 +2740,484 @@
 
 <script>
 const API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
+
+// ===========================================
+// METAMASK WALLET CONNECTION
+// ===========================================
+
+// SUTRA Token Contract on Polygon
+const SUTRA_CONTRACT = {
+    address: "0x0b3f81d3e1fa01e911a8b4e49048eea0ddf2a896",
+    chainId: 137,
+    decimals: 18
+};
+
+// Treasury wallet for SUTRA payments
+const TREASURY_WALLET = "0x1234567890123456789012345678901234567890"; // Replace with actual treasury
+
+// SUTRA rate: 1 SUTRA = $0.10
+const SUTRA_RATE = 0.10;
+
+// Wallet state
+let walletState = {
+    connected: false,
+    address: null,
+    sutraBalance: 0,
+    provider: null,
+    signer: null
+};
+
+// SUTRA Token ABI (minimal for balance check and transfer)
+const SUTRA_ABI = [
+    "function balanceOf(address owner) view returns (uint256)",
+    "function transfer(address to, uint256 amount) returns (bool)",
+    "function approve(address spender, uint256 amount) returns (bool)",
+    "function allowance(address owner, address spender) view returns (uint256)"
+];
+
+// Check if MetaMask is installed
+function isMetaMaskInstalled() {
+    return typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask;
+}
+
+// Connect wallet
+async function connectWallet() {
+    if (!isMetaMaskInstalled()) {
+        window.open('https://metamask.io/download/', '_blank');
+        showToast('Please install MetaMask to connect your wallet', 'warning');
+        return;
+    }
+
+    try {
+        // Request account access
+        const accounts = await window.ethereum.request({
+            method: 'eth_requestAccounts'
+        });
+
+        if (accounts.length === 0) {
+            showToast('No accounts found. Please unlock MetaMask.', 'error');
+            return;
+        }
+
+        // Check if on Polygon network
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+
+        if (chainId !== '0x89') {
+            await switchToPolygon();
+        }
+
+        // Initialize ethers provider
+        walletState.provider = new ethers.providers.Web3Provider(window.ethereum);
+        walletState.signer = walletState.provider.getSigner();
+        walletState.address = accounts[0];
+        walletState.connected = true;
+
+        // Get SUTRA balance
+        await updateSutraBalance();
+
+        // Update UI
+        updateWalletUI();
+
+        // Store connection preference
+        localStorage.setItem('walletConnected', 'true');
+
+        showToast('Wallet connected!', 'success');
+
+        // Apply discount if has SUTRA
+        if (walletState.sutraBalance > 0) {
+            applyHolderDiscount();
+        }
+
+    } catch (error) {
+        console.error('Wallet connection error:', error);
+        if (error.code === 4001) {
+            showToast('Connection rejected by user', 'error');
+        } else {
+            showToast('Failed to connect wallet: ' + error.message, 'error');
+        }
+    }
+}
+
+// Switch to Polygon network
+async function switchToPolygon() {
+    try {
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x89' }]
+        });
+    } catch (switchError) {
+        if (switchError.code === 4902) {
+            await window.ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [{
+                    chainId: '0x89',
+                    chainName: 'Polygon Mainnet',
+                    nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 },
+                    rpcUrls: ['https://polygon-rpc.com/'],
+                    blockExplorerUrls: ['https://polygonscan.com/']
+                }]
+            });
+        } else {
+            throw switchError;
+        }
+    }
+}
+
+// Get SUTRA balance
+async function updateSutraBalance() {
+    if (!walletState.connected || !walletState.address) return;
+
+    try {
+        const sutraContract = new ethers.Contract(
+            SUTRA_CONTRACT.address,
+            SUTRA_ABI,
+            walletState.provider
+        );
+
+        const balance = await sutraContract.balanceOf(walletState.address);
+        walletState.sutraBalance = parseFloat(ethers.utils.formatUnits(balance, 18));
+        console.log('SUTRA Balance:', walletState.sutraBalance);
+    } catch (error) {
+        console.error('Error getting SUTRA balance:', error);
+        walletState.sutraBalance = 0;
+    }
+}
+
+// Disconnect wallet
+function disconnectWallet() {
+    walletState = {
+        connected: false,
+        address: null,
+        sutraBalance: 0,
+        provider: null,
+        signer: null
+    };
+
+    localStorage.removeItem('walletConnected');
+    updateWalletUI();
+    removeHolderDiscount();
+    showToast('Wallet disconnected', 'success');
+}
+
+// Update wallet UI
+function updateWalletUI() {
+    const walletBtn = document.getElementById('walletBtn');
+    const walletText = document.getElementById('walletText');
+
+    if (walletState.connected) {
+        walletBtn.classList.add('connected');
+        walletText.textContent = shortenAddress(walletState.address);
+
+        // Store wallet address in hidden field
+        const walletField = document.getElementById('fwalletAddress');
+        if (walletField) walletField.value = walletState.address;
+
+        // Update modal if open
+        updateModalWalletState();
+    } else {
+        walletBtn.classList.remove('connected');
+        walletText.textContent = 'Connect Wallet';
+
+        const walletField = document.getElementById('fwalletAddress');
+        if (walletField) walletField.value = '';
+    }
+}
+
+// Helper: Shorten address
+function shortenAddress(address) {
+    if (!address) return '';
+    return address.slice(0, 6) + '...' + address.slice(-4);
+}
+
+// Helper: Format SUTRA balance
+function formatSutraBalance(balance) {
+    if (balance >= 1000000) {
+        return (balance / 1000000).toFixed(2) + 'M';
+    } else if (balance >= 1000) {
+        return (balance / 1000).toFixed(2) + 'K';
+    } else {
+        return balance.toFixed(2);
+    }
+}
+
+// Apply 20% discount for SUTRA holders
+function applyHolderDiscount() {
+    if (walletState.sutraBalance <= 0) return;
+
+    const modalBody = document.querySelector('.modal-body');
+    if (modalBody && !document.getElementById('sutraDiscountBanner')) {
+        const banner = document.createElement('div');
+        banner.id = 'sutraDiscountBanner';
+        banner.className = 'sutra-discount-banner';
+        banner.innerHTML = `
+            <span class="icon">&#127802;</span>
+            <div class="text">
+                <strong>SUTRA Holder Detected!</strong><br>
+                You have ${formatSutraBalance(walletState.sutraBalance)} SUTRA
+            </div>
+            <span class="discount">20% OFF</span>
+        `;
+        modalBody.insertBefore(banner, modalBody.firstChild);
+    }
+
+    updatePricingWithDiscount();
+}
+
+function removeHolderDiscount() {
+    const banner = document.getElementById('sutraDiscountBanner');
+    if (banner) banner.remove();
+
+    const holderRow = document.getElementById('holderDiscountRow');
+    if (holderRow) holderRow.style.display = 'none';
+
+    document.getElementById('fholderDiscount').value = '0';
+    updatePricingWithDiscount();
+}
+
+function updatePricingWithDiscount() {
+    const tier = document.getElementById('ftier')?.value || 'free';
+    const promo = document.getElementById('fpromoValid')?.value || '';
+
+    const basePrices = { free: 0, pro: 4900, album: 19900 };
+    let price = basePrices[tier] || 0;
+    let originalPrice = price;
+
+    // Apply SUTRA holder discount (20%)
+    let holderDiscount = 0;
+    if (walletState.connected && walletState.sutraBalance > 0 && price > 0) {
+        holderDiscount = Math.round(price * 0.20);
+        price -= holderDiscount;
+    }
+
+    // Update display
+    const subtotal = document.getElementById('subtotalPrice');
+    const holderRow = document.getElementById('holderDiscountRow');
+    const total = document.getElementById('totalPrice');
+
+    if (subtotal) subtotal.textContent = '$' + (originalPrice / 100).toFixed(2);
+
+    if (holderDiscount > 0) {
+        if (!holderRow) {
+            const discountRow = document.getElementById('discountRow');
+            if (discountRow && discountRow.parentNode) {
+                const newRow = document.createElement('div');
+                newRow.id = 'holderDiscountRow';
+                newRow.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:8px;color:#10b981;';
+                newRow.innerHTML = `
+                    <span>&#127802; SUTRA Holder (-20%):</span>
+                    <span id="holderDiscountAmount">-$${(holderDiscount / 100).toFixed(2)}</span>
+                `;
+                discountRow.parentNode.insertBefore(newRow, discountRow.nextSibling);
+            }
+        } else {
+            document.getElementById('holderDiscountAmount').textContent = '-$' + (holderDiscount / 100).toFixed(2);
+            holderRow.style.display = 'flex';
+        }
+    } else if (holderRow) {
+        holderRow.style.display = 'none';
+    }
+
+    if (total) total.textContent = price === 0 ? 'FREE' : '$' + (price / 100).toFixed(2);
+
+    document.getElementById('ffinalPrice').value = price;
+    document.getElementById('fholderDiscount').value = holderDiscount;
+
+    // Update payment method section
+    updatePaymentMethodVisibility();
+}
+
+function updatePaymentMethodVisibility() {
+    const tier = document.getElementById('ftier')?.value || 'free';
+    const paymentSection = document.getElementById('paymentMethodSection');
+    const finalPrice = parseInt(document.getElementById('ffinalPrice')?.value) || 0;
+
+    if (paymentSection && walletState.connected && finalPrice > 0) {
+        paymentSection.style.display = 'block';
+        updatePaymentMethod();
+    } else if (paymentSection) {
+        paymentSection.style.display = 'none';
+        document.getElementById('fpaymentMethod').value = 'usd';
+    }
+}
+
+function updatePaymentMethod() {
+    const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'usd';
+    const finalPrice = parseInt(document.getElementById('ffinalPrice')?.value || 0);
+    const usdPrice = finalPrice / 100;
+    const sutraPrice = Math.ceil(usdPrice / SUTRA_RATE);
+
+    document.getElementById('usdPrice').textContent = '$' + usdPrice.toFixed(2);
+    document.getElementById('sutraPrice').textContent = sutraPrice + ' SUTRA';
+    document.getElementById('paymentSutraBalance').textContent = formatSutraBalance(walletState.sutraBalance);
+
+    // Check if sufficient balance
+    const balanceEl = document.querySelector('.payment-balance');
+    const sutraRadio = document.querySelector('input[value="sutra"]');
+
+    if (walletState.sutraBalance < sutraPrice) {
+        if (balanceEl) balanceEl.classList.add('insufficient-balance');
+        if (sutraRadio) sutraRadio.disabled = true;
+    } else {
+        if (balanceEl) balanceEl.classList.remove('insufficient-balance');
+        if (sutraRadio) sutraRadio.disabled = false;
+    }
+
+    // Update submit button
+    const submitBtn = document.getElementById('modalSubmitBtn');
+    if (submitBtn) {
+        if (method === 'sutra' && usdPrice > 0) {
+            submitBtn.textContent = `Pay ${sutraPrice} SUTRA →`;
+        } else if (usdPrice === 0) {
+            submitBtn.textContent = 'Start Free Trial →';
+        } else {
+            submitBtn.textContent = 'Continue to Payment →';
+        }
+    }
+
+    document.getElementById('fpaymentMethod').value = method;
+}
+
+// Update modal when wallet state changes
+function updateModalWalletState() {
+    const modal = document.getElementById('modal');
+    if (modal && modal.style.display === 'flex') {
+        if (walletState.connected && walletState.sutraBalance > 0) {
+            applyHolderDiscount();
+        } else {
+            removeHolderDiscount();
+        }
+        updatePaymentMethodVisibility();
+    }
+}
+
+// Process SUTRA payment
+async function processSutraPayment(sutraAmount) {
+    if (!walletState.connected || !walletState.signer) {
+        showToast('Please connect your wallet first', 'error');
+        return { success: false, error: 'Wallet not connected' };
+    }
+
+    try {
+        const sutraContract = new ethers.Contract(
+            SUTRA_CONTRACT.address,
+            SUTRA_ABI,
+            walletState.signer
+        );
+
+        const amountWei = ethers.utils.parseUnits(sutraAmount.toString(), 18);
+
+        showToast('Confirming payment...', 'info');
+        const transferTx = await sutraContract.transfer(TREASURY_WALLET, amountWei);
+        const receipt = await transferTx.wait();
+
+        return {
+            success: true,
+            txHash: receipt.transactionHash,
+            amount: sutraAmount
+        };
+
+    } catch (error) {
+        console.error('SUTRA payment error:', error);
+
+        if (error.code === 4001) {
+            return { success: false, error: 'Transaction rejected by user' };
+        }
+
+        return { success: false, error: error.message };
+    }
+}
+
+// Listen for account changes
+if (typeof window.ethereum !== 'undefined') {
+    window.ethereum.on('accountsChanged', async (accounts) => {
+        if (accounts.length === 0) {
+            disconnectWallet();
+        } else {
+            walletState.address = accounts[0];
+            await updateSutraBalance();
+            updateWalletUI();
+        }
+    });
+
+    window.ethereum.on('chainChanged', (chainId) => {
+        if (chainId !== '0x89') {
+            showToast('Please switch to Polygon network for SUTRA', 'warning');
+        }
+        window.location.reload();
+    });
+}
+
+// Auto-connect if previously connected
+document.addEventListener('DOMContentLoaded', async () => {
+    if (localStorage.getItem('walletConnected') === 'true' && isMetaMaskInstalled()) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                await connectWallet();
+            }
+        } catch (e) {
+            console.log('Auto-connect failed:', e);
+        }
+    }
+});
+
+// Toast notification helper
+function showToast(message, type = 'info') {
+    // Remove existing toast
+    const existing = document.getElementById('toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 14px 20px;
+        border-radius: 10px;
+        color: white;
+        font-weight: 500;
+        font-size: 0.9rem;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    `;
+
+    const colors = {
+        success: '#10b981',
+        error: '#ef4444',
+        warning: '#f59e0b',
+        info: '#6366f1'
+    };
+    toast.style.background = colors[type] || colors.info;
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    // Add animation keyframes if not exists
+    if (!document.getElementById('toastStyles')) {
+        const style = document.createElement('style');
+        style.id = 'toastStyles';
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300);
+    }, 4000);
+}
+
+// ===========================================
+// END WALLET CONNECTION
+// ===========================================
 
 // Genre configuration - all genres from curator database
 const GENRES = [
@@ -3349,6 +3995,80 @@ async function submitForm(e) {
 
     // For paid tiers with payment required
     if (tier !== 'free' && finalPrice > 0) {
+        const paymentMethod = document.getElementById('fpaymentMethod')?.value || 'usd';
+        const holderDiscount = parseInt(document.getElementById('fholderDiscount')?.value) || 0;
+
+        // Handle SUTRA payment
+        if (paymentMethod === 'sutra' && walletState.connected) {
+            const sutraAmount = Math.ceil((finalPrice / 100) / SUTRA_RATE);
+
+            btn.textContent = 'Processing SUTRA payment...';
+
+            const paymentResult = await processSutraPayment(sutraAmount);
+
+            if (!paymentResult.success) {
+                msg.className = 'form-message error';
+                msg.style.display = 'block';
+                msg.innerHTML = '❌ Payment failed: ' + paymentResult.error;
+                btn.disabled = false;
+                btn.textContent = originalText;
+                return;
+            }
+
+            // Payment successful - confirm with backend
+            btn.textContent = 'Creating campaign...';
+
+            try {
+                const sutraData = {
+                    email: document.getElementById('femail').value,
+                    artist_name: document.getElementById('fartist').value,
+                    spotify_link: tier === 'album' ? (document.getElementById('falbum').value || '') : (document.getElementById('fspotify').value || ''),
+                    genres: genres,
+                    genre: document.getElementById('fgenre').value,
+                    tier: tier,
+                    track_title: document.getElementById('ftrackTitle').value || '',
+                    payment_tx_hash: paymentResult.txHash,
+                    payment_amount_sutra: sutraAmount,
+                    wallet_address: walletState.address,
+                    holder_discount_applied: holderDiscount > 0
+                };
+
+                const response = await fetch(API_BASE + '/payments/confirm-sutra', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(sutraData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    msg.className = 'form-message success';
+                    msg.style.display = 'block';
+                    msg.innerHTML = `
+                        <div style="margin-bottom:12px;">
+                            &#127802; Payment confirmed! Your ${tier} campaign is now active.
+                            <br><small>TX: <a href="https://polygonscan.com/tx/${paymentResult.txHash}" target="_blank" style="color:#10b981;">${paymentResult.txHash.slice(0,10)}...</a></small>
+                        </div>
+                        <button onclick="closeModal()" style="background:#065f46;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;">Got it!</button>
+                    `;
+                    document.getElementById('signupForm').reset();
+                    await updateSutraBalance();
+                    updateWalletUI();
+                } else {
+                    throw new Error(result.detail || 'Failed to create campaign');
+                }
+            } catch (error) {
+                msg.className = 'form-message error';
+                msg.style.display = 'block';
+                msg.innerHTML = '❌ ' + error.message;
+            }
+
+            btn.disabled = false;
+            btn.textContent = originalText;
+            return;
+        }
+
+        // USD payment flow (Stripe)
         try {
             const paymentData = {
                 tier: tier,
@@ -3361,15 +4081,15 @@ async function submitForm(e) {
                 track_title: document.getElementById('ftrackTitle').value || '',
                 album_tracks: document.getElementById('falbumTracks').value || ''
             };
-            
+
             const response = await fetch(API_BASE + '/payments/create-checkout', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(paymentData)
             });
-            
+
             const result = await response.json();
-            
+
             if (result.success) {
                 if (result.free) {
                     msg.className = 'form-message success';
@@ -3392,7 +4112,7 @@ async function submitForm(e) {
             msg.style.display = 'block';
             msg.innerHTML = '❌ Connection error. Please try again.';
         }
-        
+
         btn.disabled = false;
         btn.textContent = originalText;
         return;
