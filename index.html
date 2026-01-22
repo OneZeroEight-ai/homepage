@@ -4002,8 +4002,8 @@ async function submitForm(e) {
     const promoCode = document.getElementById('fpromoValid')?.value || '';
     const finalPrice = parseInt(document.getElementById('ffinalPrice')?.value) || 0;
 
-    // For paid tiers with payment required
-    if (tier !== 'free' && finalPrice > 0) {
+    // For paid tiers (including 100% promo codes) - always use payments endpoint
+    if (tier !== 'free') {
         const paymentMethod = document.getElementById('fpaymentMethod')?.value || 'usd';
         const holderDiscount = parseInt(document.getElementById('fholderDiscount')?.value) || 0;
 
