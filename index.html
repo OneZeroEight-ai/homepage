@@ -2767,6 +2767,52 @@ let walletState = {
     signer: null
 };
 
+// Store last free submission for upgrade flow
+let lastFreeSubmission = null;
+
+// Upgrade from free to Pro
+async function upgradeToProFromFree() {
+    if (!lastFreeSubmission) {
+        alert('No submission data found. Please fill out the form again.');
+        return;
+    }
+
+    const msg = document.getElementById('formMessage');
+    const btn = document.querySelector('#signupForm button[type="submit"]');
+
+    msg.innerHTML = '<div style="padding:12px;background:#f0f9ff;border-radius:8px;color:#0369a1;">Processing upgrade to Pro...</div>';
+
+    try {
+        const paymentData = {
+            tier: 'pro',
+            email: lastFreeSubmission.email,
+            artist_name: lastFreeSubmission.artist_name,
+            spotify_link: lastFreeSubmission.spotify_link,
+            genres: lastFreeSubmission.genres,
+            genre: lastFreeSubmission.genre,
+            promo_code: null,
+            track_title: lastFreeSubmission.track_title
+        };
+
+        const response = await fetch(API_BASE + '/payments/create-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(paymentData)
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.checkout_url) {
+            msg.innerHTML = '<div style="padding:12px;background:#f0f9ff;border-radius:8px;color:#0369a1;">Redirecting to checkout...</div>';
+            window.location.href = result.checkout_url;
+        } else {
+            msg.innerHTML = '<div style="padding:12px;background:#fef2f2;border-radius:8px;color:#dc2626;">❌ ' + (result.detail || 'Failed to create checkout. Please try again.') + '</div>';
+        }
+    } catch (error) {
+        msg.innerHTML = '<div style="padding:12px;background:#fef2f2;border-radius:8px;color:#dc2626;">❌ Connection error. Please try again.</div>';
+    }
+}
+
 // SUTRA Token ABI (minimal for balance check and transfer)
 const SUTRA_ABI = [
     "function balanceOf(address owner) view returns (uint256)",
@@ -4163,12 +4209,36 @@ async function submitForm(e) {
         const result = await response.json();
         
         if (response.ok && result.success) {
+            // Store submission data for potential upgrade
+            lastFreeSubmission = {
+                email: data.email,
+                artist_name: data.artist_name,
+                spotify_link: data.spotify_link,
+                genres: data.genres,
+                genre: data.genre,
+                track_title: data.track_title
+            };
+
             msg.className = 'form-message success';
             msg.style.display = 'block';
+
+            // Show upgrade option for new free submissions
+            const isWelcomeBack = result.message?.includes('Welcome back');
+            const upgradeSection = !isWelcomeBack ? `
+                <div style="margin-top:16px;padding:16px;background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);border-radius:12px;color:white;">
+                    <div style="font-weight:700;margin-bottom:8px;">🚀 Want more reach?</div>
+                    <div style="font-size:0.9rem;margin-bottom:12px;opacity:0.95;">Upgrade to Pro for access to 3,000+ external curators, PR Agent, and priority placement.</div>
+                    <button onclick="upgradeToProFromFree()" style="background:white;color:#6366f1;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;font-size:0.95rem;">
+                        Upgrade to Pro — $49
+                    </button>
+                </div>
+            ` : '';
+
             msg.innerHTML = '<div style="margin-bottom:12px;">🎉 ' + (result.message || "You're in! Check your email.") + '</div>' +
-                '<button onclick="closeModal()" style="background:#065f46;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;">Got it!</button>';
+                upgradeSection +
+                '<button onclick="closeModal()" style="background:#065f46;color:white;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;margin-top:12px;">Got it!</button>';
             msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            if (!result.message?.includes('Welcome back')) {
+            if (!isWelcomeBack) {
                 document.getElementById('signupForm').reset();
                 document.getElementById('trackPreview').style.display = 'none';
                 document.getElementById('albumPreview').style.display = 'none';
