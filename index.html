@@ -2139,7 +2139,7 @@
                         </div>
                         <div class="success-actions">
                             <button onclick="resetForm()" class="btn btn-secondary">Submit Another Track</button>
-                            <a href="#pricing" class="btn btn-primary">Upgrade to Pro for 3,000+ Curators →</a>
+                            <button onclick="upgradeToProFromFree()" class="btn btn-primary">Upgrade to Pro — $49 →</button>
                         </div>
                     </div>
 
@@ -3599,6 +3599,16 @@ async function submitInlineForm() {
         const result = await response.json();
 
         if (result.success) {
+            // Store submission data for upgrade flow
+            lastFreeSubmission = {
+                email: email,
+                artist_name: artistName,
+                spotify_link: spotifyLink,
+                genres: selectedGenres,
+                genre: selectedGenres[0],
+                track_title: trackTitle
+            };
+
             // Show success state
             document.getElementById('successTrackTitle').textContent = `"${trackTitle || 'Your Track'}"`;
             document.getElementById('expandedForm').style.display = 'none';
