@@ -2641,7 +2641,8 @@
                 </div>
                 <div class="form-group">
                     <label>Your Email *</label>
-                    <input type="email" id="femail" placeholder="you@email.com" required>
+                    <input type="email" id="femail" placeholder="you@email.com" required onblur="checkEmailEligibility()">
+                    <div id="emailStatus" style="margin-top:6px;font-size:0.85rem;display:none;"></div>
                 </div>
                 <div class="form-group">
                     <label>Artist / Project Name *</label>
@@ -2773,6 +2774,70 @@ let walletState = {
 
 // Store last free submission for upgrade flow
 let lastFreeSubmission = null;
+
+// Track if user is returning (no free tier)
+let isReturningUser = false;
+let returningUserName = '';
+
+// Check if email already exists in system
+async function checkEmailEligibility() {
+    const email = document.getElementById('femail').value.trim();
+    const statusEl = document.getElementById('emailStatus');
+
+    if (!email || !email.includes('@')) {
+        statusEl.style.display = 'none';
+        isReturningUser = false;
+        updateTierButtons();
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/artists/check-email?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (result.exists) {
+            isReturningUser = true;
+            returningUserName = result.artist_name || '';
+            statusEl.innerHTML = `<span style="color:#f59e0b;">⚠️ Welcome back${returningUserName ? ', ' + returningUserName : ''}! Free tier is one per artist. Use a promo code or select Pro.</span>`;
+            statusEl.style.display = 'block';
+
+            // If currently on free tier, update to pro
+            const currentTier = document.getElementById('ftier').value;
+            if (currentTier === 'free') {
+                document.getElementById('ftier').value = 'pro';
+                // Re-trigger modal setup for pro tier
+                const modal = document.getElementById('modal');
+                if (modal.style.display === 'flex') {
+                    openModal('pro');
+                }
+            }
+        } else {
+            isReturningUser = false;
+            statusEl.innerHTML = `<span style="color:#10b981;">✓ New artist - eligible for free tier!</span>`;
+            statusEl.style.display = 'block';
+        }
+        updateTierButtons();
+    } catch (error) {
+        console.log('Email check failed:', error);
+        statusEl.style.display = 'none';
+    }
+}
+
+// Update tier buttons based on returning user status
+function updateTierButtons() {
+    const freeTierBtns = document.querySelectorAll('[onclick*="selectTier(\'free\')"]');
+    freeTierBtns.forEach(btn => {
+        if (isReturningUser) {
+            btn.style.opacity = '0.5';
+            btn.style.pointerEvents = 'none';
+            btn.title = 'Free tier is limited to one track per email';
+        } else {
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+            btn.title = '';
+        }
+    });
+}
 
 // Upgrade from free to Pro
 async function upgradeToProFromFree() {
@@ -3572,7 +3637,32 @@ async function submitInlineForm() {
         return;
     }
 
+    // Check if returning user - they can't use free tier
     btn.disabled = true;
+    btn.textContent = 'Checking eligibility...';
+
+    try {
+        const checkResp = await fetch(`${API_BASE}/artists/check-email?email=${encodeURIComponent(email)}`);
+        const checkResult = await checkResp.json();
+
+        if (checkResult.exists) {
+            btn.disabled = false;
+            btn.textContent = '🚀 Get Free Analysis & Placement';
+            alert(`Welcome back${checkResult.artist_name ? ', ' + checkResult.artist_name : ''}! Free tier is limited to one track per email.\n\nUse promo code 2NDFREE for a free Pro promotion on your next track!`);
+            // Open modal with Pro tier pre-selected
+            openModal('pro');
+            // Pre-fill the modal form with inline form data
+            document.getElementById('femail').value = email;
+            document.getElementById('fname').value = name;
+            document.getElementById('fartist').value = artistName;
+            document.getElementById('fspotify').value = spotifyLink;
+            document.getElementById('ftrackTitle').value = trackTitle;
+            return;
+        }
+    } catch (e) {
+        console.log('Email check failed, proceeding:', e);
+    }
+
     btn.textContent = 'Submitting...';
 
     const data = {
@@ -3717,6 +3807,12 @@ function resetGenreSelection() {
 }
 
 function openModal(tier = 'free') {
+    // Prevent returning users from selecting free tier
+    if (tier === 'free' && isReturningUser) {
+        tier = 'pro';
+        alert('Free tier is limited to one track per email. Switching to Pro tier. Use a promo code like 2NDFREE for a free Pro promotion!');
+    }
+
     document.getElementById('modal').style.display = 'flex';
     document.getElementById('ftier').value = tier;
     document.body.style.overflow = 'hidden';
@@ -3767,7 +3863,7 @@ function openModal(tier = 'free') {
         header.textContent = '🚀 Start Your Free Trial';
         subtext.textContent = 'Get your music on OneZeroEight playlists—no payment required';
         modalSubmitBtn.textContent = 'Start Free Trial →';
-        promoSection.style.display = 'none';
+        promoSection.style.display = 'block';  // Show promo for all tiers
         priceSummary.style.display = 'none';
         document.getElementById('ffinalPrice').value = '0';
     }
@@ -4062,8 +4158,10 @@ async function submitForm(e) {
     const promoCode = document.getElementById('fpromoValid')?.value || '';
     const finalPrice = parseInt(document.getElementById('ffinalPrice')?.value) || 0;
 
-    // For paid tiers (including 100% promo codes) - always use payments endpoint
-    if (tier !== 'free') {
+    // For paid tiers OR free tier with promo code - use payments endpoint
+    if (tier !== 'free' || promoCode) {
+        // If free tier with promo, treat as pro for the promo flow
+        const effectiveTier = (tier === 'free' && promoCode) ? 'pro' : tier;
         const paymentMethod = document.getElementById('fpaymentMethod')?.value || 'usd';
         const holderDiscount = parseInt(document.getElementById('fholderDiscount')?.value) || 0;
 
@@ -4140,10 +4238,10 @@ async function submitForm(e) {
         // USD payment flow (Stripe)
         try {
             const paymentData = {
-                tier: tier,
+                tier: effectiveTier,
                 email: document.getElementById('femail').value,
                 artist_name: document.getElementById('fartist').value,
-                spotify_link: tier === 'album' ? (document.getElementById('falbum').value || '') : (document.getElementById('fspotify').value || ''),
+                spotify_link: effectiveTier === 'album' ? (document.getElementById('falbum').value || '') : (document.getElementById('fspotify').value || ''),
                 genres: genres,
                 genre: document.getElementById('fgenre').value, // Primary for backwards compat
                 promo_code: promoCode || null,
