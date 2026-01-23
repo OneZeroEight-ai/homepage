@@ -2882,6 +2882,137 @@ async function upgradeToProFromFree() {
     }
 }
 
+// Show inline payment UI for returning users
+function showReturningUserPayment(data) {
+    const formContainer = document.getElementById('signupFormContainer');
+    const successState = document.getElementById('successState');
+
+    // Hide form, show payment UI
+    formContainer.style.display = 'none';
+    successState.style.display = 'none';
+
+    // Create or get returning user payment container
+    let paymentContainer = document.getElementById('returningUserPayment');
+    if (!paymentContainer) {
+        paymentContainer = document.createElement('div');
+        paymentContainer.id = 'returningUserPayment';
+        formContainer.parentNode.insertBefore(paymentContainer, successState);
+    }
+
+    paymentContainer.innerHTML = `
+        <div style="text-align:center;padding:20px;">
+            <div style="font-size:2rem;margin-bottom:12px;">👋</div>
+            <h2 style="color:#6366f1;margin-bottom:8px;">Welcome back${data.returning_name ? ', ' + data.returning_name : ''}!</h2>
+            <p style="color:#64748b;margin-bottom:20px;">Free tier is one per artist. Get Pro access for your new track!</p>
+
+            <div style="background:#f8fafc;border-radius:12px;padding:20px;margin-bottom:20px;text-align:left;">
+                <div style="font-weight:600;color:#1e293b;margin-bottom:8px;">Track Details</div>
+                <div style="color:#64748b;font-size:0.9rem;">
+                    <div>🎵 ${data.track_title || 'Your track'}</div>
+                    <div>🎤 ${data.artist_name}</div>
+                    <div>🎸 ${data.genres.join(', ')}</div>
+                </div>
+            </div>
+
+            <div style="background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);color:white;padding:20px;border-radius:12px;margin-bottom:16px;">
+                <div style="font-size:1.5rem;font-weight:700;">Pro Access — $49</div>
+                <div style="font-size:0.9rem;opacity:0.9;">Full agent suite + 3,000 external curators</div>
+            </div>
+
+            <div style="margin-bottom:16px;">
+                <label style="display:block;text-align:left;font-size:0.85rem;color:#64748b;margin-bottom:4px;">Have a promo code?</label>
+                <input type="text" id="returningPromoCode" placeholder="Enter code (e.g., 2NDFREE)"
+                    style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:8px;font-size:1rem;box-sizing:border-box;">
+                <div id="returningPromoMessage" style="font-size:0.85rem;margin-top:4px;"></div>
+            </div>
+
+            <button onclick="processReturningUserPayment()" id="returningPayBtn"
+                style="width:100%;padding:16px;background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);color:white;border:none;border-radius:12px;font-size:1.1rem;font-weight:600;cursor:pointer;">
+                Continue to Checkout →
+            </button>
+
+            <button onclick="cancelReturningUserPayment()"
+                style="width:100%;padding:12px;background:transparent;color:#64748b;border:none;font-size:0.9rem;cursor:pointer;margin-top:8px;">
+                ← Go Back
+            </button>
+        </div>
+    `;
+
+    paymentContainer.style.display = 'block';
+
+    // Store data for payment processing
+    window.returningUserData = data;
+}
+
+// Cancel returning user payment flow
+function cancelReturningUserPayment() {
+    const formContainer = document.getElementById('signupFormContainer');
+    const paymentContainer = document.getElementById('returningUserPayment');
+    const btn = document.getElementById('submitBtn');
+
+    if (paymentContainer) paymentContainer.style.display = 'none';
+    formContainer.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = '🚀 Get Free Analysis & Placement';
+}
+
+// Process returning user payment
+async function processReturningUserPayment() {
+    const btn = document.getElementById('returningPayBtn');
+    const promoCode = document.getElementById('returningPromoCode').value.trim();
+    const promoMsg = document.getElementById('returningPromoMessage');
+    const data = window.returningUserData;
+
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+
+    try {
+        const paymentData = {
+            tier: 'pro',
+            email: data.email,
+            name: data.name,
+            artist_name: data.artist_name,
+            spotify_link: data.spotify_link,
+            genres: data.genres,
+            genre: data.genre,
+            promo_code: promoCode || null,
+            track_title: data.track_title
+        };
+
+        const response = await fetch(API_BASE + '/payments/create-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(paymentData)
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.checkout_url) {
+            btn.textContent = 'Redirecting to checkout...';
+            window.location.href = result.checkout_url;
+        } else if (result.success && result.free_processed) {
+            // 100% discount code used - show success
+            const paymentContainer = document.getElementById('returningUserPayment');
+            paymentContainer.innerHTML = `
+                <div style="text-align:center;padding:40px 20px;">
+                    <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
+                    <h2 style="color:#10b981;margin-bottom:12px;">You're All Set!</h2>
+                    <p style="color:#64748b;margin-bottom:20px;">${result.message || 'Your Pro campaign has been created!'}</p>
+                    <button onclick="resetForm()" class="btn btn-primary">Submit Another Track</button>
+                </div>
+            `;
+        } else {
+            btn.disabled = false;
+            btn.textContent = 'Continue to Checkout →';
+            promoMsg.innerHTML = '<span style="color:#dc2626;">❌ ' + (result.detail || 'Failed to create checkout. Please try again.') + '</span>';
+        }
+    } catch (error) {
+        btn.disabled = false;
+        btn.textContent = 'Continue to Checkout →';
+        promoMsg.innerHTML = '<span style="color:#dc2626;">❌ Connection error. Please try again.</span>';
+    }
+}
+
 // SUTRA Token ABI (minimal for balance check and transfer)
 const SUTRA_ABI = [
     "function balanceOf(address owner) view returns (uint256)",
@@ -3595,8 +3726,18 @@ function resetForm() {
     document.getElementById('expandedForm').style.display = 'none';
     document.getElementById('successState').style.display = 'none';
 
-    // Show input section
+    // Hide returning user payment if exists
+    const returningPayment = document.getElementById('returningUserPayment');
+    if (returningPayment) returningPayment.style.display = 'none';
+
+    // Show input section and form container
     document.getElementById('spotifyInputSection').style.display = 'block';
+    document.getElementById('signupFormContainer').style.display = 'block';
+
+    // Reset submit button
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = false;
+    btn.textContent = '🚀 Get Free Analysis & Placement';
 
     // Clear hidden fields
     document.getElementById('fgenres').value = '[]';
@@ -3646,17 +3787,20 @@ async function submitInlineForm() {
         const checkResult = await checkResp.json();
 
         if (checkResult.exists) {
-            btn.disabled = false;
-            btn.textContent = '🚀 Get Free Analysis & Placement';
-            alert(`Welcome back${checkResult.artist_name ? ', ' + checkResult.artist_name : ''}! Free tier is limited to one track per email.\n\nUse promo code 2NDFREE for a free Pro promotion on your next track!`);
-            // Open modal with Pro tier pre-selected
-            openModal('pro');
-            // Pre-fill the modal form with inline form data
-            document.getElementById('femail').value = email;
-            document.getElementById('fname').value = name;
-            document.getElementById('fartist').value = artistName;
-            document.getElementById('fspotify').value = spotifyLink;
-            document.getElementById('ftrackTitle').value = trackTitle;
+            // Returning user - go directly to payment flow (no popup)
+            btn.textContent = 'Preparing checkout...';
+
+            // Show inline payment UI for returning users
+            showReturningUserPayment({
+                email: email,
+                name: name,
+                artist_name: artistName,
+                spotify_link: spotifyLink,
+                track_title: trackTitle,
+                genres: selectedGenres,
+                genre: selectedGenres[0],
+                returning_name: checkResult.artist_name
+            });
             return;
         }
     } catch (e) {
