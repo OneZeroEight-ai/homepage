@@ -2899,6 +2899,40 @@ function showReturningUserPayment(data) {
         formContainer.parentNode.insertBefore(paymentContainer, successState);
     }
 
+    // Check if wallet is connected for crypto payment option
+    const hasWallet = walletState.connected && walletState.address;
+    const hasSutra = hasWallet && walletState.sutraBalance > 0;
+    const sutraPrice = 4900; // Pro tier in SUTRA
+    const canPaySutra = hasSutra && walletState.sutraBalance >= sutraPrice;
+
+    // Build crypto payment section if wallet connected
+    let cryptoSection = '';
+    if (hasWallet) {
+        cryptoSection = `
+            <div style="background:#f0fdf4;border:2px solid #10b981;border-radius:12px;padding:16px;margin-bottom:16px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                    <span style="font-size:1.2rem;">🦊</span>
+                    <span style="font-weight:600;color:#059669;">Wallet Connected</span>
+                </div>
+                <div style="font-size:0.85rem;color:#64748b;margin-bottom:12px;">
+                    ${shortenAddress(walletState.address)} • ${formatSutraBalance(walletState.sutraBalance)} SUTRA
+                </div>
+                ${canPaySutra ? `
+                    <button onclick="processReturningUserCrypto()" id="returningCryptoBtn"
+                        style="width:100%;padding:14px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:white;border:none;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+                        <span>Pay ${sutraPrice.toLocaleString()} SUTRA</span>
+                        <span style="font-size:0.8rem;opacity:0.8;">(10% holder discount)</span>
+                    </button>
+                ` : `
+                    <div style="font-size:0.85rem;color:#f59e0b;text-align:center;">
+                        Need ${sutraPrice.toLocaleString()} SUTRA to pay with crypto
+                    </div>
+                `}
+            </div>
+            <div style="text-align:center;color:#94a3b8;font-size:0.85rem;margin-bottom:12px;">— or pay with card —</div>
+        `;
+    }
+
     paymentContainer.innerHTML = `
         <div style="text-align:center;padding:20px;">
             <div style="font-size:2rem;margin-bottom:12px;">👋</div>
@@ -2918,6 +2952,8 @@ function showReturningUserPayment(data) {
                 <div style="font-size:1.5rem;font-weight:700;">Pro Access — $49</div>
                 <div style="font-size:0.9rem;opacity:0.9;">Full agent suite + 3,000 external curators</div>
             </div>
+
+            ${cryptoSection}
 
             <div style="margin-bottom:16px;">
                 <label style="display:block;text-align:left;font-size:0.85rem;color:#64748b;margin-bottom:4px;">Have a promo code?</label>
@@ -3010,6 +3046,85 @@ async function processReturningUserPayment() {
         btn.disabled = false;
         btn.textContent = 'Continue to Checkout →';
         promoMsg.innerHTML = '<span style="color:#dc2626;">❌ Connection error. Please try again.</span>';
+    }
+}
+
+// Process returning user crypto payment
+async function processReturningUserCrypto() {
+    const btn = document.getElementById('returningCryptoBtn');
+    const data = window.returningUserData;
+    const sutraAmount = 4900; // Pro tier SUTRA price
+
+    if (!walletState.connected || !walletState.signer) {
+        showToast('Please connect your wallet first', 'error');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span>Processing payment...</span>';
+
+    try {
+        // Process SUTRA payment on-chain
+        const paymentResult = await processSutraPayment(sutraAmount);
+
+        if (!paymentResult.success) {
+            btn.disabled = false;
+            btn.innerHTML = `<span>Pay ${sutraAmount.toLocaleString()} SUTRA</span><span style="font-size:0.8rem;opacity:0.8;">(10% holder discount)</span>`;
+            showToast(paymentResult.error || 'Payment failed', 'error');
+            return;
+        }
+
+        btn.innerHTML = '<span>Creating campaign...</span>';
+
+        // Register payment with backend
+        const response = await fetch(API_BASE + '/payments/create-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                tier: 'pro',
+                email: data.email,
+                name: data.name,
+                artist_name: data.artist_name,
+                spotify_link: data.spotify_link,
+                genres: data.genres,
+                genre: data.genre,
+                track_title: data.track_title,
+                payment_method: 'sutra',
+                payment_tx_hash: paymentResult.txHash,
+                payment_amount_sutra: sutraAmount,
+                wallet_address: walletState.address,
+                holder_discount: true
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Show success
+            const paymentContainer = document.getElementById('returningUserPayment');
+            paymentContainer.innerHTML = `
+                <div style="text-align:center;padding:40px 20px;">
+                    <div style="font-size:3rem;margin-bottom:16px;">🎉</div>
+                    <h2 style="color:#10b981;margin-bottom:12px;">Payment Successful!</h2>
+                    <p style="color:#64748b;margin-bottom:8px;">Your Pro campaign has been created.</p>
+                    <p style="font-size:0.85rem;color:#94a3b8;margin-bottom:20px;">
+                        TX: <a href="https://polygonscan.com/tx/${paymentResult.txHash}" target="_blank" style="color:#6366f1;">${paymentResult.txHash.slice(0, 10)}...${paymentResult.txHash.slice(-8)}</a>
+                    </p>
+                    <button onclick="resetForm()" class="btn btn-primary">Submit Another Track</button>
+                </div>
+            `;
+            await updateSutraBalance();
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = `<span>Pay ${sutraAmount.toLocaleString()} SUTRA</span><span style="font-size:0.8rem;opacity:0.8;">(10% holder discount)</span>`;
+            showToast(result.detail || 'Failed to create campaign', 'error');
+        }
+
+    } catch (error) {
+        console.error('Crypto payment error:', error);
+        btn.disabled = false;
+        btn.innerHTML = `<span>Pay ${sutraAmount.toLocaleString()} SUTRA</span><span style="font-size:0.8rem;opacity:0.8;">(10% holder discount)</span>`;
+        showToast('Payment error. Please try again.', 'error');
     }
 }
 
