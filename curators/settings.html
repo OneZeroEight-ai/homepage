@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Curator Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --gray-800: #1f2937;
+            --gray-700: #374151;
+            --gray-600: #4b5563;
+            --gray-400: #9ca3af;
+            --gray-300: #d1d5db;
+            --gray-200: #e5e7eb;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+            --white: #ffffff;
+            --error: #ef4444;
+            --success: #10b981;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-700);
+            background: var(--gray-50);
+            min-height: 100vh;
+        }
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--dark);
+            text-decoration: none;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-tab:hover { background: var(--gray-100); color: var(--dark); }
+        .nav-tab.active { background: var(--primary); color: var(--white); }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-name {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            color: var(--gray-600);
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .logout-btn:hover { background: var(--gray-200); }
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 24px;
+        }
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .page-header p {
+            color: var(--gray-600);
+        }
+        .section {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+        .section-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .section-header h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .section-body {
+            padding: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .form-group input:disabled {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+        .form-group .help-text {
+            font-size: 0.875rem;
+            color: var(--gray-400);
+            margin-top: 0.5rem;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            color: var(--gray-600);
+        }
+        .info-value {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-danger {
+            background: var(--error);
+            color: var(--white);
+        }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--gray-200);
+            color: var(--gray-600);
+        }
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .toggle-row:last-child {
+            border-bottom: none;
+        }
+        .toggle-info h4 {
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        .toggle-info p {
+            font-size: 0.875rem;
+            color: var(--gray-400);
+        }
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 28px;
+        }
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: 0.3s;
+            border-radius: 28px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+        .toggle input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        .toggle input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-400);
+        }
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .message.success {
+            background: #ecfdf5;
+            color: var(--success);
+            border: 1px solid #a7f3d0;
+        }
+        .message.error {
+            background: #fef2f2;
+            color: var(--error);
+            border: 1px solid #fecaca;
+        }
+        @media (max-width: 768px) {
+            .nav-tabs { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/curators/" class="logo">Curator Dashboard</a>
+                <div class="nav-tabs">
+                    <a href="dashboard.html" class="nav-tab">Dashboard</a>
+                    <a href="submissions.html" class="nav-tab">Submissions</a>
+                    <a href="earnings.html" class="nav-tab">Earnings</a>
+                    <a href="settings.html" class="nav-tab active">Settings</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span class="user-name" id="user-name">Loading...</span>
+                <button class="logout-btn" onclick="CuratorAuth.logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h1>Settings</h1>
+            <p>Manage your account and preferences</p>
+        </div>
+
+        <div class="loading" id="loading">Loading settings...</div>
+
+        <div id="settings-content" style="display: none;">
+            <div id="message" class="message" style="display: none;"></div>
+
+            <!-- Profile -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Profile</h2>
+                </div>
+                <div class="section-body">
+                    <div class="info-row">
+                        <span class="info-label">Name</span>
+                        <span class="info-value" id="profile-name">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email</span>
+                        <span class="info-value" id="profile-email">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Account Status</span>
+                        <span class="info-value" id="profile-status">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Spotify Profile</span>
+                        <span class="info-value" id="profile-spotify">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wallet -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Wallet</h2>
+                </div>
+                <div class="section-body">
+                    <div class="form-group">
+                        <label for="wallet-address">Polygon Wallet Address</label>
+                        <input type="text" id="wallet-address" placeholder="0x..." value="">
+                        <p class="help-text">Used for SUTRA withdrawals</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="updateWallet()">Update Wallet</button>
+                </div>
+            </div>
+
+            <!-- Preferences -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Preferences</h2>
+                </div>
+                <div class="section-body">
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Pause Submissions</h4>
+                            <p>Temporarily stop receiving new submissions</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="pause-submissions" onchange="updatePauseSubmissions()">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-row">
+                        <div class="toggle-info">
+                            <h4>Accept AI-Generated Music</h4>
+                            <p>Allow AI-generated tracks in submissions</p>
+                        </div>
+                        <label class="toggle">
+                            <input type="checkbox" id="accepts-ai" checked disabled>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="section" style="border-color: #fecaca;">
+                <div class="section-header" style="background: #fef2f2;">
+                    <h2 style="color: var(--error);">Danger Zone</h2>
+                </div>
+                <div class="section-body">
+                    <p style="color: var(--gray-600); margin-bottom: 1rem;">
+                        Once you delete your account, there is no going back. Please be certain.
+                    </p>
+                    <button class="btn btn-danger" onclick="confirmDeleteAccount()">Delete Account</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script>
+        // Check auth
+        if (!CuratorAuth.requireAuth()) {
+            // Will redirect to login
+        } else {
+            loadSettings();
+        }
+
+        async function loadSettings() {
+            try {
+                const data = await CuratorAuth.getDashboard();
+
+                // Update user name
+                document.getElementById('user-name').textContent = data.curator.name;
+
+                // Update profile info
+                document.getElementById('profile-name').textContent = data.curator.name || '-';
+                document.getElementById('profile-email').textContent = data.curator.email || '-';
+                document.getElementById('profile-status').textContent = data.curator.status || '-';
+                document.getElementById('profile-spotify').textContent = data.curator.spotify_profile_url || 'Not connected';
+
+                // Update wallet
+                if (data.curator.wallet_address) {
+                    document.getElementById('wallet-address').value = data.curator.wallet_address;
+                }
+
+                // Show content
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('settings-content').style.display = 'block';
+            } catch (err) {
+                document.getElementById('loading').textContent = 'Error loading settings. Please refresh.';
+                console.error(err);
+            }
+        }
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = `message ${type}`;
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 5000);
+        }
+
+        async function updateWallet() {
+            const address = document.getElementById('wallet-address').value.trim();
+            if (!address) {
+                showMessage('Please enter a wallet address', 'error');
+                return;
+            }
+            if (!address.startsWith('0x') || address.length !== 42) {
+                showMessage('Please enter a valid Polygon wallet address', 'error');
+                return;
+            }
+            try {
+                await CuratorAuth.connectWallet(address);
+                showMessage('Wallet updated successfully!', 'success');
+            } catch (err) {
+                showMessage('Error updating wallet: ' + err.message, 'error');
+            }
+        }
+
+        async function updatePauseSubmissions() {
+            const paused = document.getElementById('pause-submissions').checked;
+            try {
+                await CuratorAuth.apiCall('/settings', {
+                    method: 'PUT',
+                    body: JSON.stringify({ pause_submissions: paused })
+                });
+                showMessage(paused ? 'Submissions paused' : 'Submissions resumed', 'success');
+            } catch (err) {
+                showMessage('Error updating settings: ' + err.message, 'error');
+                document.getElementById('pause-submissions').checked = !paused;
+            }
+        }
+
+        function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                if (confirm('This will permanently delete all your data. Are you REALLY sure?')) {
+                    alert('Account deletion is not yet implemented. Please contact support@onezeroeight.ai');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

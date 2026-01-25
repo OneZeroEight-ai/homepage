@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earnings - Curator Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --gray-800: #1f2937;
+            --gray-700: #374151;
+            --gray-600: #4b5563;
+            --gray-400: #9ca3af;
+            --gray-300: #d1d5db;
+            --gray-200: #e5e7eb;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+            --white: #ffffff;
+            --error: #ef4444;
+            --success: #10b981;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-700);
+            background: var(--gray-50);
+            min-height: 100vh;
+        }
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--dark);
+            text-decoration: none;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            color: var(--gray-600);
+            text-decoration: none;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        .nav-tab:hover { background: var(--gray-100); color: var(--dark); }
+        .nav-tab.active { background: var(--primary); color: var(--white); }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-name {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            color: var(--gray-600);
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .logout-btn:hover { background: var(--gray-200); }
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 24px;
+        }
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        .page-header p {
+            color: var(--gray-600);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--gray-200);
+        }
+        .stat-card .label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        .stat-card .value.sutra { color: var(--primary); }
+        .stat-card .value.pending { color: var(--accent); }
+        .stat-card .subtext {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            margin-top: 0.25rem;
+        }
+        .section {
+            background: var(--white);
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+        .section-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-header h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        .section-body {
+            padding: 1.5rem;
+        }
+        .earning-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        .earning-item:last-child {
+            border-bottom: none;
+        }
+        .earning-info {
+            flex: 1;
+        }
+        .earning-track {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        .earning-artist {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        .earning-date {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            margin-top: 0.25rem;
+        }
+        .earning-amount {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.125rem;
+        }
+        .earning-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+        }
+        .earning-status.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .earning-status.cleared {
+            background: #d1fae5;
+            color: #059669;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-400);
+        }
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-400);
+        }
+        .wallet-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .wallet-info {
+            flex: 1;
+        }
+        .wallet-address {
+            font-family: monospace;
+            background: var(--gray-100);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-primary:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+        }
+        .modal h3 {
+            font-size: 1.25rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .modal-actions .btn { flex: 1; }
+        .btn-cancel {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+        @media (max-width: 768px) {
+            .nav-tabs { display: none; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="/curators/" class="logo">Curator Dashboard</a>
+                <div class="nav-tabs">
+                    <a href="dashboard.html" class="nav-tab">Dashboard</a>
+                    <a href="submissions.html" class="nav-tab">Submissions</a>
+                    <a href="earnings.html" class="nav-tab active">Earnings</a>
+                    <a href="settings.html" class="nav-tab">Settings</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span class="user-name" id="user-name">Loading...</span>
+                <button class="logout-btn" onclick="CuratorAuth.logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h1>Earnings</h1>
+            <p>Track your SUTRA earnings and withdrawals</p>
+        </div>
+
+        <div class="loading" id="loading">Loading earnings...</div>
+
+        <div id="earnings-content" style="display: none;">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">Available Balance</div>
+                    <div class="value sutra" id="balance">0</div>
+                    <div class="subtext">SUTRA</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Pending</div>
+                    <div class="value pending" id="pending">0</div>
+                    <div class="subtext">Clearing in 7 days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Total Earned</div>
+                    <div class="value" id="total-earned">0</div>
+                    <div class="subtext">All time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Total Withdrawn</div>
+                    <div class="value" id="total-withdrawn">0</div>
+                    <div class="subtext">SUTRA</div>
+                </div>
+            </div>
+
+            <!-- Wallet -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Wallet & Withdrawals</h2>
+                </div>
+                <div class="section-body">
+                    <div class="wallet-section">
+                        <div class="wallet-info" id="wallet-info">
+                            <p style="color: var(--gray-600);">Connect your wallet to withdraw SUTRA</p>
+                        </div>
+                        <button class="btn btn-primary" id="wallet-btn" onclick="showWalletModal()">Connect Wallet</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Earnings -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Recent Earnings</h2>
+                </div>
+                <div class="section-body" id="earnings-list">
+                    <div class="empty-state">
+                        <div class="icon">💰</div>
+                        <p>No earnings yet. Accept submissions to earn SUTRA!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Wallet Modal -->
+    <div class="modal-overlay" id="wallet-modal">
+        <div class="modal">
+            <h3>Connect Wallet</h3>
+            <p style="color: var(--gray-600); margin-bottom: 1rem;">Enter your Polygon wallet address to receive SUTRA withdrawals.</p>
+            <input type="text" id="wallet-input" placeholder="0x..." style="width: 100%; padding: 0.75rem; border: 2px solid var(--gray-200); border-radius: 8px; font-family: monospace;">
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="hideWalletModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="connectWallet()">Connect</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Check auth
+        if (!CuratorAuth.requireAuth()) {
+            // Will redirect to login
+        } else {
+            loadEarnings();
+        }
+
+        async function loadEarnings() {
+            try {
+                const [dashboard, earnings] = await Promise.all([
+                    CuratorAuth.getDashboard(),
+                    CuratorAuth.getEarnings()
+                ]);
+
+                // Update user name
+                document.getElementById('user-name').textContent = dashboard.curator.name;
+
+                // Update stats
+                document.getElementById('balance').textContent = earnings.balance || 0;
+                document.getElementById('pending').textContent = earnings.pending || 0;
+                document.getElementById('total-earned').textContent = earnings.total_earned || 0;
+                document.getElementById('total-withdrawn').textContent = earnings.total_withdrawn || 0;
+
+                // Update wallet section
+                if (dashboard.wallet_connected && dashboard.curator.wallet_address) {
+                    document.getElementById('wallet-info').innerHTML = `
+                        <p style="color: var(--gray-600); margin-bottom: 0.5rem;">Connected wallet:</p>
+                        <div class="wallet-address">${dashboard.curator.wallet_address}</div>
+                    `;
+                    document.getElementById('wallet-btn').textContent = 'Withdraw SUTRA';
+                    document.getElementById('wallet-btn').onclick = requestWithdrawal;
+                }
+
+                // Load earnings list
+                const list = document.getElementById('earnings-list');
+                if (earnings.recent_earnings && earnings.recent_earnings.length > 0) {
+                    list.innerHTML = earnings.recent_earnings.map(e => `
+                        <div class="earning-item">
+                            <div class="earning-info">
+                                <div class="earning-track">${e.track_title}</div>
+                                <div class="earning-artist">${e.artist_name}</div>
+                                <div class="earning-date">${e.date ? new Date(e.date).toLocaleDateString() : ''}</div>
+                            </div>
+                            <div>
+                                <span class="earning-amount">+${e.amount} SUTRA</span>
+                                <span class="earning-status ${e.status === 'pending' ? 'pending' : 'cleared'}">${e.status}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                // Show content
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('earnings-content').style.display = 'block';
+            } catch (err) {
+                document.getElementById('loading').textContent = 'Error loading earnings. Please refresh.';
+                console.error(err);
+            }
+        }
+
+        function showWalletModal() {
+            document.getElementById('wallet-modal').classList.add('show');
+        }
+
+        function hideWalletModal() {
+            document.getElementById('wallet-modal').classList.remove('show');
+        }
+
+        async function connectWallet() {
+            const address = document.getElementById('wallet-input').value.trim();
+            if (!address.startsWith('0x') || address.length !== 42) {
+                alert('Please enter a valid Polygon wallet address');
+                return;
+            }
+            try {
+                await CuratorAuth.connectWallet(address);
+                hideWalletModal();
+                location.reload();
+            } catch (err) {
+                alert('Error connecting wallet: ' + err.message);
+            }
+        }
+
+        async function requestWithdrawal() {
+            const balance = parseInt(document.getElementById('balance').textContent);
+            if (balance < 100) {
+                alert('Minimum withdrawal is 100 SUTRA');
+                return;
+            }
+            const amount = prompt('Enter amount to withdraw (min 100):', balance);
+            if (!amount) return;
+            try {
+                await CuratorAuth.requestWithdrawal(parseFloat(amount));
+                alert('Withdrawal requested! Check your wallet in 24-48 hours.');
+                location.reload();
+            } catch (err) {
+                alert('Error requesting withdrawal: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
