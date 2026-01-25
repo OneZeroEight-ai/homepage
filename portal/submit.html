@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Track - Artist Portal</title>
+    <link rel="stylesheet" href="css/portal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span>OneZeroEight.ai</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="campaigns.html" class="nav-item" data-page="campaigns">
+                    <i class="fas fa-music"></i>
+                    <span>Campaigns</span>
+                </a>
+                <a href="placements.html" class="nav-item" data-page="placements">
+                    <i class="fas fa-list"></i>
+                    <span>Placements</span>
+                </a>
+                <a href="sutra.html" class="nav-item" data-page="sutra">
+                    <i class="fas fa-coins"></i>
+                    <span>SUTRA Wallet</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sutra-balance">
+                    <div class="sutra-balance-label">SUTRA Balance</div>
+                    <div class="sutra-balance-value"><span id="sutra-balance">0</span></div>
+                </div>
+
+                <div class="user-menu" id="logout-btn">
+                    <div class="user-avatar" id="user-avatar">A</div>
+                    <div class="user-name" id="user-name">Artist</div>
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Submit New Track</h1>
+                    <p class="page-subtitle">Start a new playlist campaign for your track</p>
+                </div>
+            </div>
+
+            <!-- Submission Form -->
+            <div class="submit-container">
+                <form id="submit-form" class="submit-form">
+                    <!-- Step 1: Spotify URL -->
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label class="form-label">Spotify Track URL <span class="required">*</span></label>
+                            <div class="url-input-wrapper">
+                                <input
+                                    type="url"
+                                    id="spotify-url"
+                                    class="form-input"
+                                    placeholder="https://open.spotify.com/track/..."
+                                    required
+                                >
+                                <button type="button" id="fetch-btn" class="btn btn-outline fetch-btn">
+                                    <i class="fab fa-spotify"></i>
+                                    <span>Fetch</span>
+                                </button>
+                            </div>
+                            <p class="form-hint">Paste your Spotify track link to auto-fill track details</p>
+                        </div>
+                    </div>
+
+                    <!-- Track Preview (hidden until fetched) -->
+                    <div id="track-preview" class="track-preview hidden">
+                        <div class="track-artwork" id="track-artwork">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="track-details">
+                            <div class="track-title" id="track-title">Track Title</div>
+                            <div class="track-artist" id="track-artist">Artist Name</div>
+                        </div>
+                        <div class="track-verified">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+
+                    <!-- Hidden fields for track data -->
+                    <input type="hidden" id="track-title-input" name="track_title">
+                    <input type="hidden" id="artist-name-input" name="artist_name">
+                    <input type="hidden" id="artwork-url-input" name="artwork_url">
+
+                    <!-- Step 2: Genre -->
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label class="form-label">Genre <span class="required">*</span></label>
+                            <select id="genre" class="form-input form-select" required>
+                                <option value="">Select a genre...</option>
+                                <option value="Pop">Pop</option>
+                                <option value="Hip Hop">Hip Hop</option>
+                                <option value="R&B">R&B</option>
+                                <option value="Electronic">Electronic</option>
+                                <option value="Lo-Fi">Lo-Fi</option>
+                                <option value="Indie">Indie</option>
+                                <option value="Rock">Rock</option>
+                                <option value="Alternative">Alternative</option>
+                                <option value="Folk">Folk</option>
+                                <option value="Country">Country</option>
+                                <option value="Jazz">Jazz</option>
+                                <option value="Classical">Classical</option>
+                                <option value="Ambient">Ambient</option>
+                                <option value="Metal">Metal</option>
+                                <option value="Reggae">Reggae</option>
+                                <option value="Latin">Latin</option>
+                                <option value="World">World</option>
+                                <option value="Singer-Songwriter">Singer-Songwriter</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Pitch (optional) -->
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label class="form-label">Pitch / Description <span class="optional">(optional)</span></label>
+                            <textarea
+                                id="pitch"
+                                class="form-input form-textarea"
+                                placeholder="Tell curators about your track... What makes it special? What playlists would it fit?"
+                                rows="4"
+                                maxlength="500"
+                            ></textarea>
+                            <p class="form-hint"><span id="pitch-count">0</span>/500 characters</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Campaign Tier -->
+                    <div class="form-section">
+                        <label class="form-label">Campaign Tier <span class="required">*</span></label>
+                        <div class="tier-options">
+                            <label class="tier-option" data-tier="free">
+                                <input type="radio" name="tier" value="free" checked>
+                                <div class="tier-card">
+                                    <div class="tier-header">
+                                        <span class="tier-name">Free Trial</span>
+                                        <span class="tier-price">$0</span>
+                                    </div>
+                                    <ul class="tier-features">
+                                        <li><i class="fas fa-check"></i> 1 guaranteed placement</li>
+                                        <li><i class="fas fa-check"></i> Basic curator matching</li>
+                                        <li><i class="fas fa-check"></i> 7-day campaign</li>
+                                    </ul>
+                                </div>
+                            </label>
+                            <label class="tier-option" data-tier="pro">
+                                <input type="radio" name="tier" value="pro">
+                                <div class="tier-card">
+                                    <div class="tier-header">
+                                        <span class="tier-name">Pro</span>
+                                        <span class="tier-price">$99</span>
+                                    </div>
+                                    <ul class="tier-features">
+                                        <li><i class="fas fa-check"></i> 10+ placements guaranteed</li>
+                                        <li><i class="fas fa-check"></i> AI-powered curator matching</li>
+                                        <li><i class="fas fa-check"></i> 30-day campaign</li>
+                                        <li><i class="fas fa-check"></i> Priority support</li>
+                                    </ul>
+                                    <div class="tier-badge">Most Popular</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-actions">
+                        <a href="dashboard.html" class="btn btn-outline">Cancel</a>
+                        <button type="submit" id="submit-btn" class="btn btn-primary" disabled>
+                            <i class="fas fa-rocket"></i>
+                            Start Campaign
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-icon success">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Campaign Created!</h2>
+            <p>Your track has been submitted. We'll start matching you with curators right away.</p>
+            <div class="modal-actions">
+                <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/submit.js"></script>
+</body>
+</html>
