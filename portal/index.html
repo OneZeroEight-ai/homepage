@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Portal - OneZeroEight.ai</title>
+    <link rel="stylesheet" href="css/portal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-logo">
+                <h1>OneZeroEight.ai</h1>
+            </div>
+
+            <div id="login-form-container">
+                <h2 class="login-title">Artist Portal</h2>
+                <p class="login-subtitle">Enter your email to receive a magic login link</p>
+
+                <form class="login-form" id="login-form">
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            class="form-input"
+                            placeholder="your@email.com"
+                            required
+                            autocomplete="email"
+                        >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary login-btn" id="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Magic Link
+                    </button>
+                </form>
+
+                <p id="error-message" style="color: #f44336; text-align: center; margin-top: 15px; display: none;"></p>
+            </div>
+
+            <div id="success-container" class="login-success" style="display: none;">
+                <i class="fas fa-envelope-open-text"></i>
+                <h3>Check your email!</h3>
+                <p>We've sent a magic login link to your email address. Click the link to sign in.</p>
+                <button class="btn btn-outline" style="margin-top: 20px;" onclick="showLoginForm()">
+                    <i class="fas fa-arrow-left"></i>
+                    Try a different email
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Check if already authenticated
+        if (ArtistAuth.isAuthenticated()) {
+            window.location.href = 'dashboard.html';
+        }
+
+        // Check for token in URL (from magic link)
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        if (token) {
+            window.location.href = `verify.html?token=${token}`;
+        }
+
+        // Handle form submission
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const submitBtn = document.getElementById('submit-btn');
+            const errorMsg = document.getElementById('error-message');
+
+            errorMsg.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+            try {
+                await ArtistAuth.requestMagicLink(email);
+                document.getElementById('login-form-container').style.display = 'none';
+                document.getElementById('success-container').style.display = 'block';
+            } catch (error) {
+                errorMsg.textContent = error.message || 'Something went wrong. Please try again.';
+                errorMsg.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Magic Link';
+            }
+        });
+
+        function showLoginForm() {
+            document.getElementById('login-form-container').style.display = 'block';
+            document.getElementById('success-container').style.display = 'none';
+            document.getElementById('email').value = '';
+        }
+    </script>
+</body>
+</html>

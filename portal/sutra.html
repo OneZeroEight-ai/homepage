@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUTRA Wallet - Artist Portal</title>
+    <link rel="stylesheet" href="css/portal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <button class="mobile-menu-btn" id="mobile-menu-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span>OneZeroEight.ai</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="campaigns.html" class="nav-item" data-page="campaigns">
+                    <i class="fas fa-music"></i>
+                    <span>Campaigns</span>
+                </a>
+                <a href="placements.html" class="nav-item" data-page="placements">
+                    <i class="fas fa-list"></i>
+                    <span>Placements</span>
+                </a>
+                <a href="sutra.html" class="nav-item" data-page="sutra">
+                    <i class="fas fa-coins"></i>
+                    <span>SUTRA Wallet</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sutra-balance">
+                    <div class="sutra-balance-label">SUTRA Balance</div>
+                    <div class="sutra-balance-value"><span id="sutra-balance">0</span></div>
+                </div>
+
+                <div class="user-menu" id="logout-btn">
+                    <div class="user-avatar" id="user-avatar">A</div>
+                    <div class="user-name" id="user-name">Artist</div>
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">SUTRA Wallet</h1>
+                    <p class="page-subtitle">Manage your SUTRA tokens</p>
+                </div>
+                <button class="btn btn-outline" onclick="Sutra.exportCSV()">
+                    <i class="fas fa-download"></i>
+                    Export CSV
+                </button>
+            </div>
+
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-label">Available Balance</div>
+                <div class="balance-value"><span id="balance-value">0</span> SUTRA</div>
+                <div class="balance-usd" id="balance-usd">~$0.00 USD</div>
+                <div class="balance-actions">
+                    <a href="https://onezeroeight.ai/#sutra" target="_blank" class="btn">
+                        <i class="fas fa-info-circle"></i>
+                        Learn About SUTRA
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="stats-grid" style="margin-bottom: 30px;">
+                <div class="stat-card">
+                    <div class="stat-label">Total Earned</div>
+                    <div class="stat-value gradient" id="stat-earned">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Spent</div>
+                    <div class="stat-value" id="stat-spent">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pending</div>
+                    <div class="stat-value" id="stat-pending">0</div>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+                <!-- Transaction History -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Transaction History</h3>
+                    </div>
+                    <div class="transaction-list" id="transactions-list">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wallet Info -->
+                <div>
+                    <!-- Wallet Connection -->
+                    <div class="card" style="margin-bottom: 20px;">
+                        <div class="card-header">
+                            <h3 class="card-title">Wallet</h3>
+                        </div>
+                        <div id="wallet-status" style="display: flex; align-items: center; gap: 10px; color: var(--text-secondary);">
+                            <i class="fas fa-exclamation-circle" style="color: var(--status-pending);"></i>
+                            No wallet connected
+                        </div>
+                    </div>
+
+                    <!-- Token Info -->
+                    <div class="card" style="margin-bottom: 20px;">
+                        <div class="card-header">
+                            <h3 class="card-title">Token Info</h3>
+                        </div>
+                        <div style="font-size: 13px; color: var(--text-secondary);">
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-light);">
+                                <span>Network</span>
+                                <span style="color: var(--text-primary);">Polygon</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-light);">
+                                <span>Symbol</span>
+                                <span style="color: var(--text-primary);">SUTRA</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                                <span>DEX</span>
+                                <span style="color: var(--text-primary);">SushiSwap</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ways to Earn -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Ways to Earn SUTRA</h3>
+                        </div>
+                        <ul style="font-size: 13px; color: var(--text-secondary); padding-left: 20px; margin: 0;">
+                            <li style="margin-bottom: 8px;">Get placements on playlists</li>
+                            <li style="margin-bottom: 8px;">Refer other artists</li>
+                            <li style="margin-bottom: 8px;">Engage with the community</li>
+                            <li>Complete campaigns successfully</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/sutra.js"></script>
+</body>
+</html>
