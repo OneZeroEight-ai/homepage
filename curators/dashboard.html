@@ -315,6 +315,101 @@
             color: var(--gray-400);
         }
 
+        /* Playlist Items */
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            transition: box-shadow 0.2s;
+        }
+        .playlist-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .playlist-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+        .playlist-info {
+            flex: 1;
+        }
+        .playlist-name {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        .playlist-meta {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        .playlist-genres {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .playlist-genre {
+            display: inline-block;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+        .playlist-link {
+            padding: 0.5rem 1rem;
+            background: #1DB954;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: opacity 0.2s;
+        }
+        .playlist-link:hover {
+            opacity: 0.9;
+        }
+        .placement-tracks {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--gray-200);
+        }
+        .placement-track {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
+        }
+        .placement-track .track-title {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        .placement-track .track-artist {
+            color: var(--gray-500);
+        }
+        .placement-track .track-link {
+            margin-left: auto;
+            color: #1DB954;
+            text-decoration: none;
+            font-size: 0.75rem;
+        }
+        .no-placements {
+            color: var(--gray-400);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
         /* Modal */
         .modal-overlay {
             display: none;
@@ -412,6 +507,20 @@
                 <div class="section-body" style="display: flex; align-items: center; gap: 1rem;">
                     <span class="status-badge pending" id="account-status">Pending</span>
                     <span id="status-message">Your account is pending verification. You'll be notified once approved.</span>
+                </div>
+            </div>
+
+            <!-- Your Playlists -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Your Playlists</h2>
+                    <span class="badge" id="playlists-badge">0</span>
+                </div>
+                <div class="section-body" id="playlists-list">
+                    <div class="empty-state">
+                        <div class="icon">🎵</div>
+                        <p>No playlists linked yet.</p>
+                    </div>
                 </div>
             </div>
 
@@ -519,6 +628,9 @@
                     document.getElementById('wallet-btn').onclick = requestWithdrawal;
                 }
 
+                // Load playlists
+                loadPlaylists(data.playlists || []);
+
                 // Load submissions
                 await loadSubmissions();
 
@@ -529,6 +641,54 @@
                 document.getElementById('loading').textContent = 'Error loading dashboard. Please refresh.';
                 console.error(err);
             }
+        }
+
+        function loadPlaylists(playlists) {
+            const list = document.getElementById('playlists-list');
+            const badge = document.getElementById('playlists-badge');
+
+            badge.textContent = playlists.length;
+
+            if (!playlists || playlists.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🎵</div>
+                        <p>No playlists linked yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = playlists.map(p => {
+                const placementsHtml = (p.placements && p.placements.length > 0)
+                    ? `<div class="placement-tracks">
+                        ${p.placements.map(track => `
+                            <div class="placement-track">
+                                <span class="track-title">${track.track_title}</span>
+                                <span class="track-artist">by ${track.artist_name}</span>
+                                ${track.spotify_url ? `<a href="${track.spotify_url}" target="_blank" class="track-link">▶</a>` : ''}
+                            </div>
+                        `).join('')}
+                       </div>`
+                    : '<p class="no-placements">No tracks placed yet</p>';
+
+                const genresHtml = (p.genres && p.genres.length > 0)
+                    ? `<div class="playlist-genres">${p.genres.slice(0, 3).map(g => `<span class="playlist-genre">${g}</span>`).join('')}</div>`
+                    : '';
+
+                return `
+                    <div class="playlist-item">
+                        <div class="playlist-icon">🎧</div>
+                        <div class="playlist-info">
+                            <div class="playlist-name">${p.name}</div>
+                            <div class="playlist-meta">${p.followers.toLocaleString()} followers • ${p.placements ? p.placements.length : 0} tracks placed</div>
+                            ${genresHtml}
+                            ${placementsHtml}
+                        </div>
+                        <a href="${p.spotify_url}" target="_blank" class="playlist-link">Open in Spotify</a>
+                    </div>
+                `;
+            }).join('');
         }
 
         async function loadSubmissions() {
