@@ -79,7 +79,7 @@ const ArtistAuth = {
 
         if (response.status === 401) {
             this.clearAuth();
-            window.location.href = '/portal/';
+            window.location.href = '/artists/';
             throw new Error('Session expired');
         }
 
@@ -148,7 +148,7 @@ const ArtistAuth = {
         }
 
         this.clearAuth();
-        window.location.href = '/portal/';
+        window.location.href = '/artists/';
     },
 
     /**
@@ -156,7 +156,7 @@ const ArtistAuth = {
      */
     requireAuth() {
         if (!this.isAuthenticated()) {
-            window.location.href = '/portal/';
+            window.location.href = '/artists/';
             return false;
         }
         return true;
@@ -175,7 +175,7 @@ const ArtistAuth = {
         } catch (error) {
             console.error('Auth error:', error);
             this.clearAuth();
-            window.location.href = '/portal/';
+            window.location.href = '/artists/';
         }
     }
 };
