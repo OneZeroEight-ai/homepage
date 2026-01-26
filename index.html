@@ -1041,6 +1041,25 @@
             font-weight: 500;
             color: var(--gray-500);
         }
+        .pricing-card .price-regular {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--gray-400);
+            text-decoration: line-through;
+            margin-right: 8px;
+        }
+        .pricing-card .price-sale {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--secondary);
+        }
+        .pricing-card .price-label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--secondary);
+            margin-top: 4px;
+        }
         .pricing-card .description {
             color: var(--gray-600);
             margin-bottom: 32px;
@@ -2121,7 +2140,7 @@
                             🚀 Get Free Analysis & Placement
                         </button>
                         <p class="submit-note">No credit card required. Upgrade to Pro anytime.</p>
-                        <p class="submit-note-small">Free tier includes placement on OneZeroEight playlists. Upgrade to Pro ($49) for access to 3,000+ external curators.</p>
+                        <p class="submit-note-small">Free tier includes placement on OneZeroEight playlists. Upgrade to Pro (<s>$49</s> $19.95) for access to 3,000+ external curators.</p>
                     </div>
 
                     <!-- Success State -->
@@ -2143,7 +2162,7 @@
                         </div>
                         <div class="success-actions">
                             <button onclick="resetForm()" class="btn btn-secondary">Submit Another Track</button>
-                            <button onclick="upgradeToProFromFree()" class="btn btn-primary">Upgrade to Pro — $49 →</button>
+                            <button onclick="upgradeToProFromFree()" class="btn btn-primary">Upgrade to Pro — $19.95 →</button>
                         </div>
                     </div>
 
@@ -2367,7 +2386,12 @@
             <div class="pricing-card featured">
                 <div class="pricing-badge">Most Popular</div>
                 <h3>Pro</h3>
-                <div class="price">$49 <span>/ track</span></div>
+                <div class="price">
+                    <span class="price-regular">$49</span>
+                    <span class="price-sale">$19.95</span>
+                    <span>/ track</span>
+                    <span class="price-label">Introductory Price</span>
+                </div>
                 <p class="description">Full agent suite + external curators</p>
                 <ul class="pricing-features">
                     <li>Everything in Free, plus:</li>
@@ -2391,7 +2415,12 @@
             <div class="pricing-card">
                 <div class="pricing-badge" style="background: var(--secondary);">Best Value</div>
                 <h3>Album</h3>
-                <div class="price">$199 <span>/ 10 tracks</span></div>
+                <div class="price">
+                    <span class="price-regular">$249</span>
+                    <span class="price-sale">$99</span>
+                    <span>/ 10 tracks</span>
+                    <span class="price-label">Introductory Price</span>
+                </div>
                 <p class="description">Promote your full album or EP</p>
                 <ul class="pricing-features">
                     <li>Everything in Pro, plus:</li>
@@ -2400,7 +2429,7 @@
                     <li>Album-wide PR campaign</li>
                     <li>Coordinated release strategy</li>
                     <li>Dedicated account manager</li>
-                    <li>Save $290 vs individual Pro</li>
+                    <li>Save $100 vs individual Pro</li>
                 </ul>
                 <a href="#" onclick="openModal('album'); return false;" class="btn btn-primary">Get Started</a>
                 
@@ -2683,7 +2712,7 @@
                 <div id="priceSummary" style="display: none; background: var(--gray-50); border-radius: 12px; padding: 16px; margin-bottom: 20px;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
                         <span style="color: var(--gray-600);">Subtotal:</span>
-                        <span id="subtotalPrice" style="font-weight: 600;">$49.00</span>
+                        <span id="subtotalPrice" style="font-weight: 600;">$19.95</span>
                     </div>
                     <div id="discountRow" style="display: none; justify-content: space-between; margin-bottom: 8px; color: var(--secondary);">
                         <span>Discount:</span>
@@ -2691,7 +2720,7 @@
                     </div>
                     <div style="display: flex; justify-content: space-between; padding-top: 8px; border-top: 1px solid var(--gray-200);">
                         <span style="font-weight: 700;">Total:</span>
-                        <span id="totalPrice" style="font-weight: 700; font-size: 1.25rem;">$49.00</span>
+                        <span id="totalPrice" style="font-weight: 700; font-size: 1.25rem;">$19.95</span>
                     </div>
                 </div>
                 
@@ -2950,8 +2979,9 @@ function showReturningUserPayment(data) {
             </div>
 
             <div style="background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 100%);color:white;padding:20px;border-radius:12px;margin-bottom:16px;">
-                <div style="font-size:1.5rem;font-weight:700;">Pro Access — $49</div>
+                <div style="font-size:1.5rem;font-weight:700;">Pro Access — <s style="opacity:0.6;">$49</s> $19.95</div>
                 <div style="font-size:0.9rem;opacity:0.9;">Full agent suite + 3,000 external curators</div>
+                <div style="font-size:0.8rem;margin-top:4px;color:#10b981;font-weight:600;">Introductory Price!</div>
             </div>
 
             ${cryptoSection}
@@ -4101,24 +4131,24 @@ function openModal(tier = 'free') {
 
     if (tier === 'pro') {
         header.textContent = '🚀 Get Pro Access';
-        subtext.textContent = 'Full agent suite + 3000 external curators — $49/track';
+        subtext.textContent = 'Full agent suite + 3000 external curators — $19.95/track';
         modalSubmitBtn.textContent = 'Continue to Payment →';
         promoSection.style.display = 'block';
         priceSummary.style.display = 'block';
-        document.getElementById('subtotalPrice').textContent = '$49.00';
-        document.getElementById('totalPrice').textContent = '$49.00';
-        document.getElementById('ffinalPrice').value = '4900';
+        document.getElementById('subtotalPrice').textContent = '$19.95';
+        document.getElementById('totalPrice').textContent = '$19.95';
+        document.getElementById('ffinalPrice').value = '1995';
     } else if (tier === 'album') {
         header.textContent = '💿 Album Package';
-        subtext.textContent = '10 tracks promoted together — $199';
+        subtext.textContent = '10 tracks promoted together — $99';
         albumSection.style.display = 'block';
         trackSection.style.display = 'none';
         modalSubmitBtn.textContent = 'Continue to Payment →';
         promoSection.style.display = 'block';
         priceSummary.style.display = 'block';
-        document.getElementById('subtotalPrice').textContent = '$199.00';
-        document.getElementById('totalPrice').textContent = '$199.00';
-        document.getElementById('ffinalPrice').value = '19900';
+        document.getElementById('subtotalPrice').textContent = '$99.00';
+        document.getElementById('totalPrice').textContent = '$99.00';
+        document.getElementById('ffinalPrice').value = '9900';
     } else {
         header.textContent = '🚀 Start Your Free Trial';
         subtext.textContent = 'Get your music on OneZeroEight playlists—no payment required';
@@ -4605,7 +4635,7 @@ async function submitForm(e) {
                     <div style="font-weight:700;margin-bottom:8px;">🚀 Want more reach now?</div>
                     <div style="font-size:0.9rem;margin-bottom:12px;opacity:0.95;">Upgrade this track to Pro for 3,000+ external curators.</div>
                     <button onclick="upgradeToProFromFree()" style="background:white;color:#6366f1;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;width:100%;font-size:0.95rem;">
-                        Upgrade to Pro — $49
+                        Upgrade to Pro — $19.95
                     </button>
                 </div>
             ` : '';
