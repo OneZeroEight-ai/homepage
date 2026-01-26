@@ -257,14 +257,58 @@
 
                 <!-- Wallet Info -->
                 <div>
-                    <!-- Wallet Connection -->
+                    <!-- Withdraw SUTRA -->
                     <div class="card" style="margin-bottom: 20px;">
                         <div class="card-header">
-                            <h3 class="card-title">Wallet</h3>
+                            <h3 class="card-title"><i class="fas fa-wallet" style="margin-right: 8px;"></i>Withdraw SUTRA</h3>
                         </div>
-                        <div id="wallet-status" style="display: flex; align-items: center; gap: 10px; color: var(--text-secondary);">
-                            <i class="fas fa-exclamation-circle" style="color: var(--status-pending);"></i>
-                            No wallet connected
+                        <div id="withdraw-section">
+                            <!-- Wallet Status -->
+                            <div id="wallet-status" style="display: flex; align-items: center; gap: 10px; color: var(--text-secondary); margin-bottom: 15px;">
+                                <i class="fas fa-exclamation-circle" style="color: var(--status-pending);"></i>
+                                <span>Connect wallet to withdraw</span>
+                            </div>
+
+                            <!-- Wallet Address Display (shown when connected) -->
+                            <div id="connected-wallet" style="display: none; margin-bottom: 15px;">
+                                <label style="font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 5px;">Connected Wallet</label>
+                                <div style="background: var(--bg-secondary); padding: 10px 12px; border-radius: 8px; font-family: monospace; font-size: 13px; word-break: break-all;" id="wallet-address-display">
+                                    0x...
+                                </div>
+                            </div>
+
+                            <!-- Withdraw Form -->
+                            <div id="withdraw-form" style="display: none;">
+                                <div style="margin-bottom: 15px;">
+                                    <label style="font-size: 12px; color: var(--text-secondary); display: block; margin-bottom: 5px;">Amount (min: 100 SUTRA)</label>
+                                    <input type="number" id="withdraw-amount" min="100" placeholder="Enter amount" style="width: 100%; padding: 10px 12px; background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: 8px; color: var(--text-primary); font-size: 14px;">
+                                </div>
+                                <button class="btn" id="withdraw-btn" onclick="Sutra.withdraw()" style="width: 100%;">
+                                    <i class="fas fa-arrow-up"></i> Withdraw SUTRA
+                                </button>
+                                <p style="font-size: 11px; color: var(--text-muted); margin-top: 10px; text-align: center;">
+                                    Transfers to Polygon • Gas paid by OneZeroEight
+                                </p>
+                            </div>
+
+                            <!-- Connect Wallet Prompt (shown when not connected) -->
+                            <div id="connect-prompt" style="text-align: center; padding: 10px 0;">
+                                <button class="btn btn-outline" onclick="WalletModule.toggle()" style="width: 100%;">
+                                    <i class="fas fa-wallet"></i> Connect Polygon Wallet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Withdrawal History -->
+                    <div class="card" style="margin-bottom: 20px;">
+                        <div class="card-header">
+                            <h3 class="card-title">Withdrawal History</h3>
+                        </div>
+                        <div id="withdrawals-list" style="max-height: 200px; overflow-y: auto;">
+                            <div style="color: var(--text-muted); font-size: 13px; text-align: center; padding: 20px;">
+                                No withdrawals yet
+                            </div>
                         </div>
                     </div>
 

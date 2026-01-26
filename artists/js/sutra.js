@@ -5,6 +5,7 @@
 const Sutra = {
     balance: null,
     transactions: [],
+    withdrawals: [],
 
     /**
      * Initialize SUTRA wallet page
@@ -17,10 +18,12 @@ const Sutra = {
 
         await Promise.all([
             this.loadBalance(),
-            this.loadTransactions()
+            this.loadTransactions(),
+            this.loadWithdrawals()
         ]);
 
         this.initSidebar();
+        this.updateWithdrawUI();
     },
 
     /**
@@ -309,6 +312,190 @@ const Sutra = {
         }).catch(err => {
             console.error('Failed to copy:', err);
         });
+    },
+
+    /**
+     * Load withdrawals history
+     */
+    async loadWithdrawals() {
+        try {
+            const response = await ArtistAuth.apiRequest('/withdrawals');
+            const data = await response.json();
+            this.withdrawals = data.withdrawals || [];
+            this.renderWithdrawals();
+        } catch (error) {
+            console.error('Failed to load withdrawals:', error);
+        }
+    },
+
+    /**
+     * Update withdrawal UI based on wallet connection
+     */
+    updateWithdrawUI() {
+        const walletStatus = document.getElementById('wallet-status');
+        const connectedWallet = document.getElementById('connected-wallet');
+        const withdrawForm = document.getElementById('withdraw-form');
+        const connectPrompt = document.getElementById('connect-prompt');
+        const walletAddressDisplay = document.getElementById('wallet-address-display');
+
+        if (!this.balance) return;
+
+        if (this.balance.wallet_connected && this.balance.wallet_address) {
+            // Wallet is connected
+            if (walletStatus) {
+                walletStatus.innerHTML = `
+                    <i class="fas fa-check-circle" style="color: var(--status-placed);"></i>
+                    <span>Wallet connected</span>
+                `;
+            }
+            if (connectedWallet) {
+                connectedWallet.style.display = 'block';
+            }
+            if (walletAddressDisplay) {
+                walletAddressDisplay.textContent = this.balance.wallet_address;
+            }
+            if (withdrawForm) {
+                withdrawForm.style.display = 'block';
+            }
+            if (connectPrompt) {
+                connectPrompt.style.display = 'none';
+            }
+        } else {
+            // Wallet not connected
+            if (walletStatus) {
+                walletStatus.innerHTML = `
+                    <i class="fas fa-exclamation-circle" style="color: var(--status-pending);"></i>
+                    <span>Connect wallet to withdraw</span>
+                `;
+            }
+            if (connectedWallet) {
+                connectedWallet.style.display = 'none';
+            }
+            if (withdrawForm) {
+                withdrawForm.style.display = 'none';
+            }
+            if (connectPrompt) {
+                connectPrompt.style.display = 'block';
+            }
+        }
+    },
+
+    /**
+     * Perform withdrawal
+     */
+    async withdraw() {
+        const amountInput = document.getElementById('withdraw-amount');
+        const withdrawBtn = document.getElementById('withdraw-btn');
+
+        if (!amountInput) return;
+
+        const amount = parseFloat(amountInput.value);
+
+        // Validation
+        if (!amount || isNaN(amount)) {
+            alert('Please enter a valid amount');
+            return;
+        }
+
+        if (amount < 100) {
+            alert('Minimum withdrawal is 100 SUTRA');
+            return;
+        }
+
+        if (this.balance && amount > this.balance.balance) {
+            alert('Insufficient balance');
+            return;
+        }
+
+        // Disable button and show loading
+        if (withdrawBtn) {
+            withdrawBtn.disabled = true;
+            withdrawBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        }
+
+        try {
+            const response = await ArtistAuth.apiRequest('/withdraw', {
+                method: 'POST',
+                body: JSON.stringify({ amount: amount })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                // Success
+                alert(`Withdrawal successful!\n\nAmount: ${amount} SUTRA\nTx: ${result.tx_hash || 'Processing...'}`);
+
+                // Clear input
+                amountInput.value = '';
+
+                // Reload data
+                await Promise.all([
+                    this.loadBalance(),
+                    this.loadWithdrawals()
+                ]);
+                this.updateWithdrawUI();
+            } else {
+                throw new Error(result.detail || result.error || 'Withdrawal failed');
+            }
+        } catch (error) {
+            console.error('Withdrawal failed:', error);
+            alert(`Withdrawal failed: ${error.message}`);
+        } finally {
+            // Re-enable button
+            if (withdrawBtn) {
+                withdrawBtn.disabled = false;
+                withdrawBtn.innerHTML = '<i class="fas fa-arrow-up"></i> Withdraw SUTRA';
+            }
+        }
+    },
+
+    /**
+     * Render withdrawals list
+     */
+    renderWithdrawals() {
+        const container = document.getElementById('withdrawals-list');
+        if (!container) return;
+
+        if (!this.withdrawals || this.withdrawals.length === 0) {
+            container.innerHTML = `
+                <div style="color: var(--text-muted); font-size: 13px; text-align: center; padding: 20px;">
+                    No withdrawals yet
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = this.withdrawals.map(w => {
+            const statusColor = {
+                'completed': 'var(--status-placed)',
+                'processing': 'var(--status-pending)',
+                'pending': 'var(--status-pending)',
+                'failed': 'var(--status-declined)'
+            }[w.status] || 'var(--text-secondary)';
+
+            const statusIcon = {
+                'completed': 'check-circle',
+                'processing': 'spinner fa-spin',
+                'pending': 'clock',
+                'failed': 'times-circle'
+            }[w.status] || 'circle';
+
+            return `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 13px;">
+                    <div>
+                        <div style="color: var(--text-primary); font-weight: 500;">${w.amount} SUTRA</div>
+                        <div style="color: var(--text-muted); font-size: 11px;">${this.formatDate(w.requested_at)}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="display: flex; align-items: center; gap: 5px; color: ${statusColor};">
+                            <i class="fas fa-${statusIcon}"></i>
+                            <span style="text-transform: capitalize;">${w.status}</span>
+                        </div>
+                        ${w.explorer_url ? `<a href="${w.explorer_url}" target="_blank" style="font-size: 11px; color: var(--primary);">View on Polygonscan</a>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
     }
 };
 

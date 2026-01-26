@@ -228,9 +228,18 @@ const CuratorAuth = {
             method: 'POST',
             body: JSON.stringify({ amount })
         });
+        const data = await response.json();
         if (!response.ok) {
-            const data = await response.json();
             throw new Error(data.detail || 'Withdrawal failed');
+        }
+        return data;
+    },
+
+    // Get withdrawals history
+    async getWithdrawals() {
+        const response = await this.apiCall('/withdrawals');
+        if (!response.ok) {
+            throw new Error('Failed to load withdrawals');
         }
         return response.json();
     }

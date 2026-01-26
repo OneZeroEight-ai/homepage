@@ -399,6 +399,19 @@
                 </div>
             </div>
 
+            <!-- Withdrawal History -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>Withdrawal History</h2>
+                </div>
+                <div class="section-body" id="withdrawals-list">
+                    <div class="empty-state">
+                        <div class="icon">📤</div>
+                        <p>No withdrawals yet</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Recent Earnings -->
             <div class="section">
                 <div class="section-header">
@@ -440,9 +453,10 @@
 
         async function loadEarnings() {
             try {
-                const [dashboard, earnings] = await Promise.all([
+                const [dashboard, earnings, withdrawals] = await Promise.all([
                     CuratorAuth.getDashboard(),
-                    CuratorAuth.getEarnings()
+                    CuratorAuth.getEarnings(),
+                    CuratorAuth.getWithdrawals()
                 ]);
 
                 // Update user name
@@ -463,6 +477,9 @@
                     document.getElementById('wallet-btn').textContent = 'Withdraw SUTRA';
                     document.getElementById('wallet-btn').onclick = requestWithdrawal;
                 }
+
+                // Load withdrawals list
+                renderWithdrawals(withdrawals.withdrawals || []);
 
                 // Load earnings list
                 const list = document.getElementById('earnings-list');
@@ -489,6 +506,43 @@
                 document.getElementById('loading').textContent = 'Error loading earnings. Please refresh.';
                 console.error(err);
             }
+        }
+
+        function renderWithdrawals(withdrawals) {
+            const list = document.getElementById('withdrawals-list');
+            if (!withdrawals || withdrawals.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📤</div>
+                        <p>No withdrawals yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = withdrawals.map(w => {
+                const statusColors = {
+                    'completed': '#10b981',
+                    'processing': '#f59e0b',
+                    'pending': '#f59e0b',
+                    'failed': '#ef4444'
+                };
+                const statusColor = statusColors[w.status] || '#6b7280';
+
+                return `
+                    <div class="earning-item">
+                        <div class="earning-info">
+                            <div class="earning-track">${w.amount} SUTRA</div>
+                            <div class="earning-artist" style="font-family: monospace; font-size: 0.75rem;">${w.wallet_address}</div>
+                            <div class="earning-date">${w.requested_at ? new Date(w.requested_at).toLocaleDateString() : ''}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <span class="earning-status" style="background: ${statusColor}22; color: ${statusColor}; text-transform: capitalize;">${w.status}</span>
+                            ${w.tx_hash ? `<br><a href="https://polygonscan.com/tx/${w.tx_hash}" target="_blank" style="font-size: 0.75rem; color: var(--primary);">View on Polygonscan</a>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function showWalletModal() {
@@ -522,12 +576,41 @@
             }
             const amount = prompt('Enter amount to withdraw (min 100):', balance);
             if (!amount) return;
+
+            const amountNum = parseFloat(amount);
+            if (isNaN(amountNum) || amountNum < 100) {
+                alert('Minimum withdrawal is 100 SUTRA');
+                return;
+            }
+            if (amountNum > balance) {
+                alert('Insufficient balance');
+                return;
+            }
+
+            // Show processing state
+            const btn = document.getElementById('wallet-btn');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+
             try {
-                await CuratorAuth.requestWithdrawal(parseFloat(amount));
-                alert('Withdrawal requested! Check your wallet in 24-48 hours.');
+                const result = await CuratorAuth.requestWithdrawal(amountNum);
+
+                if (result.success) {
+                    let message = `Withdrawal successful!\n\nAmount: ${amountNum} SUTRA`;
+                    if (result.tx_hash) {
+                        message += `\nTransaction: ${result.tx_hash}`;
+                        message += `\n\nView on Polygonscan: https://polygonscan.com/tx/${result.tx_hash}`;
+                    }
+                    alert(message);
+                } else {
+                    throw new Error(result.detail || result.error || 'Withdrawal failed');
+                }
+
                 location.reload();
             } catch (err) {
-                alert('Error requesting withdrawal: ' + err.message);
+                alert('Error requesting withdrawal: ' + (err.detail || err.message || err));
+                btn.disabled = false;
+                btn.textContent = 'Withdraw SUTRA';
             }
         }
     </script>
