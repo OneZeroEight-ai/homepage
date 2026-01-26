@@ -41,6 +41,12 @@
             </nav>
 
             <div class="sidebar-footer">
+                <button id="walletBtn" class="wallet-btn" onclick="WalletModule.toggle()">
+                    <i class="fas fa-wallet"></i>
+                    <span id="walletText">Connect Wallet</span>
+                </button>
+                <div id="walletBalance" class="wallet-balance-display" style="display: none;">0 SUTRA</div>
+
                 <div class="sutra-balance">
                     <div class="sutra-balance-label">SUTRA Balance</div>
                     <div class="sutra-balance-value"><span id="sutra-balance">0</span></div>
@@ -76,6 +82,8 @@
         </main>
     </div>
 
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <script src="js/wallet.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/campaigns.js"></script>
 </body>

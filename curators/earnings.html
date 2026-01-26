@@ -95,6 +95,35 @@
             font-family: inherit;
         }
         .logout-btn:hover { background: var(--gray-200); }
+
+        /* Wallet Button */
+        .wallet-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #f6851b, #e2761b);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .wallet-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(246, 133, 27, 0.3);
+        }
+        .wallet-btn.connected {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .wallet-balance-inline {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-left: 0.5rem;
+        }
         main {
             max-width: 1400px;
             margin: 0 auto;
@@ -312,6 +341,10 @@
                 </div>
             </div>
             <div class="nav-right">
+                <button id="walletBtn" class="wallet-btn" onclick="WalletModule.toggle()">
+                    <span id="walletText">Connect Wallet</span>
+                </button>
+                <span id="walletBalance" class="wallet-balance-inline" style="display: none;">0 SUTRA</span>
                 <span class="user-name" id="user-name">Loading...</span>
                 <button class="logout-btn" onclick="CuratorAuth.logout()">Logout</button>
             </div>
@@ -394,6 +427,8 @@
         </div>
     </div>
 
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <script src="js/wallet.js"></script>
     <script src="auth.js"></script>
     <script>
         // Check auth
