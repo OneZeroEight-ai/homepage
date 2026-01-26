@@ -41,6 +41,12 @@
             </nav>
 
             <div class="sidebar-footer">
+                <button id="walletBtn" class="wallet-btn" onclick="WalletModule.toggle()">
+                    <i class="fas fa-wallet"></i>
+                    <span id="walletText">Connect Wallet</span>
+                </button>
+                <div id="walletBalance" class="wallet-balance-display" style="display: none;">0 SUTRA</div>
+
                 <div class="sutra-balance">
                     <div class="sutra-balance-label">SUTRA Balance</div>
                     <div class="sutra-balance-value"><span id="sutra-balance">0</span></div>
@@ -172,7 +178,7 @@
                                 <div class="tier-card">
                                     <div class="tier-header">
                                         <span class="tier-name">Pro</span>
-                                        <span class="tier-price">$99</span>
+                                        <span class="tier-price">$49</span>
                                     </div>
                                     <ul class="tier-features">
                                         <li><i class="fas fa-check"></i> 10+ placements guaranteed</li>
@@ -184,6 +190,42 @@
                                 </div>
                             </label>
                         </div>
+                    </div>
+
+                    <!-- Payment Method (shown when Pro is selected) -->
+                    <div id="payment-section" class="form-section payment-section hidden">
+                        <label class="form-label">Payment Method <span class="required">*</span></label>
+                        <div class="payment-options">
+                            <label class="payment-option">
+                                <input type="radio" name="payment_method" value="stripe" checked>
+                                <div class="payment-card">
+                                    <div class="payment-icon stripe-icon">
+                                        <i class="fas fa-credit-card"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <span class="payment-name">Pay with Card</span>
+                                        <span class="payment-price">$49.00</span>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="payment_method" value="sutra">
+                                <div class="payment-card sutra-card">
+                                    <div class="payment-icon sutra-icon">
+                                        <span>&#127802;</span>
+                                    </div>
+                                    <div class="payment-info">
+                                        <span class="payment-name">Pay with SUTRA</span>
+                                        <span class="payment-price">392 SUTRA</span>
+                                        <span class="payment-discount">20% off!</span>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                        <p class="payment-note" id="wallet-note">
+                            <i class="fas fa-info-circle"></i>
+                            <span id="wallet-status-text">Connect your wallet to pay with SUTRA</span>
+                        </p>
                     </div>
 
                     <!-- Submit Button -->
@@ -213,6 +255,9 @@
         </div>
     </div>
 
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="js/wallet.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/submit.js"></script>
 </body>

@@ -2,8 +2,45 @@
  * Artist Portal - Track Submission Module
  */
 
+// SUTRA Token Contract on Polygon
+const SUTRA_CONTRACT = {
+    address: '0x5f76b6b561690bB425F0e131A1AC5E8d0c92C3bB',
+    decimals: 18
+};
+
+// Treasury wallet for SUTRA payments
+const TREASURY_WALLET = '0x742d35Cc6634C0532925a3b844Bc9e7595f5bE21';
+
+// Pricing
+const PRICING = {
+    pro_usd: 4900, // $49.00 in cents
+    pro_sutra: 392 // SUTRA amount (20% discount from ~490)
+};
+
+// SUTRA Token ABI (minimal for transfer)
+const SUTRA_ABI = [
+    {
+        "constant": false,
+        "inputs": [
+            { "name": "_to", "type": "address" },
+            { "name": "_value", "type": "uint256" }
+        ],
+        "name": "transfer",
+        "outputs": [{ "name": "", "type": "bool" }],
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "name": "_owner", "type": "address" }],
+        "name": "balanceOf",
+        "outputs": [{ "name": "balance", "type": "uint256" }],
+        "type": "function"
+    }
+];
+
 const Submit = {
     trackData: null,
+    stripe: null,
 
     /**
      * Initialize submission page
@@ -99,6 +136,7 @@ const Submit = {
                 tierOptions.forEach(o => o.classList.remove('selected'));
                 option.classList.add('selected');
                 option.querySelector('input[type="radio"]').checked = true;
+                this.updatePaymentVisibility();
             });
         });
 
@@ -107,6 +145,16 @@ const Submit = {
         if (checkedTier) {
             checkedTier.closest('.tier-option').classList.add('selected');
         }
+
+        // Payment method selection
+        const paymentOptions = document.querySelectorAll('.payment-option input');
+        paymentOptions.forEach(option => {
+            option.addEventListener('change', () => this.updatePaymentUI());
+        });
+
+        // Initialize payment visibility
+        this.updatePaymentVisibility();
+        this.updateWalletStatus();
 
         // Form submission
         const form = document.getElementById('submit-form');
@@ -198,8 +246,91 @@ const Submit = {
         const submitBtn = document.getElementById('submit-btn');
         const hasTrack = this.trackData !== null;
         const hasGenre = document.getElementById('genre').value !== '';
+        const tier = document.querySelector('input[name="tier"]:checked')?.value || 'free';
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'stripe';
 
         submitBtn.disabled = !hasTrack || !hasGenre;
+
+        // Update button text based on tier and payment method
+        if (tier === 'pro') {
+            if (paymentMethod === 'sutra') {
+                submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Pay ' + PRICING.pro_sutra + ' SUTRA & Start Campaign';
+            } else {
+                submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Pay $49 & Start Campaign';
+            }
+        } else {
+            submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Start Campaign';
+        }
+    },
+
+    /**
+     * Update payment section visibility based on tier
+     */
+    updatePaymentVisibility() {
+        const tier = document.querySelector('input[name="tier"]:checked')?.value || 'free';
+        const paymentSection = document.getElementById('payment-section');
+
+        if (paymentSection) {
+            if (tier === 'pro') {
+                paymentSection.classList.remove('hidden');
+            } else {
+                paymentSection.classList.add('hidden');
+            }
+        }
+
+        this.updateSubmitButton();
+    },
+
+    /**
+     * Update payment UI based on wallet status
+     */
+    updateWalletStatus() {
+        const sutraOption = document.querySelector('input[value="sutra"]');
+        const sutraCard = sutraOption?.closest('.payment-option');
+        const walletNote = document.getElementById('wallet-note');
+        const walletStatusText = document.getElementById('wallet-status-text');
+
+        if (typeof WalletModule !== 'undefined' && WalletModule.isConnected()) {
+            const balance = WalletModule.getBalance();
+            const canAfford = balance >= PRICING.pro_sutra;
+
+            if (sutraCard) {
+                sutraCard.classList.remove('disabled');
+                sutraOption.disabled = !canAfford;
+            }
+
+            if (walletStatusText) {
+                if (canAfford) {
+                    walletStatusText.innerHTML = `Wallet connected: ${balance.toFixed(2)} SUTRA available`;
+                    walletNote.style.background = '#d1fae5';
+                } else {
+                    walletStatusText.innerHTML = `Insufficient balance: ${balance.toFixed(2)} SUTRA (need ${PRICING.pro_sutra})`;
+                    walletNote.style.background = '#fef3c7';
+                }
+            }
+        } else {
+            if (sutraCard) {
+                sutraCard.classList.add('disabled');
+                sutraOption.disabled = true;
+            }
+            if (walletStatusText) {
+                walletStatusText.innerHTML = 'Connect your wallet to pay with SUTRA';
+            }
+            // Switch to Stripe if SUTRA was selected
+            const stripeOption = document.querySelector('input[value="stripe"]');
+            if (stripeOption && sutraOption?.checked) {
+                stripeOption.checked = true;
+            }
+        }
+
+        this.updateSubmitButton();
+    },
+
+    /**
+     * Update payment UI
+     */
+    updatePaymentUI() {
+        this.updateSubmitButton();
     },
 
     /**
@@ -214,8 +345,10 @@ const Submit = {
         }
 
         const submitBtn = document.getElementById('submit-btn');
+        const tier = document.querySelector('input[name="tier"]:checked').value;
+        const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'stripe';
+
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Campaign...';
 
         const formData = {
             spotify_url: document.getElementById('spotify-url').value.trim(),
@@ -224,8 +357,33 @@ const Submit = {
             artwork_url: document.getElementById('artwork-url-input').value,
             genre: document.getElementById('genre').value,
             pitch: document.getElementById('pitch').value.trim(),
-            tier: document.querySelector('input[name="tier"]:checked').value
+            tier: tier,
+            payment_method: tier === 'pro' ? paymentMethod : null
         };
+
+        // Handle Pro tier payment
+        if (tier === 'pro') {
+            if (paymentMethod === 'sutra') {
+                // Process SUTRA payment
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing SUTRA Payment...';
+                const paymentResult = await this.processSutraPayment();
+                if (!paymentResult.success) {
+                    this.showError(paymentResult.error || 'SUTRA payment failed');
+                    submitBtn.disabled = false;
+                    this.updateSubmitButton();
+                    return;
+                }
+                formData.payment_tx = paymentResult.txHash;
+                formData.payment_amount_sutra = PRICING.pro_sutra;
+            } else {
+                // Redirect to Stripe checkout
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting to Payment...';
+                await this.processStripePayment(formData);
+                return; // Stripe will redirect, don't continue
+            }
+        }
+
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Campaign...';
 
         try {
             const response = await ArtistAuth.apiRequest('/submit', {
@@ -238,21 +396,87 @@ const Submit = {
             if (result.success) {
                 // Show success modal
                 document.getElementById('success-modal').classList.remove('hidden');
-
-                // If Pro tier, might need to redirect to payment
-                if (formData.tier === 'pro' && result.payment_url) {
-                    window.location.href = result.payment_url;
-                }
             } else {
                 this.showError(result.error || 'Failed to create campaign');
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Start Campaign';
+                this.updateSubmitButton();
             }
         } catch (error) {
             console.error('Submit error:', error);
             this.showError('Failed to create campaign. Please try again.');
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Start Campaign';
+            this.updateSubmitButton();
+        }
+    },
+
+    /**
+     * Process SUTRA payment on-chain
+     */
+    async processSutraPayment() {
+        if (typeof WalletModule === 'undefined' || !WalletModule.isConnected()) {
+            return { success: false, error: 'Wallet not connected' };
+        }
+
+        try {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+
+            const sutraContract = new ethers.Contract(
+                SUTRA_CONTRACT.address,
+                SUTRA_ABI,
+                signer
+            );
+
+            const amountWei = ethers.utils.parseUnits(PRICING.pro_sutra.toString(), 18);
+
+            // Execute transfer
+            const tx = await sutraContract.transfer(TREASURY_WALLET, amountWei);
+            const receipt = await tx.wait();
+
+            return {
+                success: true,
+                txHash: receipt.transactionHash,
+                amount: PRICING.pro_sutra
+            };
+        } catch (error) {
+            console.error('SUTRA payment error:', error);
+            if (error.code === 4001) {
+                return { success: false, error: 'Transaction rejected by user' };
+            }
+            return { success: false, error: error.message || 'Payment failed' };
+        }
+    },
+
+    /**
+     * Process Stripe payment (redirect to checkout)
+     */
+    async processStripePayment(formData) {
+        try {
+            // Create checkout session on backend
+            const response = await ArtistAuth.apiRequest('/create-checkout', {
+                method: 'POST',
+                body: JSON.stringify({
+                    ...formData,
+                    return_url: window.location.origin + '/artists/dashboard.html?payment=success',
+                    cancel_url: window.location.origin + '/artists/submit.html?payment=cancelled'
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.checkout_url) {
+                // Redirect to Stripe
+                window.location.href = result.checkout_url;
+            } else {
+                this.showError(result.error || 'Failed to create payment session');
+                document.getElementById('submit-btn').disabled = false;
+                this.updateSubmitButton();
+            }
+        } catch (error) {
+            console.error('Stripe setup error:', error);
+            this.showError('Payment setup failed. Please try again.');
+            document.getElementById('submit-btn').disabled = false;
+            this.updateSubmitButton();
         }
     },
 
