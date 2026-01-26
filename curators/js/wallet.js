@@ -229,11 +229,9 @@ const WalletModule = {
             }
         }
 
-        // Update sidebar balance if exists (for artist portal)
-        const sidebarBalance = document.getElementById('sutra-balance');
-        if (sidebarBalance && this.state.connected) {
-            sidebarBalance.textContent = this.formatBalance(this.state.sutraBalance);
-        }
+        // Note: Do NOT update the main sutra-balance element here
+        // That shows the database/platform balance, not the on-chain wallet balance
+        // The walletBalance element shows the on-chain balance for withdrawals
     },
 
     // Helper: Shorten address
