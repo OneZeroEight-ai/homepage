@@ -12,6 +12,7 @@ const Sutra = {
     async init() {
         await ArtistAuth.initPage((artist) => {
             this.updateUserInfo(artist);
+            this.loadReferralCode(artist);
         });
 
         await Promise.all([
@@ -265,6 +266,49 @@ const Sutra = {
     setElementText(id, text) {
         const el = document.getElementById(id);
         if (el) el.textContent = text;
+    },
+
+    /**
+     * Load referral code from artist data
+     */
+    loadReferralCode(artist) {
+        const codeEl = document.getElementById('referral-code');
+        if (codeEl && artist) {
+            // Generate referral code from artist ID if not already present
+            const code = artist.referral_code || this.generateReferralCode(artist.id);
+            codeEl.textContent = code;
+        }
+    },
+
+    /**
+     * Generate a referral code from artist ID
+     */
+    generateReferralCode(artistId) {
+        if (!artistId) return 'SUTRA000';
+        // Take first 8 chars of ID and make uppercase
+        return 'SUTRA' + artistId.replace(/-/g, '').substring(0, 6).toUpperCase();
+    },
+
+    /**
+     * Copy referral code to clipboard
+     */
+    copyReferralCode() {
+        const codeEl = document.getElementById('referral-code');
+        if (!codeEl) return;
+
+        const code = codeEl.textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            // Show copied feedback
+            const originalText = codeEl.textContent;
+            codeEl.textContent = 'Copied!';
+            codeEl.style.color = '#10b981';
+            setTimeout(() => {
+                codeEl.textContent = originalText;
+                codeEl.style.color = '';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy:', err);
+        });
     }
 };
 

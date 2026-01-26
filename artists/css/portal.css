@@ -1656,3 +1656,153 @@ tr:hover td {
         right: 15px;
     }
 }
+
+/* SUTRA Earning/Spending Sections */
+.earn-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.earn-category {
+    background: var(--background);
+    border-radius: var(--radius-sm);
+    padding: 15px;
+}
+
+.earn-category-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.earn-category-title i {
+    color: #667eea;
+    font-size: 14px;
+}
+
+.earn-table {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.earn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.earn-action {
+    color: var(--text-primary);
+}
+
+.earn-amount {
+    font-weight: 600;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.spend-table {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.spend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: var(--background);
+    border-radius: var(--radius-sm);
+}
+
+.spend-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.spend-feature {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.spend-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.spend-cost {
+    font-weight: 600;
+    color: #8b5cf6;
+    background: rgba(139, 92, 246, 0.1);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.spend-note {
+    margin-top: 15px;
+    padding: 12px 15px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.spend-note i {
+    color: #667eea;
+}
+
+.referral-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.referral-code {
+    flex: 1;
+    background: var(--background);
+    padding: 10px 15px;
+    border-radius: var(--radius-sm);
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: 600;
+    color: #667eea;
+    letter-spacing: 1px;
+}
+
+.btn-small {
+    padding: 8px 12px;
+    font-size: 12px;
+}
+
+@media (max-width: 768px) {
+    .earn-categories {
+        grid-template-columns: 1fr;
+    }
+
+    .spend-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .spend-cost {
+        align-self: flex-end;
+    }
+}
