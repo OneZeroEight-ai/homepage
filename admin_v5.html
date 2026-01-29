@@ -230,7 +230,7 @@
 </div>
 
 <div class="modal-overlay" id="artistModal"><div class="modal"><div class="modal-header"><h3>🎤 Artist Details</h3><button class="modal-close" onclick="closeModal('artistModal')">×</button></div><div class="modal-body" id="artistModalContent"></div></div></div>
-<div class="modal-overlay" id="agentModal"><div class="modal"><div class="modal-header"><h3>🤖 AI Agent Results</h3><button class="modal-close" onclick="closeModal('agentModal')">×</button></div><div class="modal-body" id="agentModalContent"></div></div></div>
+<div class="modal-overlay" id="agentModal"><div class="modal"><div class="modal-header"><h3>🤖 Agent Results</h3><button class="modal-close" onclick="closeModal('agentModal')">×</button></div><div class="modal-body" id="agentModalContent"></div></div></div>
 <div class="modal-overlay" id="placementModal"><div class="modal" style="max-width:600px;"><div class="modal-header" style="background:linear-gradient(135deg,var(--spotify),#1ed760);"><h3 style="color:white;">📍 Place Track on Playlist</h3><button class="modal-close" onclick="closeModal('placementModal')" style="background:rgba(255,255,255,0.2);color:white;">×</button></div><div class="modal-body" id="placementModalContent"></div></div></div>
 <div class="modal-overlay" id="confirmModal"><div class="modal confirm-modal"><div class="modal-body"><div class="confirm-icon" id="confirmIcon">⚠️</div><div class="confirm-title" id="confirmTitle">Confirm Action</div><div class="confirm-message" id="confirmMessage">Are you sure?</div><div class="confirm-details" id="confirmDetails" style="display:none;"></div><div class="confirm-buttons"><button class="btn btn-ghost" onclick="closeModal('confirmModal')">Cancel</button><button class="btn btn-primary" id="confirmButton" onclick="executeConfirmedAction()">Confirm</button></div></div></div></div>
 <div class="toast" id="toast"></div>
@@ -599,7 +599,7 @@ function confirmMarkPlaced(id, track, artist) {
     showConfirmation({ icon: '✅', title: 'Mark as Placed?', message: 'This will update status and notify Discord.', details: '<p><strong>Track:</strong> ' + escapeHtml(track) + '</p><p><strong>Artist:</strong> ' + escapeHtml(artist) + '</p>', confirmText: 'Mark Placed', confirmClass: 'btn-success', action: () => markPlaced(id) });
 }
 function confirmRunAgents(track, artist, url, genre) {
-    showConfirmation({ icon: '🤖', title: 'Run AI Agents?', message: 'This may take 30-60 seconds.', details: '<p><strong>Track:</strong> ' + escapeHtml(track) + '</p><p><strong>Artist:</strong> ' + escapeHtml(artist) + '</p>' + (url ? '<p><strong>Spotify:</strong> <a href="' + escapeHtml(url) + '" target="_blank" style="color:var(--spotify);">Open</a></p>' : ''), confirmText: 'Run Agents', confirmClass: 'btn-primary', action: () => runAgents(track, artist, url, genre) });
+    showConfirmation({ icon: '🤖', title: 'Run Intelligent Agents?', message: 'This may take 30-60 seconds.', details: '<p><strong>Track:</strong> ' + escapeHtml(track) + '</p><p><strong>Artist:</strong> ' + escapeHtml(artist) + '</p>' + (url ? '<p><strong>Spotify:</strong> <a href="' + escapeHtml(url) + '" target="_blank" style="color:var(--spotify);">Open</a></p>' : ''), confirmText: 'Run Intelligent Agents', confirmClass: 'btn-primary', action: () => runAgents(track, artist, url, genre) });
 }
 
 async function deleteArtist(id) { try { await fetch(API + '/admin/artists/' + id, {method:'DELETE'}); showToast('Artist deleted'); loadArtists(); loadStats(); } catch(e) { showToast('Error: ' + e.message, 'error'); } }
@@ -620,7 +620,7 @@ async function runAgents(track, artist, url, genre) {
         var sr = await fetch(API + '/workflow/agent/generate-social?track_title=' + encodeURIComponent(track) + '&artist_name=' + encodeURIComponent(artist) + '&spotify_url=' + encodeURIComponent(url) + '&genre=' + encodeURIComponent(genre), {method:'POST'});
         var s = await sr.json();
         out.textContent += '\n✅ Social posts generated!\n\n' + JSON.stringify(s, null, 2);
-        showToast('AI agents completed!');
+        showToast('Intelligent Agents completed!');
     } catch(e) { out.textContent += '\n\n❌ Error: ' + e.message; showToast('Agent error', 'error'); }
 }
 
