@@ -105,7 +105,6 @@ const Sutra = {
         if (!this.balance) return;
 
         this.setElementText('balance-value', this.formatNumber(this.balance.balance));
-        this.setElementText('balance-usd', `~$${this.balance.usd_value.toFixed(2)} USD`);
         this.setElementText('stat-earned', this.formatNumber(this.balance.total_earned));
         this.setElementText('stat-spent', this.formatNumber(this.balance.total_spent));
         this.setElementText('stat-pending', this.formatNumber(this.balance.pending));
