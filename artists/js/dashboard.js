@@ -80,9 +80,98 @@ const Dashboard = {
             this.renderSocialPosts();
             this.renderActivity();
             this.updateSutraBalance();
+            this.checkUpgradeBanner();
         } catch (error) {
             console.error('Failed to load dashboard:', error);
             this.showError('Failed to load dashboard data');
+        }
+    },
+
+    /**
+     * Check if user has free tier campaigns and show upgrade banner
+     */
+    async checkUpgradeBanner() {
+        const { recent_campaigns } = this.data;
+        if (!recent_campaigns || recent_campaigns.length === 0) return;
+
+        // Check if any campaign is free/basic tier
+        const freeCampaign = recent_campaigns.find(c =>
+            c.tier === 'free' || c.tier === 'basic'
+        );
+
+        if (!freeCampaign) return;
+
+        // Show the upgrade banner
+        const banner = document.getElementById('upgrade-banner');
+        if (!banner) return;
+
+        // Get genre stats for personalized copy
+        try {
+            const genre = freeCampaign.track_genre || 'indie';
+            const statsResponse = await fetch(`${ArtistAuth.API_BASE.replace('/artist-portal', '')}/stats/genre/${encodeURIComponent(genre)}`);
+
+            if (statsResponse.ok) {
+                const stats = await statsResponse.json();
+                const curatorCountEl = document.getElementById('curator-count');
+                if (curatorCountEl) {
+                    curatorCountEl.textContent = stats.curator_count || '3,000+';
+                }
+            }
+
+            banner.style.display = 'flex';
+
+            // Track conversion event
+            this.trackConversion('viewed_banner', 'dashboard', {
+                campaign_id: freeCampaign.id,
+                tier: freeCampaign.tier
+            });
+        } catch (error) {
+            console.error('Failed to load genre stats:', error);
+            // Still show banner with default count
+            banner.style.display = 'flex';
+        }
+    },
+
+    /**
+     * Start upgrade flow
+     */
+    startUpgrade(tier) {
+        const { recent_campaigns } = this.data;
+        const freeCampaign = recent_campaigns?.find(c =>
+            c.tier === 'free' || c.tier === 'basic'
+        );
+
+        // Track conversion event
+        this.trackConversion('clicked_cta', 'dashboard_banner', {
+            tier,
+            campaign_id: freeCampaign?.id
+        });
+
+        // Redirect to upgrade page or checkout
+        if (freeCampaign) {
+            window.location.href = `submit.html?upgrade_from=${freeCampaign.id}&tier=${tier}`;
+        } else {
+            window.location.href = `submit.html?tier=${tier}`;
+        }
+    },
+
+    /**
+     * Track conversion event
+     */
+    async trackConversion(eventType, source, metadata = {}) {
+        try {
+            await fetch(`${ArtistAuth.API_BASE.replace('/artist-portal', '')}/conversion-events`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    event_type: eventType,
+                    source: source,
+                    metadata: metadata
+                })
+            });
+        } catch (error) {
+            // Silent fail - conversion tracking shouldn't break UI
+            console.debug('Conversion tracking failed:', error);
         }
     },
 
@@ -344,6 +433,11 @@ const Dashboard = {
 
 // Make Dashboard available globally
 window.Dashboard = Dashboard;
+
+// DashboardModule wrapper for HTML onclick handlers
+window.DashboardModule = {
+    startUpgrade: (tier) => Dashboard.startUpgrade(tier)
+};
 
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => Dashboard.init());

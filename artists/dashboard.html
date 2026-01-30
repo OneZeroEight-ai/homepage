@@ -97,6 +97,39 @@
                 </div>
             </div>
 
+            <!-- Upgrade Banner (shown for free tier) -->
+            <div class="upgrade-banner" id="upgrade-banner" style="display: none;">
+                <div class="upgrade-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <div class="upgrade-content">
+                    <h3>Unlock 3,000+ External Curators</h3>
+                    <p>Your genre has <strong id="curator-count">--</strong> curators waiting to hear your music.</p>
+
+                    <div class="intro-pricing">
+                        <p class="pricing-label">Limited Time Intro Pricing:</p>
+                        <div class="price-row">
+                            <span>Single Track:</span>
+                            <span class="price-regular strikethrough">$49</span>
+                            <span class="price-intro">$19.95</span>
+                        </div>
+                        <div class="price-row">
+                            <span>Full Album (10 tracks):</span>
+                            <span class="price-regular strikethrough">$199</span>
+                            <span class="price-intro">$99</span>
+                        </div>
+                    </div>
+
+                    <div class="upgrade-cta">
+                        <button class="btn btn-primary" onclick="DashboardModule.startUpgrade('single')">
+                            <i class="fas fa-rocket"></i>
+                            Upgrade Now
+                        </button>
+                        <a href="curator-preview.html" class="btn btn-outline">See Curator Network</a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Recent Campaigns -->
             <div class="content-section">
                 <div class="section-header">
