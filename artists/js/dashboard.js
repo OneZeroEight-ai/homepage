@@ -4,6 +4,8 @@
 
 const Dashboard = {
     data: null,
+    selectedCurators: [],
+    curatorStatuses: {},
 
     /**
      * Initialize dashboard
@@ -81,6 +83,7 @@ const Dashboard = {
             this.renderActivity();
             this.updateSutraBalance();
             this.checkUpgradeBanner();
+            await this.loadCuratorMatching();
         } catch (error) {
             console.error('Failed to load dashboard:', error);
             this.showError('Failed to load dashboard data');
@@ -129,6 +132,136 @@ const Dashboard = {
             console.error('Failed to load genre stats:', error);
             // Still show banner with default count
             banner.style.display = 'flex';
+        }
+    },
+
+    /**
+     * Load curator matching data
+     */
+    async loadCuratorMatching() {
+        const { recent_campaigns } = this.data;
+        if (!recent_campaigns || recent_campaigns.length === 0) return;
+
+        // Get the most recent active campaign
+        const activeCampaign = recent_campaigns.find(c => c.status === 'active') || recent_campaigns[0];
+        if (!activeCampaign) return;
+
+        const section = document.getElementById('curator-matching');
+        if (!section) return;
+
+        try {
+            // Get matching curators count
+            const genre = activeCampaign.track_genre || 'indie';
+            const previewResponse = await fetch(
+                `${ArtistAuth.API_BASE.replace('/artist-portal', '')}/curator-portal/preview?genre=${encodeURIComponent(genre)}`
+            );
+
+            if (previewResponse.ok) {
+                const previewData = await previewResponse.json();
+                this.setElementText('total-matches', previewData.total_count || 0);
+            }
+
+            // Get outreach status for this campaign
+            const statusResponse = await fetch(
+                `${ArtistAuth.API_BASE.replace('/artist-portal', '')}/campaigns/${activeCampaign.id}/outreach-status`
+            );
+
+            if (statusResponse.ok) {
+                const statusData = await statusResponse.json();
+                this.setElementText('sent-count', statusData.sent || 0);
+                this.setElementText('accepted-count', statusData.accepted || 0);
+                this.setElementText('rejected-count', statusData.rejected || 0);
+                this.curatorStatuses = statusData.curator_statuses || {};
+
+                // If we have outreach data, show curator list for pro tier
+                if (activeCampaign.tier === 'pro' || activeCampaign.tier === 'album') {
+                    const listSection = document.getElementById('curator-list-section');
+                    if (listSection && statusData.curators && statusData.curators.length > 0) {
+                        listSection.style.display = 'block';
+                        this.renderCuratorCards(statusData.curators);
+                    }
+                } else {
+                    // Show free tier note
+                    const freeNote = document.getElementById('free-tier-note');
+                    if (freeNote) freeNote.style.display = 'block';
+                }
+            }
+
+            // Show the section
+            section.style.display = 'block';
+
+        } catch (error) {
+            console.error('Failed to load curator matching:', error);
+            // Don't show section if we can't load data
+        }
+    },
+
+    /**
+     * Render curator cards
+     */
+    renderCuratorCards(curators) {
+        const container = document.getElementById('curator-cards');
+        if (!container || !curators) return;
+
+        container.innerHTML = curators.map(curator => {
+            const status = this.curatorStatuses[curator.id] || 'available';
+            const isDisabled = status !== 'available';
+            const isSelected = this.selectedCurators.includes(curator.id);
+
+            let statusLabel = '';
+            if (status === 'sent') statusLabel = '<span class="curator-card-status sent">Sent</span>';
+            else if (status === 'accepted') statusLabel = '<span class="curator-card-status accepted">Accepted</span>';
+            else if (status === 'rejected') statusLabel = '<span class="curator-card-status rejected">Rejected</span>';
+
+            return `
+                <div class="curator-card-item ${isDisabled ? 'disabled' : ''} ${isSelected ? 'selected' : ''}"
+                     data-curator-id="${curator.id}"
+                     onclick="Dashboard.toggleCuratorSelection('${curator.id}', ${isDisabled})">
+                    <input type="checkbox"
+                           ${isDisabled ? 'disabled' : ''}
+                           ${isSelected ? 'checked' : ''}
+                           onclick="event.stopPropagation()">
+                    <div class="curator-card-info">
+                        <div class="curator-card-name">${this.escapeHtml(curator.name || 'Curator')}</div>
+                        <div class="curator-card-followers">${this.formatNumber(curator.followers || 0)} followers</div>
+                    </div>
+                    ${statusLabel}
+                </div>
+            `;
+        }).join('');
+    },
+
+    /**
+     * Toggle curator selection
+     */
+    toggleCuratorSelection(curatorId, isDisabled) {
+        if (isDisabled) return;
+
+        const index = this.selectedCurators.indexOf(curatorId);
+        if (index > -1) {
+            this.selectedCurators.splice(index, 1);
+        } else {
+            this.selectedCurators.push(curatorId);
+        }
+
+        // Update UI
+        const card = document.querySelector(`[data-curator-id="${curatorId}"]`);
+        if (card) {
+            card.classList.toggle('selected');
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            if (checkbox) checkbox.checked = this.selectedCurators.includes(curatorId);
+        }
+
+        this.updateSelectedCount();
+    },
+
+    /**
+     * Update selected curator count
+     */
+    updateSelectedCount() {
+        const countEl = document.getElementById('selected-curator-count');
+        if (countEl) {
+            countEl.textContent = this.selectedCurators.length;
         }
     },
 

@@ -2061,3 +2061,211 @@ tr:hover td {
         grid-template-columns: 1fr;
     }
 }
+
+/* ===========================================
+   CURATOR MATCHING SECTION
+   =========================================== */
+
+.curator-matching-section {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.curator-match-stat {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.match-number {
+    font-size: 48px;
+    font-weight: 700;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.match-label {
+    font-size: 16px;
+    color: var(--text-secondary);
+}
+
+.outreach-status {
+    margin-top: 20px;
+}
+
+.status-pills {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.status-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--background);
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    min-width: 120px;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.status-dot.red { background: #ef4444; }
+.status-dot.yellow { background: #f59e0b; }
+.status-dot.green { background: #10b981; }
+
+.status-count {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.status-pill .status-label {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* Curator Selection Cards */
+.curator-list-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+}
+
+.selected-count {
+    font-size: 13px;
+    color: var(--text-muted);
+    background: var(--background);
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+}
+
+.curator-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.curator-card-item {
+    background: var(--background);
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.curator-card-item:hover {
+    border-color: var(--border);
+}
+
+.curator-card-item.selected {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.curator-card-item.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.curator-card-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #10b981;
+    cursor: pointer;
+}
+
+.curator-card-item.disabled input[type="checkbox"] {
+    cursor: not-allowed;
+}
+
+.curator-card-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.curator-card-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.curator-card-followers {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.curator-card-status {
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.curator-card-status.sent {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.curator-card-status.accepted {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.curator-card-status.rejected {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+/* Hide pro features for free tier */
+.free-tier .pro-only { display: none; }
+.pro-tier .free-only { display: none; }
+
+@media (max-width: 768px) {
+    .curator-match-stat {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .match-number {
+        font-size: 36px;
+    }
+
+    .status-pills {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .status-pill {
+        width: 100%;
+    }
+
+    .curator-cards {
+        grid-template-columns: 1fr;
+    }
+}
