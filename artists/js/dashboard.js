@@ -4,8 +4,8 @@
 
 const Dashboard = {
     data: null,
-    selectedCurators: [],
-    curatorStatuses: {},
+    selectedPlaylists: [],
+    playlistStatuses: {},
 
     /**
      * Initialize dashboard
@@ -83,7 +83,7 @@ const Dashboard = {
             this.renderActivity();
             this.updateSutraBalance();
             this.checkUpgradeBanner();
-            await this.loadCuratorMatching();
+            await this.loadPlaylistMatching();
         } catch (error) {
             console.error('Failed to load dashboard:', error);
             this.showError('Failed to load dashboard data');
@@ -115,9 +115,9 @@ const Dashboard = {
 
             if (statsResponse.ok) {
                 const stats = await statsResponse.json();
-                const curatorCountEl = document.getElementById('curator-count');
-                if (curatorCountEl) {
-                    curatorCountEl.textContent = stats.curator_count || '3,000+';
+                const playlistCountEl = document.getElementById('playlist-count');
+                if (playlistCountEl) {
+                    playlistCountEl.textContent = stats.playlist_count || stats.curator_count || '3,000+';
                 }
             }
 
@@ -136,9 +136,9 @@ const Dashboard = {
     },
 
     /**
-     * Load curator matching data
+     * Load playlist matching data
      */
-    async loadCuratorMatching() {
+    async loadPlaylistMatching() {
         const { recent_campaigns } = this.data;
         if (!recent_campaigns || recent_campaigns.length === 0) return;
 
@@ -146,11 +146,11 @@ const Dashboard = {
         const activeCampaign = recent_campaigns.find(c => c.status === 'active') || recent_campaigns[0];
         if (!activeCampaign) return;
 
-        const section = document.getElementById('curator-matching');
+        const section = document.getElementById('playlist-matching');
         if (!section) return;
 
         try {
-            // Get matching curators count
+            // Get matching playlists count
             const genre = activeCampaign.track_genre || 'indie';
             const previewResponse = await fetch(
                 `${ArtistAuth.API_BASE.replace('/artist-portal', '')}/curator-portal/preview?genre=${encodeURIComponent(genre)}`
@@ -171,14 +171,14 @@ const Dashboard = {
                 this.setElementText('sent-count', statusData.sent || 0);
                 this.setElementText('accepted-count', statusData.accepted || 0);
                 this.setElementText('rejected-count', statusData.rejected || 0);
-                this.curatorStatuses = statusData.curator_statuses || {};
+                this.playlistStatuses = statusData.playlist_statuses || statusData.curator_statuses || {};
 
-                // If we have outreach data, show curator list for pro tier
+                // If we have outreach data, show playlist list for pro tier
                 if (activeCampaign.tier === 'pro' || activeCampaign.tier === 'album') {
-                    const listSection = document.getElementById('curator-list-section');
-                    if (listSection && statusData.curators && statusData.curators.length > 0) {
+                    const listSection = document.getElementById('playlist-list-section');
+                    if (listSection && statusData.playlists && statusData.playlists.length > 0) {
                         listSection.style.display = 'block';
-                        this.renderCuratorCards(statusData.curators);
+                        this.renderPlaylistCards(statusData.playlists);
                     }
                 } else {
                     // Show free tier note
@@ -191,39 +191,46 @@ const Dashboard = {
             section.style.display = 'block';
 
         } catch (error) {
-            console.error('Failed to load curator matching:', error);
+            console.error('Failed to load playlist matching:', error);
             // Don't show section if we can't load data
         }
     },
 
     /**
-     * Render curator cards
+     * Render playlist cards
      */
-    renderCuratorCards(curators) {
-        const container = document.getElementById('curator-cards');
-        if (!container || !curators) return;
+    renderPlaylistCards(playlists) {
+        const container = document.getElementById('playlist-cards');
+        if (!container || !playlists) return;
 
-        container.innerHTML = curators.map(curator => {
-            const status = this.curatorStatuses[curator.id] || 'available';
+        const defaultImage = '/images/default-playlist.png';
+
+        container.innerHTML = playlists.map(playlist => {
+            const status = this.playlistStatuses[playlist.id] || 'available';
             const isDisabled = status !== 'available';
-            const isSelected = this.selectedCurators.includes(curator.id);
+            const isSelected = this.selectedPlaylists.includes(playlist.id);
+            const imageUrl = playlist.image_url || defaultImage;
 
             let statusLabel = '';
-            if (status === 'sent') statusLabel = '<span class="curator-card-status sent">Sent</span>';
-            else if (status === 'accepted') statusLabel = '<span class="curator-card-status accepted">Accepted</span>';
-            else if (status === 'rejected') statusLabel = '<span class="curator-card-status rejected">Rejected</span>';
+            if (status === 'sent' || status === 'pitched') statusLabel = '<span class="playlist-status sent">Pitched</span>';
+            else if (status === 'accepted') statusLabel = '<span class="playlist-status accepted">Accepted</span>';
+            else if (status === 'rejected' || status === 'declined') statusLabel = '<span class="playlist-status rejected">Declined</span>';
 
             return `
-                <div class="curator-card-item ${isDisabled ? 'disabled' : ''} ${isSelected ? 'selected' : ''}"
-                     data-curator-id="${curator.id}"
-                     onclick="Dashboard.toggleCuratorSelection('${curator.id}', ${isDisabled})">
+                <div class="playlist-card ${isDisabled ? 'has-status' : ''} ${isSelected ? 'selected' : ''}"
+                     data-playlist-id="${playlist.id}"
+                     onclick="Dashboard.togglePlaylistSelection('${playlist.id}', ${isDisabled})">
                     <input type="checkbox"
                            ${isDisabled ? 'disabled' : ''}
                            ${isSelected ? 'checked' : ''}
                            onclick="event.stopPropagation()">
-                    <div class="curator-card-info">
-                        <div class="curator-card-name">${this.escapeHtml(curator.name || 'Curator')}</div>
-                        <div class="curator-card-followers">${this.formatNumber(curator.followers || 0)} followers</div>
+                    <img src="${imageUrl}" class="playlist-image" alt="" onerror="this.src='${defaultImage}'">
+                    <div class="playlist-info">
+                        <div class="playlist-name">${this.escapeHtml(playlist.name || 'Playlist')}</div>
+                        <div class="playlist-meta">
+                            <span class="playlist-followers">${this.formatNumber(playlist.followers || 0)} followers</span>
+                            ${playlist.genre ? `<span class="playlist-genre">${this.escapeHtml(playlist.genre)}</span>` : ''}
+                        </div>
                     </div>
                     ${statusLabel}
                 </div>
@@ -232,36 +239,36 @@ const Dashboard = {
     },
 
     /**
-     * Toggle curator selection
+     * Toggle playlist selection
      */
-    toggleCuratorSelection(curatorId, isDisabled) {
+    togglePlaylistSelection(playlistId, isDisabled) {
         if (isDisabled) return;
 
-        const index = this.selectedCurators.indexOf(curatorId);
+        const index = this.selectedPlaylists.indexOf(playlistId);
         if (index > -1) {
-            this.selectedCurators.splice(index, 1);
+            this.selectedPlaylists.splice(index, 1);
         } else {
-            this.selectedCurators.push(curatorId);
+            this.selectedPlaylists.push(playlistId);
         }
 
         // Update UI
-        const card = document.querySelector(`[data-curator-id="${curatorId}"]`);
+        const card = document.querySelector(`[data-playlist-id="${playlistId}"]`);
         if (card) {
             card.classList.toggle('selected');
             const checkbox = card.querySelector('input[type="checkbox"]');
-            if (checkbox) checkbox.checked = this.selectedCurators.includes(curatorId);
+            if (checkbox) checkbox.checked = this.selectedPlaylists.includes(playlistId);
         }
 
         this.updateSelectedCount();
     },
 
     /**
-     * Update selected curator count
+     * Update selected playlist count
      */
     updateSelectedCount() {
-        const countEl = document.getElementById('selected-curator-count');
+        const countEl = document.getElementById('selected-playlist-count');
         if (countEl) {
-            countEl.textContent = this.selectedCurators.length;
+            countEl.textContent = this.selectedPlaylists.length;
         }
     },
 

@@ -99,24 +99,24 @@
                 </div>
             </div>
 
-            <!-- Curator Matching Section -->
-            <div class="curator-matching-section" id="curator-matching" style="display: none;">
+            <!-- Playlist Matching Section -->
+            <div class="playlist-matching-section" id="playlist-matching" style="display: none;">
                 <div class="section-header">
-                    <h2 class="section-title"><i class="fas fa-users" style="margin-right: 10px; color: #667eea;"></i>Your Curator Network</h2>
+                    <h2 class="section-title"><i class="fab fa-spotify" style="margin-right: 10px; color: #1DB954;"></i>Matching Playlists</h2>
                 </div>
 
-                <div class="curator-match-stat">
+                <div class="playlist-match-stat">
                     <span class="match-number" id="total-matches">0</span>
-                    <span class="match-label">curators match your sound</span>
+                    <span class="match-label">playlists match your sound</span>
                 </div>
 
                 <div class="outreach-status">
-                    <h4 style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">Outreach Status</h4>
+                    <h4 style="font-size: 14px; color: var(--text-secondary); margin-bottom: 12px;">Pitch Status</h4>
                     <div class="status-pills">
                         <div class="status-pill sent">
                             <span class="status-dot yellow"></span>
                             <span class="status-count" id="sent-count">0</span>
-                            <span class="status-label">Sent</span>
+                            <span class="status-label">Pitched</span>
                         </div>
                         <div class="status-pill accepted">
                             <span class="status-dot green"></span>
@@ -126,21 +126,21 @@
                         <div class="status-pill rejected">
                             <span class="status-dot red"></span>
                             <span class="status-count" id="rejected-count">0</span>
-                            <span class="status-label">Rejected</span>
+                            <span class="status-label">Declined</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Curator List (Pro tier only) -->
-                <div class="curator-list-section" id="curator-list-section" style="display: none;">
+                <!-- Playlist List (Pro tier only) -->
+                <div class="playlist-list-section" id="playlist-list-section" style="display: none;">
                     <div class="section-header" style="margin-top: 20px;">
                         <h4 style="font-size: 14px; color: var(--text-secondary);">Select Playlists for Promotion</h4>
-                        <span class="selected-count"><span id="selected-curator-count">0</span> selected</span>
+                        <span class="selected-count"><span id="selected-playlist-count">0</span> selected</span>
                     </div>
                     <p class="tier-note free-only" id="free-tier-note" style="display: none; color: var(--text-muted); font-size: 13px; margin-bottom: 15px;">
                         <i class="fas fa-lock" style="margin-right: 6px;"></i>Upgrade to Pro to select specific playlists
                     </p>
-                    <div class="curator-cards" id="curator-cards">
+                    <div class="playlist-cards" id="playlist-cards">
                         <!-- Populated by JS -->
                     </div>
                 </div>
@@ -152,8 +152,8 @@
                     <i class="fas fa-lock"></i>
                 </div>
                 <div class="upgrade-content">
-                    <h3>Unlock 3,000+ External Curators</h3>
-                    <p>Your genre has <strong id="curator-count">--</strong> curators waiting to hear your music.</p>
+                    <h3>Unlock 3,000+ Playlists</h3>
+                    <p>Your genre has <strong id="playlist-count">--</strong> playlists waiting for your music.</p>
 
                     <div class="intro-pricing">
                         <p class="pricing-label">Limited Time Intro Pricing:</p>
@@ -174,7 +174,7 @@
                             <i class="fas fa-rocket"></i>
                             Upgrade Now
                         </button>
-                        <a href="curator-preview.html" class="btn btn-outline">See Curator Network</a>
+                        <a href="playlist-preview.html" class="btn btn-outline">See Matching Playlists</a>
                     </div>
                 </div>
             </div>
