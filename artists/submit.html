@@ -114,32 +114,30 @@
                     <input type="hidden" id="artist-name-input" name="artist_name">
                     <input type="hidden" id="artwork-url-input" name="artwork_url">
 
-                    <!-- Step 2: Genre -->
-                    <div class="form-section">
-                        <div class="form-group">
-                            <label class="form-label">Genre <span class="required">*</span></label>
-                            <select id="genre" class="form-input form-select" required>
-                                <option value="">Select a genre...</option>
-                                <option value="Pop">Pop</option>
-                                <option value="Hip Hop">Hip Hop</option>
-                                <option value="R&B">R&B</option>
-                                <option value="Electronic">Electronic</option>
-                                <option value="Lo-Fi">Lo-Fi</option>
-                                <option value="Indie">Indie</option>
-                                <option value="Rock">Rock</option>
-                                <option value="Alternative">Alternative</option>
-                                <option value="Folk">Folk</option>
-                                <option value="Country">Country</option>
-                                <option value="Jazz">Jazz</option>
-                                <option value="Classical">Classical</option>
-                                <option value="Ambient">Ambient</option>
-                                <option value="Metal">Metal</option>
-                                <option value="Reggae">Reggae</option>
-                                <option value="Latin">Latin</option>
-                                <option value="World">World</option>
-                                <option value="Singer-Songwriter">Singer-Songwriter</option>
-                            </select>
+                    <!-- Step 2: Genre Selection (shown after track analysis) -->
+                    <div class="form-section genre-section" id="genre-section" style="display: none;">
+                        <!-- AI Prediction -->
+                        <div class="genre-prediction" id="genre-prediction">
+                            <h4>Genre Prediction</h4>
+                            <p id="prediction-text"></p>
+                            <p class="prediction-reasoning" id="prediction-reasoning"></p>
                         </div>
+
+                        <!-- Genre Selection -->
+                        <div class="form-group">
+                            <label class="form-label">Select Your Genres <span class="required">*</span></label>
+                            <p class="form-hint">Confirm the prediction or choose different genres (up to 2)</p>
+
+                            <div class="genre-buttons" id="genre-buttons">
+                                <!-- Populated by JS -->
+                            </div>
+
+                            <p class="selected-count"><span id="selected-count">0</span>/2 genres selected</p>
+                        </div>
+
+                        <!-- Hidden fields for genre data -->
+                        <input type="hidden" id="primary-genre" name="primary_genre">
+                        <input type="hidden" id="secondary-genre" name="secondary_genre">
                     </div>
 
                     <!-- Step 3: Pitch (optional) -->

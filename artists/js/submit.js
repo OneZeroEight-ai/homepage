@@ -41,6 +41,8 @@ const SUTRA_ABI = [
 const Submit = {
     trackData: null,
     stripe: null,
+    selectedGenres: [],
+    availableGenres: [],
 
     /**
      * Initialize submission page
@@ -167,12 +169,13 @@ const Submit = {
     },
 
     /**
-     * Fetch track info from Spotify URL
+     * Fetch track info and analyze genres
      */
     async fetchTrackInfo() {
         const urlInput = document.getElementById('spotify-url');
         const fetchBtn = document.getElementById('fetch-btn');
         const preview = document.getElementById('track-preview');
+        const genreSection = document.getElementById('genre-section');
 
         const url = urlInput.value.trim();
         if (!url) return;
@@ -185,58 +188,148 @@ const Submit = {
 
         // Show loading state
         fetchBtn.disabled = true;
-        fetchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Loading...</span>';
+        fetchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Analyzing...</span>';
 
         try {
-            const response = await ArtistAuth.apiRequest(`/track-info?url=${encodeURIComponent(url)}`);
+            // Call the track analyzer endpoint
+            const response = await fetch(`${ArtistAuth.API_BASE.replace('/artist-portal', '')}/tracks/analyze`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ spotify_url: url })
+            });
+
             const data = await response.json();
 
-            if (data.success) {
-                this.trackData = data;
-
-                // Update preview
-                const artworkEl = document.getElementById('track-artwork');
-                const titleEl = document.getElementById('track-title');
-                const artistEl = document.getElementById('track-artist');
-
-                if (data.thumbnail_url) {
-                    artworkEl.innerHTML = `<img src="${data.thumbnail_url}" alt="Album art">`;
-                }
-                titleEl.textContent = data.track_title || 'Unknown Track';
-                artistEl.textContent = data.artist_name || 'Unknown Artist';
-
-                // Set hidden fields
-                document.getElementById('track-title-input').value = data.track_title || '';
-                document.getElementById('artist-name-input').value = data.artist_name || '';
-                document.getElementById('artwork-url-input').value = data.thumbnail_url || '';
-
-                // Auto-select genre if detected
-                if (data.primary_genre) {
-                    const genreSelect = document.getElementById('genre');
-                    const genreOption = Array.from(genreSelect.options).find(
-                        opt => opt.value.toLowerCase() === data.primary_genre.toLowerCase()
-                    );
-                    if (genreOption) {
-                        genreSelect.value = genreOption.value;
-                    }
-                }
-
-                // Show preview
-                preview.classList.remove('hidden');
-                preview.classList.add('show');
-
-                // Update submit button
-                this.updateSubmitButton();
-            } else {
-                this.showError(data.error || 'Failed to fetch track info');
+            if (data.error) {
+                this.showError(data.error);
+                return;
             }
+
+            this.trackData = data;
+            this.availableGenres = data.available_genres || [];
+
+            // Update preview
+            const artworkEl = document.getElementById('track-artwork');
+            const titleEl = document.getElementById('track-title');
+            const artistEl = document.getElementById('track-artist');
+
+            if (data.thumbnail_url) {
+                artworkEl.innerHTML = `<img src="${data.thumbnail_url}" alt="Album art">`;
+            }
+            titleEl.textContent = data.track_title || 'Unknown Track';
+            artistEl.textContent = data.artist_name || 'Unknown Artist';
+
+            // Set hidden fields
+            document.getElementById('track-title-input').value = data.track_title || '';
+            document.getElementById('artist-name-input').value = data.artist_name || '';
+            document.getElementById('artwork-url-input').value = data.thumbnail_url || '';
+
+            // Show AI prediction
+            const predictionText = document.getElementById('prediction-text');
+            const predictionReasoning = document.getElementById('prediction-reasoning');
+            const primaryGenre = data.predicted_primary_genre;
+            const secondaryGenre = data.predicted_secondary_genre;
+
+            if (primaryGenre) {
+                let html = `We think this is <strong>${primaryGenre}</strong>`;
+                if (secondaryGenre) {
+                    html += ` with elements of <strong>${secondaryGenre}</strong>`;
+                }
+                predictionText.innerHTML = html;
+                predictionReasoning.textContent = data.prediction_reasoning || '';
+            } else {
+                predictionText.innerHTML = 'Select the genres that best match your track';
+                predictionReasoning.textContent = '';
+            }
+
+            // Render genre buttons and pre-select predicted genres
+            this.renderGenreButtons(primaryGenre, secondaryGenre);
+
+            // Show preview and genre section
+            preview.classList.remove('hidden');
+            preview.classList.add('show');
+            genreSection.style.display = 'block';
+
+            // Update submit button
+            this.updateSubmitButton();
+
         } catch (error) {
             console.error('Fetch error:', error);
-            this.showError('Failed to fetch track info. Please check the URL and try again.');
+            this.showError('Failed to analyze track. Please try again.');
         } finally {
             fetchBtn.disabled = false;
             fetchBtn.innerHTML = '<i class="fab fa-spotify"></i> <span>Fetch</span>';
         }
+    },
+
+    /**
+     * Render genre selection buttons
+     */
+    renderGenreButtons(predictedPrimary, predictedSecondary) {
+        const container = document.getElementById('genre-buttons');
+
+        // Pre-select predicted genres
+        this.selectedGenres = [];
+        if (predictedPrimary) this.selectedGenres.push(predictedPrimary);
+        if (predictedSecondary) this.selectedGenres.push(predictedSecondary);
+
+        container.innerHTML = this.availableGenres.map(genre => {
+            const isSelected = this.selectedGenres.includes(genre);
+            const isPredicted = genre === predictedPrimary || genre === predictedSecondary;
+
+            return `
+                <button
+                    type="button"
+                    class="genre-btn ${isSelected ? 'selected' : ''} ${isPredicted ? 'predicted' : ''}"
+                    onclick="Submit.toggleGenre('${genre}')"
+                    data-genre="${genre}">
+                    ${genre}
+                    ${isPredicted ? '<span class="predicted-badge">AI</span>' : ''}
+                </button>
+            `;
+        }).join('');
+
+        this.updateGenreSelection();
+    },
+
+    /**
+     * Toggle genre selection
+     */
+    toggleGenre(genre) {
+        const index = this.selectedGenres.indexOf(genre);
+
+        if (index > -1) {
+            // Deselect
+            this.selectedGenres.splice(index, 1);
+        } else {
+            // Select (max 2)
+            if (this.selectedGenres.length >= 2) {
+                this.showError('You can select up to 2 genres. Deselect one first.');
+                return;
+            }
+            this.selectedGenres.push(genre);
+        }
+
+        // Update button states
+        document.querySelectorAll('.genre-btn').forEach(btn => {
+            if (this.selectedGenres.includes(btn.dataset.genre)) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+
+        this.updateGenreSelection();
+    },
+
+    /**
+     * Update genre selection state
+     */
+    updateGenreSelection() {
+        document.getElementById('selected-count').textContent = this.selectedGenres.length;
+        document.getElementById('primary-genre').value = this.selectedGenres[0] || '';
+        document.getElementById('secondary-genre').value = this.selectedGenres[1] || '';
+        this.updateSubmitButton();
     },
 
     /**
@@ -245,7 +338,7 @@ const Submit = {
     updateSubmitButton() {
         const submitBtn = document.getElementById('submit-btn');
         const hasTrack = this.trackData !== null;
-        const hasGenre = document.getElementById('genre').value !== '';
+        const hasGenre = this.selectedGenres.length > 0;
         const tier = document.querySelector('input[name="tier"]:checked')?.value || 'free';
         const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'stripe';
 
@@ -256,7 +349,7 @@ const Submit = {
             if (paymentMethod === 'sutra') {
                 submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Pay ' + PRICING.pro_sutra + ' SUTRA & Start Campaign';
             } else {
-                submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Pay $49 & Start Campaign';
+                submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Pay $19.95 & Start Campaign';
             }
         } else {
             submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Start Campaign';
@@ -355,7 +448,8 @@ const Submit = {
             track_title: document.getElementById('track-title-input').value,
             artist_name: document.getElementById('artist-name-input').value,
             artwork_url: document.getElementById('artwork-url-input').value,
-            genre: document.getElementById('genre').value,
+            genre: this.selectedGenres[0] || '',
+            secondary_genre: this.selectedGenres[1] || null,
             pitch: document.getElementById('pitch').value.trim(),
             tier: tier,
             payment_method: tier === 'pro' ? paymentMethod : null
