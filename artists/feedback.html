@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Feedback - OneZeroEight</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .feedback-container {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .rating-section {
+            margin-bottom: 30px;
+        }
+
+        .rating-section label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .rating-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+        }
+
+        .rating-btn {
+            flex: 1;
+            padding: 16px 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .rating-btn:hover {
+            border-color: #6366f1;
+            background: #f5f5ff;
+        }
+
+        .rating-btn.selected {
+            border-color: #6366f1;
+            background: #6366f1;
+            color: white;
+        }
+
+        .rating-btn .number {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .rating-btn .label {
+            font-size: 10px;
+            color: #888;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .rating-btn.selected .label {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .comment-section {
+            margin-bottom: 30px;
+        }
+
+        .comment-section label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .comment-section textarea {
+            width: 100%;
+            height: 120px;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        .comment-section textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+
+        .comment-section .hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .skip-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .skip-link:hover {
+            color: #6366f1;
+        }
+
+        .low-rating-notice {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .low-rating-notice.visible {
+            display: block;
+        }
+
+        .low-rating-notice p {
+            color: #92400e;
+            font-size: 14px;
+        }
+
+        .success-message {
+            text-align: center;
+            display: none;
+        }
+
+        .success-message.visible {
+            display: block;
+        }
+
+        .success-message i {
+            font-size: 64px;
+            color: #10b981;
+            margin-bottom: 20px;
+        }
+
+        .success-message h2 {
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        .success-message p {
+            color: #666;
+        }
+
+        .form-content.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="feedback-container">
+        <div class="header">
+            <h1>How are we doing?</h1>
+            <p>Your feedback helps us improve curator matching</p>
+        </div>
+
+        <div class="form-content" id="form-content">
+            <div class="low-rating-notice" id="low-rating-notice">
+                <p><i class="fas fa-exclamation-triangle"></i> We're sorry the matches weren't great. Please tell us more so we can improve!</p>
+            </div>
+
+            <div class="rating-section">
+                <label>Rate the playlist matches</label>
+                <div class="rating-buttons">
+                    <button type="button" class="rating-btn" data-rating="1">
+                        <span class="number">1</span>
+                        <span class="label">Poor</span>
+                    </button>
+                    <button type="button" class="rating-btn" data-rating="2">
+                        <span class="number">2</span>
+                        <span class="label">Fair</span>
+                    </button>
+                    <button type="button" class="rating-btn" data-rating="3">
+                        <span class="number">3</span>
+                        <span class="label">Okay</span>
+                    </button>
+                    <button type="button" class="rating-btn" data-rating="4">
+                        <span class="number">4</span>
+                        <span class="label">Good</span>
+                    </button>
+                    <button type="button" class="rating-btn" data-rating="5">
+                        <span class="number">5</span>
+                        <span class="label">Great</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="comment-section">
+                <label>Tell us more (optional)</label>
+                <textarea id="comment" placeholder="What could we do better? Were the playlists relevant to your genre? Any specific feedback?"></textarea>
+                <p class="hint">Your feedback is reviewed by our team to improve matching.</p>
+            </div>
+
+            <button type="button" class="submit-btn" id="submit-btn" disabled>Submit Feedback</button>
+
+            <a href="/artists/dashboard.html" class="skip-link">Skip for now</a>
+        </div>
+
+        <div class="success-message" id="success-message">
+            <i class="fas fa-check-circle"></i>
+            <h2>Thank you!</h2>
+            <p>Your feedback helps us improve curator matching for all artists.</p>
+            <a href="/artists/dashboard.html" class="submit-btn" style="display: inline-block; margin-top: 20px; text-decoration: none;">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
+
+        // Get URL parameters
+        const params = new URLSearchParams(window.location.search);
+        const campaignId = params.get('campaign_id');
+        const batchDate = params.get('batch_date');
+        const presetRating = params.get('rating');
+
+        let selectedRating = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set up rating buttons
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.addEventListener('click', () => selectRating(parseInt(btn.dataset.rating)));
+            });
+
+            // Pre-select rating if provided
+            if (presetRating) {
+                selectRating(parseInt(presetRating));
+            }
+
+            // Submit button
+            document.getElementById('submit-btn').addEventListener('click', submitFeedback);
+        });
+
+        function selectRating(rating) {
+            selectedRating = rating;
+
+            // Update button states
+            document.querySelectorAll('.rating-btn').forEach(btn => {
+                btn.classList.toggle('selected', parseInt(btn.dataset.rating) === rating);
+            });
+
+            // Show notice for low ratings
+            const notice = document.getElementById('low-rating-notice');
+            notice.classList.toggle('visible', rating <= 2);
+
+            // Enable submit button
+            document.getElementById('submit-btn').disabled = false;
+        }
+
+        async function submitFeedback() {
+            if (!selectedRating || !campaignId || !batchDate) {
+                alert('Missing required information');
+                return;
+            }
+
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+
+            try {
+                const response = await fetch(`${API_BASE}/feedback/submit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        campaign_id: campaignId,
+                        batch_date: batchDate,
+                        rating: selectedRating,
+                        comment: document.getElementById('comment').value || null
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to submit feedback');
+                }
+
+                // Show success message
+                document.getElementById('form-content').classList.add('hidden');
+                document.getElementById('success-message').classList.add('visible');
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to submit feedback. Please try again.');
+                btn.disabled = false;
+                btn.textContent = 'Submit Feedback';
+            }
+        }
+    </script>
+</body>
+</html>
