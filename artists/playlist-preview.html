@@ -121,6 +121,7 @@
         const PlaylistPreview = {
             campaignId: null,
             data: null,
+            playlistStatuses: {},
 
             async init() {
                 // Initialize auth
@@ -199,11 +200,21 @@
                         return;
                     }
 
-                    // Load playlist preview (uses same endpoint for now)
-                    const response = await fetch(`${API_BASE}/campaigns/${this.campaignId}/curator-preview`);
-                    if (!response.ok) throw new Error('Failed to load preview');
+                    // Load playlist matches with status from the new endpoint
+                    const response = await fetch(`${API_BASE}/campaigns/${this.campaignId}/playlist-matches`);
+                    if (!response.ok) throw new Error('Failed to load playlist matches');
 
                     this.data = await response.json();
+
+                    // Build status map
+                    if (this.data.playlists) {
+                        this.data.playlists.forEach(p => {
+                            if (p.status && p.status !== 'available') {
+                                this.playlistStatuses[p.id] = p.status;
+                            }
+                        });
+                    }
+
                     this.render();
 
                     // Track conversion event
@@ -224,13 +235,29 @@
                 }
             },
 
+            getStatusInfo(status) {
+                const statusMap = {
+                    'available': { icon: '', label: 'Available', color: 'transparent', cssClass: 'available' },
+                    'sent': { icon: '🟡', label: 'Pitched', color: '#f59e0b', cssClass: 'sent' },
+                    'pending': { icon: '🟡', label: 'Pending', color: '#f59e0b', cssClass: 'sent' },
+                    'accepted': { icon: '🟢', label: 'Accepted', color: '#10b981', cssClass: 'accepted' },
+                    'rejected': { icon: '🔴', label: 'Rejected', color: '#ef4444', cssClass: 'rejected' }
+                };
+                return statusMap[status] || statusMap['available'];
+            },
+
+            extractPlaylistId(spotifyUrl) {
+                if (!spotifyUrl) return '';
+                const match = spotifyUrl.match(/playlist\/([a-zA-Z0-9]+)/);
+                return match ? match[1] : '';
+            },
+
             render() {
-                const { total_count, preview, curators, playlists, full_access, remaining, upgrade_message } = this.data;
-                const playlistData = playlists || curators; // Support both response formats
+                const { total_count, playlists, campaign_genre } = this.data;
 
                 // Update title
                 const title = document.getElementById('page-title');
-                title.textContent = `${total_count.toLocaleString()} playlists match your sound`;
+                title.textContent = `${(total_count || 0).toLocaleString()} playlists match your sound`;
 
                 const grid = document.getElementById('playlist-grid');
                 const moreEl = document.getElementById('more-playlists');
@@ -238,68 +265,113 @@
 
                 const defaultImage = 'https://via.placeholder.com/64x64/1a1a2e/8b5cf6?text=%E2%99%AA';
 
-                if (full_access && playlistData) {
-                    // Paid tier: show all playlists
-                    grid.innerHTML = playlistData.map(playlist => `
-                        <div class="playlist-preview-card">
-                            <img src="${playlist.image_url || defaultImage}" class="playlist-preview-image" alt="" onerror="this.src='${defaultImage}'">
-                            <div class="playlist-preview-info">
-                                <div class="playlist-preview-name">${this.escapeHtml(playlist.name)}</div>
-                                <div class="playlist-preview-followers">${(playlist.followers || 0).toLocaleString()} followers</div>
-                                ${playlist.genres && playlist.genres.length > 0 ? `
-                                    <div class="playlist-preview-genres">
-                                        ${playlist.genres.slice(0, 3).map(g => `
-                                            <span class="genre-tag">${this.escapeHtml(g)}</span>
-                                        `).join('')}
-                                    </div>
-                                ` : (playlist.genre ? `
-                                    <div class="playlist-preview-genres">
-                                        <span class="genre-tag">${this.escapeHtml(playlist.genre)}</span>
-                                    </div>
-                                ` : '')}
+                if (playlists && playlists.length > 0) {
+                    grid.innerHTML = playlists.map(playlist => {
+                        const status = playlist.status || 'available';
+                        const statusInfo = this.getStatusInfo(status);
+                        const spotifyId = this.extractPlaylistId(playlist.spotify_url);
+                        const playlistName = this.escapeHtml(playlist.name || 'Playlist');
+
+                        // Build status indicator
+                        let statusIndicator = '';
+                        if (status !== 'available') {
+                            statusIndicator = `
+                                <div class="playlist-status-indicator ${statusInfo.cssClass}">
+                                    <span class="status-dot-indicator"></span>
+                                    <span class="status-text">${statusInfo.label}</span>
+                                </div>
+                            `;
+                        }
+
+                        return `
+                            <div class="playlist-preview-card status-${status}"
+                                 data-playlist-id="${playlist.id}"
+                                 data-spotify-id="${spotifyId}"
+                                 onclick="PlaylistPreview.openPlayer('${spotifyId}', '${playlistName.replace(/'/g, "\\'")}')">
+                                <img src="${playlist.image_url || defaultImage}" class="playlist-preview-image" alt="" onerror="this.src='${defaultImage}'">
+                                <div class="playlist-preview-info">
+                                    <div class="playlist-preview-name">${playlistName}</div>
+                                    <div class="playlist-preview-followers">${(playlist.followers || 0).toLocaleString()} followers</div>
+                                    ${playlist.genre ? `
+                                        <div class="playlist-preview-genres">
+                                            <span class="genre-tag">${this.escapeHtml(playlist.genre)}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                ${statusIndicator}
                             </div>
-                        </div>
-                    `).join('');
+                        `;
+                    }).join('');
 
                     moreEl.style.display = 'none';
                     upgradeBox.style.display = 'none';
-
-                } else if (preview) {
-                    // Free tier: show blurred preview
-                    grid.innerHTML = preview.map(playlist => `
-                        <div class="playlist-preview-card blurred">
-                            <img src="${playlist.image_url || defaultImage}" class="playlist-preview-image" alt="" onerror="this.src='${defaultImage}'">
-                            <div class="playlist-preview-info">
-                                <div class="playlist-preview-name">${this.escapeHtml(playlist.name)}</div>
-                                <div class="playlist-preview-followers">${(playlist.followers || 0).toLocaleString()} followers</div>
-                                ${playlist.genres && playlist.genres.length > 0 ? `
-                                    <div class="playlist-preview-genres">
-                                        ${playlist.genres.slice(0, 2).map(g => `
-                                            <span class="genre-tag">${this.escapeHtml(g)}</span>
-                                        `).join('')}
-                                    </div>
-                                ` : (playlist.genre ? `
-                                    <div class="playlist-preview-genres">
-                                        <span class="genre-tag">${this.escapeHtml(playlist.genre)}</span>
-                                    </div>
-                                ` : '')}
-                            </div>
+                } else {
+                    grid.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <i class="fas fa-list"></i>
+                            <h3>No matching playlists found</h3>
+                            <p>Try a different genre or check back later</p>
                         </div>
-                    `).join('');
+                    `;
+                }
+            },
 
-                    // Show "more" message
-                    if (remaining > 0) {
-                        moreEl.innerHTML = `
-                            <div class="playlist-more">
-                                <i class="fas fa-lock" style="margin-right: 8px;"></i>
-                                ...and ${remaining.toLocaleString()} more playlists
-                            </div>
-                        `;
-                        moreEl.style.display = 'block';
-                    }
+            openPlayer(spotifyId, playlistName) {
+                if (!spotifyId) {
+                    console.log('No Spotify link available for this playlist');
+                    return;
+                }
 
-                    // Show upgrade box
-                    upgradeBox.style.display = 'block';
+                // Remove existing modal if any
+                const existingModal = document.querySelector('.playlist-player-modal');
+                if (existingModal) existingModal.remove();
+
+                // Create modal with Spotify embed
+                const modal = document.createElement('div');
+                modal.className = 'playlist-player-modal';
+                modal.innerHTML = `
+                    <div class="playlist-player-content">
+                        <div class="playlist-player-header">
+                            <h3>${playlistName}</h3>
+                            <button class="close-player" onclick="PlaylistPreview.closePlayer()">&times;</button>
+                        </div>
+                        <div class="playlist-player-embed">
+                            <iframe
+                                src="https://open.spotify.com/embed/playlist/${spotifyId}?utm_source=generator&theme=0"
+                                width="100%"
+                                height="352"
+                                frameborder="0"
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy">
+                            </iframe>
+                        </div>
+                        <div class="playlist-player-actions">
+                            <a href="https://open.spotify.com/playlist/${spotifyId}" target="_blank" class="btn-open-spotify">
+                                <i class="fab fa-spotify"></i> Open in Spotify
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(modal);
+
+                // Close on background click
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) PlaylistPreview.closePlayer();
+                });
+
+                // Close on Escape key
+                this.escapeHandler = (e) => {
+                    if (e.key === 'Escape') PlaylistPreview.closePlayer();
+                };
+                document.addEventListener('keydown', this.escapeHandler);
+            },
+
+            closePlayer() {
+                const modal = document.querySelector('.playlist-player-modal');
+                if (modal) modal.remove();
+                if (this.escapeHandler) {
+                    document.removeEventListener('keydown', this.escapeHandler);
                 }
             },
 

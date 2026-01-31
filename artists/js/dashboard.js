@@ -221,6 +221,80 @@ const Dashboard = {
     },
 
     /**
+     * Extract Spotify playlist ID from URL
+     */
+    extractPlaylistId(spotifyUrl) {
+        if (!spotifyUrl) return '';
+        const match = spotifyUrl.match(/playlist\/([a-zA-Z0-9]+)/);
+        return match ? match[1] : '';
+    },
+
+    /**
+     * Open Spotify player modal
+     */
+    openPlaylistPlayer(spotifyId, playlistName) {
+        if (!spotifyId) {
+            console.log('No Spotify link available for this playlist');
+            return;
+        }
+
+        // Remove existing modal if any
+        const existingModal = document.querySelector('.playlist-player-modal');
+        if (existingModal) existingModal.remove();
+
+        // Create modal with Spotify embed
+        const modal = document.createElement('div');
+        modal.className = 'playlist-player-modal';
+        modal.innerHTML = `
+            <div class="playlist-player-content">
+                <div class="playlist-player-header">
+                    <h3>${playlistName}</h3>
+                    <button class="close-player" onclick="Dashboard.closePlaylistPlayer()">&times;</button>
+                </div>
+                <div class="playlist-player-embed">
+                    <iframe
+                        src="https://open.spotify.com/embed/playlist/${spotifyId}?utm_source=generator&theme=0"
+                        width="100%"
+                        height="352"
+                        frameborder="0"
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy">
+                    </iframe>
+                </div>
+                <div class="playlist-player-actions">
+                    <a href="https://open.spotify.com/playlist/${spotifyId}" target="_blank" class="btn-open-spotify">
+                        <i class="fab fa-spotify"></i> Open in Spotify
+                    </a>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) Dashboard.closePlaylistPlayer();
+        });
+
+        // Close on Escape key
+        this.escapeHandler = (e) => {
+            if (e.key === 'Escape') Dashboard.closePlaylistPlayer();
+        };
+        document.addEventListener('keydown', this.escapeHandler);
+    },
+
+    /**
+     * Close playlist player modal
+     */
+    closePlaylistPlayer() {
+        const modal = document.querySelector('.playlist-player-modal');
+        if (modal) modal.remove();
+        if (this.escapeHandler) {
+            document.removeEventListener('keydown', this.escapeHandler);
+        }
+    },
+
+    /**
      * Render playlist cards
      */
     renderPlaylistCards(playlists) {
@@ -235,6 +309,8 @@ const Dashboard = {
             const isDisabled = status !== 'available';
             const isSelected = this.selectedPlaylists.includes(playlist.id);
             const imageUrl = playlist.image_url || defaultImage;
+            const spotifyId = this.extractPlaylistId(playlist.spotify_url);
+            const playlistName = this.escapeHtml(playlist.name || 'Playlist');
 
             // Build status indicator HTML
             let statusIndicator = '';
@@ -250,14 +326,15 @@ const Dashboard = {
             return `
                 <div class="playlist-card ${isDisabled ? 'has-status' : ''} ${isSelected ? 'selected' : ''} status-${status}"
                      data-playlist-id="${playlist.id}"
-                     onclick="Dashboard.togglePlaylistSelection('${playlist.id}', ${isDisabled})">
+                     data-spotify-id="${spotifyId}"
+                     onclick="Dashboard.handlePlaylistClick(event, '${playlist.id}', ${isDisabled}, '${spotifyId}', '${playlistName.replace(/'/g, "\\'")}')">
                     <input type="checkbox"
                            ${isDisabled ? 'disabled' : ''}
                            ${isSelected ? 'checked' : ''}
                            onclick="event.stopPropagation()">
                     <img src="${imageUrl}" class="playlist-image" alt="" onerror="this.src='${defaultImage}'">
                     <div class="playlist-info">
-                        <div class="playlist-name">${this.escapeHtml(playlist.name || 'Playlist')}</div>
+                        <div class="playlist-name">${playlistName}</div>
                         <div class="playlist-meta">
                             <span class="playlist-followers">${this.formatNumber(playlist.followers || 0)} followers</span>
                             ${playlist.genre ? `<span class="playlist-genre">${this.escapeHtml(playlist.genre)}</span>` : ''}
@@ -267,6 +344,21 @@ const Dashboard = {
                 </div>
             `;
         }).join('');
+    },
+
+    /**
+     * Handle playlist card click - open player or toggle selection
+     */
+    handlePlaylistClick(event, playlistId, isDisabled, spotifyId, playlistName) {
+        // If clicking on checkbox, let the checkbox handler handle it
+        if (event.target.type === 'checkbox') return;
+
+        // If has status, open the player instead of selecting
+        if (isDisabled && spotifyId) {
+            this.openPlaylistPlayer(spotifyId, playlistName);
+        } else {
+            this.togglePlaylistSelection(playlistId, isDisabled);
+        }
     },
 
     /**
