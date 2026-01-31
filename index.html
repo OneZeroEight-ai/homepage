@@ -307,23 +307,37 @@
             margin-bottom: 12px;
         }
 
-        .genre-prediction {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .genre-prediction-section {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
         }
 
-        .genre-prediction .label {
-            color: var(--gray-600);
-            font-size: 0.9em;
+        .genre-prediction-section h4 {
+            margin: 0 0 12px 0;
+            color: #10b981;
+            font-size: 1em;
         }
 
-        .genre-badge {
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            padding: 6px 16px;
-            border-radius: 16px;
+        .genre-prediction-summary {
+            font-size: 1.1em;
             font-weight: 600;
+            color: #fff;
+            margin: 0 0 12px 0;
+        }
+
+        .genre-prediction-summary strong {
+            color: #10b981;
+        }
+
+        .genre-prediction-reasoning {
+            color: #a0a0b0;
             font-size: 0.9em;
+            line-height: 1.6;
+            margin: 0;
         }
 
         /* Playlist Preview */
@@ -928,11 +942,14 @@
                 <div class="track-info">
                     <h3 id="track-title">Track Title</h3>
                     <div class="track-artist" id="track-artist">Artist Name</div>
-                    <div class="genre-prediction">
-                        <span class="label">Predicted Genre:</span>
-                        <span id="predicted-genre" class="genre-badge">Loading...</span>
-                    </div>
                 </div>
+            </div>
+
+            <!-- Genre Prediction Section -->
+            <div class="genre-prediction-section" id="genre-prediction-section" style="display: none;">
+                <h4>Genre Prediction</h4>
+                <p class="genre-prediction-summary" id="genre-summary"></p>
+                <p class="genre-prediction-reasoning" id="genre-reasoning"></p>
             </div>
 
             <!-- Playlist Preview -->
@@ -1152,6 +1169,7 @@ async function analyzeTrack() {
         let predictedGenre = 'Indie';
         let matchCount = 500;
         let samplePlaylists = [];
+        let analysis = null;
 
         try {
             const analysisResponse = await fetch(`${API_BASE}/api/tracks/analyze`, {
@@ -1161,9 +1179,12 @@ async function analyzeTrack() {
             });
 
             if (analysisResponse.ok) {
-                const analysis = await analysisResponse.json();
+                analysis = await analysisResponse.json();
                 predictedGenre = analysis.predicted_primary_genre || 'Indie';
                 pendingTrack.genre = predictedGenre;
+
+                // Display verbose genre prediction
+                displayGenrePrediction(analysis);
             }
         } catch (e) {
             console.log('Genre prediction not available, using default');
@@ -1182,7 +1203,6 @@ async function analyzeTrack() {
         }
 
         // Update UI
-        document.getElementById('predicted-genre').textContent = predictedGenre;
         document.getElementById('match-count').textContent = matchCount.toLocaleString();
         pendingTrack.genre = predictedGenre;
 
@@ -1249,6 +1269,28 @@ function formatFollowers(num) {
     if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
     if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
     return num.toString();
+}
+
+function displayGenrePrediction(analysis) {
+    const summaryEl = document.getElementById('genre-summary');
+    const reasoningEl = document.getElementById('genre-reasoning');
+    const sectionEl = document.getElementById('genre-prediction-section');
+
+    const primary = analysis.predicted_primary_genre || 'Unknown';
+    const secondary = analysis.predicted_secondary_genre;
+    const reasoning = analysis.prediction_reasoning || '';
+
+    // Build summary text
+    let summaryText = `We think this is <strong>${primary}</strong>`;
+    if (secondary) {
+        summaryText += ` with elements of <strong>${secondary}</strong>`;
+    }
+
+    summaryEl.innerHTML = summaryText;
+    reasoningEl.textContent = reasoning;
+
+    // Show the section
+    sectionEl.style.display = 'block';
 }
 
 async function handleQuickSignup(e) {
