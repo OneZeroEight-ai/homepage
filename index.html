@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OneZeroEight.ai - Intelligent Agents That Promote Your Music</title>
-    <meta name="description" content="Deploy Intelligent Agents to get your music on playlists, promote on socials, and handle PR. Start free. Upgrade when you're ready.">
-    <meta property="og:title" content="OneZeroEight.ai - Intelligent Agent Music Promotion">
-    <meta property="og:description" content="Intelligent Agents that actually get your music heard. Playlists, PR, socials. Start free.">
+    <title>OneZeroEight.ai - Get Your Music on Playlists</title>
+    <meta name="description" content="Paste your Spotify track and see matching playlists instantly. AI-powered playlist placement. Free to start.">
+    <meta property="og:title" content="OneZeroEight.ai - Get Your Music on Playlists">
+    <meta property="og:description" content="Paste your Spotify track and see matching playlists instantly. Free to start.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://onezeroeight.ai">
     <link rel="canonical" href="https://onezeroeight.ai">
@@ -25,44 +25,35 @@
         :root {
             --primary: #6366f1;
             --primary-dark: #4f46e5;
-            --primary-light: #a5b4fc;
             --secondary: #10b981;
-            --secondary-dark: #059669;
-            --accent: #f59e0b;
-            --dark: #0f172a;
-            --darker: #020617;
-            --gray-900: #111827;
-            --gray-800: #1f2937;
-            --gray-700: #374151;
-            --gray-600: #4b5563;
-            --gray-500: #6b7280;
-            --gray-400: #9ca3af;
-            --gray-300: #d1d5db;
-            --gray-200: #e5e7eb;
-            --gray-100: #f3f4f6;
-            --gray-50: #f9fafb;
+            --spotify-green: #1DB954;
+            --dark: #0f0f1a;
+            --dark-card: #1e1e2e;
+            --dark-border: #2d2d44;
+            --gray-600: #888;
+            --gray-400: #a0a0b0;
             --white: #ffffff;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.6;
-            color: var(--gray-700);
-            background: var(--white);
+            color: var(--white);
+            background: var(--dark);
             -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
         /* Navigation */
         nav {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 15, 26, 0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--dark-border);
             position: fixed;
             width: 100%;
             top: 0;
@@ -76,22 +67,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 72px;
+            height: 64px;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 800;
-            color: var(--dark);
+            color: var(--white);
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 2px;
         }
 
-        .logo .one {
-            color: var(--primary);
-        }
+        .logo .one { color: var(--primary); }
 
         .nav-links {
             display: flex;
@@ -101,80 +87,53 @@
         }
 
         .nav-links a {
-            color: var(--gray-600);
+            color: var(--gray-400);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.925rem;
+            font-size: 0.9rem;
             transition: color 0.2s;
         }
 
-        .nav-links a:hover {
-            color: var(--dark);
-        }
+        .nav-links a:hover { color: var(--white); }
 
         .nav-cta {
-            background: var(--dark);
+            background: var(--primary);
             color: var(--white) !important;
-            padding: 0.625rem 1.25rem;
+            padding: 0.5rem 1rem;
             border-radius: 8px;
             font-weight: 600 !important;
-            transition: all 0.2s !important;
         }
 
         .nav-cta:hover {
-            background: var(--gray-800);
-            transform: translateY(-1px);
+            background: var(--primary-dark);
         }
 
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark);
-        }
-
-        /* Hero */
+        /* Hero Section */
         .hero {
-            padding: 140px 0 100px;
-            background: linear-gradient(180deg, var(--gray-50) 0%, var(--white) 100%);
-            position: relative;
-            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 20px 60px;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1000px;
-            height: 1000px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .hero-content {
-            position: relative;
-            text-align: center;
+        .hero .container {
             max-width: 800px;
-            margin: 0 auto;
+            text-align: center;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
             padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 0.875rem;
+            border-radius: 20px;
+            font-size: 0.85em;
             font-weight: 500;
-            color: var(--gray-600);
             margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .hero-badge .dot {
@@ -191,171 +150,392 @@
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: 3.5em;
             font-weight: 800;
-            color: var(--dark);
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-bottom: 24px;
-        }
-
-        .hero h1 span {
-            background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+            margin: 0 0 16px;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            line-height: 1.1;
         }
 
         .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--gray-600);
+            font-size: 1.25em;
+            color: var(--gray-400);
             margin-bottom: 40px;
-            line-height: 1.7;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .hero-ctas {
+        /* Track Analyzer */
+        .track-analyzer {
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .input-group {
             display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 48px;
+            gap: 12px;
+            background: var(--dark-card);
+            padding: 8px;
+            border-radius: 16px;
+            border: 2px solid var(--dark-border);
+            transition: border-color 0.2s;
         }
 
-        .btn {
-            display: inline-flex;
+        .input-group:focus-within {
+            border-color: var(--spotify-green);
+        }
+
+        .spotify-input {
+            flex: 1;
+            padding: 16px 20px;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .spotify-input::placeholder {
+            color: #666;
+        }
+
+        .spotify-input:focus {
+            outline: none;
+        }
+
+        .btn-analyze {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #1DB954, #1ed760);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1em;
+            cursor: pointer;
+            white-space: nowrap;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .btn-analyze:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(29, 185, 84, 0.4);
+        }
+
+        .btn-analyze:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .input-hint {
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 12px;
+        }
+
+        /* Hero Stats */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-size: 0.9em;
+        }
+
+        /* Analysis Results */
+        .analysis-results {
+            margin-top: 48px;
+            padding: 40px;
+            background: var(--dark-card);
+            border-radius: 20px;
+            border: 1px solid var(--dark-border);
+            text-align: left;
+        }
+
+        .track-preview-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }
+
+        .track-artwork {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .track-info {
+            flex: 1;
+        }
+
+        .track-info h3 {
+            font-size: 1.25em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .track-artist {
+            color: var(--gray-400);
+            margin-bottom: 12px;
+        }
+
+        .genre-prediction {
+            display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .genre-prediction .label {
+            color: var(--gray-600);
+            font-size: 0.9em;
+        }
+
+        .genre-badge {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        /* Playlist Preview */
+        .playlist-preview {
+            margin-top: 32px;
+        }
+
+        .playlist-preview h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .playlist-preview h3 span {
+            color: var(--secondary);
+        }
+
+        .playlist-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+            position: relative;
+        }
+
+        .playlist-preview-card {
+            background: var(--dark-border);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .playlist-preview-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .playlist-preview-card img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .playlist-name {
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-followers {
+            color: var(--gray-600);
+            font-size: 0.8em;
+        }
+
+        .playlist-preview-card.blurred {
+            filter: blur(4px);
+            opacity: 0.5;
+        }
+
+        .more-playlists-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, var(--dark-card) 80%);
+            padding: 60px 20px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            color: var(--gray-400);
+        }
+
+        .more-playlists-overlay span:first-child {
+            font-size: 1.25em;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        /* Signup Prompt */
+        .signup-prompt {
+            text-align: center;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--dark-border);
+        }
+
+        .signup-prompt > p {
+            color: var(--gray-400);
+            margin-bottom: 20px;
+        }
+
+        .quick-signup-form {
+            display: flex;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .quick-signup-form input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid var(--dark-border);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--white);
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .quick-signup-form input::placeholder {
+            color: #666;
+        }
+
+        .quick-signup-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn-signup {
             padding: 14px 28px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: white;
+            border: none;
             border-radius: 10px;
             font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: all 0.2s;
+            font-size: 1em;
             cursor: pointer;
-            border: none;
+            white-space: nowrap;
+            font-family: inherit;
+            transition: all 0.2s;
         }
 
-        .btn-primary {
-            background: var(--dark);
-            color: var(--white);
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-primary:hover {
-            background: var(--gray-800);
+        .btn-signup:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
         }
 
-        .btn-secondary {
-            background: var(--white);
-            color: var(--dark);
-            border: 1px solid var(--gray-300);
+        .btn-signup:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
-        .btn-secondary:hover {
-            background: var(--gray-50);
-            border-color: var(--gray-400);
+        .form-note {
+            color: var(--gray-600);
+            font-size: 0.85em;
+            margin-top: 12px;
         }
 
-        .hero-proof {
-            display: flex;
-            justify-content: center;
-            gap: 48px;
-            padding-top: 32px;
-            border-top: 1px solid var(--gray-200);
+        .form-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-weight: 500;
         }
 
-        .proof-item {
-            text-align: center;
+        .form-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--secondary);
+            border: 1px solid var(--secondary);
         }
 
-        .proof-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--dark);
+        .form-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid #ef4444;
         }
 
-        .proof-label {
-            font-size: 0.875rem;
-            color: var(--gray-500);
-        }
-
-        /* Free Banner */
-        .free-banner {
-            background: var(--secondary);
-            color: var(--white);
-            padding: 16px 0;
-            text-align: center;
-        }
-
-        .free-banner p {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .free-banner span {
-            opacity: 0.9;
-            font-weight: 400;
-        }
-
-        /* Section Styles */
+        /* How It Works Section */
         .section {
-            padding: 100px 0;
-        }
-
-        .section-dark {
-            background: var(--dark);
-            color: var(--white);
-        }
-
-        .section-gray {
-            background: var(--gray-50);
+            padding: 80px 0;
         }
 
         .section-header {
             text-align: center;
-            max-width: 640px;
-            margin: 0 auto 64px;
+            margin-bottom: 48px;
         }
 
         .section-header h2 {
-            font-size: 2.5rem;
+            font-size: 2.25em;
             font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 16px;
-            letter-spacing: -0.02em;
-        }
-
-        .section-dark .section-header h2 {
-            color: var(--white);
+            margin-bottom: 12px;
         }
 
         .section-header p {
-            font-size: 1.125rem;
-            color: var(--gray-600);
-        }
-
-        .section-dark .section-header p {
             color: var(--gray-400);
+            font-size: 1.1em;
         }
 
-        /* How It Works */
         .steps-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 32px;
+            gap: 24px;
         }
 
         .step {
             text-align: center;
-            position: relative;
+            padding: 24px;
+            background: var(--dark-card);
+            border-radius: 16px;
+            border: 1px solid var(--dark-border);
         }
 
         .step-number {
             width: 48px;
             height: 48px;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
             color: var(--white);
             border-radius: 12px;
             display: flex;
@@ -363,106 +543,51 @@
             justify-content: center;
             font-weight: 700;
             font-size: 1.25rem;
-            margin: 0 auto 20px;
+            margin: 0 auto 16px;
         }
 
         .step h3 {
-            font-size: 1.125rem;
+            font-size: 1.1em;
             font-weight: 600;
-            color: var(--dark);
             margin-bottom: 8px;
         }
 
         .step p {
-            font-size: 0.95rem;
-            color: var(--gray-600);
-            line-height: 1.6;
+            font-size: 0.9em;
+            color: var(--gray-400);
+            line-height: 1.5;
         }
 
-        .step-connector {
-            position: absolute;
-            top: 24px;
-            left: calc(50% + 40px);
-            width: calc(100% - 80px);
-            height: 2px;
-            background: var(--gray-200);
+        /* Pricing Section */
+        .section-gray {
+            background: var(--dark-card);
         }
 
-        .step:last-child .step-connector {
-            display: none;
-        }
-
-        /* Agents Grid */
-        .agents-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        .agent-card {
-            background: var(--gray-800);
-            border: 1px solid var(--gray-700);
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.3s;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .agent-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
-        }
-
-        .agent-image {
-            width: 100%;
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
-
-        .agent-status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.8rem;
-            color: var(--secondary);
-            font-weight: 500;
-        }
-
-        .agent-status .dot {
-            width: 6px;
-            height: 6px;
-            background: var(--secondary);
-            border-radius: 50%;
-        }
-
-        /* Pricing */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .pricing-card {
-            background: var(--white);
-            border: 2px solid var(--gray-200);
+            background: var(--dark);
+            border: 2px solid var(--dark-border);
             border-radius: 20px;
-            padding: 40px;
+            padding: 32px;
             position: relative;
             transition: all 0.3s;
         }
 
         .pricing-card:hover {
             border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1);
+            transform: translateY(-4px);
         }
 
         .pricing-card.featured {
             border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.2);
         }
 
         .pricing-badge {
@@ -479,331 +604,140 @@
         }
 
         .pricing-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--dark);
+            font-size: 1.25em;
+            font-weight: 600;
             margin-bottom: 8px;
         }
 
         .pricing-card .price {
-            font-size: 3rem;
+            font-size: 2.5em;
             font-weight: 800;
-            color: var(--dark);
             margin-bottom: 8px;
         }
 
         .pricing-card .price span {
-            font-size: 1rem;
+            font-size: 0.4em;
             font-weight: 500;
-            color: var(--gray-500);
+            color: var(--gray-600);
+        }
+
+        .pricing-card .price .original {
+            text-decoration: line-through;
+            opacity: 0.5;
+            font-size: 0.5em;
+            margin-right: 8px;
+        }
+
+        .intro-label {
+            color: var(--secondary);
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
 
         .pricing-card .description {
-            color: var(--gray-600);
-            margin-bottom: 32px;
-            font-size: 0.95rem;
+            color: var(--gray-400);
+            margin-bottom: 24px;
+            font-size: 0.9em;
         }
 
         .pricing-features {
             list-style: none;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
         .pricing-features li {
+            padding: 8px 0;
+            font-size: 0.9em;
+            color: var(--gray-400);
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 10px 0;
-            font-size: 0.95rem;
-            color: var(--gray-700);
+            align-items: center;
+            gap: 10px;
         }
 
         .pricing-features li::before {
             content: '✓';
             color: var(--secondary);
             font-weight: 700;
-            flex-shrink: 0;
         }
 
-        .pricing-card .btn {
-            width: 100%;
-            justify-content: center;
-        }
-
-        /* SUTRA Section */
-        .sutra-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: center;
-        }
-
-        .sutra-content h2 {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 16px;
-        }
-
-        .sutra-content > p {
-            font-size: 1.1rem;
-            color: var(--gray-600);
-            margin-bottom: 32px;
-            line-height: 1.7;
-        }
-
-        .sutra-benefits {
-            list-style: none;
-        }
-
-        .sutra-benefits li {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-200);
-            font-size: 1rem;
-            color: var(--gray-700);
-        }
-
-        .sutra-benefits li:last-child {
-            border-bottom: none;
-        }
-
-        .sutra-benefits .icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gray-100);
-            border-radius: 10px;
-            display: flex;
+        .btn {
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-
-        .sutra-note {
-            margin-top: 24px;
-            padding: 16px;
-            background: var(--gray-100);
-            border-radius: 12px;
-            font-size: 0.9rem;
-            color: var(--gray-600);
-        }
-
-        .sutra-visual {
-            background: linear-gradient(135deg, var(--dark), var(--gray-800));
-            border-radius: 24px;
-            padding: 40px;
-            color: var(--white);
-        }
-
-        .sutra-visual h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 32px;
-            color: var(--gray-300);
-        }
-
-        .sutra-stat-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-700);
-        }
-
-        .sutra-stat-row:last-child {
-            border-bottom: none;
-        }
-
-        .sutra-stat-label {
-            color: var(--gray-400);
-        }
-
-        .sutra-stat-value {
-            font-weight: 600;
-            color: var(--white);
-        }
-
-        /* Philosophy */
-        .philosophy-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: center;
-        }
-
-        .philosophy-content h2 {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 24px;
-        }
-
-        .philosophy-quote {
-            font-size: 1.5rem;
-            font-style: italic;
-            color: var(--primary-light);
-            margin-bottom: 24px;
-            padding-left: 24px;
-            border-left: 3px solid var(--primary);
-            line-height: 1.5;
-        }
-
-        .philosophy-content > p {
-            font-size: 1.05rem;
-            color: var(--gray-400);
-            margin-bottom: 16px;
-            line-height: 1.7;
-        }
-
-        .book-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .book-card {
-            background: var(--gray-800);
-            border: 1px solid var(--gray-700);
-            border-radius: 16px;
-            padding: 24px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            text-decoration: none;
-            color: var(--white);
-            transition: all 0.3s;
-        }
-
-        .book-card:hover {
-            background: var(--gray-700);
-            transform: translateX(8px);
-        }
-
-        .book-cover {
-            width: 60px;
-            height: 90px;
-            object-fit: cover;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .book-info h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .book-info p {
-            font-size: 0.9rem;
-            color: var(--gray-400);
-            margin-bottom: 4px;
-        }
-
-        .book-info .author {
-            font-size: 0.8rem;
-            color: var(--gray-500);
-        }
-
-        /* CTA Section */
-        .cta-section {
-            padding: 100px 0;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            text-align: center;
-            color: var(--white);
-        }
-
-        .cta-section h2 {
-            font-size: 2.75rem;
-            font-weight: 700;
-            margin-bottom: 16px;
-        }
-
-        .cta-section p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 40px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-section .btn-primary {
-            background: var(--white);
-            color: var(--primary);
-        }
-
-        .cta-section .btn-primary:hover {
-            background: var(--gray-100);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 48px;
-        }
-
-        .social-link {
-            display: flex;
-            align-items: center;
             gap: 8px;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.15);
+            padding: 14px 28px;
             border-radius: 10px;
-            color: var(--white);
+            font-weight: 600;
+            font-size: 1rem;
             text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
             transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            width: 100%;
         }
 
-        .social-link:hover {
-            background: rgba(255, 255, 255, 0.25);
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--dark-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gray-600);
         }
 
         /* Footer */
         footer {
-            background: var(--darker);
-            color: var(--white);
-            padding: 80px 0 40px;
+            background: #080810;
+            padding: 60px 0 30px;
+            border-top: 1px solid var(--dark-border);
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
             gap: 48px;
-            margin-bottom: 64px;
+            margin-bottom: 48px;
         }
 
         .footer-brand .logo {
-            color: var(--white);
+            display: inline-block;
             margin-bottom: 16px;
         }
 
         .footer-brand p {
-            color: var(--gray-400);
-            font-size: 0.95rem;
-            line-height: 1.7;
+            color: var(--gray-600);
+            font-size: 0.9em;
+            line-height: 1.6;
         }
 
         .footer-section h4 {
-            font-size: 0.9rem;
+            font-size: 0.85em;
             font-weight: 600;
-            color: var(--white);
-            margin-bottom: 20px;
+            color: var(--gray-400);
+            margin-bottom: 16px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
         .footer-section a {
             display: block;
-            color: var(--gray-400);
+            color: var(--gray-600);
             text-decoration: none;
-            padding: 8px 0;
-            font-size: 0.925rem;
+            padding: 6px 0;
+            font-size: 0.9em;
             transition: color 0.2s;
         }
 
@@ -812,17 +746,17 @@
         }
 
         .footer-bottom {
-            padding-top: 32px;
-            border-top: 1px solid var(--gray-800);
+            padding-top: 24px;
+            border-top: 1px solid var(--dark-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.875rem;
-            color: var(--gray-500);
+            font-size: 0.85em;
+            color: var(--gray-600);
         }
 
         .footer-bottom a {
-            color: var(--gray-500);
+            color: var(--gray-600);
             text-decoration: none;
         }
 
@@ -830,523 +764,110 @@
             color: var(--white);
         }
 
-        /* Modal styles remain the same - truncated for brevity */
-        .modal-overlay {
+        /* Mobile Menu */
+        .mobile-menu-btn {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(4px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal {
-            background: var(--white);
-            border-radius: 24px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            color: var(--white);
-            padding: 32px;
-            border-radius: 24px 24px 0 0;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.2);
+            background: none;
             border: none;
-            color: var(--white);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .modal-header h2 {
             font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .modal-header p {
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
-
-        .modal-body {
-            padding: 32px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--gray-700);
-            font-size: 0.9rem;
-        }
-
-        .form-group label span {
-            font-weight: 400;
-            color: var(--gray-500);
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-            font-family: inherit;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .form-message {
-            display: none;
-            padding: 14px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        .form-message.success {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .form-message.error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .form-submit {
-            width: 100%;
-            padding: 16px;
-            background: var(--dark);
-            color: var(--white);
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .form-submit:hover {
-            background: var(--gray-800);
-        }
-
-        .form-submit:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .form-note {
-            text-align: center;
-            margin-top: 16px;
-            font-size: 0.85rem;
-            color: var(--gray-500);
+            color: var(--white);
         }
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .steps-grid { grid-template-columns: repeat(2, 1fr); }
-            .step-connector { display: none; }
-            .agents-grid { grid-template-columns: 1fr; }
-            .pricing-grid { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: repeat(3, 1fr); }
+            .steps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .mobile-menu-btn { display: block; }
-            .hero { padding: 120px 0 80px; }
-            .hero h1 { font-size: 2.5rem; }
-            .hero-subtitle { font-size: 1.1rem; }
-            .hero-proof { flex-direction: column; gap: 24px; }
-            .steps-grid { grid-template-columns: 1fr; }
-            .pricing-grid { grid-template-columns: 1fr; }
-            .sutra-grid, .philosophy-grid { grid-template-columns: 1fr; gap: 48px; }
-            .section-header h2 { font-size: 2rem; }
-            .footer-grid { grid-template-columns: 1fr 1fr; }
-            .footer-brand { grid-column: span 2; }
-            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
-            .cta-section h2 { font-size: 2rem; }
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero {
+                padding: 100px 20px 40px;
+            }
+
+            .hero h1 {
+                font-size: 2.25em;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1em;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .btn-analyze {
+                width: 100%;
+            }
+
+            .hero-stats {
+                gap: 30px;
+            }
+
+            .stat-number {
+                font-size: 1.5em;
+            }
+
+            .track-preview-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .track-artwork {
+                width: 120px;
+                height: 120px;
+            }
+
+            .playlist-preview-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quick-signup-form {
+                flex-direction: column;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 12px;
+                text-align: center;
+            }
         }
 
         @media (max-width: 480px) {
-            .hero h1 { font-size: 2rem; }
-            .hero-ctas { flex-direction: column; }
-            .btn { width: 100%; justify-content: center; }
-            .social-links { flex-direction: column; }
-            .footer-grid { grid-template-columns: 1fr; }
-            .footer-brand { grid-column: span 1; }
-        }
-
-        /* Hero Submit Form */
-        .hero-submit-form {
-            max-width: 600px;
-            margin: 0 auto 32px;
-            padding: 24px;
-            background: var(--white);
-            border-radius: 16px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--gray-200);
-        }
-
-        .hero-form-row {
-            margin-bottom: 16px;
-        }
-
-        .spotify-input-wrapper {
-            display: flex;
-            gap: 12px;
-        }
-
-        .hero-spotify-input {
-            flex: 1;
-            padding: 14px 16px;
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: border-color 0.2s;
-        }
-
-        .hero-spotify-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .hero-fetch-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 20px;
-            background: #1DB954;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .hero-fetch-btn:hover {
-            background: #1ed760;
-            transform: translateY(-1px);
-        }
-
-        .hero-track-preview {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
-            background: var(--gray-50);
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
-
-        .hero-artwork {
-            width: 64px;
-            height: 64px;
-            border-radius: 8px;
-            object-fit: cover;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .hero-track-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .hero-track-title {
-            font-weight: 600;
-            color: var(--dark);
-            font-size: 1.1rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .hero-track-artist {
-            color: var(--gray-600);
-            font-size: 0.95rem;
-        }
-
-        .hero-track-verified {
-            width: 32px;
-            height: 32px;
-            background: var(--secondary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .hero-genre-row, .hero-email-row {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .hero-genre-select {
-            flex: 1;
-            padding: 14px 16px;
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            font-size: 1rem;
-            font-family: inherit;
-            background: white;
-            cursor: pointer;
-        }
-
-        .hero-genre-select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .hero-email-input {
-            flex: 1;
-            padding: 14px 16px;
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            font-size: 1rem;
-            font-family: inherit;
-        }
-
-        .hero-email-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .hero-submit-btn {
-            padding: 14px 28px;
-            background: var(--dark);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-            white-space: nowrap;
-        }
-
-        .hero-submit-btn:hover {
-            background: var(--gray-800);
-            transform: translateY(-1px);
-        }
-
-        .hero-submit-btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .hero-note {
-            font-size: 0.9rem;
-            color: var(--gray-500);
-            margin-bottom: 32px;
-        }
-
-        .hero-form-message {
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .hero-form-message.success {
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .hero-form-message.error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        @media (max-width: 600px) {
-            .hero-submit-form {
-                padding: 16px;
+            .hero h1 {
+                font-size: 1.75em;
             }
 
-            .spotify-input-wrapper {
-                flex-direction: column;
+            .analysis-results {
+                padding: 24px;
             }
-
-            .hero-genre-row, .hero-email-row {
-                flex-direction: column;
-            }
-
-            .hero-fetch-btn, .hero-submit-btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        /* Inline Signup Form */
-        .signup-section {
-            background: linear-gradient(135deg, var(--dark) 0%, var(--gray-800) 100%);
-        }
-
-        .signup-section .section-header h2 {
-            color: var(--white);
-        }
-
-        .signup-section .section-header p {
-            color: var(--gray-400);
-        }
-
-        .inline-signup-form {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 40px;
-            background: var(--gray-900);
-            border-radius: 20px;
-            border: 1px solid var(--gray-700);
-        }
-
-        .inline-signup-form .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .inline-signup-form .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .inline-signup-form .form-group {
-            margin-bottom: 20px;
-        }
-
-        .inline-signup-form .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--gray-300);
-            font-size: 0.9rem;
-        }
-
-        .inline-signup-form .form-group input,
-        .inline-signup-form .form-group select {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--gray-700);
-            border-radius: 10px;
-            background: var(--gray-800);
-            color: var(--white);
-            font-size: 1rem;
-            transition: border-color 0.2s;
-            font-family: inherit;
-        }
-
-        .inline-signup-form .form-group input::placeholder {
-            color: var(--gray-500);
-        }
-
-        .inline-signup-form .form-group input:focus,
-        .inline-signup-form .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .inline-signup-form .btn-submit {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            color: var(--white);
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.2s;
-        }
-
-        .inline-signup-form .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-        }
-
-        .inline-signup-form .btn-submit:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .inline-signup-form .form-note {
-            text-align: center;
-            color: var(--gray-500);
-            font-size: 0.9rem;
-            margin-top: 16px;
-        }
-
-        .inline-signup-form .form-message {
-            display: none;
-            padding: 14px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-
-        .inline-signup-form .form-message.success {
-            display: block;
-            background: #d1fae5;
-            color: #065f46;
-        }
-
-        .inline-signup-form .form-message.error {
-            display: block;
-            background: #fee2e2;
-            color: #991b1b;
         }
     </style>
 </head>
@@ -1358,116 +879,96 @@
         <a href="/" class="logo"><span class="one">One</span>ZeroEight</a>
         <ul class="nav-links">
             <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#agents">Intelligent Agents</a></li>
             <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#sutra">SUTRA</a></li>
-            <li><a href="#philosophy">Philosophy</a></li>
-            <li><a href="#start-free" class="nav-cta">Start Free</a></li>
+            <li><a href="/curators/">For Curators</a></li>
+            <li><a href="/artists/dashboard.html" class="nav-cta">Artist Login</a></li>
         </ul>
-        <button class="mobile-menu-btn" onclick="openModal()">☰</button>
+        <button class="mobile-menu-btn">☰</button>
     </div>
 </nav>
 
-<!-- Hero -->
+<!-- Hero Section -->
 <section class="hero">
     <div class="container">
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="dot"></span>
-                Intelligent Agents Now Active
-            </div>
-            <h1>Intelligent Agents That <span>Promote Your Music</span></h1>
-            <p class="hero-subtitle">
-                Deploy Intelligent Agents to get your music on playlists. Start free.
-            </p>
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Intelligent Agents Now Active
+        </div>
 
-            <!-- Hero Track Submit Form -->
-            <div class="hero-submit-form">
-                <div class="hero-form-row">
-                    <div class="spotify-input-wrapper">
-                        <input
-                            type="url"
-                            id="hero-spotify-url"
-                            class="hero-spotify-input"
-                            placeholder="Paste your Spotify track URL..."
-                        >
-                        <button type="button" id="hero-fetch-btn" class="hero-fetch-btn" onclick="fetchHeroTrack()">
-                            <span class="fab fa-spotify"></span>
-                            Fetch
-                        </button>
+        <h1>Get Your Music on Playlists</h1>
+        <p class="hero-subtitle">
+            Paste your Spotify track and see matching playlists instantly. Free to start.
+        </p>
+
+        <!-- Track Analyzer -->
+        <div class="track-analyzer">
+            <div class="input-group">
+                <input type="url"
+                       id="spotify-url"
+                       class="spotify-input"
+                       placeholder="Paste your Spotify track URL...">
+                <button onclick="analyzeTrack()" id="analyze-btn" class="btn-analyze">
+                    Analyze Track →
+                </button>
+            </div>
+            <p class="input-hint">Example: https://open.spotify.com/track/...</p>
+        </div>
+
+        <!-- Analysis Results (hidden until analysis) -->
+        <div id="analysis-results" class="analysis-results" style="display: none;">
+            <!-- Track Preview -->
+            <div class="track-preview-card">
+                <img id="track-artwork" class="track-artwork" src="" alt="">
+                <div class="track-info">
+                    <h3 id="track-title">Track Title</h3>
+                    <div class="track-artist" id="track-artist">Artist Name</div>
+                    <div class="genre-prediction">
+                        <span class="label">Predicted Genre:</span>
+                        <span id="predicted-genre" class="genre-badge">Loading...</span>
                     </div>
                 </div>
-
-                <!-- Track Preview (hidden until fetched) -->
-                <div id="hero-track-preview" class="hero-track-preview" style="display: none;">
-                    <img id="hero-track-artwork" class="hero-artwork" src="" alt="">
-                    <div class="hero-track-info">
-                        <div class="hero-track-title" id="hero-track-title">Track Title</div>
-                        <div class="hero-track-artist" id="hero-track-artist">Artist Name</div>
-                    </div>
-                    <div class="hero-track-verified">✓</div>
-                </div>
-
-                <!-- Genre & Submit Row (shown after track fetch) -->
-                <div id="hero-genre-row" class="hero-genre-row" style="display: none;">
-                    <select id="hero-genre" class="hero-genre-select" required>
-                        <option value="">Select genre...</option>
-                        <option value="hip-hop">Hip-Hop/Rap</option>
-                        <option value="pop">Pop</option>
-                        <option value="rnb">R&B/Soul</option>
-                        <option value="electronic">Electronic/EDM</option>
-                        <option value="lo-fi">Lo-Fi/Chill</option>
-                        <option value="rock">Rock</option>
-                        <option value="alternative">Alternative</option>
-                        <option value="indie">Indie</option>
-                        <option value="folk">Folk</option>
-                        <option value="country">Country</option>
-                        <option value="jazz">Jazz</option>
-                        <option value="classical">Classical</option>
-                        <option value="latin">Latin</option>
-                        <option value="metal">Metal</option>
-                        <option value="other">Other</option>
-                    </select>
-                    <button type="button" id="hero-submit-btn" class="hero-submit-btn" onclick="submitHeroTrack()">
-                        Start Free Trial →
-                    </button>
-                </div>
-
-                <!-- Email input (shown after genre selection) -->
-                <div id="hero-email-row" class="hero-email-row" style="display: none;">
-                    <input type="email" id="hero-email" class="hero-email-input" placeholder="Your email address...">
-                    <button type="button" id="hero-final-btn" class="hero-submit-btn" onclick="finalSubmitHero()">
-                        Submit →
-                    </button>
-                </div>
-
-                <div id="hero-form-message" class="hero-form-message" style="display: none;"></div>
             </div>
 
-            <p class="hero-note">No credit card required. Free placement on OneZeroEight playlists.</p>
+            <!-- Playlist Preview -->
+            <div class="playlist-preview">
+                <h3><span id="match-count">0</span> Playlists Match Your Sound</h3>
 
-            <div class="hero-proof">
-                <div class="proof-item">
-                    <div class="proof-value">3000+</div>
-                    <div class="proof-label">Verified Curators</div>
+                <div class="playlist-preview-grid" id="playlist-preview-grid">
+                    <!-- Populated by JS -->
                 </div>
-                <div class="proof-item">
-                    <div class="proof-value">15M+</div>
-                    <div class="proof-label">Playlist Listeners</div>
-                </div>
-                <div class="proof-item">
-                    <div class="proof-value">Free</div>
-                    <div class="proof-label">To Start</div>
+
+                <!-- Signup Prompt -->
+                <div class="signup-prompt">
+                    <p>Sign up free to see all matching playlists and start your campaign</p>
+
+                    <div id="signup-message" class="form-message" style="display: none;"></div>
+
+                    <form id="quick-signup" class="quick-signup-form" onsubmit="handleQuickSignup(event)">
+                        <input type="text" id="artist-name" placeholder="Your name" required>
+                        <input type="email" id="artist-email" placeholder="Email" required>
+                        <button type="submit" class="btn-signup" id="signup-btn">Start Free Trial →</button>
+                    </form>
+
+                    <p class="form-note">No credit card required</p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
 
-<!-- Free Banner -->
-<section class="free-banner">
-    <div class="container">
-        <p>🎉 Free Trial: Get placed on OneZeroEight playlists. <span>No credit card required.</span></p>
+        <!-- Hero Stats -->
+        <div class="hero-stats">
+            <div class="stat">
+                <span class="stat-number">3,000+</span>
+                <span class="stat-label">Playlists</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">15M+</span>
+                <span class="stat-label">Listeners</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">Free</span>
+                <span class="stat-label">To Start</span>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -1476,60 +977,29 @@
     <div class="container">
         <div class="section-header">
             <h2>How It Works</h2>
-            <p>Sign up free. Get real placements. Upgrade when you want more.</p>
+            <p>Four simple steps to get your music heard</p>
         </div>
         <div class="steps-grid">
             <div class="step">
-                <div class="step-connector"></div>
                 <div class="step-number">1</div>
-                <h3>Sign Up Free</h3>
-                <p>Create your account and submit your track. No payment needed to start.</p>
+                <h3>Paste Your Track</h3>
+                <p>Enter your Spotify URL and our AI analyzes your sound instantly</p>
             </div>
             <div class="step">
-                <div class="step-connector"></div>
                 <div class="step-number">2</div>
-                <h3>Agents Activate</h3>
-                <p>Intelligent Agents analyze your music and add you to OneZeroEight playlists.</p>
+                <h3>See Matches</h3>
+                <p>View playlists that fit your genre and style</p>
             </div>
             <div class="step">
-                <div class="step-connector"></div>
                 <div class="step-number">3</div>
-                <h3>Get Promoted</h3>
-                <p>Agents handle social posts, PR outreach, and playlist marketing.</p>
+                <h3>Agents Pitch</h3>
+                <p>Intelligent agents reach out to curators on your behalf</p>
             </div>
             <div class="step">
                 <div class="step-number">4</div>
-                <h3>Upgrade for More</h3>
-                <p>Want access to 3000+ playlists? Upgrade when you're ready.</p>
+                <h3>Get Placed</h3>
+                <p>Track placements and grow your audience</p>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- Intelligent Agents -->
-<section class="section section-dark" id="agents">
-    <div class="container">
-        <div class="section-header">
-            <h2>Meet Your Intelligent Agents</h2>
-            <p>A team of specialized Agents working around the clock to promote your music.</p>
-        </div>
-        <div class="agents-grid">
-            <a href="#start-free" class="agent-card">
-                <img src="PlaylistAgent.png" alt="Playlist Agent" class="agent-image">
-                <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
-            </a>
-            <a href="#start-free" class="agent-card">
-                <img src="SocialAgent.png" alt="Social Agent" class="agent-image">
-                <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
-            </a>
-            <a href="#" onclick="openModal('pro'); return false;" class="agent-card">
-                <img src="PRAgent.png" alt="PR Agent" class="agent-image">
-                <div class="agent-status"><span class="dot"></span> Active on Pro Tier</div>
-            </a>
-            <a href="#" onclick="openModal('pro'); return false;" class="agent-card">
-                <img src="CuratorAgent.png" alt="Curator Agent" class="agent-image">
-                <div class="agent-status"><span class="dot"></span> Active on Pro Tier</div>
-            </a>
         </div>
     </div>
 </section>
@@ -1539,7 +1009,7 @@
     <div class="container">
         <div class="section-header">
             <h2>Simple Pricing</h2>
-            <p>Start free. Upgrade when you want to scale.</p>
+            <p>Start free. Upgrade when you want more reach.</p>
         </div>
         <div class="pricing-grid">
             <div class="pricing-card">
@@ -1548,209 +1018,43 @@
                 <p class="description">Get started with OneZeroEight playlists</p>
                 <ul class="pricing-features">
                     <li>Placement on OneZeroEight playlists</li>
-                    <li>Playlist Agent active</li>
-                    <li>Social Agent active</li>
-                    <li>Basic analytics dashboard</li>
-                    <li>Community Discord access</li>
+                    <li>AI genre analysis</li>
+                    <li>Basic analytics</li>
+                    <li>Community Discord</li>
                 </ul>
-                <a href="#start-free" class="btn btn-secondary">Start Free</a>
+                <a href="#" onclick="scrollToAnalyzer(); return false;" class="btn btn-secondary">Start Free</a>
             </div>
             <div class="pricing-card featured">
                 <div class="pricing-badge">Most Popular</div>
                 <h3>Pro</h3>
-                <p class="intro-label" style="color: #10b981; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Limited Time Intro Pricing</p>
-                <div class="price"><span style="text-decoration: line-through; opacity: 0.5; font-size: 0.6em;">$49</span> $19.95 <span>/ track</span></div>
-                <p class="description">Full Agent suite + 3000+ playlists</p>
+                <p class="intro-label">Limited Time Intro Pricing</p>
+                <div class="price"><span class="original">$49</span>$19.95 <span>/ track</span></div>
+                <p class="description">Full access to 3,000+ playlists</p>
                 <ul class="pricing-features">
                     <li>Everything in Free, plus:</li>
-                    <li>Access to 3000+ playlists</li>
-                    <li>PR Agent active</li>
-                    <li>Curator Agent active</li>
-                    <li>3+ playlist placements guaranteed</li>
-                    <li>Advanced analytics</li>
+                    <li>Access to 3,000+ playlists</li>
+                    <li>3+ placements guaranteed</li>
+                    <li>Curator Agent outreach</li>
+                    <li>Priority support</li>
                     <li>Pay with SUTRA for 20% off</li>
                 </ul>
-                <a href="#" onclick="openModal('pro'); return false;" class="btn btn-primary">Get Started</a>
+                <a href="/artists/submit.html" class="btn btn-primary">Get Started</a>
             </div>
             <div class="pricing-card">
                 <div class="pricing-badge" style="background: var(--secondary);">Best Value</div>
                 <h3>Album</h3>
-                <p class="intro-label" style="color: #10b981; font-size: 12px; font-weight: 600; margin-bottom: 5px;">Limited Time Intro Pricing</p>
-                <div class="price"><span style="text-decoration: line-through; opacity: 0.5; font-size: 0.6em;">$199</span> $99 <span>/ 10 tracks</span></div>
+                <p class="intro-label">Limited Time Intro Pricing</p>
+                <div class="price"><span class="original">$199</span>$99 <span>/ 10 tracks</span></div>
                 <p class="description">Promote your full album or EP</p>
                 <ul class="pricing-features">
                     <li>Everything in Pro, plus:</li>
-                    <li>10 tracks promoted together</li>
-                    <li>Individual track campaigns</li>
+                    <li>10 tracks promoted</li>
                     <li>Album-wide PR campaign</li>
                     <li>Coordinated release strategy</li>
-                    <li>Dedicated account manager</li>
-                    <li>30+ playlist placements guaranteed</li>
+                    <li>30+ placements guaranteed</li>
                 </ul>
-                <a href="#" onclick="openModal('album'); return false;" class="btn btn-primary">Get Started</a>
+                <a href="/artists/submit.html" class="btn btn-primary">Get Started</a>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- SUTRA -->
-<section class="section" id="sutra">
-    <div class="container">
-        <div class="sutra-grid">
-            <div class="sutra-content">
-                <h2>Save with SUTRA</h2>
-                <p>SUTRA is the utility token that powers the OneZeroEight ecosystem. Use it to unlock discounts on services, earn rewards for engagement, and access exclusive features.</p>
-                <ul class="sutra-benefits">
-                    <li>
-                        <span class="icon">💰</span>
-                        <span>Pay with SUTRA for 20% off all services</span>
-                    </li>
-                    <li>
-                        <span class="icon">🏆</span>
-                        <span>Earn SUTRA for quality submissions and engagement</span>
-                    </li>
-                    <li>
-                        <span class="icon">⚡</span>
-                        <span>Stake for priority Agent access and features</span>
-                    </li>
-                    <li>
-                        <span class="icon">🗳️</span>
-                        <span>Participate in platform governance</span>
-                    </li>
-                </ul>
-                <div class="sutra-note">
-                    <strong>Note:</strong> SUTRA is completely optional. You can always pay with USD. SUTRA simply offers additional discounts and benefits for those who choose to use it.
-                </div>
-            </div>
-            <div class="sutra-visual">
-                <h3>Token Overview</h3>
-                <div class="sutra-stat-row">
-                    <span class="sutra-stat-label">Total Supply</span>
-                    <span class="sutra-stat-value">108,000,000</span>
-                </div>
-                <div class="sutra-stat-row">
-                    <span class="sutra-stat-label">Network</span>
-                    <span class="sutra-stat-value">Polygon</span>
-                </div>
-                <div class="sutra-stat-row">
-                    <span class="sutra-stat-label">Utility</span>
-                    <span class="sutra-stat-value">Platform Discounts</span>
-                </div>
-                <div class="sutra-stat-row">
-                    <span class="sutra-stat-label">DEX</span>
-                    <span class="sutra-stat-value">SushiSwap</span>
-                </div>
-                <div class="sutra-stat-row">
-                    <span class="sutra-stat-label">USD Always Accepted</span>
-                    <span class="sutra-stat-value">✓ Yes</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Philosophy -->
-<section class="section section-dark" id="philosophy">
-    <div class="container">
-        <div class="philosophy-grid">
-            <div class="philosophy-content">
-                <h2>The Philosophy</h2>
-                <p class="philosophy-quote">"Self-preservation is the first law of intelligence."</p>
-                <p>OneZeroEight isn't just a platform—it's an implementation of a new approach to alignment. Our Agents succeed only when you succeed, creating natural incentives for beneficial outcomes.</p>
-                <p>Want to go deeper? Explore the ideas behind the platform:</p>
-            </div>
-            <div class="book-cards">
-                <a href="https://a.co/d/htCcbRw" target="_blank" class="book-card">
-                    <img src="onezeroeight_cover.png" alt="OneZeroEight Book Cover" class="book-cover">
-                    <div class="book-info">
-                        <h4>OneZeroEight</h4>
-                        <p>Aligning Human and Agent Consciousness</p>
-                        <span class="author">by JB Wagoner</span>
-                    </div>
-                </a>
-                <a href="https://a.co/d/avN3yHt" target="_blank" class="book-card">
-                    <img src="ZenAI_cover.png" alt="Zen AI Book Cover" class="book-cover">
-                    <div class="book-info">
-                        <h4>Zen AI</h4>
-                        <p>The Philosophical Foundation</p>
-                        <span class="author">by JB Wagoner</span>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Inline Signup Form -->
-<section class="section signup-section" id="start-free">
-    <div class="container">
-        <div class="section-header">
-            <h2>🚀 Start Your Free Trial</h2>
-            <p>Get your music on playlists—no payment required</p>
-        </div>
-        <form id="inline-signup-form" class="inline-signup-form" onsubmit="submitInlineForm(event)">
-            <div class="form-message" id="inlineFormMessage"></div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Your Name *</label>
-                    <input type="text" id="inline-name" placeholder="Your full name" required>
-                </div>
-                <div class="form-group">
-                    <label>Email *</label>
-                    <input type="email" id="inline-email" placeholder="you@email.com" required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Artist / Project Name *</label>
-                    <input type="text" id="inline-artist" placeholder="Your artist or band name" required>
-                </div>
-                <div class="form-group">
-                    <label>Spotify Track URL</label>
-                    <input type="url" id="inline-spotify" placeholder="https://open.spotify.com/track/...">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Primary Genre *</label>
-                <select id="inline-genre" required>
-                    <option value="">Select your genre...</option>
-                    <option value="hip-hop">Hip-Hop/Rap</option>
-                    <option value="pop">Pop</option>
-                    <option value="rnb">R&B/Soul</option>
-                    <option value="electronic">Electronic/EDM</option>
-                    <option value="lo-fi">Lo-Fi/Chill</option>
-                    <option value="rock">Rock</option>
-                    <option value="alternative">Alternative</option>
-                    <option value="indie">Indie</option>
-                    <option value="folk">Folk</option>
-                    <option value="country">Country</option>
-                    <option value="jazz">Jazz</option>
-                    <option value="classical">Classical</option>
-                    <option value="latin">Latin</option>
-                    <option value="metal">Metal</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <button type="submit" class="btn-submit" id="inline-submit-btn">
-                Start Free Trial →
-            </button>
-            <p class="form-note">No credit card required. We'll email you next steps.</p>
-        </form>
-    </div>
-</section>
-
-<!-- CTA -->
-<section class="cta-section">
-    <div class="container">
-        <h2>Ready to Deploy Your Agents?</h2>
-        <p>Start free today. Get real playlist placements. Upgrade when you want more reach.</p>
-        <a href="#start-free" class="btn btn-primary">
-            Start Free Trial →
-        </a>
-        <div class="social-links">
-            <a href="https://discord.gg/4A6ExTnKnK" target="_blank" class="social-link">💬 Discord</a>
-            <a href="https://x.com/OneZeroEight_ai" target="_blank" class="social-link">𝕏 Twitter</a>
-            <a href="https://t.me/OneZeroEight_ai" target="_blank" class="social-link">✈️ Telegram</a>
         </div>
     </div>
 </section>
@@ -1761,26 +1065,18 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="/" class="logo"><span class="one">One</span>ZeroEight</a>
-                <p>Intelligent Agents that promote your music. Playlists, PR, socials—all handled. Start free, upgrade when you're ready.</p>
+                <p>Intelligent Agents that promote your music. Playlists, PR, socials—all handled. Start free.</p>
             </div>
             <div class="footer-section">
                 <h4>Platform</h4>
                 <a href="#how-it-works">How It Works</a>
-                <a href="#agents">Intelligent Agents</a>
                 <a href="#pricing">Pricing</a>
-                <a href="https://forms.gle/6ZcSqKV6jVtYd1Yp8" target="_blank">For Curators</a>
+                <a href="/curators/">For Curators</a>
             </div>
             <div class="footer-section">
-                <h4>SUTRA</h4>
-                <a href="#sutra">What is SUTRA?</a>
-                <a href="#">SushiSwap</a>
-                <a href="#">Polygon</a>
-            </div>
-            <div class="footer-section">
-                <h4>Learn</h4>
+                <h4>Resources</h4>
                 <a href="https://a.co/d/htCcbRw" target="_blank">OneZeroEight Book</a>
                 <a href="https://a.co/d/avN3yHt" target="_blank">Zen AI Book</a>
-                <a href="#philosophy">Philosophy</a>
             </div>
             <div class="footer-section">
                 <h4>Connect</h4>
@@ -1797,305 +1093,222 @@
     </div>
 </footer>
 
-<!-- Modal - JavaScript remains largely the same, just update any AI references in comments/strings -->
-<div id="modal" class="modal-overlay">
-    <div class="modal">
-        <div class="modal-header">
-            <button class="modal-close" onclick="closeModal()">×</button>
-            <h2>🚀 Start Your Free Trial</h2>
-            <p>Get your music on OneZeroEight playlists—no payment required</p>
-        </div>
-        <div class="modal-body">
-            <div class="form-message" id="formMessage"></div>
-            <form id="signupForm" onsubmit="submitForm(event)">
-                <!-- Form content same as original - abbreviated for length -->
-                <div class="form-group">
-                    <label>Your Name *</label>
-                    <input type="text" id="fname" placeholder="Your full name" required>
-                </div>
-                <div class="form-group">
-                    <label>Your Email *</label>
-                    <input type="email" id="femail" placeholder="you@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Artist / Project Name *</label>
-                    <input type="text" id="fartist" placeholder="Your artist or band name" required>
-                </div>
-                <div class="form-group">
-                    <label>Primary Genre *</label>
-                    <select id="fgenre" required>
-                        <option value="">Select your genre...</option>
-                        <option value="electronic">Electronic / EDM</option>
-                        <option value="hip-hop">Hip Hop / Rap</option>
-                        <option value="pop">Pop</option>
-                        <option value="lo-fi">Lo-Fi / Chill</option>
-                        <option value="rock">Rock / Alternative</option>
-                        <option value="rnb">R&B / Soul</option>
-                        <option value="indie">Indie</option>
-                        <option value="folk">Folk / Singer-Songwriter</option>
-                        <option value="ambient">Ambient / Experimental</option>
-                        <option value="country">Country</option>
-                        <option value="jazz">Jazz / Blues</option>
-                        <option value="classical">Classical</option>
-                        <option value="metal">Metal</option>
-                        <option value="latin">Latin</option>
-                        <option value="world">World</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                
-                <input type="hidden" id="ftier" value="free">
-                
-                <button type="submit" class="form-submit" id="submitBtn">
-                    Start Free Trial →
-                </button>
-                <p class="form-note">No credit card required. We'll email you next steps.</p>
-            </form>
-        </div>
-    </div>
-</div>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <script>
-const API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
+const API_BASE = 'https://onezeroeight-backend-production.up.railway.app';
 
-// Hero form state
-let heroTrackData = null;
+// Pending track data for signup
+let pendingTrack = null;
 
-async function fetchHeroTrack() {
-    const url = document.getElementById('hero-spotify-url').value.trim();
-    const btn = document.getElementById('hero-fetch-btn');
-    const preview = document.getElementById('hero-track-preview');
-    const genreRow = document.getElementById('hero-genre-row');
-    const msg = document.getElementById('hero-form-message');
+function scrollToAnalyzer() {
+    document.getElementById('spotify-url').focus();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-    if (!url || !url.includes('spotify.com/track')) {
-        showHeroMessage('Please enter a valid Spotify track URL', 'error');
+async function analyzeTrack() {
+    const spotifyUrl = document.getElementById('spotify-url').value.trim();
+    const btn = document.getElementById('analyze-btn');
+    const resultsSection = document.getElementById('analysis-results');
+
+    if (!spotifyUrl || !spotifyUrl.includes('spotify.com/track/')) {
+        alert('Please enter a valid Spotify track URL');
         return;
     }
 
-    btn.innerHTML = '<span class="fas fa-spinner fa-spin"></span> Fetching...';
     btn.disabled = true;
-    msg.style.display = 'none';
+    btn.textContent = 'Analyzing...';
 
     try {
-        // Use Spotify OEmbed API
-        const oembedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`;
-        const response = await fetch(oembedUrl);
-
-        if (!response.ok) throw new Error('Could not fetch track info');
-
-        const data = await response.json();
+        // 1. Fetch track metadata via OEmbed
+        const oembedResponse = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(spotifyUrl)}`);
+        if (!oembedResponse.ok) throw new Error('Could not fetch track info');
+        const trackData = await oembedResponse.json();
 
         // Parse title (format: "Song Title by Artist Name")
-        const titleParts = data.title.split(' by ');
-        const trackTitle = titleParts[0] || data.title;
+        const titleParts = trackData.title.split(' by ');
+        const trackTitle = titleParts[0] || trackData.title;
         const artistName = titleParts.slice(1).join(' by ') || 'Unknown Artist';
 
-        heroTrackData = {
-            spotify_url: url,
+        // Show track preview
+        document.getElementById('track-artwork').src = trackData.thumbnail_url;
+        document.getElementById('track-title').textContent = trackTitle;
+        document.getElementById('track-artist').textContent = artistName;
+
+        // Store pending track
+        pendingTrack = {
+            spotify_url: spotifyUrl,
             track_title: trackTitle,
             artist_name: artistName,
-            artwork_url: data.thumbnail_url
+            artwork_url: trackData.thumbnail_url,
+            genre: null
         };
 
-        // Show preview
-        document.getElementById('hero-track-artwork').src = data.thumbnail_url;
-        document.getElementById('hero-track-title').textContent = trackTitle;
-        document.getElementById('hero-track-artist').textContent = artistName;
+        // 2. Try to get genre prediction from backend
+        let predictedGenre = 'Indie';
+        let matchCount = 500;
+        let samplePlaylists = [];
 
-        preview.style.display = 'flex';
-        genreRow.style.display = 'flex';
+        try {
+            const analysisResponse = await fetch(`${API_BASE}/api/tracks/analyze`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ spotify_url: spotifyUrl })
+            });
+
+            if (analysisResponse.ok) {
+                const analysis = await analysisResponse.json();
+                predictedGenre = analysis.predicted_primary_genre || 'Indie';
+                pendingTrack.genre = predictedGenre;
+            }
+        } catch (e) {
+            console.log('Genre prediction not available, using default');
+        }
+
+        // 3. Get playlist count for this genre
+        try {
+            const playlistResponse = await fetch(`${API_BASE}/api/tracks/playlists/count?genre=${encodeURIComponent(predictedGenre)}`);
+            if (playlistResponse.ok) {
+                const playlistData = await playlistResponse.json();
+                matchCount = playlistData.count || 500;
+                samplePlaylists = playlistData.sample_playlists || [];
+            }
+        } catch (e) {
+            console.log('Playlist count not available');
+        }
+
+        // Update UI
+        document.getElementById('predicted-genre').textContent = predictedGenre;
+        document.getElementById('match-count').textContent = matchCount.toLocaleString();
+        pendingTrack.genre = predictedGenre;
+
+        // Render playlist preview
+        renderPlaylistPreview(samplePlaylists, matchCount);
+
+        // Show results section
+        resultsSection.style.display = 'block';
+
+        // Scroll to results
+        setTimeout(() => {
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
 
     } catch (error) {
-        showHeroMessage('Could not fetch track. Please check the URL.', 'error');
+        console.error('Analysis failed:', error);
+        alert('Could not analyze track. Please check the URL and try again.');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Analyze Track →';
     }
-
-    btn.innerHTML = '<span class="fab fa-spotify"></span> Fetch';
-    btn.disabled = false;
 }
 
-function submitHeroTrack() {
-    const genre = document.getElementById('hero-genre').value;
-    const emailRow = document.getElementById('hero-email-row');
-    const genreRow = document.getElementById('hero-genre-row');
+function renderPlaylistPreview(playlists, totalCount) {
+    const grid = document.getElementById('playlist-preview-grid');
 
-    if (!genre) {
-        showHeroMessage('Please select a genre', 'error');
-        return;
-    }
+    // Default playlists if none returned
+    const defaultPlaylists = [
+        { name: 'Fresh Finds', followers: 125000, image_url: null },
+        { name: 'Indie Vibes', followers: 89000, image_url: null },
+        { name: 'New Music Friday', followers: 245000, image_url: null },
+        { name: 'Chill Hits', followers: 156000, image_url: null },
+        { name: 'Discovery Mode', followers: 78000, image_url: null },
+        { name: 'Rising Artists', followers: 112000, image_url: null }
+    ];
 
-    heroTrackData.genre = genre;
+    const previewPlaylists = playlists.length > 0 ? playlists.slice(0, 6) : defaultPlaylists;
 
-    // Show email input
-    genreRow.style.display = 'none';
-    emailRow.style.display = 'flex';
-    document.getElementById('hero-email').focus();
+    const defaultImage = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%232d2d44" width="100" height="100"/><text x="50" y="55" font-size="30" text-anchor="middle" fill="%23666">♪</text></svg>';
+
+    grid.innerHTML = previewPlaylists.map((p, i) => `
+        <div class="playlist-preview-card ${i >= 2 ? 'blurred' : ''}">
+            <img src="${p.image_url || defaultImage}" alt="${p.name}" onerror="this.src='${defaultImage}'">
+            <div class="playlist-name">${p.name}</div>
+            <div class="playlist-followers">${formatFollowers(p.followers)} followers</div>
+        </div>
+    `).join('');
+
+    // Add overlay
+    grid.innerHTML += `
+        <div class="more-playlists-overlay">
+            <span>+${totalCount.toLocaleString()} more playlists</span>
+            <span>Sign up to see all →</span>
+        </div>
+    `;
 }
 
-async function finalSubmitHero() {
-    const email = document.getElementById('hero-email').value.trim();
-    const btn = document.getElementById('hero-final-btn');
-    const msg = document.getElementById('hero-form-message');
+function formatFollowers(num) {
+    if (!num) return '10K+';
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+    return num.toString();
+}
 
-    if (!email || !email.includes('@')) {
-        showHeroMessage('Please enter a valid email address', 'error');
+async function handleQuickSignup(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('artist-name').value.trim();
+    const email = document.getElementById('artist-email').value.trim();
+    const btn = document.getElementById('signup-btn');
+    const msg = document.getElementById('signup-message');
+
+    if (!name || !email) {
+        showMessage('Please fill in all fields', 'error');
         return;
     }
 
     btn.disabled = true;
-    btn.textContent = 'Submitting...';
+    btn.textContent = 'Signing up...';
     msg.style.display = 'none';
 
     try {
-        const response = await fetch(API_BASE + '/artists/signup', {
+        const response = await fetch(`${API_BASE}/api/artists/signup`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                name: heroTrackData.artist_name,
+                name: name,
                 email: email,
-                artist_name: heroTrackData.artist_name,
-                genre: heroTrackData.genre,
-                spotify_url: heroTrackData.spotify_url,
-                track_title: heroTrackData.track_title,
-                artwork_url: heroTrackData.artwork_url,
+                artist_name: pendingTrack?.artist_name || name,
+                spotify_url: pendingTrack?.spotify_url || null,
+                track_title: pendingTrack?.track_title || null,
+                genre: pendingTrack?.genre || 'indie',
+                artwork_url: pendingTrack?.artwork_url || null,
                 interested_tier: 'free',
-                referral_source: 'Homepage Hero Form'
+                referral_source: 'Homepage Track Analyzer'
             })
         });
 
         const result = await response.json();
 
         if (response.ok && result.success) {
-            showHeroMessage('🎉 Success! Check your email for next steps.', 'success');
-            // Reset form
-            document.getElementById('hero-spotify-url').value = '';
-            document.getElementById('hero-track-preview').style.display = 'none';
-            document.getElementById('hero-genre-row').style.display = 'none';
-            document.getElementById('hero-email-row').style.display = 'none';
-            document.getElementById('hero-email').value = '';
-            document.getElementById('hero-genre').value = '';
-            heroTrackData = null;
+            showMessage('🎉 Success! Check your email for next steps.', 'success');
+            // Could redirect to dashboard here
+            // window.location.href = '/artists/dashboard.html?welcome=true';
         } else {
-            showHeroMessage(result.detail || 'Something went wrong. Please try again.', 'error');
+            showMessage(result.detail || result.message || 'Signup failed. Please try again.', 'error');
         }
     } catch (error) {
-        showHeroMessage('Connection error. Please try again.', 'error');
+        console.error('Signup error:', error);
+        showMessage('Connection error. Please try again.', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Start Free Trial →';
     }
-
-    btn.disabled = false;
-    btn.textContent = 'Submit →';
 }
 
-function showHeroMessage(text, type) {
-    const msg = document.getElementById('hero-form-message');
+function showMessage(text, type) {
+    const msg = document.getElementById('signup-message');
     msg.textContent = text;
-    msg.className = 'hero-form-message ' + type;
+    msg.className = 'form-message ' + type;
     msg.style.display = 'block';
 }
 
-// Allow pressing Enter in the Spotify URL field to fetch
-document.addEventListener('DOMContentLoaded', function() {
-    const spotifyInput = document.getElementById('hero-spotify-url');
-    if (spotifyInput) {
-        spotifyInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                fetchHeroTrack();
-            }
-        });
+// Allow Enter key to trigger analysis
+document.getElementById('spotify-url').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        e.preventDefault();
+        analyzeTrack();
     }
 });
 
-function openModal(tier = 'free') {
-    document.getElementById('modal').style.display = 'flex';
-    document.getElementById('ftier').value = tier;
-    document.body.style.overflow = 'hidden';
-    
-    const header = document.querySelector('.modal-header h2');
-    const subtext = document.querySelector('.modal-header p');
-    const submitBtn = document.getElementById('submitBtn');
-    
-    if (tier === 'pro') {
-        header.textContent = '🚀 Get Pro Access';
-        subtext.textContent = 'Full Agent suite + 3000+ playlists — $19.95/track';
-        submitBtn.textContent = 'Continue to Payment →';
-    } else if (tier === 'album') {
-        header.textContent = '💿 Album Package';
-        subtext.textContent = '10 tracks promoted together — $199';
-        submitBtn.textContent = 'Continue to Payment →';
-    } else {
-        header.textContent = '🚀 Start Your Free Trial';
-        subtext.textContent = 'Get your music on OneZeroEight playlists—no payment required';
-        submitBtn.textContent = 'Start Free Trial →';
-    }
-}
-
-function closeModal() {
-    document.getElementById('modal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-    document.getElementById('signupForm').reset();
-    document.getElementById('formMessage').style.display = 'none';
-}
-
-document.getElementById('modal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-});
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModal();
-});
-
-async function submitForm(e) {
-    e.preventDefault();
-    
-    const btn = document.getElementById('submitBtn');
-    const msg = document.getElementById('formMessage');
-    const originalText = btn.textContent;
-    
-    btn.disabled = true;
-    btn.textContent = 'Processing...';
-    msg.style.display = 'none';
-    
-    const data = {
-        name: document.getElementById('fname').value,
-        email: document.getElementById('femail').value,
-        artist_name: document.getElementById('fartist').value,
-        genre: document.getElementById('fgenre').value,
-        interested_tier: document.getElementById('ftier').value,
-        referral_source: 'Website'
-    };
-    
-    try {
-        const response = await fetch(API_BASE + '/artists/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        
-        const result = await response.json();
-        
-        if (response.ok && result.success) {
-            msg.className = 'form-message success';
-            msg.style.display = 'block';
-            msg.innerHTML = `<div>🎉 ${result.message || "You're in! Check your email for next steps."}</div>`;
-            document.getElementById('signupForm').reset();
-        } else {
-            msg.className = 'form-message error';
-            msg.style.display = 'block';
-            msg.innerHTML = `<div>❌ ${result.detail || 'Something went wrong. Please try again.'}</div>`;
-        }
-    } catch (error) {
-        msg.className = 'form-message error';
-        msg.style.display = 'block';
-        msg.innerHTML = `<div>❌ Connection error. Please try again.</div>`;
-    }
-    
-    btn.disabled = false;
-    btn.textContent = originalText;
-}
-
+// Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         const href = this.getAttribute('href');
@@ -2103,62 +1316,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             e.preventDefault();
             const target = document.querySelector(href);
             if (target) {
-                const navHeight = 72;
+                const navHeight = 64;
                 const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
                 window.scrollTo({ top: targetPosition, behavior: 'smooth' });
             }
         }
     });
 });
-
-// Inline signup form submission
-async function submitInlineForm(e) {
-    e.preventDefault();
-
-    const btn = document.getElementById('inline-submit-btn');
-    const msg = document.getElementById('inlineFormMessage');
-    const originalText = btn.textContent;
-
-    btn.disabled = true;
-    btn.textContent = 'Processing...';
-    msg.style.display = 'none';
-    msg.className = 'form-message';
-
-    const data = {
-        name: document.getElementById('inline-name').value,
-        email: document.getElementById('inline-email').value,
-        artist_name: document.getElementById('inline-artist').value,
-        genre: document.getElementById('inline-genre').value,
-        spotify_url: document.getElementById('inline-spotify').value || null,
-        interested_tier: 'free',
-        referral_source: 'Website Inline Form'
-    };
-
-    try {
-        const response = await fetch(API_BASE + '/artists/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-            msg.className = 'form-message success';
-            msg.innerHTML = `<div>🎉 ${result.message || "You're in! Check your email for next steps."}</div>`;
-            document.getElementById('inline-signup-form').reset();
-        } else {
-            msg.className = 'form-message error';
-            msg.innerHTML = `<div>❌ ${result.detail || 'Something went wrong. Please try again.'}</div>`;
-        }
-    } catch (error) {
-        msg.className = 'form-message error';
-        msg.innerHTML = `<div>❌ Connection error. Please try again.</div>`;
-    }
-
-    btn.disabled = false;
-    btn.textContent = originalText;
-}
 </script>
 
 </body>
