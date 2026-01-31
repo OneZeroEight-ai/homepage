@@ -2434,6 +2434,77 @@ tr:hover td {
     color: #ef4444;
 }
 
+/* Playlist Status Indicators with Colored Dots */
+.playlist-status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.playlist-status-indicator .status-dot-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.playlist-status-indicator.sent {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.playlist-status-indicator.sent .status-dot-indicator {
+    background: #f59e0b;
+}
+
+.playlist-status-indicator.accepted {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.playlist-status-indicator.accepted .status-dot-indicator {
+    background: #10b981;
+}
+
+.playlist-status-indicator.rejected {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.playlist-status-indicator.rejected .status-dot-indicator {
+    background: #ef4444;
+}
+
+/* Status-specific card styling */
+.playlist-card.status-sent {
+    border-left: 3px solid #f59e0b;
+}
+
+.playlist-card.status-pending {
+    border-left: 3px solid #f59e0b;
+}
+
+.playlist-card.status-accepted {
+    border-left: 3px solid #10b981;
+    background: rgba(16, 185, 129, 0.03);
+}
+
+.playlist-card.status-rejected {
+    border-left: 3px solid #ef4444;
+    opacity: 0.6;
+}
+
+.playlist-card.status-available {
+    border-left: 3px solid transparent;
+}
+
 /* Hide pro features for free tier */
 .free-tier .pro-only { display: none; }
 .pro-tier .free-only { display: none; }

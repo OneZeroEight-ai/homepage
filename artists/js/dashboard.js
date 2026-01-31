@@ -150,35 +150,45 @@ const Dashboard = {
         if (!section) return;
 
         try {
-            // Get matching playlists count
-            const genre = activeCampaign.track_genre || 'indie';
-            const previewResponse = await fetch(
-                `${ArtistAuth.API_BASE.replace('/artist-portal', '')}/curator-portal/preview?genre=${encodeURIComponent(genre)}`
+            // Get playlist matches with status from the new endpoint
+            const matchesResponse = await fetch(
+                `${ArtistAuth.API_BASE.replace('/artist-portal', '')}/campaigns/${activeCampaign.id}/playlist-matches`
             );
 
-            if (previewResponse.ok) {
-                const previewData = await previewResponse.json();
-                this.setElementText('total-matches', previewData.total_count || 0);
-            }
+            if (matchesResponse.ok) {
+                const matchesData = await matchesResponse.json();
 
-            // Get outreach status for this campaign
-            const statusResponse = await fetch(
-                `${ArtistAuth.API_BASE.replace('/artist-portal', '')}/campaigns/${activeCampaign.id}/outreach-status`
-            );
+                // Update total matches count
+                this.setElementText('total-matches', matchesData.total_count || 0);
 
-            if (statusResponse.ok) {
-                const statusData = await statusResponse.json();
-                this.setElementText('sent-count', statusData.sent || 0);
-                this.setElementText('accepted-count', statusData.accepted || 0);
-                this.setElementText('rejected-count', statusData.rejected || 0);
-                this.playlistStatuses = statusData.playlist_statuses || statusData.curator_statuses || {};
+                // Count statuses from the playlists
+                let sent = 0, accepted = 0, rejected = 0;
+                const playlists = matchesData.playlists || [];
 
-                // If we have outreach data, show playlist list for pro tier
+                playlists.forEach(p => {
+                    if (p.status === 'sent' || p.status === 'pending') sent++;
+                    else if (p.status === 'accepted') accepted++;
+                    else if (p.status === 'rejected') rejected++;
+                });
+
+                this.setElementText('sent-count', sent);
+                this.setElementText('accepted-count', accepted);
+                this.setElementText('rejected-count', rejected);
+
+                // Build status map for compatibility
+                this.playlistStatuses = {};
+                playlists.forEach(p => {
+                    if (p.status !== 'available') {
+                        this.playlistStatuses[p.id] = p.status;
+                    }
+                });
+
+                // Show playlist list for pro tier
                 if (activeCampaign.tier === 'pro' || activeCampaign.tier === 'album') {
                     const listSection = document.getElementById('playlist-list-section');
-                    if (listSection && statusData.playlists && statusData.playlists.length > 0) {
+                    if (listSection && playlists.length > 0) {
                         listSection.style.display = 'block';
-                        this.renderPlaylistCards(statusData.playlists);
+                        this.renderPlaylistCards(playlists);
                     }
                 } else {
                     // Show free tier note
@@ -197,6 +207,20 @@ const Dashboard = {
     },
 
     /**
+     * Get status info for playlist status indicator
+     */
+    getStatusInfo(status) {
+        const statusMap = {
+            'available': { icon: '', label: 'Available', color: 'transparent', cssClass: '' },
+            'sent': { icon: '🟡', label: 'Pitched', color: '#f59e0b', cssClass: 'sent' },
+            'pending': { icon: '🟡', label: 'Pending', color: '#f59e0b', cssClass: 'sent' },
+            'accepted': { icon: '🟢', label: 'Accepted', color: '#10b981', cssClass: 'accepted' },
+            'rejected': { icon: '🔴', label: 'Rejected', color: '#ef4444', cssClass: 'rejected' }
+        };
+        return statusMap[status] || statusMap['available'];
+    },
+
+    /**
      * Render playlist cards
      */
     renderPlaylistCards(playlists) {
@@ -206,18 +230,25 @@ const Dashboard = {
         const defaultImage = 'https://via.placeholder.com/64x64/1a1a2e/8b5cf6?text=%E2%99%AA';
 
         container.innerHTML = playlists.map(playlist => {
-            const status = this.playlistStatuses[playlist.id] || 'available';
+            const status = playlist.status || this.playlistStatuses[playlist.id] || 'available';
+            const statusInfo = this.getStatusInfo(status);
             const isDisabled = status !== 'available';
             const isSelected = this.selectedPlaylists.includes(playlist.id);
             const imageUrl = playlist.image_url || defaultImage;
 
-            let statusLabel = '';
-            if (status === 'sent' || status === 'pitched') statusLabel = '<span class="playlist-status sent">Pitched</span>';
-            else if (status === 'accepted') statusLabel = '<span class="playlist-status accepted">Accepted</span>';
-            else if (status === 'rejected' || status === 'declined') statusLabel = '<span class="playlist-status rejected">Declined</span>';
+            // Build status indicator HTML
+            let statusIndicator = '';
+            if (status !== 'available') {
+                statusIndicator = `
+                    <div class="playlist-status-indicator ${statusInfo.cssClass}">
+                        <span class="status-dot-indicator"></span>
+                        <span class="status-text">${statusInfo.label}</span>
+                    </div>
+                `;
+            }
 
             return `
-                <div class="playlist-card ${isDisabled ? 'has-status' : ''} ${isSelected ? 'selected' : ''}"
+                <div class="playlist-card ${isDisabled ? 'has-status' : ''} ${isSelected ? 'selected' : ''} status-${status}"
                      data-playlist-id="${playlist.id}"
                      onclick="Dashboard.togglePlaylistSelection('${playlist.id}', ${isDisabled})">
                     <input type="checkbox"
@@ -232,7 +263,7 @@ const Dashboard = {
                             ${playlist.genre ? `<span class="playlist-genre">${this.escapeHtml(playlist.genre)}</span>` : ''}
                         </div>
                     </div>
-                    ${statusLabel}
+                    ${statusIndicator}
                 </div>
             `;
         }).join('');
