@@ -323,6 +323,103 @@
             background: var(--gray-100);
             color: var(--gray-600);
         }
+        /* Listen Timer */
+        .listen-timer {
+            padding: 8px 12px;
+            background: #2d2d44;
+            border-radius: 8px;
+            text-align: center;
+            margin: 8px 0;
+            font-size: 0.85rem;
+        }
+        .timer-counting {
+            color: #f59e0b;
+            font-weight: bold;
+        }
+        .timer-complete {
+            color: #10b981;
+            font-weight: bold;
+        }
+        .timer-waiting {
+            color: #888;
+        }
+        /* SUTRA Reward Notification */
+        .sutra-reward-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.1em;
+            animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        /* Reward Summary */
+        .reward-summary {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            font-size: 0.75rem;
+        }
+        .reward-item {
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .reward-item.earned {
+            color: #10b981;
+        }
+        /* Submission card enhancements */
+        .submission-player {
+            width: 100%;
+            margin: 12px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .submission-item-enhanced {
+            display: block;
+            padding: 1.25rem;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            background: var(--white);
+            transition: box-shadow 0.2s;
+        }
+        .submission-item-enhanced:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .submission-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .action-btn.accept {
+            background: var(--secondary);
+            color: var(--white);
+        }
+        .action-btn.decline {
+            background: var(--error);
+            color: var(--white);
+        }
+        .sutra-hint {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-left: 4px;
+        }
         @media (max-width: 768px) {
             .nav-tabs { display: none; }
             .submission-item { flex-wrap: wrap; }
@@ -398,6 +495,15 @@
         let currentSubmissionId = null;
         let currentStatus = 'pending';
 
+        // SUTRA Rewards tracking
+        const REWARDS_API = window.location.hostname === 'localhost'
+            ? 'http://localhost:8000/api/curator-rewards'
+            : 'https://onezeroeight-backend-production.up.railway.app/api/curator-rewards';
+
+        // Track listening time per submission
+        let listenTimers = {};  // { submissionId: { startTime, elapsed, rewarded, interval } }
+        let curatorSutraBalance = 0;
+
         // Check auth
         if (!CuratorAuth.requireAuth()) {
             // Will redirect to login
@@ -409,6 +515,7 @@
             try {
                 const data = await CuratorAuth.getDashboard();
                 document.getElementById('user-name').textContent = data.curator.name;
+                curatorSutraBalance = data.curator.sutra_balance || 0;
                 await loadSubmissions('pending');
             } catch (err) {
                 console.error(err);
@@ -425,9 +532,21 @@
             });
         });
 
+        // Extract track ID from Spotify URL
+        function getSpotifyTrackId(url) {
+            const match = url.match(/track\/([a-zA-Z0-9]+)/);
+            return match ? match[1] : null;
+        }
+
         async function loadSubmissions(status) {
             const list = document.getElementById('submissions-list');
             list.innerHTML = '<div class="loading">Loading submissions...</div>';
+
+            // Clear any existing timers
+            Object.keys(listenTimers).forEach(id => {
+                if (listenTimers[id].interval) clearInterval(listenTimers[id].interval);
+            });
+            listenTimers = {};
 
             try {
                 const data = await CuratorAuth.getSubmissions(status);
@@ -442,37 +561,186 @@
                     return;
                 }
 
-                list.innerHTML = data.submissions.map(sub => `
-                    <div class="submission-item" data-id="${sub.id}">
-                        <img src="${sub.album_art_url || 'https://via.placeholder.com/60'}" alt="Album art" class="submission-art">
-                        <div class="submission-info">
-                            <div class="submission-title">${sub.track_title}</div>
-                            <div class="submission-artist">${sub.artist_name}</div>
-                            ${sub.genres ? `<span class="submission-genre">${sub.genres[0] || 'Music'}</span>` : ''}
-                            ${status !== 'pending' ? `<span class="status-badge ${status}">${status}</span>` : ''}
+                list.innerHTML = data.submissions.map(sub => {
+                    const trackId = getSpotifyTrackId(sub.spotify_url);
+                    return `
+                    <div class="submission-item-enhanced" data-id="${sub.id}">
+                        <div class="submission-header">
+                            <img src="${sub.album_art_url || 'https://via.placeholder.com/60'}" alt="Album art" class="submission-art">
+                            <div class="submission-info">
+                                <div class="submission-title">${sub.track_title}</div>
+                                <div class="submission-artist">${sub.artist_name}</div>
+                                ${sub.genres ? `<span class="submission-genre">${sub.genres[0] || 'Music'}</span>` : ''}
+                                ${status !== 'pending' ? `<span class="status-badge ${status}">${status}</span>` : ''}
+                            </div>
                         </div>
-                        <div class="submission-actions">
-                            <a href="${sub.spotify_url}" target="_blank" class="action-btn play">Play</a>
-                            ${status === 'pending' ? `
-                                <button class="action-btn accept" onclick="acceptSubmission('${sub.id}')">Accept</button>
-                                <button class="action-btn decline" onclick="showDeclineModal('${sub.id}')">Decline</button>
-                            ` : ''}
+
+                        ${status === 'pending' && trackId ? `
+                        <!-- Spotify Embed -->
+                        <div class="submission-player"
+                             onmouseenter="startListenTimer('${sub.id}')"
+                             onmouseleave="pauseListenTimer('${sub.id}')">
+                            <iframe
+                                src="https://open.spotify.com/embed/track/${trackId}?utm_source=generator&theme=0"
+                                width="100%"
+                                height="152"
+                                frameBorder="0"
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy">
+                            </iframe>
                         </div>
+
+                        <!-- Listen Timer -->
+                        <div class="listen-timer" id="timer-${sub.id}">
+                            <span class="timer-waiting">🎵 Listen 30s to earn 50 SUTRA</span>
+                        </div>
+                        ` : `
+                        <div style="margin: 12px 0;">
+                            <a href="${sub.spotify_url}" target="_blank" class="action-btn play">Open in Spotify</a>
+                        </div>
+                        `}
+
+                        ${status === 'pending' ? `
+                        <!-- Decision Buttons -->
+                        <div class="submission-actions" style="margin-top: 12px;">
+                            <button class="action-btn accept" onclick="acceptSubmission('${sub.id}')">
+                                ✅ Accept <span class="sutra-hint">(+25 SUTRA)</span>
+                            </button>
+                            <button class="action-btn decline" onclick="showDeclineModal('${sub.id}')">
+                                ❌ Decline <span class="sutra-hint">(+25 SUTRA)</span>
+                            </button>
+                        </div>
+
+                        <!-- Reward Summary -->
+                        <div class="reward-summary">
+                            <span class="reward-item" id="reward-listen-${sub.id}">⏳ Listen: 50 SUTRA</span>
+                            <span class="reward-item" id="reward-decision-${sub.id}">⏳ Decision: 25 SUTRA</span>
+                        </div>
+                        ` : ''}
                     </div>
-                `).join('');
+                `}).join('');
             } catch (err) {
                 list.innerHTML = '<div class="empty-state"><p>Error loading submissions</p></div>';
                 console.error(err);
             }
         }
 
+        // ==========================================
+        // LISTEN TIMER FUNCTIONS
+        // ==========================================
+
+        function startListenTimer(submissionId) {
+            if (listenTimers[submissionId]?.rewarded) return;
+
+            if (!listenTimers[submissionId]) {
+                listenTimers[submissionId] = { startTime: Date.now(), elapsed: 0, rewarded: false };
+            } else {
+                listenTimers[submissionId].startTime = Date.now();
+            }
+
+            // Update timer display every second
+            listenTimers[submissionId].interval = setInterval(() => {
+                if (!listenTimers[submissionId]) return;
+
+                const elapsed = listenTimers[submissionId].elapsed +
+                    Math.floor((Date.now() - listenTimers[submissionId].startTime) / 1000);
+
+                updateTimerDisplay(submissionId, elapsed);
+
+                // Check if 30 seconds reached
+                if (elapsed >= 30 && !listenTimers[submissionId].rewarded) {
+                    clearInterval(listenTimers[submissionId].interval);
+                    recordListen(submissionId, elapsed);
+                }
+            }, 1000);
+        }
+
+        function pauseListenTimer(submissionId) {
+            if (!listenTimers[submissionId]) return;
+
+            // Save elapsed time
+            listenTimers[submissionId].elapsed +=
+                Math.floor((Date.now() - listenTimers[submissionId].startTime) / 1000);
+
+            if (listenTimers[submissionId].interval) {
+                clearInterval(listenTimers[submissionId].interval);
+            }
+        }
+
+        function updateTimerDisplay(submissionId, elapsed) {
+            const timerEl = document.getElementById(`timer-${submissionId}`);
+            if (!timerEl) return;
+
+            const remaining = Math.max(0, 30 - elapsed);
+
+            if (remaining > 0) {
+                timerEl.innerHTML = `<span class="timer-counting">🎵 ${remaining}s to earn 50 SUTRA</span>`;
+            } else {
+                timerEl.innerHTML = `<span class="timer-complete">✅ 50 SUTRA earned!</span>`;
+            }
+        }
+
+        async function recordListen(submissionId, duration) {
+            try {
+                const response = await fetch(`${REWARDS_API}/submissions/${submissionId}/listened`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${CuratorAuth.getToken()}`
+                    },
+                    body: JSON.stringify({ duration })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 'rewarded') {
+                    listenTimers[submissionId].rewarded = true;
+                    showRewardNotification(`+${data.sutra_earned} SUTRA for listening!`);
+                    curatorSutraBalance = data.new_balance || curatorSutraBalance + data.sutra_earned;
+
+                    // Update reward display
+                    const rewardEl = document.getElementById(`reward-listen-${submissionId}`);
+                    if (rewardEl) {
+                        rewardEl.textContent = '✅ Listen: 50 SUTRA';
+                        rewardEl.classList.add('earned');
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to record listen:', error);
+            }
+        }
+
+        // ==========================================
+        // DECISION FUNCTIONS WITH SUTRA REWARDS
+        // ==========================================
+
         async function acceptSubmission(id) {
             try {
+                // Call the rewards API for decision
+                const rewardResponse = await fetch(`${REWARDS_API}/submissions/${id}/decide`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${CuratorAuth.getToken()}`
+                    },
+                    body: JSON.stringify({ decision: 'accepted' })
+                });
+
+                const rewardData = await rewardResponse.json();
+
+                if (rewardData.sutra_earned > 0) {
+                    showRewardNotification(`+${rewardData.sutra_earned} SUTRA for your decision!`);
+                    curatorSutraBalance = rewardData.new_balance || curatorSutraBalance + rewardData.sutra_earned;
+                }
+
+                // Also call the original accept endpoint to update submission status
                 await CuratorAuth.acceptSubmission(id);
+
                 document.querySelector(`[data-id="${id}"]`).remove();
+
                 // Check if list is empty
                 const list = document.getElementById('submissions-list');
-                if (!list.querySelector('.submission-item')) {
+                if (!list.querySelector('.submission-item-enhanced')) {
                     loadSubmissions(currentStatus);
                 }
             } catch (err) {
@@ -493,18 +761,52 @@
         async function confirmDecline() {
             if (!currentSubmissionId) return;
             const reason = document.getElementById('decline-reason').value;
+
             try {
+                // Call the rewards API for decision
+                const rewardResponse = await fetch(`${REWARDS_API}/submissions/${currentSubmissionId}/decide`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${CuratorAuth.getToken()}`
+                    },
+                    body: JSON.stringify({ decision: 'rejected', reason: reason })
+                });
+
+                const rewardData = await rewardResponse.json();
+
+                if (rewardData.sutra_earned > 0) {
+                    showRewardNotification(`+${rewardData.sutra_earned} SUTRA for your decision!`);
+                    curatorSutraBalance = rewardData.new_balance || curatorSutraBalance + rewardData.sutra_earned;
+                }
+
+                // Also call the original decline endpoint
                 await CuratorAuth.declineSubmission(currentSubmissionId, reason);
+
                 document.querySelector(`[data-id="${currentSubmissionId}"]`).remove();
                 hideDeclineModal();
+
                 // Check if list is empty
                 const list = document.getElementById('submissions-list');
-                if (!list.querySelector('.submission-item')) {
+                if (!list.querySelector('.submission-item-enhanced')) {
                     loadSubmissions(currentStatus);
                 }
             } catch (err) {
                 alert('Error declining submission: ' + err.message);
             }
+        }
+
+        // ==========================================
+        // REWARD NOTIFICATION
+        // ==========================================
+
+        function showRewardNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'sutra-reward-notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.remove(), 3000);
         }
     </script>
 </body>
