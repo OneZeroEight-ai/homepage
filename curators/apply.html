@@ -296,10 +296,8 @@
 
     <script src="auth.js"></script>
     <script>
-        // Redirect if already logged in
-        if (CuratorAuth.isLoggedIn()) {
-            window.location.href = 'dashboard.html';
-        }
+        // Don't auto-redirect on apply page - user explicitly wants to apply
+        // If they want to login, they can click the login link
 
         // Show message
         function showMessage(text, type) {
