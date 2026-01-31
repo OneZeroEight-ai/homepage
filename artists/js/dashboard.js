@@ -190,6 +190,15 @@ const Dashboard = {
                         listSection.style.display = 'block';
                         this.renderPlaylistCards(playlists);
                     }
+
+                    // Show agent notice if there are auto-selected playlists
+                    const agentNotice = document.getElementById('agent-notice');
+                    const selectedCount = playlists.filter(p => p.status !== 'available').length;
+                    if (agentNotice && selectedCount > 0) {
+                        agentNotice.style.display = 'flex';
+                        const countEl = document.getElementById('agent-selected-count');
+                        if (countEl) countEl.textContent = selectedCount;
+                    }
                 } else {
                     // Show free tier note
                     const freeNote = document.getElementById('free-tier-note');
@@ -323,11 +332,16 @@ const Dashboard = {
                 `;
             }
 
+            // OZE badge for OneZeroEight playlists
+            const ozeBadge = playlist.is_oze_playlist ? '<span class="oze-badge">OZE</span>' : '';
+            const ozeClass = playlist.is_oze_playlist ? 'oze-playlist' : '';
+
             return `
-                <div class="playlist-card ${isDisabled ? 'has-status' : ''} ${isSelected ? 'selected' : ''} status-${status}"
+                <div class="playlist-card ${isDisabled ? 'has-status' : ''} ${isSelected ? 'selected' : ''} ${ozeClass} status-${status}"
                      data-playlist-id="${playlist.id}"
                      data-spotify-id="${spotifyId}"
                      onclick="Dashboard.handlePlaylistClick(event, '${playlist.id}', ${isDisabled}, '${spotifyId}', '${playlistName.replace(/'/g, "\\'")}')">
+                    ${ozeBadge}
                     <input type="checkbox"
                            ${isDisabled ? 'disabled' : ''}
                            ${isSelected ? 'checked' : ''}
