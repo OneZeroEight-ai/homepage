@@ -1017,6 +1017,128 @@
             .footer-grid { grid-template-columns: 1fr; }
             .footer-brand { grid-column: span 1; }
         }
+
+        /* Inline Signup Form */
+        .signup-section {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--gray-800) 100%);
+        }
+
+        .signup-section .section-header h2 {
+            color: var(--white);
+        }
+
+        .signup-section .section-header p {
+            color: var(--gray-400);
+        }
+
+        .inline-signup-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+            background: var(--gray-900);
+            border-radius: 20px;
+            border: 1px solid var(--gray-700);
+        }
+
+        .inline-signup-form .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .inline-signup-form .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .inline-signup-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .inline-signup-form .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray-300);
+            font-size: 0.9rem;
+        }
+
+        .inline-signup-form .form-group input,
+        .inline-signup-form .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-700);
+            border-radius: 10px;
+            background: var(--gray-800);
+            color: var(--white);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .inline-signup-form .form-group input::placeholder {
+            color: var(--gray-500);
+        }
+
+        .inline-signup-form .form-group input:focus,
+        .inline-signup-form .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .inline-signup-form .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .inline-signup-form .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .inline-signup-form .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .inline-signup-form .form-note {
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            margin-top: 16px;
+        }
+
+        .inline-signup-form .form-message {
+            display: none;
+            padding: 14px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .inline-signup-form .form-message.success {
+            display: block;
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .inline-signup-form .form-message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
     </style>
 </head>
 <body>
@@ -1031,7 +1153,7 @@
             <li><a href="#pricing">Pricing</a></li>
             <li><a href="#sutra">SUTRA</a></li>
             <li><a href="#philosophy">Philosophy</a></li>
-            <li><a href="#" onclick="openModal(); return false;" class="nav-cta">Start Free</a></li>
+            <li><a href="#start-free" class="nav-cta">Start Free</a></li>
         </ul>
         <button class="mobile-menu-btn" onclick="openModal()">☰</button>
     </div>
@@ -1050,7 +1172,7 @@
                 Deploy Intelligent Agents to get your music on playlists, blast your socials, and handle PR. Start free. Upgrade when you're ready.
             </p>
             <div class="hero-ctas">
-                <a href="#" onclick="openModal(); return false;" class="btn btn-primary">
+                <a href="#start-free" class="btn btn-primary">
                     Start Free Trial →
                 </a>
                 <a href="#how-it-works" class="btn btn-secondary">
@@ -1125,11 +1247,11 @@
             <p>A team of specialized Agents working around the clock to promote your music.</p>
         </div>
         <div class="agents-grid">
-            <a href="#" onclick="openModal(); return false;" class="agent-card">
+            <a href="#start-free" class="agent-card">
                 <img src="PlaylistAgent.png" alt="Playlist Agent" class="agent-image">
                 <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
             </a>
-            <a href="#" onclick="openModal(); return false;" class="agent-card">
+            <a href="#start-free" class="agent-card">
                 <img src="SocialAgent.png" alt="Social Agent" class="agent-image">
                 <div class="agent-status"><span class="dot"></span> Active on Free Tier</div>
             </a>
@@ -1164,7 +1286,7 @@
                     <li>Basic analytics dashboard</li>
                     <li>Community Discord access</li>
                 </ul>
-                <a href="#" onclick="openModal(); return false;" class="btn btn-secondary">Start Free</a>
+                <a href="#start-free" class="btn btn-secondary">Start Free</a>
             </div>
             <div class="pricing-card featured">
                 <div class="pricing-badge">Most Popular</div>
@@ -1292,12 +1414,70 @@
     </div>
 </section>
 
+<!-- Inline Signup Form -->
+<section class="section signup-section" id="start-free">
+    <div class="container">
+        <div class="section-header">
+            <h2>🚀 Start Your Free Trial</h2>
+            <p>Get your music on playlists—no payment required</p>
+        </div>
+        <form id="inline-signup-form" class="inline-signup-form" onsubmit="submitInlineForm(event)">
+            <div class="form-message" id="inlineFormMessage"></div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Your Name *</label>
+                    <input type="text" id="inline-name" placeholder="Your full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="inline-email" placeholder="you@email.com" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Artist / Project Name *</label>
+                    <input type="text" id="inline-artist" placeholder="Your artist or band name" required>
+                </div>
+                <div class="form-group">
+                    <label>Spotify Track URL</label>
+                    <input type="url" id="inline-spotify" placeholder="https://open.spotify.com/track/...">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Primary Genre *</label>
+                <select id="inline-genre" required>
+                    <option value="">Select your genre...</option>
+                    <option value="hip-hop">Hip-Hop/Rap</option>
+                    <option value="pop">Pop</option>
+                    <option value="rnb">R&B/Soul</option>
+                    <option value="electronic">Electronic/EDM</option>
+                    <option value="lo-fi">Lo-Fi/Chill</option>
+                    <option value="rock">Rock</option>
+                    <option value="alternative">Alternative</option>
+                    <option value="indie">Indie</option>
+                    <option value="folk">Folk</option>
+                    <option value="country">Country</option>
+                    <option value="jazz">Jazz</option>
+                    <option value="classical">Classical</option>
+                    <option value="latin">Latin</option>
+                    <option value="metal">Metal</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-submit" id="inline-submit-btn">
+                Start Free Trial →
+            </button>
+            <p class="form-note">No credit card required. We'll email you next steps.</p>
+        </form>
+    </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section">
     <div class="container">
         <h2>Ready to Deploy Your Agents?</h2>
         <p>Start free today. Get real playlist placements. Upgrade when you want more reach.</p>
-        <a href="#" onclick="openModal(); return false;" class="btn btn-primary">
+        <a href="#start-free" class="btn btn-primary">
             Start Free Trial →
         </a>
         <div class="social-links">
@@ -1513,6 +1693,55 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Inline signup form submission
+async function submitInlineForm(e) {
+    e.preventDefault();
+
+    const btn = document.getElementById('inline-submit-btn');
+    const msg = document.getElementById('inlineFormMessage');
+    const originalText = btn.textContent;
+
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+    msg.style.display = 'none';
+    msg.className = 'form-message';
+
+    const data = {
+        name: document.getElementById('inline-name').value,
+        email: document.getElementById('inline-email').value,
+        artist_name: document.getElementById('inline-artist').value,
+        genre: document.getElementById('inline-genre').value,
+        spotify_url: document.getElementById('inline-spotify').value || null,
+        interested_tier: 'free',
+        referral_source: 'Website Inline Form'
+    };
+
+    try {
+        const response = await fetch(API_BASE + '/artists/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            msg.className = 'form-message success';
+            msg.innerHTML = `<div>🎉 ${result.message || "You're in! Check your email for next steps."}</div>`;
+            document.getElementById('inline-signup-form').reset();
+        } else {
+            msg.className = 'form-message error';
+            msg.innerHTML = `<div>❌ ${result.detail || 'Something went wrong. Please try again.'}</div>`;
+        }
+    } catch (error) {
+        msg.className = 'form-message error';
+        msg.innerHTML = `<div>❌ Connection error. Please try again.</div>`;
+    }
+
+    btn.disabled = false;
+    btn.textContent = originalText;
+}
 </script>
 
 </body>
