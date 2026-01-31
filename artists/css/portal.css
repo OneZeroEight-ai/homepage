@@ -1450,6 +1450,20 @@ tr:hover td {
 .tier-price {
     font-size: 24px;
     font-weight: 700;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.tier-price .price-original {
+    font-size: 16px;
+    font-weight: 400;
+    color: #6b7280;
+    text-decoration: line-through;
+}
+
+.tier-price .price-sale {
+    font-weight: 700;
     background: var(--primary-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

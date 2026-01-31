@@ -11,10 +11,10 @@ const SUTRA_CONTRACT = {
 // Treasury wallet for SUTRA payments
 const TREASURY_WALLET = '0x742d35Cc6634C0532925a3b844Bc9e7595f5bE21';
 
-// Pricing
+// Pricing (Intro pricing)
 const PRICING = {
-    pro_usd: 4900, // $49.00 in cents
-    pro_sutra: 392 // SUTRA amount (20% discount from ~490)
+    pro_usd: 1995, // $19.95 in cents
+    pro_sutra: 160 // SUTRA amount (20% discount from $19.95 / $0.10 per SUTRA)
 };
 
 // SUTRA Token ABI (minimal for transfer)
@@ -43,6 +43,7 @@ const Submit = {
     stripe: null,
     selectedGenres: [],
     availableGenres: [],
+    sutraBalance: 0,
 
     /**
      * Initialize submission page
@@ -50,10 +51,44 @@ const Submit = {
     async init() {
         await ArtistAuth.initPage((artist) => {
             this.updateUserInfo(artist);
+            // Load SUTRA balance from artist data
+            this.sutraBalance = artist.sutra_balance || 0;
+            this.updateSutraDisplay();
         });
 
         this.initSidebar();
         this.initForm();
+
+        // Also load SUTRA balance from dedicated endpoint
+        this.loadSutraBalance();
+    },
+
+    /**
+     * Load SUTRA balance from backend
+     */
+    async loadSutraBalance() {
+        try {
+            const response = await ArtistAuth.apiRequest('/sutra/balance');
+            if (response.ok) {
+                const data = await response.json();
+                this.sutraBalance = data.balance || 0;
+                this.updateSutraDisplay();
+                this.updateWalletStatus();
+                console.log('SUTRA balance loaded:', this.sutraBalance);
+            }
+        } catch (error) {
+            console.error('Failed to load SUTRA balance:', error);
+        }
+    },
+
+    /**
+     * Update SUTRA balance display in sidebar
+     */
+    updateSutraDisplay() {
+        const balanceEl = document.getElementById('sutra-balance');
+        if (balanceEl) {
+            balanceEl.textContent = Math.floor(this.sutraBalance).toLocaleString();
+        }
     },
 
     /**
@@ -375,7 +410,7 @@ const Submit = {
     },
 
     /**
-     * Update payment UI based on wallet status
+     * Update payment UI based on SUTRA balance
      */
     updateWalletStatus() {
         const sutraOption = document.querySelector('input[value="sutra"]');
@@ -383,37 +418,46 @@ const Submit = {
         const walletNote = document.getElementById('wallet-note');
         const walletStatusText = document.getElementById('wallet-status-text');
 
-        if (typeof WalletModule !== 'undefined' && WalletModule.isConnected()) {
-            const balance = WalletModule.getBalance();
-            const canAfford = balance >= PRICING.pro_sutra;
+        // Check backend SUTRA balance first
+        const backendBalance = this.sutraBalance || 0;
+        const canAffordBackend = backendBalance >= PRICING.pro_sutra;
 
-            if (sutraCard) {
-                sutraCard.classList.remove('disabled');
-                sutraOption.disabled = !canAfford;
-            }
+        // Also check on-chain wallet balance
+        const hasWallet = typeof WalletModule !== 'undefined' && WalletModule.isConnected();
+        const walletBalance = hasWallet ? WalletModule.getBalance() : 0;
+        const canAffordWallet = walletBalance >= PRICING.pro_sutra;
 
-            if (walletStatusText) {
-                if (canAfford) {
-                    walletStatusText.innerHTML = `Wallet connected: ${balance.toFixed(2)} SUTRA available`;
-                    walletNote.style.background = '#d1fae5';
-                } else {
-                    walletStatusText.innerHTML = `Insufficient balance: ${balance.toFixed(2)} SUTRA (need ${PRICING.pro_sutra})`;
-                    walletNote.style.background = '#fef3c7';
-                }
+        // Can pay with either backend balance or wallet balance
+        const canAfford = canAffordBackend || canAffordWallet;
+
+        if (sutraCard) {
+            sutraCard.classList.toggle('disabled', !canAfford && backendBalance === 0);
+            sutraOption.disabled = !canAfford && backendBalance === 0;
+        }
+
+        if (walletStatusText) {
+            if (canAffordBackend) {
+                walletStatusText.innerHTML = `<i class="fas fa-check-circle" style="color:#10b981"></i> ${Math.floor(backendBalance)} SUTRA available in your account`;
+                walletNote.style.background = '#d1fae5';
+            } else if (backendBalance > 0) {
+                walletStatusText.innerHTML = `You have ${Math.floor(backendBalance)} SUTRA (need ${PRICING.pro_sutra}). <a href="sutra.html">Earn more SUTRA</a>`;
+                walletNote.style.background = '#fef3c7';
+            } else if (canAffordWallet) {
+                walletStatusText.innerHTML = `<i class="fas fa-wallet"></i> Wallet connected: ${walletBalance.toFixed(0)} SUTRA`;
+                walletNote.style.background = '#d1fae5';
+            } else if (hasWallet) {
+                walletStatusText.innerHTML = `Wallet balance: ${walletBalance.toFixed(0)} SUTRA (need ${PRICING.pro_sutra})`;
+                walletNote.style.background = '#fef3c7';
+            } else {
+                walletStatusText.innerHTML = `No SUTRA balance. <a href="sutra.html">Earn SUTRA</a> or pay with card.`;
+                walletNote.style.background = '#f3f4f6';
             }
-        } else {
-            if (sutraCard) {
-                sutraCard.classList.add('disabled');
-                sutraOption.disabled = true;
-            }
-            if (walletStatusText) {
-                walletStatusText.innerHTML = 'Connect your wallet to pay with SUTRA';
-            }
-            // Switch to Stripe if SUTRA was selected
+        }
+
+        // Switch to Stripe if SUTRA was selected but can't afford
+        if (!canAfford && sutraOption?.checked) {
             const stripeOption = document.querySelector('input[value="stripe"]');
-            if (stripeOption && sutraOption?.checked) {
-                stripeOption.checked = true;
-            }
+            if (stripeOption) stripeOption.checked = true;
         }
 
         this.updateSubmitButton();
@@ -504,11 +548,39 @@ const Submit = {
     },
 
     /**
-     * Process SUTRA payment on-chain
+     * Process SUTRA payment - tries backend balance first, then on-chain
      */
     async processSutraPayment() {
+        // Try backend SUTRA balance first
+        if (this.sutraBalance >= PRICING.pro_sutra) {
+            try {
+                const response = await ArtistAuth.apiRequest('/sutra/pay', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        amount: PRICING.pro_sutra,
+                        purpose: 'campaign_payment'
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    this.sutraBalance = result.new_balance || (this.sutraBalance - PRICING.pro_sutra);
+                    this.updateSutraDisplay();
+                    return {
+                        success: true,
+                        txHash: result.transaction_id || 'backend-' + Date.now(),
+                        amount: PRICING.pro_sutra,
+                        source: 'backend'
+                    };
+                }
+            } catch (error) {
+                console.error('Backend SUTRA payment failed, trying on-chain:', error);
+            }
+        }
+
+        // Fall back to on-chain wallet payment
         if (typeof WalletModule === 'undefined' || !WalletModule.isConnected()) {
-            return { success: false, error: 'Wallet not connected' };
+            return { success: false, error: 'Insufficient SUTRA balance and wallet not connected' };
         }
 
         try {
@@ -530,7 +602,8 @@ const Submit = {
             return {
                 success: true,
                 txHash: receipt.transactionHash,
-                amount: PRICING.pro_sutra
+                amount: PRICING.pro_sutra,
+                source: 'wallet'
             };
         } catch (error) {
             console.error('SUTRA payment error:', error);
