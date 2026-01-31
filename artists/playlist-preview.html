@@ -206,14 +206,23 @@
 
                     this.data = await response.json();
 
-                    // Build status map
+                    // Debug: Log the API response
+                    console.log('Playlist matches API response:', this.data);
+                    console.log('Campaign ID:', this.campaignId);
+
+                    // Build status map and count statuses
+                    const statusCounts = { available: 0, sent: 0, pending: 0, accepted: 0, rejected: 0 };
                     if (this.data.playlists) {
                         this.data.playlists.forEach(p => {
-                            if (p.status && p.status !== 'available') {
-                                this.playlistStatuses[p.id] = p.status;
+                            const status = p.status || 'available';
+                            statusCounts[status] = (statusCounts[status] || 0) + 1;
+                            if (status !== 'available') {
+                                this.playlistStatuses[p.id] = status;
                             }
                         });
                     }
+                    console.log('Status counts:', statusCounts);
+                    console.log('Non-available statuses:', this.playlistStatuses);
 
                     this.render();
 
