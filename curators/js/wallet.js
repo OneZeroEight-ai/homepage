@@ -33,10 +33,8 @@ const WalletModule = {
 
     // Initialize wallet module
     init: function() {
-        // Check for saved connection
-        if (localStorage.getItem('walletConnected') === 'true' && window.ethereum) {
-            this.reconnect();
-        }
+        // Do NOT auto-reconnect on curator dashboard
+        // User must explicitly click "Connect Wallet"
 
         // Listen for account changes
         if (window.ethereum) {
