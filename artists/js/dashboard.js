@@ -470,10 +470,15 @@ const Dashboard = {
             return;
         }
 
+        const defaultArtwork = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%23667eea" width="100" height="100"/><text x="50" y="55" font-size="40" text-anchor="middle" fill="white" opacity="0.5">♪</text></svg>';
+
         container.innerHTML = recent_campaigns.map(campaign => `
             <div class="campaign-card" onclick="window.location.href='campaign.html?id=${campaign.id}'">
-                <div class="campaign-artwork-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); aspect-ratio: 1; display: flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-music" style="font-size: 48px; color: white; opacity: 0.5;"></i>
+                <div class="campaign-artwork">
+                    <img src="${campaign.track_image_url || defaultArtwork}"
+                         alt="${this.escapeHtml(campaign.track_title)}"
+                         class="track-artwork"
+                         onerror="this.src='${defaultArtwork}'">
                 </div>
                 <div class="campaign-info">
                     <div class="campaign-title">${this.escapeHtml(campaign.track_title)}</div>
