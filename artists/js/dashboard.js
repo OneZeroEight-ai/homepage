@@ -77,6 +77,7 @@ const Dashboard = {
             this.data = await response.json();
 
             this.renderStats();
+            this.renderAgent();
             this.renderCampaigns();
             this.renderPlacements();
             this.renderSocialPosts();
@@ -88,6 +89,22 @@ const Dashboard = {
             console.error('Failed to load dashboard:', error);
             this.showError('Failed to load dashboard data');
         }
+    },
+
+    /**
+     * Render the playlist agent card
+     */
+    renderAgent() {
+        const { agent } = this.data;
+        const container = document.getElementById('your-agent');
+        if (!container || !agent) return;
+
+        document.getElementById('agent-emoji').textContent = agent.emoji || '🎵';
+        document.getElementById('agent-name').textContent = agent.name || 'Harmony';
+        document.getElementById('agent-genre').textContent = agent.genre ? `${agent.genre} Specialist` : 'Music Specialist';
+        document.getElementById('agent-personality').textContent = agent.personality || 'Versatile and supportive';
+
+        container.style.display = 'block';
     },
 
     /**

@@ -2571,6 +2571,55 @@ tr:hover td {
     z-index: 1;
 }
 
+/* Your Playlist Agent Card */
+.your-agent {
+    background: #1e1e2e;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.your-agent h4 {
+    margin: 0 0 12px 0;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.your-agent .agent-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.your-agent .agent-emoji {
+    font-size: 2.5em;
+}
+
+.your-agent .agent-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.your-agent .agent-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #fff;
+}
+
+.your-agent .agent-genre {
+    color: #10b981;
+    font-size: 0.9em;
+}
+
+.your-agent .agent-personality {
+    color: #888;
+    font-size: 0.85em;
+    font-style: italic;
+}
+
 /* Agent Selection Notice */
 .agent-selection-notice {
     display: flex;
