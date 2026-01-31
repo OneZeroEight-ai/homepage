@@ -203,7 +203,7 @@ const Dashboard = {
         const container = document.getElementById('playlist-cards');
         if (!container || !playlists) return;
 
-        const defaultImage = '/images/default-playlist.png';
+        const defaultImage = 'https://via.placeholder.com/64x64/1a1a2e/8b5cf6?text=%E2%99%AA';
 
         container.innerHTML = playlists.map(playlist => {
             const status = this.playlistStatuses[playlist.id] || 'available';
