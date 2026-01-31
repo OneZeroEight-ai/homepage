@@ -1018,6 +1018,215 @@
             .footer-brand { grid-column: span 1; }
         }
 
+        /* Hero Submit Form */
+        .hero-submit-form {
+            max-width: 600px;
+            margin: 0 auto 32px;
+            padding: 24px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--gray-200);
+        }
+
+        .hero-form-row {
+            margin-bottom: 16px;
+        }
+
+        .spotify-input-wrapper {
+            display: flex;
+            gap: 12px;
+        }
+
+        .hero-spotify-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .hero-spotify-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .hero-fetch-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            background: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .hero-fetch-btn:hover {
+            background: #1ed760;
+            transform: translateY(-1px);
+        }
+
+        .hero-track-preview {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: var(--gray-50);
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .hero-artwork {
+            width: 64px;
+            height: 64px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero-track-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-track-title {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1.1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .hero-track-artist {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        .hero-track-verified {
+            width: 32px;
+            height: 32px;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .hero-genre-row, .hero-email-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .hero-genre-select {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+        }
+
+        .hero-genre-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .hero-email-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .hero-email-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .hero-submit-btn {
+            padding: 14px 28px;
+            background: var(--dark);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .hero-submit-btn:hover {
+            background: var(--gray-800);
+            transform: translateY(-1px);
+        }
+
+        .hero-submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .hero-note {
+            font-size: 0.9rem;
+            color: var(--gray-500);
+            margin-bottom: 32px;
+        }
+
+        .hero-form-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .hero-form-message.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .hero-form-message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        @media (max-width: 600px) {
+            .hero-submit-form {
+                padding: 16px;
+            }
+
+            .spotify-input-wrapper {
+                flex-direction: column;
+            }
+
+            .hero-genre-row, .hero-email-row {
+                flex-direction: column;
+            }
+
+            .hero-fetch-btn, .hero-submit-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
         /* Inline Signup Form */
         .signup-section {
             background: linear-gradient(135deg, var(--dark) 0%, var(--gray-800) 100%);
@@ -1169,16 +1378,74 @@
             </div>
             <h1>Intelligent Agents That <span>Promote Your Music</span></h1>
             <p class="hero-subtitle">
-                Deploy Intelligent Agents to get your music on playlists, blast your socials, and handle PR. Start free. Upgrade when you're ready.
+                Deploy Intelligent Agents to get your music on playlists. Start free.
             </p>
-            <div class="hero-ctas">
-                <a href="#start-free" class="btn btn-primary">
-                    Start Free Trial →
-                </a>
-                <a href="#how-it-works" class="btn btn-secondary">
-                    See How It Works
-                </a>
+
+            <!-- Hero Track Submit Form -->
+            <div class="hero-submit-form">
+                <div class="hero-form-row">
+                    <div class="spotify-input-wrapper">
+                        <input
+                            type="url"
+                            id="hero-spotify-url"
+                            class="hero-spotify-input"
+                            placeholder="Paste your Spotify track URL..."
+                        >
+                        <button type="button" id="hero-fetch-btn" class="hero-fetch-btn" onclick="fetchHeroTrack()">
+                            <span class="fab fa-spotify"></span>
+                            Fetch
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Track Preview (hidden until fetched) -->
+                <div id="hero-track-preview" class="hero-track-preview" style="display: none;">
+                    <img id="hero-track-artwork" class="hero-artwork" src="" alt="">
+                    <div class="hero-track-info">
+                        <div class="hero-track-title" id="hero-track-title">Track Title</div>
+                        <div class="hero-track-artist" id="hero-track-artist">Artist Name</div>
+                    </div>
+                    <div class="hero-track-verified">✓</div>
+                </div>
+
+                <!-- Genre & Submit Row (shown after track fetch) -->
+                <div id="hero-genre-row" class="hero-genre-row" style="display: none;">
+                    <select id="hero-genre" class="hero-genre-select" required>
+                        <option value="">Select genre...</option>
+                        <option value="hip-hop">Hip-Hop/Rap</option>
+                        <option value="pop">Pop</option>
+                        <option value="rnb">R&B/Soul</option>
+                        <option value="electronic">Electronic/EDM</option>
+                        <option value="lo-fi">Lo-Fi/Chill</option>
+                        <option value="rock">Rock</option>
+                        <option value="alternative">Alternative</option>
+                        <option value="indie">Indie</option>
+                        <option value="folk">Folk</option>
+                        <option value="country">Country</option>
+                        <option value="jazz">Jazz</option>
+                        <option value="classical">Classical</option>
+                        <option value="latin">Latin</option>
+                        <option value="metal">Metal</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <button type="button" id="hero-submit-btn" class="hero-submit-btn" onclick="submitHeroTrack()">
+                        Start Free Trial →
+                    </button>
+                </div>
+
+                <!-- Email input (shown after genre selection) -->
+                <div id="hero-email-row" class="hero-email-row" style="display: none;">
+                    <input type="email" id="hero-email" class="hero-email-input" placeholder="Your email address...">
+                    <button type="button" id="hero-final-btn" class="hero-submit-btn" onclick="finalSubmitHero()">
+                        Submit →
+                    </button>
+                </div>
+
+                <div id="hero-form-message" class="hero-form-message" style="display: none;"></div>
             </div>
+
+            <p class="hero-note">No credit card required. Free placement on OneZeroEight playlists.</p>
+
             <div class="hero-proof">
                 <div class="proof-item">
                     <div class="proof-value">3000+</div>
@@ -1588,8 +1855,158 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <script>
 const API_BASE = 'https://onezeroeight-backend-production.up.railway.app/api';
+
+// Hero form state
+let heroTrackData = null;
+
+async function fetchHeroTrack() {
+    const url = document.getElementById('hero-spotify-url').value.trim();
+    const btn = document.getElementById('hero-fetch-btn');
+    const preview = document.getElementById('hero-track-preview');
+    const genreRow = document.getElementById('hero-genre-row');
+    const msg = document.getElementById('hero-form-message');
+
+    if (!url || !url.includes('spotify.com/track')) {
+        showHeroMessage('Please enter a valid Spotify track URL', 'error');
+        return;
+    }
+
+    btn.innerHTML = '<span class="fas fa-spinner fa-spin"></span> Fetching...';
+    btn.disabled = true;
+    msg.style.display = 'none';
+
+    try {
+        // Use Spotify OEmbed API
+        const oembedUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`;
+        const response = await fetch(oembedUrl);
+
+        if (!response.ok) throw new Error('Could not fetch track info');
+
+        const data = await response.json();
+
+        // Parse title (format: "Song Title by Artist Name")
+        const titleParts = data.title.split(' by ');
+        const trackTitle = titleParts[0] || data.title;
+        const artistName = titleParts.slice(1).join(' by ') || 'Unknown Artist';
+
+        heroTrackData = {
+            spotify_url: url,
+            track_title: trackTitle,
+            artist_name: artistName,
+            artwork_url: data.thumbnail_url
+        };
+
+        // Show preview
+        document.getElementById('hero-track-artwork').src = data.thumbnail_url;
+        document.getElementById('hero-track-title').textContent = trackTitle;
+        document.getElementById('hero-track-artist').textContent = artistName;
+
+        preview.style.display = 'flex';
+        genreRow.style.display = 'flex';
+
+    } catch (error) {
+        showHeroMessage('Could not fetch track. Please check the URL.', 'error');
+    }
+
+    btn.innerHTML = '<span class="fab fa-spotify"></span> Fetch';
+    btn.disabled = false;
+}
+
+function submitHeroTrack() {
+    const genre = document.getElementById('hero-genre').value;
+    const emailRow = document.getElementById('hero-email-row');
+    const genreRow = document.getElementById('hero-genre-row');
+
+    if (!genre) {
+        showHeroMessage('Please select a genre', 'error');
+        return;
+    }
+
+    heroTrackData.genre = genre;
+
+    // Show email input
+    genreRow.style.display = 'none';
+    emailRow.style.display = 'flex';
+    document.getElementById('hero-email').focus();
+}
+
+async function finalSubmitHero() {
+    const email = document.getElementById('hero-email').value.trim();
+    const btn = document.getElementById('hero-final-btn');
+    const msg = document.getElementById('hero-form-message');
+
+    if (!email || !email.includes('@')) {
+        showHeroMessage('Please enter a valid email address', 'error');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+    msg.style.display = 'none';
+
+    try {
+        const response = await fetch(API_BASE + '/artists/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: heroTrackData.artist_name,
+                email: email,
+                artist_name: heroTrackData.artist_name,
+                genre: heroTrackData.genre,
+                spotify_url: heroTrackData.spotify_url,
+                track_title: heroTrackData.track_title,
+                artwork_url: heroTrackData.artwork_url,
+                interested_tier: 'free',
+                referral_source: 'Homepage Hero Form'
+            })
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            showHeroMessage('🎉 Success! Check your email for next steps.', 'success');
+            // Reset form
+            document.getElementById('hero-spotify-url').value = '';
+            document.getElementById('hero-track-preview').style.display = 'none';
+            document.getElementById('hero-genre-row').style.display = 'none';
+            document.getElementById('hero-email-row').style.display = 'none';
+            document.getElementById('hero-email').value = '';
+            document.getElementById('hero-genre').value = '';
+            heroTrackData = null;
+        } else {
+            showHeroMessage(result.detail || 'Something went wrong. Please try again.', 'error');
+        }
+    } catch (error) {
+        showHeroMessage('Connection error. Please try again.', 'error');
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Submit →';
+}
+
+function showHeroMessage(text, type) {
+    const msg = document.getElementById('hero-form-message');
+    msg.textContent = text;
+    msg.className = 'hero-form-message ' + type;
+    msg.style.display = 'block';
+}
+
+// Allow pressing Enter in the Spotify URL field to fetch
+document.addEventListener('DOMContentLoaded', function() {
+    const spotifyInput = document.getElementById('hero-spotify-url');
+    if (spotifyInput) {
+        spotifyInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                fetchHeroTrack();
+            }
+        });
+    }
+});
 
 function openModal(tier = 'free') {
     document.getElementById('modal').style.display = 'flex';
