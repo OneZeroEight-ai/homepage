@@ -460,10 +460,114 @@
             opacity: 0.8;
             margin-left: 4px;
         }
+        /* Placement Cards */
+        .placement-card {
+            display: flex;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            transition: box-shadow 0.2s;
+        }
+        .placement-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .placement-card-art {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .placement-card-content {
+            flex: 1;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .placement-card-title {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+        .placement-card-artist {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+        .placement-playlist-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #1DB954, #1ed760);
+            color: white;
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            width: fit-content;
+            transition: transform 0.2s;
+        }
+        .placement-playlist-link:hover {
+            transform: scale(1.02);
+        }
+        .placement-card-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 1rem;
+            background: var(--gray-50);
+            min-width: 140px;
+        }
+        .placement-date {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            margin-bottom: 0.5rem;
+        }
+        .placement-reward-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .placement-reward-badge.earned {
+            background: #d1fae5;
+            color: #059669;
+        }
+        .placement-reward-badge.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        .placement-reward-badge.claimable {
+            background: #10b981;
+            color: white;
+            cursor: pointer;
+        }
+        .placement-reward-badge.claimable:hover {
+            background: #059669;
+        }
         @media (max-width: 768px) {
             .nav-tabs { display: none; }
             .submission-item { flex-wrap: wrap; }
             .submission-actions { width: 100%; margin-top: 1rem; }
+            .placement-card {
+                flex-direction: column;
+            }
+            .placement-card-art {
+                width: 100%;
+                height: 150px;
+            }
+            .placement-card-right {
+                flex-direction: row;
+                justify-content: space-between;
+                min-width: unset;
+            }
         }
     </style>
 </head>
@@ -499,6 +603,7 @@
         <div class="tabs">
             <button class="tab-btn active" data-status="pending">Pending</button>
             <button class="tab-btn" data-status="accepted">Accepted</button>
+            <button class="tab-btn" data-status="placed">Placements</button>
             <button class="tab-btn" data-status="declined">Declined</button>
         </div>
 
@@ -617,12 +722,31 @@
                 const data = await CuratorAuth.getSubmissions(status);
 
                 if (!data.submissions || data.submissions.length === 0) {
+                    const emptyIcons = {
+                        pending: '📬',
+                        accepted: '✅',
+                        placed: '📍',
+                        declined: '❌'
+                    };
+                    const emptyLabels = {
+                        pending: 'pending',
+                        accepted: 'accepted',
+                        placed: 'placed',
+                        declined: 'declined'
+                    };
                     list.innerHTML = `
                         <div class="empty-state">
-                            <div class="icon">${status === 'pending' ? '📬' : status === 'accepted' ? '✅' : '❌'}</div>
-                            <p>No ${status} submissions</p>
+                            <div class="icon">${emptyIcons[status] || '📬'}</div>
+                            <p>No ${emptyLabels[status] || status} submissions</p>
+                            ${status === 'placed' ? '<p style="color: var(--gray-400); font-size: 0.9rem; margin-top: 0.5rem;">Accept tracks and mark them as placed to see them here</p>' : ''}
                         </div>
                     `;
+                    return;
+                }
+
+                // Render placements differently
+                if (status === 'placed') {
+                    list.innerHTML = data.submissions.map(sub => renderPlacementCard(sub)).join('');
                     return;
                 }
 
@@ -904,6 +1028,45 @@
         // PLACEMENT FUNCTIONS
         // ==========================================
 
+        function renderPlacementCard(sub) {
+            const placedDate = sub.placed_at ? new Date(sub.placed_at).toLocaleDateString() : '';
+            const eligibleAt = sub.sutra_placement_eligible_at ? new Date(sub.sutra_placement_eligible_at) : null;
+            const now = new Date();
+            const canClaim = eligibleAt && now >= eligibleAt && !sub.sutra_placement_paid;
+            const daysRemaining = eligibleAt ? Math.max(0, Math.ceil((eligibleAt - now) / (24 * 60 * 60 * 1000))) : 7;
+
+            let rewardBadge = '';
+            if (sub.sutra_placement_paid) {
+                rewardBadge = '<span class="placement-reward-badge earned">✅ 50 SUTRA earned</span>';
+            } else if (canClaim) {
+                rewardBadge = `<span class="placement-reward-badge claimable" onclick="claimPlacementReward('${sub.id}')">🎁 Claim 50 SUTRA</span>`;
+            } else {
+                rewardBadge = `<span class="placement-reward-badge pending">⏳ ${daysRemaining}d remaining</span>`;
+            }
+
+            return `
+                <div class="placement-card" data-id="${sub.id}">
+                    <img src="${sub.album_art_url || 'https://via.placeholder.com/100'}" alt="Album art" class="placement-card-art">
+                    <div class="placement-card-content">
+                        <div class="placement-card-title">${sub.track_title}</div>
+                        <div class="placement-card-artist">${sub.artist_name}</div>
+                        ${sub.placed_playlist_url ? `
+                            <a href="${sub.placed_playlist_url}" target="_blank" class="placement-playlist-link">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                                </svg>
+                                ${sub.placed_playlist_name || 'View Playlist'}
+                            </a>
+                        ` : ''}
+                    </div>
+                    <div class="placement-card-right">
+                        <div class="placement-date">Placed ${placedDate}</div>
+                        ${rewardBadge}
+                    </div>
+                </div>
+            `;
+        }
+
         function canClaimPlacement(sub) {
             if (!sub.placed_at || sub.sutra_placement_paid) return false;
             const eligibleAt = sub.sutra_placement_eligible_at
@@ -995,15 +1158,21 @@
                 showRewardNotification(`+${data.reward.amount} SUTRA placement reward!`);
                 curatorSutraBalance = data.reward.new_balance;
 
-                // Update the UI
-                const section = document.getElementById(`placement-section-${submissionId}`);
-                if (section) {
-                    section.innerHTML = `
-                        <div class="placement-status">
-                            <div class="playlist-name">📍 ${data.reward.playlist_name}</div>
-                            <div class="placement-countdown">✅ 50 SUTRA rewarded</div>
-                        </div>
-                    `;
+                // Update UI based on current view
+                if (currentStatus === 'placed') {
+                    // Reload placements view to show updated state
+                    loadSubmissions('placed');
+                } else {
+                    // Update the inline placement section
+                    const section = document.getElementById(`placement-section-${submissionId}`);
+                    if (section) {
+                        section.innerHTML = `
+                            <div class="placement-status">
+                                <div class="playlist-name">📍 ${data.reward.playlist_name}</div>
+                                <div class="placement-countdown">✅ 50 SUTRA rewarded</div>
+                            </div>
+                        `;
+                    }
                 }
             } catch (err) {
                 alert('Error claiming reward: ' + err.message);
