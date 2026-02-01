@@ -993,6 +993,153 @@
         * {
             box-sizing: border-box;
         }
+
+        /* Playlist Marquee */
+        .playlist-marquee-container {
+            margin: 40px 0;
+            overflow: hidden;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .marquee-label {
+            text-align: center;
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 16px;
+        }
+
+        .playlist-marquee {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .marquee-track {
+            display: flex;
+            width: max-content;
+            animation: marquee 45s linear infinite;
+        }
+
+        .playlist-marquee.reverse .marquee-track {
+            animation: marquee-reverse 50s linear infinite;
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 12px;
+            padding: 8px 6px;
+        }
+
+        .marquee-playlist {
+            width: 72px;
+            height: 72px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .marquee-playlist:hover {
+            transform: scale(1.15);
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .marquee-playlist img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes marquee-reverse {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+
+        .playlist-marquee:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        /* Social Proof Bar */
+        .social-proof-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            padding: 20px 32px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            margin: 32px auto;
+            max-width: 600px;
+        }
+
+        .proof-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .proof-number {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .proof-label {
+            font-size: 0.7em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        .proof-divider {
+            width: 1px;
+            height: 32px;
+            background: linear-gradient(to bottom, transparent, #333, transparent);
+        }
+
+        @media (max-width: 500px) {
+            .social-proof-bar {
+                gap: 16px;
+                padding: 16px;
+            }
+            .proof-divider {
+                display: none;
+            }
+            .proof-number {
+                font-size: 1.2em;
+            }
+            .proof-label {
+                font-size: 0.6em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .marquee-playlist {
+                width: 56px;
+                height: 56px;
+            }
+            .marquee-content {
+                gap: 8px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1023,6 +1170,46 @@
         <p class="hero-subtitle">
             Paste your Spotify track and see matching playlists instantly. Free to start.
         </p>
+
+        <!-- Scrolling Playlist Showcase -->
+        <div class="playlist-marquee-container" id="marquee-container" style="display: none;">
+            <p class="marquee-label">Trusted by 2,500+ curators managing 3,000+ playlists</p>
+            <div class="playlist-marquee">
+                <div class="marquee-track">
+                    <div class="marquee-content" id="marquee-row-1"></div>
+                    <div class="marquee-content" id="marquee-row-1-clone" aria-hidden="true"></div>
+                </div>
+            </div>
+            <div class="playlist-marquee reverse">
+                <div class="marquee-track">
+                    <div class="marquee-content" id="marquee-row-2"></div>
+                    <div class="marquee-content" id="marquee-row-2-clone" aria-hidden="true"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Proof Stats -->
+        <div class="social-proof-bar">
+            <div class="proof-stat">
+                <span class="proof-number">3,000+</span>
+                <span class="proof-label">Playlists</span>
+            </div>
+            <div class="proof-divider"></div>
+            <div class="proof-stat">
+                <span class="proof-number">48.9M</span>
+                <span class="proof-label">Followers</span>
+            </div>
+            <div class="proof-divider"></div>
+            <div class="proof-stat">
+                <span class="proof-number">2,500+</span>
+                <span class="proof-label">Curators</span>
+            </div>
+            <div class="proof-divider"></div>
+            <div class="proof-stat">
+                <span class="proof-number">AI</span>
+                <span class="proof-label">Matching</span>
+            </div>
+        </div>
 
         <!-- Track Analyzer -->
         <div class="track-analyzer">
@@ -1081,21 +1268,6 @@
             </div>
         </div>
 
-        <!-- Hero Stats -->
-        <div class="hero-stats">
-            <div class="stat">
-                <span class="stat-number">3,000+</span>
-                <span class="stat-label">Playlists</span>
-            </div>
-            <div class="stat">
-                <span class="stat-number">15M+</span>
-                <span class="stat-label">Listeners</span>
-            </div>
-            <div class="stat">
-                <span class="stat-number">Free</span>
-                <span class="stat-label">To Start</span>
-            </div>
-        </div>
     </div>
 </section>
 
@@ -1481,6 +1653,49 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Load playlist marquee images
+async function loadMarqueeImages() {
+    try {
+        const response = await fetch(`${API_BASE}/api/tracks/playlists/featured?limit=40`);
+        if (!response.ok) throw new Error('Failed to load playlists');
+
+        const data = await response.json();
+        const playlists = data.playlists || [];
+
+        if (playlists.length < 10) {
+            // Not enough playlists with images, hide marquee
+            return;
+        }
+
+        const half = Math.ceil(playlists.length / 2);
+        const row1 = playlists.slice(0, half);
+        const row2 = playlists.slice(half);
+
+        const defaultImage = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%232d2d44" width="100" height="100"/><text x="50" y="55" font-size="30" text-anchor="middle" fill="%23666">♪</text></svg>';
+
+        const renderRow = (items) => items.map(p => `
+            <div class="marquee-playlist" title="${p.name} - ${(p.followers || 0).toLocaleString()} followers">
+                <img src="${p.image_url || defaultImage}" alt="" loading="lazy" onerror="this.src='${defaultImage}'">
+            </div>
+        `).join('');
+
+        document.getElementById('marquee-row-1').innerHTML = renderRow(row1);
+        document.getElementById('marquee-row-1-clone').innerHTML = renderRow(row1);
+        document.getElementById('marquee-row-2').innerHTML = renderRow(row2);
+        document.getElementById('marquee-row-2-clone').innerHTML = renderRow(row2);
+
+        // Show marquee container
+        document.getElementById('marquee-container').style.display = 'block';
+
+    } catch (error) {
+        console.log('Marquee load skipped:', error.message);
+        // Marquee stays hidden on error
+    }
+}
+
+// Load marquee on page load
+document.addEventListener('DOMContentLoaded', loadMarqueeImages);
 </script>
 
 </body>
