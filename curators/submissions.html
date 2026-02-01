@@ -382,6 +382,46 @@
         .reward-item.earned {
             color: #10b981;
         }
+        /* Placement Status */
+        .placement-status {
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            color: white;
+        }
+        .placement-status .playlist-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .placement-status .placement-countdown {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .placement-status.can-claim {
+            background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+        }
+        .action-btn.place {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+        }
+        .action-btn.place:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+        .action-btn.claim {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            font-weight: 600;
+        }
+        .action-btn.claim:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        .action-btn.claim:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         /* Submission card enhancements */
         .submission-player {
             width: 100%;
@@ -488,17 +528,42 @@
         </div>
     </div>
 
+    <!-- Placement Modal -->
+    <div class="modal-overlay" id="placement-modal">
+        <div class="modal">
+            <h3>Add Track to Playlist</h3>
+            <p style="color: var(--gray-600); margin-bottom: 1rem;">
+                Paste the Spotify playlist URL where you added this track:
+            </p>
+            <input type="text" id="playlist-url-input"
+                   placeholder="https://open.spotify.com/playlist/..."
+                   style="width: 100%; padding: 0.75rem; border: 2px solid var(--gray-200); border-radius: 8px; font-family: inherit; margin-bottom: 1rem;">
+            <p style="color: var(--gray-400); font-size: 0.85rem; margin-bottom: 1rem;">
+                After 7 days, you'll receive 50 SUTRA if the track is still on the playlist.
+            </p>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="hidePlacementModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmPlacement()">Confirm Placement</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
     <script src="js/wallet.js"></script>
     <script src="auth.js"></script>
     <script>
         let currentSubmissionId = null;
         let currentStatus = 'pending';
+        let placementSubmissionId = null;
 
         // SUTRA Rewards tracking
         const REWARDS_API = window.location.hostname === 'localhost'
             ? 'http://localhost:8000/api/curator-rewards'
             : 'https://onezeroeight-backend-production.up.railway.app/api/curator-rewards';
+
+        const PORTAL_API = window.location.hostname === 'localhost'
+            ? 'http://localhost:8000/api/curator-portal'
+            : 'https://onezeroeight-backend-production.up.railway.app/api/curator-portal';
 
         // Track listening time per submission
         let listenTimers = {};  // { submissionId: { startTime, elapsed, rewarded, interval } }
@@ -593,6 +658,32 @@
                         <!-- Listen Timer -->
                         <div class="listen-timer" id="timer-${sub.id}">
                             <span class="timer-waiting">🎵 Listen 30s to earn 50 SUTRA</span>
+                        </div>
+                        ` : status === 'accepted' ? `
+                        <div style="margin: 12px 0;">
+                            <a href="${sub.spotify_url}" target="_blank" class="action-btn play">Open in Spotify</a>
+                        </div>
+                        <!-- Placement Section -->
+                        <div id="placement-section-${sub.id}">
+                            ${sub.placed_at ? `
+                                <div class="placement-status ${sub.sutra_placement_paid ? '' : (canClaimPlacement(sub) ? 'can-claim' : '')}">
+                                    <div class="playlist-name">📍 ${sub.placed_playlist_name || 'Playlist'}</div>
+                                    ${sub.sutra_placement_paid ? `
+                                        <div class="placement-countdown">✅ 50 SUTRA rewarded</div>
+                                    ` : canClaimPlacement(sub) ? `
+                                        <div class="placement-countdown">✅ 7-day verification complete!</div>
+                                        <button class="action-btn claim" style="margin-top: 8px;" onclick="claimPlacementReward('${sub.id}')">
+                                            Claim 50 SUTRA
+                                        </button>
+                                    ` : `
+                                        <div class="placement-countdown">⏳ ${getDaysRemaining(sub)} days until verification</div>
+                                    `}
+                                </div>
+                            ` : `
+                                <button class="action-btn place" onclick="showPlacementModal('${sub.id}')">
+                                    📍 Mark as Placed (+50 SUTRA after 7 days)
+                                </button>
+                            `}
                         </div>
                         ` : `
                         <div style="margin: 12px 0;">
@@ -807,6 +898,116 @@
             document.body.appendChild(notification);
 
             setTimeout(() => notification.remove(), 3000);
+        }
+
+        // ==========================================
+        // PLACEMENT FUNCTIONS
+        // ==========================================
+
+        function canClaimPlacement(sub) {
+            if (!sub.placed_at || sub.sutra_placement_paid) return false;
+            const eligibleAt = sub.sutra_placement_eligible_at
+                ? new Date(sub.sutra_placement_eligible_at)
+                : new Date(new Date(sub.placed_at).getTime() + 7 * 24 * 60 * 60 * 1000);
+            return new Date() >= eligibleAt;
+        }
+
+        function getDaysRemaining(sub) {
+            if (!sub.placed_at) return 7;
+            const eligibleAt = sub.sutra_placement_eligible_at
+                ? new Date(sub.sutra_placement_eligible_at)
+                : new Date(new Date(sub.placed_at).getTime() + 7 * 24 * 60 * 60 * 1000);
+            const now = new Date();
+            const diff = eligibleAt - now;
+            return Math.max(0, Math.ceil(diff / (24 * 60 * 60 * 1000)));
+        }
+
+        function showPlacementModal(id) {
+            placementSubmissionId = id;
+            document.getElementById('playlist-url-input').value = '';
+            document.getElementById('placement-modal').classList.add('show');
+        }
+
+        function hidePlacementModal() {
+            placementSubmissionId = null;
+            document.getElementById('placement-modal').classList.remove('show');
+        }
+
+        async function confirmPlacement() {
+            if (!placementSubmissionId) return;
+
+            const playlistUrl = document.getElementById('playlist-url-input').value.trim();
+            if (!playlistUrl || !playlistUrl.includes('open.spotify.com/playlist/')) {
+                alert('Please enter a valid Spotify playlist URL');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${PORTAL_API}/submissions/${placementSubmissionId}/place`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${CuratorAuth.getToken()}`
+                    },
+                    body: JSON.stringify({ playlist_url: playlistUrl })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Failed to record placement');
+                }
+
+                hidePlacementModal();
+                showRewardNotification('Placement recorded! 50 SUTRA available in 7 days.');
+
+                // Update the UI
+                const section = document.getElementById(`placement-section-${placementSubmissionId}`);
+                if (section) {
+                    section.innerHTML = `
+                        <div class="placement-status">
+                            <div class="playlist-name">📍 ${data.placement.playlist_name}</div>
+                            <div class="placement-countdown">⏳ ${data.placement.days_remaining} days until verification</div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                alert('Error recording placement: ' + err.message);
+            }
+        }
+
+        async function claimPlacementReward(submissionId) {
+            try {
+                const response = await fetch(`${PORTAL_API}/submissions/${submissionId}/claim-placement-reward`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${CuratorAuth.getToken()}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.detail || 'Failed to claim reward');
+                }
+
+                showRewardNotification(`+${data.reward.amount} SUTRA placement reward!`);
+                curatorSutraBalance = data.reward.new_balance;
+
+                // Update the UI
+                const section = document.getElementById(`placement-section-${submissionId}`);
+                if (section) {
+                    section.innerHTML = `
+                        <div class="placement-status">
+                            <div class="playlist-name">📍 ${data.reward.playlist_name}</div>
+                            <div class="placement-countdown">✅ 50 SUTRA rewarded</div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                alert('Error claiming reward: ' + err.message);
+            }
         }
     </script>
 </body>
