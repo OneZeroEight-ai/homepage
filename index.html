@@ -1634,17 +1634,21 @@ function renderPlaylistPreview(playlists, totalCount) {
     // Show 8 playlists instead of 6
     const previewPlaylists = playlists.length > 0 ? playlists.slice(0, 8) : defaultPlaylists;
 
-    // Base64 encoded placeholder for better iOS compatibility
-    const defaultImage = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCBmaWxsPSIjMmQyZDQ0IiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIvPjx0ZXh0IHg9IjUwIiB5PSI1OCIgZm9udC1zaXplPSIzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiI+4pmqPC90ZXh0Pjwvc3ZnPg==';
-
     // Blur cards starting at index 3
-    grid.innerHTML = previewPlaylists.map((p, i) => `
+    grid.innerHTML = previewPlaylists.map((p, i) => {
+        // Check if image_url exists and is valid
+        const hasImage = p.image_url && p.image_url.startsWith('http');
+        return `
         <div class="playlist-preview-card ${i >= 3 ? 'blurred' : ''}">
-            <img src="${p.image_url || defaultImage}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='${defaultImage}';">
+            ${hasImage
+                ? `<img src="${p.image_url}" alt="${p.name}" crossorigin="anonymous" referrerpolicy="no-referrer" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                   <div class="playlist-img-fallback" style="display:none;width:100%;aspect-ratio:1;background:#2d2d44;border-radius:4px;align-items:center;justify-content:center;font-size:24px;color:#666;">&#9834;</div>`
+                : `<div class="playlist-img-fallback" style="width:100%;aspect-ratio:1;background:#2d2d44;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#666;">&#9834;</div>`
+            }
             <div class="playlist-name">${p.name}</div>
             <div class="playlist-followers">${formatFollowers(p.followers)} followers</div>
         </div>
-    `).join('');
+    `}).join('');
 
     // Add overlay
     grid.innerHTML += `
