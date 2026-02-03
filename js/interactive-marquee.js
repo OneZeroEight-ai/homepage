@@ -717,9 +717,36 @@ function stopBackgroundPlayback() {
 }
 
 // ============================================
+// Speed Control
+// ============================================
+const BASE_SPEED_ROW1 = 30; // seconds
+const BASE_SPEED_ROW2 = 25; // seconds
+
+function setMarqueeSpeed(multiplier) {
+    const row1 = document.querySelector('.im-row-1 .im-marquee-inner');
+    const row2 = document.querySelector('.im-row-2 .im-marquee-inner');
+
+    if (row1) row1.style.animationDuration = (BASE_SPEED_ROW1 / multiplier) + 's';
+    if (row2) row2.style.animationDuration = (BASE_SPEED_ROW2 / multiplier) + 's';
+
+    // Update active button
+    document.querySelectorAll('.im-speed-btn').forEach(btn => {
+        btn.classList.toggle('active', parseFloat(btn.dataset.speed) === multiplier);
+    });
+}
+
+// ============================================
 // Event Handlers
 // ============================================
 function setupEventHandlers() {
+    // Speed control buttons
+    document.querySelectorAll('.im-speed-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const speed = parseFloat(btn.dataset.speed);
+            setMarqueeSpeed(speed);
+        });
+    });
+
     // Event delegation for all clicks
     document.addEventListener('click', function(e) {
         // Check for data-action attributes (modal buttons)
