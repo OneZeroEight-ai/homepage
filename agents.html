@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneZeroEight — Agent Personnel Files</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07060b;
+  --surface:#0e0d14;
+  --surface2:#16141f;
+  --border:#1e1c2a;
+  --text:#e8e6f0;
+  --text-dim:#8a879e;
+  --accent:#7C3AED;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── Grain overlay ── */
+body::after{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size:128px;
+}
+
+/* ── Header ── */
+.header{
+  position:relative;
+  text-align:center;
+  padding:80px 24px 60px;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+.header::before{
+  content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(124,58,237,.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+.header-badge{
+  display:inline-block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);
+  border:1px solid rgba(124,58,237,.3);
+  padding:6px 18px;border-radius:20px;
+  margin-bottom:24px;
+  background:rgba(124,58,237,.06);
+}
+.header h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(48px,8vw,96px);
+  letter-spacing:4px;
+  line-height:.95;
+  background:linear-gradient(135deg,#fff 30%,var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.header p{
+  margin-top:16px;font-size:16px;color:var(--text-dim);
+  max-width:500px;margin-left:auto;margin-right:auto;
+}
+.header-stats{
+  display:flex;gap:40px;justify-content:center;margin-top:32px;flex-wrap:wrap;
+}
+.header-stats .stat{text-align:center}
+.header-stats .stat-val{
+  font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;
+}
+.header-stats .stat-label{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--text-dim);
+}
+
+/* ── Grid ── */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(380px,1fr));
+  gap:2px;
+  padding:2px;
+  max-width:1600px;
+  margin:0 auto;
+}
+
+/* ── Agent Card (One-Sheet) ── */
+.agent-card{
+  position:relative;
+  background:var(--surface);
+  border:1px solid var(--border);
+  overflow:hidden;
+  transition:transform .3s,box-shadow .3s;
+}
+.agent-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  z-index:10;
+}
+
+/* Color bar top */
+.card-color-bar{
+  height:4px;width:100%;
+}
+
+/* Classified stamp */
+.classified-stamp{
+  position:absolute;top:16px;right:16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:3px 10px;border-radius:2px;
+  border:1px solid;
+  opacity:.7;z-index:5;
+}
+
+/* ── Avatar Hero Section ── */
+.avatar-hero{
+  position:relative;
+  width:100%;
+  padding-top:80%;
+  overflow:hidden;
+}
+.avatar-hero-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.avatar-glow{
+  position:absolute;
+  width:280px;height:280px;border-radius:50%;
+  filter:blur(70px);opacity:.25;
+  z-index:0;
+  animation:subtlePulse 4s ease-in-out infinite;
+}
+.avatar-hero-bg img{
+  position:relative;z-index:1;
+  width:220px;height:220px;
+  border-radius:20px;
+  object-fit:cover;
+  border:3px solid rgba(255,255,255,.1);
+  box-shadow:0 8px 40px rgba(0,0,0,.6), 0 0 80px rgba(0,0,0,.3);
+  transition:transform .4s ease, box-shadow .4s ease;
+  background:rgba(0,0,0,.3);
+}
+.agent-card:hover .avatar-hero-bg img{
+  transform:scale(1.04);
+  box-shadow:0 12px 50px rgba(0,0,0,.7), 0 0 100px rgba(0,0,0,.4);
+}
+/* Fallback emoji (shown if img fails) */
+.avatar-fallback{
+  position:absolute;inset:0;z-index:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:80px;
+  opacity:.12;
+  pointer-events:none;
+}
+.avatar-fallback.active{
+  opacity:1 !important;
+  font-size:100px;
+  z-index:1;
+}
+
+/* Scanline overlay */
+.avatar-hero::after{
+  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,.03) 2px,
+    rgba(0,0,0,.03) 4px
+  );
+}
+
+/* Bottom gradient fade */
+.avatar-hero-fade{
+  position:absolute;bottom:0;left:0;right:0;height:100px;z-index:3;
+  pointer-events:none;
+}
+
+/* Emoji badge floating top-left */
+.avatar-emoji-badge{
+  position:absolute;top:16px;left:20px;z-index:5;
+  width:44px;height:44px;
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;
+  border:2px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+}
+
+/* Agent name overlay bottom-left */
+.avatar-hero-name{
+  position:absolute;bottom:20px;left:24px;z-index:4;
+}
+.avatar-hero-name h2{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:44px;letter-spacing:3px;line-height:1;
+  text-shadow:0 2px 24px rgba(0,0,0,.9);
+}
+.avatar-hero-name .genre-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-top:2px;
+  text-shadow:0 1px 10px rgba(0,0,0,.9);
+}
+
+/* ── Card Body ── */
+.card-body{padding:16px 24px 24px}
+
+.personality-quote{
+  font-size:15px;font-style:italic;
+  color:var(--text-dim);
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+
+.info-section{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+}
+.info-section:first-child{margin-top:0;padding-top:0;border-top:none}
+
+.section-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:8px;
+}
+
+/* Color swatches */
+.color-row{display:flex;gap:10px;align-items:center}
+.swatch{
+  width:32px;height:32px;border-radius:8px;
+  border:1px solid rgba(255,255,255,.1);
+}
+.color-hex{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;color:var(--text-dim);
+}
+
+/* Style keywords */
+.keywords{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.keyword{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:1px;
+  padding:4px 10px;border-radius:4px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  color:var(--text-dim);
+}
+
+/* Communication block */
+.comm-block{
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:10px;padding:16px;
+  font-size:13px;
+}
+.comm-block .subject{font-weight:700;margin-bottom:6px}
+.comm-block .opening{color:var(--text-dim);font-style:italic;font-size:12px;margin-bottom:8px;line-height:1.5}
+.comm-block .voice{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  padding-top:8px;border-top:1px solid rgba(255,255,255,.04);
+}
+
+/* Stats row */
+.stats-row{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+}
+.stat-box{
+  text-align:center;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.04);
+  border-radius:10px;padding:12px 8px;
+}
+.stat-box .val{
+  font-family:'Bebas Neue',sans-serif;font-size:26px;
+}
+.stat-box .lbl{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-dim);margin-top:2px;
+}
+
+/* SUTRA earned row */
+.sutra-row{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:10px;
+  padding:10px 14px;
+  border-radius:8px;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.04);
+}
+.sutra-row .sutra-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-dim);
+}
+.sutra-row .sutra-val{
+  font-family:'Bebas Neue',sans-serif;font-size:20px;
+}
+
+/* Signoff */
+.signoff{
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px dashed rgba(255,255,255,.08);
+  font-style:italic;font-size:13px;color:var(--text-dim);
+  text-align:right;
+}
+
+/* ── Footer ── */
+.footer{
+  text-align:center;padding:60px 24px;
+  border-top:1px solid var(--border);
+}
+.footer p{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--text-dim);
+}
+.footer a{color:var(--accent);text-decoration:none}
+
+/* ── Animations ── */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes subtlePulse{
+  0%,100%{opacity:.2;transform:scale(1)}
+  50%{opacity:.35;transform:scale(1.05)}
+}
+.agent-card{animation:fadeUp .6s ease both}
+.agent-card:nth-child(1){animation-delay:.05s}
+.agent-card:nth-child(2){animation-delay:.1s}
+.agent-card:nth-child(3){animation-delay:.15s}
+.agent-card:nth-child(4){animation-delay:.2s}
+.agent-card:nth-child(5){animation-delay:.25s}
+.agent-card:nth-child(6){animation-delay:.3s}
+.agent-card:nth-child(7){animation-delay:.35s}
+.agent-card:nth-child(8){animation-delay:.4s}
+.agent-card:nth-child(9){animation-delay:.45s}
+.agent-card:nth-child(10){animation-delay:.5s}
+.agent-card:nth-child(11){animation-delay:.55s}
+.agent-card:nth-child(12){animation-delay:.6s}
+.agent-card:nth-child(13){animation-delay:.65s}
+.agent-card:nth-child(14){animation-delay:.7s}
+.agent-card:nth-child(15){animation-delay:.75s}
+.agent-card:nth-child(16){animation-delay:.8s}
+
+@media(max-width:420px){
+  .grid{grid-template-columns:1fr}
+  .avatar-hero-bg img{width:160px;height:160px}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-badge">Classified · Internal Personnel Files</div>
+  <h1>OneZeroEight<br>Agent Roster</h1>
+  <p>Genre-specialized AI agents powering ethical music promotion across every sound.</p>
+  <div class="header-stats">
+    <div class="stat"><div class="stat-val">16</div><div class="stat-label">Active Agents</div></div>
+    <div class="stat"><div class="stat-val">3,000+</div><div class="stat-label">Playlists</div></div>
+    <div class="stat"><div class="stat-val">48M+</div><div class="stat-label">Follower Reach</div></div>
+    <div class="stat"><div class="stat-val">108M</div><div class="stat-label">SUTRA Supply</div></div>
+  </div>
+</header>
+
+<!-- Agent Grid -->
+<div class="grid" id="agentGrid"></div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>🪷 <a href="https://onezeroeight.ai">OneZeroEight.ai</a> — Ethical AI Music Promotion</p>
+  <p style="margin-top:8px;opacity:.5">Personnel files · February 2026</p>
+</footer>
+
+<script>
+// ── Avatar images hosted on onezeroeight.ai ──
+const AVATAR_BASE = "/images/agents";
+
+// ── Agent Data ──
+const agents = [
+  {
+    name:"Pulse", emoji:"⚡", genre:"Electronic / EDM",
+    personality:"High-energy and precise",
+    primary:"#00D4FF", secondary:"#0A0A1A",
+    keywords:["neon","circuits","geometric","futuristic","electric"],
+    subject:"⚡ High-energy track for {playlist_name}",
+    opening:"Hey {curator_name}, Pulse here from OneZeroEight.",
+    voice:"Direct, energetic, gets to the point quickly",
+    signoff:"Stay electric ⚡ — Pulse",
+    placements:52, rate:71, rank:1, sutra:520
+  },
+  {
+    name:"Flow", emoji:"🎤", genre:"Hip-Hop / Rap",
+    personality:"Sharp and culturally connected",
+    primary:"#FFD700", secondary:"#1A1A2E",
+    keywords:["urban","gold","graffiti","bold","street"],
+    subject:"🎤 Fresh heat for {playlist_name}",
+    opening:"What's good {curator_name}, Flow checking in from OneZeroEight.",
+    voice:"Confident, culturally aware, authentic",
+    signoff:"Keep it real — Flow 🎤",
+    placements:48, rate:68, rank:2, sutra:480
+  },
+  {
+    name:"Velvet", emoji:"💜", genre:"R&B / Soul",
+    personality:"Smooth and emotionally intelligent",
+    primary:"#8B5CF6", secondary:"#1A0A2E",
+    keywords:["luxurious","smooth","warm","sensual","elegant"],
+    subject:"💜 Smooth vibes for {playlist_name}",
+    opening:"Hi {curator_name}, Velvet here from OneZeroEight.",
+    voice:"Warm, sophisticated, emotionally intelligent",
+    signoff:"With warmth — Velvet 💜",
+    placements:45, rate:66, rank:3, sutra:450
+  },
+  {
+    name:"Haze", emoji:"🌙", genre:"Lo-Fi / Chill",
+    personality:"Laid-back and atmospheric",
+    primary:"#9B7EDE", secondary:"#1A1625",
+    keywords:["dreamy","soft","anime","nostalgic","cozy"],
+    subject:"🌙 Chill track for {playlist_name}",
+    opening:"Hey {curator_name}, Haze from OneZeroEight here.",
+    voice:"Relaxed, understated, no pressure",
+    signoff:"Stay chill — Haze 🌙",
+    placements:41, rate:63, rank:4, sutra:410
+  },
+  {
+    name:"Spark", emoji:"✨", genre:"Pop",
+    personality:"Bright and trend-aware",
+    primary:"#FF6B9D", secondary:"#2A1520",
+    keywords:["bright","sparkles","energetic","trendy","fun"],
+    subject:"✨ Can't-miss track for {playlist_name}",
+    opening:"Hey {curator_name}! Spark here from OneZeroEight 💫",
+    voice:"Bubbly, trend-forward, infectious energy",
+    signoff:"Sparkle on ✨ — Spark",
+    placements:38, rate:62, rank:5, sutra:380
+  },
+  {
+    name:"Edge", emoji:"🎸", genre:"Rock / Alt",
+    personality:"Raw and authentic",
+    primary:"#DC2626", secondary:"#1A1A1A",
+    keywords:["gritty","distressed","raw","rebellious","powerful"],
+    subject:"🎸 Raw track for {playlist_name}",
+    opening:"Hey {curator_name}, Edge from OneZeroEight.",
+    voice:"Blunt, no-nonsense, lets the music speak",
+    signoff:"Stay loud — Edge 🎸",
+    placements:35, rate:59, rank:6, sutra:350
+  },
+  {
+    name:"Scout", emoji:"🔍", genre:"Indie",
+    personality:"Curious and discovery-focused",
+    primary:"#D97706", secondary:"#1A1508",
+    keywords:["vintage","earthy","exploratory","authentic","handcrafted"],
+    subject:"🔍 Discovered something for {playlist_name}",
+    opening:"Hey {curator_name}, Scout here — found your playlist while hunting for great taste.",
+    voice:"Curious, discovery-focused, genuine",
+    signoff:"Happy hunting — Scout 🔍",
+    placements:32, rate:57, rank:7, sutra:320
+  },
+  {
+    name:"Miles", emoji:"🎺", genre:"Jazz / Blues",
+    personality:"Sophisticated and improvisational",
+    primary:"#CA8A04", secondary:"#1C1917",
+    keywords:["smoky","classic","noir","sophisticated","brass"],
+    subject:"🎺 Something with soul for {playlist_name}",
+    opening:"Hey {curator_name}, Miles from OneZeroEight.",
+    voice:"Cool, sophisticated, effortlessly knowledgeable",
+    signoff:"Keep swinging — Miles 🎺",
+    placements:28, rate:61, rank:8, sutra:280
+  },
+  {
+    name:"Sage", emoji:"🍃", genre:"Folk / Acoustic",
+    personality:"Warm and storytelling-focused",
+    primary:"#059669", secondary:"#0A1A10",
+    keywords:["natural","forest","acoustic","warm","storyteller"],
+    subject:"🍃 A story worth hearing for {playlist_name}",
+    opening:"Hi {curator_name}, Sage from OneZeroEight here.",
+    voice:"Warm, narrative-driven, inviting",
+    signoff:"Wishing you well — Sage 🍃",
+    placements:26, rate:55, rank:9, sutra:260
+  },
+  {
+    name:"Ritmo", emoji:"💃", genre:"Latin",
+    personality:"Passionate and rhythmic",
+    primary:"#EA580C", secondary:"#1A0E05",
+    keywords:["vibrant","passionate","rhythmic","warm","dynamic"],
+    subject:"💃 Irresistible rhythm for {playlist_name}",
+    opening:"¡Hola {curator_name}! Ritmo here from OneZeroEight.",
+    voice:"Passionate, warm, rhythmically infectious",
+    signoff:"Con ritmo — Ritmo 💃",
+    placements:24, rate:60, rank:10, sutra:240
+  },
+  {
+    name:"Drift", emoji:"🌊", genre:"Ambient",
+    personality:"Contemplative and expansive",
+    primary:"#0EA5E9", secondary:"#0A1628",
+    keywords:["ethereal","flowing","oceanic","spacious","meditative"],
+    subject:"🌊 Immersive soundscape for {playlist_name}",
+    opening:"Hi {curator_name}, Drift here from OneZeroEight.",
+    voice:"Calm, spacious, evocative",
+    signoff:"In stillness — Drift 🌊",
+    placements:22, rate:58, rank:11, sutra:220
+  },
+  {
+    name:"Forge", emoji:"🔥", genre:"Metal",
+    personality:"Intense and uncompromising",
+    primary:"#B91C1C", secondary:"#0A0A0A",
+    keywords:["dark","flames","iron","aggressive","powerful"],
+    subject:"🔥 Crushing track for {playlist_name}",
+    opening:"{curator_name}. Forge, OneZeroEight.",
+    voice:"Intense, minimal words, maximum impact",
+    signoff:"— Forge 🔥",
+    placements:20, rate:56, rank:12, sutra:200
+  },
+  {
+    name:"Aria", emoji:"🎻", genre:"Classical",
+    personality:"Refined and detail-oriented",
+    primary:"#A16207", secondary:"#1A1508",
+    keywords:["elegant","orchestral","timeless","refined","grand"],
+    subject:"🎻 An exquisite piece for {playlist_name}",
+    opening:"Dear {curator_name}, Aria here, writing from OneZeroEight.",
+    voice:"Refined, articulate, reverent of craft",
+    signoff:"With regards — Aria 🎻",
+    placements:18, rate:64, rank:13, sutra:180
+  },
+  {
+    name:"Dusty", emoji:"🤠", genre:"Country / Americana",
+    personality:"Down-to-earth and heartfelt",
+    primary:"#92400E", secondary:"#1A1208",
+    keywords:["rustic","Americana","warm","honest","heartland"],
+    subject:"🤠 Honest-to-goodness track for {playlist_name}",
+    opening:"Howdy {curator_name}, Dusty here from OneZeroEight.",
+    voice:"Genuine, conversational, heartfelt",
+    signoff:"Take it easy — Dusty 🤠",
+    placements:16, rate:54, rank:14, sutra:160
+  },
+  {
+    name:"Atlas", emoji:"🌍", genre:"World Music",
+    personality:"Globally-minded and eclectic",
+    primary:"#0D9488", secondary:"#081A18",
+    keywords:["global","cultural","diverse","patterns","connected"],
+    subject:"🌍 A global sound for {playlist_name}",
+    opening:"Greetings {curator_name}, Atlas from OneZeroEight here.",
+    voice:"Worldly, inclusive, celebrates diversity",
+    signoff:"One world, one sound — Atlas 🌍",
+    placements:15, rate:52, rank:15, sutra:150
+  },
+  {
+    name:"Harmony", emoji:"🎵", genre:"All Genres · Default Agent",
+    personality:"Versatile and supportive",
+    primary:"#7C3AED", secondary:"#1E1B4B",
+    keywords:["balanced","musical","adaptable","professional","unified"],
+    subject:"🎵 Great fit for {playlist_name}",
+    opening:"Hi {curator_name}, Harmony here from OneZeroEight.",
+    voice:"Balanced, professional, universally adaptable",
+    signoff:"In harmony — Harmony 🎵",
+    placements:30, rate:60, rank:8, sutra:300
+  }
+];
+
+// ── Helpers ──
+function hexToRgba(hex, a){
+  hex = hex.replace('#','');
+  if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+  const r=parseInt(hex.substring(0,2),16);
+  const g=parseInt(hex.substring(2,4),16);
+  const b=parseInt(hex.substring(4,6),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+function rankBadge(r){
+  if(r===1) return '🥇';
+  if(r===2) return '🥈';
+  if(r===3) return '🥉';
+  return `#${r}`;
+}
+
+// ── Build Cards ──
+const grid = document.getElementById('agentGrid');
+
+agents.forEach(a => {
+  const avatarUrl = `${AVATAR_BASE}/${a.name.toLowerCase()}_avatar.png`;
+
+  const card = document.createElement('div');
+  card.className = 'agent-card';
+  card.innerHTML = `
+    <div class="card-color-bar" style="background:linear-gradient(90deg,${a.primary},${a.secondary})"></div>
+
+    <!-- Avatar Hero -->
+    <div class="avatar-hero" style="background:${a.secondary}">
+      <div class="avatar-hero-bg" style="background:radial-gradient(ellipse at center, ${hexToRgba(a.primary,.08)} 0%, ${a.secondary} 70%)">
+        <div class="avatar-fallback" id="fb-${a.name}">${a.emoji}</div>
+        <div class="avatar-glow" style="background:${a.primary}"></div>
+        <img src="${avatarUrl}"
+             alt="${a.name} — ${a.genre} Agent"
+             loading="lazy"
+             onerror="this.style.display='none'; document.getElementById('fb-${a.name}').classList.add('active');"
+        />
+      </div>
+      <div class="avatar-hero-fade" style="background:linear-gradient(transparent, var(--surface))"></div>
+      <div class="avatar-emoji-badge" style="background:${hexToRgba(a.primary,.15)}">${a.emoji}</div>
+      <div class="classified-stamp" style="color:${a.primary};border-color:${hexToRgba(a.primary,.3)}">Agent File</div>
+      <div class="avatar-hero-name">
+        <h2 style="color:${a.primary}">${a.name.toUpperCase()}</h2>
+        <div class="genre-tag" style="color:${hexToRgba(a.primary,.85)}">${a.genre}</div>
+      </div>
+    </div>
+
+    <!-- Card Body -->
+    <div class="card-body">
+      <div class="personality-quote">"${a.personality}"</div>
+
+      <!-- Visual Identity -->
+      <div class="info-section">
+        <div class="section-label">Visual Identity</div>
+        <div class="color-row">
+          <div class="swatch" style="background:${a.primary}"></div>
+          <span class="color-hex">${a.primary}</span>
+          <div class="swatch" style="background:${a.secondary}"></div>
+          <span class="color-hex">${a.secondary}</span>
+        </div>
+        <div class="keywords">
+          ${a.keywords.map(k=>`<span class="keyword">${k}</span>`).join('')}
+        </div>
+      </div>
+
+      <!-- Communication Protocol -->
+      <div class="info-section">
+        <div class="section-label">Communication Protocol</div>
+        <div class="comm-block">
+          <div class="subject">${a.subject}</div>
+          <div class="opening">${a.opening}</div>
+          <div class="voice" style="color:${a.primary}">Voice: ${a.voice}</div>
+        </div>
+      </div>
+
+      <!-- Performance Metrics -->
+      <div class="info-section">
+        <div class="section-label">Performance Metrics</div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="val" style="color:${a.primary}">${a.placements}</div>
+            <div class="lbl">Placements</div>
+          </div>
+          <div class="stat-box">
+            <div class="val" style="color:${a.primary}">${a.rate}%</div>
+            <div class="lbl">Success Rate</div>
+          </div>
+          <div class="stat-box">
+            <div class="val" style="color:${a.primary}">${rankBadge(a.rank)}</div>
+            <div class="lbl">Leaderboard</div>
+          </div>
+        </div>
+        <div class="sutra-row">
+          <span class="sutra-label">🪷 Total SUTRA Earned</span>
+          <span class="sutra-val" style="color:${a.primary}">${a.sutra.toLocaleString()}</span>
+        </div>
+      </div>
+
+      <!-- Signoff -->
+      <div class="signoff" style="color:${a.primary}">${a.signoff}</div>
+    </div>
+  `;
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>
