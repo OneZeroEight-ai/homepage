@@ -400,13 +400,13 @@ function extractSpotifyId(url) {
 // ============================================
 // Marquee Rendering
 // ============================================
-function renderPlaylistCard(playlist) {
+function renderPlaylistCard(playlist, index) {
     const agent = AGENTS_DATA[getAgentForGenre(playlist.genre)];
     const agentLower = agent.name.toLowerCase();
     const defaultCover = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="${encodeURIComponent(agent.secondary)}" width="100" height="100"/><text x="50" y="58" font-size="40" text-anchor="middle" fill="${encodeURIComponent(agent.primary)}">🎵</text></svg>`;
 
     return `
-        <div class="im-playlist-card" onclick="openPlaylistModal('${escapeHtml(playlist.name)}')">
+        <div class="im-playlist-card" data-playlist-index="${index}">
             <div class="im-card-accent" style="background:linear-gradient(90deg,${agent.primary},${agent.secondary})"></div>
             <div class="im-card-body">
                 <div class="im-cover-wrap">
@@ -414,8 +414,7 @@ function renderPlaylistCard(playlist) {
                         <img src="${playlist.image || defaultCover}" alt="${escapeHtml(playlist.name)}" loading="lazy" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\\'im-cover-fallback\\' style=\\'background:${agent.secondary}\\'>🎵</div>'">
                         <div class="im-play-hint">▶</div>
                     </div>
-                    <div class="im-agent-overlap"
-                         onclick="event.stopPropagation();openAgentModal('${agent.name}')"
+                    <div class="im-agent-overlap" data-agent="${agent.name}"
                          title="${agent.emoji} ${agent.name} — ${agent.genre} Specialist"
                          style="--agent-glow:${agent.primary}"
                          onmouseover="this.style.boxShadow='0 0 16px ${agent.primary}'"
@@ -442,7 +441,7 @@ function renderAgentCard(agent) {
     const agentLower = agent.name.toLowerCase();
 
     return `
-        <div class="im-agent-card" onclick="openAgentModal('${agent.name}')" style="border-color:${agent.primary}30">
+        <div class="im-agent-card" data-agent="${agent.name}" style="border-color:${agent.primary}30">
             <div class="im-agent-avatar">
                 <img src="images/agents/${agentLower}_avatar.png"
                      alt="${agent.name}"
@@ -461,7 +460,7 @@ function buildMarquee() {
     const agents = Object.values(AGENTS_DATA);
 
     // Row 1: All playlist cards
-    const row1Items = playlists.slice(0, 12).map(p => renderPlaylistCard(p)).join('');
+    const row1Items = playlists.slice(0, 12).map((p, i) => renderPlaylistCard(p, i)).join('');
 
     // Row 2: Mix of agent cards and playlist cards
     let row2Items = '';
@@ -474,7 +473,7 @@ function buildMarquee() {
             row2Items += renderAgentCard(agents[agentIndex]);
             agentIndex++;
         }
-        row2Items += renderPlaylistCard(row2Playlists[i]);
+        row2Items += renderPlaylistCard(row2Playlists[i], 12 + i);
     }
 
     // Add remaining agents
@@ -495,12 +494,13 @@ function openPlaylistModal(playlistName) {
     const playlist = loadedPlaylists.find(p => p.name === playlistName);
     if (!playlist) return;
 
+    const playlistIndex = loadedPlaylists.indexOf(playlist);
     const agent = AGENTS_DATA[getAgentForGenre(playlist.genre)];
     const agentLower = agent.name.toLowerCase();
 
     const modalHtml = `
         <div class="im-modal">
-            <button class="im-modal-close" onclick="closeModal()">&times;</button>
+            <button class="im-modal-close" data-action="close">&times;</button>
             <div class="im-modal-hero" style="background:linear-gradient(180deg,${agent.secondary} 0%,var(--im-surface) 100%)">
                 <div class="im-modal-cover">
                     <img src="${playlist.image || ''}" alt="${escapeHtml(playlist.name)}"
@@ -529,14 +529,14 @@ function openPlaylistModal(playlistName) {
                 </div>
 
                 <div class="im-modal-section">
-                    <button class="im-play-bg-btn" style="background:${agent.primary}" onclick="playInBackground('${playlist.spotifyId}', '${escapeHtml(playlist.name)}', '${agent.emoji}')">
+                    <button class="im-play-bg-btn" data-action="play-bg" data-spotify-id="${playlist.spotifyId}" data-playlist-index="${playlistIndex}" data-emoji="${agent.emoji}" style="background:${agent.primary}">
                         <span>▶</span> Play in Background
                     </button>
                 </div>
 
                 <div class="im-modal-section">
                     <div class="im-modal-section-title">Assigned Agent</div>
-                    <div class="im-agent-link" onclick="closeModal();setTimeout(()=>openAgentModal('${agent.name}'),150)">
+                    <div class="im-agent-link" data-action="open-agent" data-agent="${agent.name}">
                         <div class="im-agent-link-avatar">
                             <img src="images/agents/${agentLower}_avatar.png" alt="${agent.name}"
                                  onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:${agent.secondary};font-size:24px\\'>${agent.emoji}</div>'">
@@ -564,8 +564,10 @@ function openAgentModal(agentName) {
     // Find playlists for this agent
     const agentPlaylists = loadedPlaylists.filter(p => getAgentForGenre(p.genre) === agentName);
 
-    const playlistListHtml = agentPlaylists.slice(0, 5).map(p => `
-        <div class="im-playlist-list-item" onclick="closeModal();setTimeout(()=>openPlaylistModal('${escapeHtml(p.name)}'),150)">
+    const playlistListHtml = agentPlaylists.slice(0, 5).map(p => {
+        const idx = loadedPlaylists.indexOf(p);
+        return `
+        <div class="im-playlist-list-item" data-action="open-playlist" data-playlist-index="${idx}">
             <div class="im-playlist-list-cover">
                 <img src="${p.image || ''}" alt="${escapeHtml(p.name)}"
                      onerror="this.parentElement.innerHTML='<div style=\\'width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:${agent.secondary};font-size:16px\\'>🎵</div>'">
@@ -575,11 +577,11 @@ function openAgentModal(agentName) {
                 <div class="im-playlist-list-meta">${p.followers} followers</div>
             </div>
         </div>
-    `).join('') || '<p style="color:var(--im-text-dim);font-size:13px;">No playlists currently assigned.</p>';
+    `}).join('') || '<p style="color:var(--im-text-dim);font-size:13px;">No playlists currently assigned.</p>';
 
     const modalHtml = `
         <div class="im-modal">
-            <button class="im-modal-close" onclick="closeModal()">&times;</button>
+            <button class="im-modal-close" data-action="close">&times;</button>
             <div class="im-modal-hero" style="background:radial-gradient(circle at 50% 0%,${agent.primary}30 0%,${agent.secondary} 70%,var(--im-surface) 100%)">
                 <div class="im-modal-avatar">
                     <img src="images/agents/${agentLower}_avatar.png" alt="${agent.name}"
@@ -709,6 +711,79 @@ function stopBackgroundPlayback() {
 // Event Handlers
 // ============================================
 function setupEventHandlers() {
+    // Event delegation for all clicks
+    document.addEventListener('click', function(e) {
+        // Check for data-action attributes (modal buttons)
+        const actionEl = e.target.closest('[data-action]');
+        if (actionEl) {
+            const action = actionEl.dataset.action;
+
+            if (action === 'close') {
+                closeModal();
+                return;
+            }
+
+            if (action === 'play-bg') {
+                const spotifyId = actionEl.dataset.spotifyId;
+                const playlistIndex = parseInt(actionEl.dataset.playlistIndex, 10);
+                const emoji = actionEl.dataset.emoji;
+                const playlist = loadedPlaylists[playlistIndex];
+                if (playlist) {
+                    playInBackground(spotifyId, playlist.name, emoji);
+                }
+                return;
+            }
+
+            if (action === 'open-agent') {
+                const agentName = actionEl.dataset.agent;
+                closeModal();
+                setTimeout(() => openAgentModal(agentName), 150);
+                return;
+            }
+
+            if (action === 'open-playlist') {
+                const playlistIndex = parseInt(actionEl.dataset.playlistIndex, 10);
+                const playlist = loadedPlaylists[playlistIndex];
+                if (playlist) {
+                    closeModal();
+                    setTimeout(() => openPlaylistModal(playlist.name), 150);
+                }
+                return;
+            }
+        }
+
+        // Check for playlist card click (marquee)
+        const playlistCard = e.target.closest('.im-playlist-card');
+        if (playlistCard && !e.target.closest('.im-agent-overlap')) {
+            const index = parseInt(playlistCard.dataset.playlistIndex, 10);
+            if (!isNaN(index) && loadedPlaylists[index]) {
+                openPlaylistModal(loadedPlaylists[index].name);
+            }
+            return;
+        }
+
+        // Check for agent overlap click (on playlist cards)
+        const agentOverlap = e.target.closest('.im-agent-overlap');
+        if (agentOverlap) {
+            e.stopPropagation();
+            const agentName = agentOverlap.dataset.agent;
+            if (agentName) {
+                openAgentModal(agentName);
+            }
+            return;
+        }
+
+        // Check for standalone agent card click
+        const agentCard = e.target.closest('.im-agent-card');
+        if (agentCard) {
+            const agentName = agentCard.dataset.agent;
+            if (agentName) {
+                openAgentModal(agentName);
+            }
+            return;
+        }
+    });
+
     // Close modal on overlay click
     document.getElementById('im-modal-overlay').addEventListener('click', function(e) {
         if (e.target === this) {

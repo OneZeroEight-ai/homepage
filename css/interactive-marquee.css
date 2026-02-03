@@ -351,6 +351,7 @@
 }
 
 .im-modal {
+    position: relative;
     background: var(--im-surface);
     border-radius: 20px;
     max-width: 520px;
