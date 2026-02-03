@@ -483,8 +483,17 @@ function buildMarquee() {
     }
 
     // Populate rows (duplicate for seamless loop)
-    document.getElementById('im-row-1-content').innerHTML = row1Items + row1Items;
-    document.getElementById('im-row-2-content').innerHTML = row2Items + row2Items;
+    const row1El = document.getElementById('im-row-1-content');
+    const row2El = document.getElementById('im-row-2-content');
+
+    if (row1El && row2El) {
+        row1El.innerHTML = row1Items + row1Items;
+        row2El.innerHTML = row2Items + row2Items;
+        console.log('[Marquee] Row 1 items:', row1El.children.length);
+        console.log('[Marquee] Row 2 items:', row2El.children.length);
+    } else {
+        console.error('[Marquee] Row elements not found!', { row1El, row2El });
+    }
 }
 
 // ============================================
@@ -813,12 +822,28 @@ function escapeHtml(text) {
 // Initialize
 // ============================================
 async function initInteractiveMarquee() {
-    loadedPlaylists = await loadFeaturedPlaylists();
-    buildMarquee();
-    setupEventHandlers();
+    try {
+        console.log('[Marquee] Initializing...');
+        loadedPlaylists = await loadFeaturedPlaylists();
+        console.log('[Marquee] Loaded', loadedPlaylists.length, 'playlists');
 
-    // Show the section
-    document.getElementById('im-section').style.display = 'block';
+        buildMarquee();
+        console.log('[Marquee] Built marquee');
+
+        setupEventHandlers();
+        console.log('[Marquee] Event handlers set up');
+
+        // Show the section
+        const section = document.getElementById('im-section');
+        if (section) {
+            section.style.display = 'block';
+            console.log('[Marquee] Section displayed');
+        } else {
+            console.error('[Marquee] Section element not found!');
+        }
+    } catch (err) {
+        console.error('[Marquee] Init error:', err);
+    }
 }
 
 // Start when DOM is ready
