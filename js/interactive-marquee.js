@@ -459,38 +459,29 @@ function buildMarquee() {
     const playlists = loadedPlaylists;
     const agents = Object.values(AGENTS_DATA);
 
-    // Row 1: First batch of playlists (scroll left)
+    // Row 1: First batch of playlists
     const row1Playlists = playlists.slice(0, 11);
     const row1Items = row1Playlists.map((p, i) => renderPlaylistCard(p, i)).join('');
 
-    // Row 2: All agents (scroll right)
+    // Row 2: All agents
     const row2Items = agents.map(agent => renderAgentCard(agent)).join('');
 
-    // Row 3: Remaining playlists (scroll left, different speed)
+    // Row 3: Remaining playlists
     const row3Playlists = playlists.slice(11);
     const row3Items = row3Playlists.map((p, i) => renderPlaylistCard(p, 11 + i)).join('');
 
-    // Populate rows (content + clone for seamless loop)
-    const row1El = document.getElementById('im-row-1-content');
-    const row1Clone = document.getElementById('im-row-1-clone');
-    const row2El = document.getElementById('im-row-2-content');
-    const row2Clone = document.getElementById('im-row-2-clone');
-    const row3El = document.getElementById('im-row-3-content');
-    const row3Clone = document.getElementById('im-row-3-clone');
+    // Populate rows (duplicate content for seamless loop)
+    const row1El = document.getElementById('im-row-1');
+    const row2El = document.getElementById('im-row-2');
+    const row3El = document.getElementById('im-row-3');
 
-    if (row1El && row1Clone && row2El && row2Clone && row3El && row3Clone) {
-        row1El.innerHTML = row1Items;
-        row1Clone.innerHTML = row1Items;
-        row2El.innerHTML = row2Items;
-        row2Clone.innerHTML = row2Items;
-        row3El.innerHTML = row3Items;
-        row3Clone.innerHTML = row3Items;
-        console.log('[Marquee] Row 1 items:', row1El.children.length, '+ clone');
-        console.log('[Marquee] Row 2 items:', row2El.children.length, '+ clone');
-        console.log('[Marquee] Row 3 items:', row3El.children.length, '+ clone');
-    } else {
-        console.error('[Marquee] Row elements not found!');
-    }
+    if (row1El) row1El.innerHTML = row1Items + row1Items;
+    if (row2El) row2El.innerHTML = row2Items + row2Items;
+    if (row3El) row3El.innerHTML = row3Items + row3Items;
+
+    console.log('[Marquee] Row 1:', row1El?.children.length, 'items');
+    console.log('[Marquee] Row 2:', row2El?.children.length, 'items');
+    console.log('[Marquee] Row 3:', row3El?.children.length, 'items');
 }
 
 // ============================================
@@ -714,55 +705,15 @@ function stopBackgroundPlayback() {
 }
 
 // ============================================
-// Speed Control & Animation
+// Speed Control
 // ============================================
-let currentSpeed = 2;
-const PIXELS_PER_SECOND = 100; // Base scroll speed
-
-function setupMarqueeAnimations() {
-    const rows = [
-        { wrap: '.im-row-1', content: '#im-row-1-content', direction: 'left' },
-        { wrap: '.im-row-2', content: '#im-row-2-content', direction: 'right' },
-        { wrap: '.im-row-3', content: '#im-row-3-content', direction: 'left' }
-    ];
-
-    rows.forEach((row, index) => {
-        const content = document.querySelector(row.content);
-        const track = document.querySelector(`${row.wrap} .im-marquee-track`);
-
-        if (!content || !track) return;
-
-        const contentWidth = content.offsetWidth;
-        const duration = contentWidth / (PIXELS_PER_SECOND * currentSpeed);
-
-        // Create unique keyframes for this row
-        const keyframeName = `im-scroll-${index}`;
-        const translateEnd = row.direction === 'left' ? -contentWidth : 0;
-        const translateStart = row.direction === 'left' ? 0 : -contentWidth;
-
-        // Remove old keyframes if they exist
-        const existingStyle = document.getElementById(`marquee-keyframes-${index}`);
-        if (existingStyle) existingStyle.remove();
-
-        // Create new keyframes
-        const style = document.createElement('style');
-        style.id = `marquee-keyframes-${index}`;
-        style.textContent = `
-            @keyframes ${keyframeName} {
-                0% { transform: translateX(${translateStart}px); }
-                100% { transform: translateX(${translateEnd}px); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Apply animation
-        track.style.animation = `${keyframeName} ${duration}s linear infinite`;
-    });
-}
+const BASE_DURATION = 40; // seconds at 1x
 
 function setMarqueeSpeed(multiplier) {
-    currentSpeed = multiplier;
-    setupMarqueeAnimations();
+    const duration = BASE_DURATION / multiplier;
+    document.querySelectorAll('.im-marquee-track').forEach(track => {
+        track.style.setProperty('--marquee-duration', duration + 's');
+    });
 
     // Update active button
     document.querySelectorAll('.im-speed-btn').forEach(btn => {
@@ -892,11 +843,8 @@ async function initInteractiveMarquee() {
         buildMarquee();
         console.log('[Marquee] Built marquee');
 
-        // Small delay to let browser calculate widths
-        requestAnimationFrame(() => {
-            setupMarqueeAnimations();
-            console.log('[Marquee] Animations set up');
-        });
+        // Set initial speed (2x default)
+        setMarqueeSpeed(2);
 
         setupEventHandlers();
         console.log('[Marquee] Event handlers set up');

@@ -92,38 +92,43 @@
    ============================================ */
 .im-marquee-wrap {
     width: 100%;
-    mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
-    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+    margin-bottom: 16px;
 }
 
 .im-marquee-track {
     display: flex;
-    gap: 20px;
-    width: max-content;
-    will-change: transform;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    gap: 16px;
+    width: fit-content;
+    padding: 8px 0;
 }
 
 .im-marquee-wrap:hover .im-marquee-track {
     animation-play-state: paused;
 }
 
-.im-marquee-inner {
-    display: flex;
-    gap: 20px;
-    padding: 10px 0;
-    flex-shrink: 0;
+.im-scroll-left {
+    animation: marquee-left var(--marquee-duration, 40s) linear infinite;
 }
 
-/* Animations are applied via JavaScript with calculated widths */
-
-.im-row-2 {
-    margin-top: 20px;
+.im-scroll-right {
+    animation: marquee-right var(--marquee-duration, 35s) linear infinite;
 }
 
-.im-row-3 {
-    margin-top: 20px;
+.im-slow {
+    --marquee-duration: 50s;
+}
+
+@keyframes marquee-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
 }
 
 /* ============================================
