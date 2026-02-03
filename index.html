@@ -15,6 +15,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/interactive-marquee.css">
     <style>
         * {
             margin: 0;
@@ -1433,23 +1435,6 @@
             </div>
         </div>
 
-        <!-- Scrolling Playlist Showcase -->
-        <div class="playlist-marquee-container" id="marquee-container" style="display: none;">
-            <p class="marquee-label">3,000+ curated playlists  ·  16 AI genre agents  ·  48M+ followers</p>
-            <div class="playlist-marquee">
-                <div class="marquee-track">
-                    <div class="marquee-content" id="marquee-row-1"></div>
-                    <div class="marquee-content" id="marquee-row-1-clone" aria-hidden="true"></div>
-                </div>
-            </div>
-            <div class="playlist-marquee reverse">
-                <div class="marquee-track">
-                    <div class="marquee-content" id="marquee-row-2"></div>
-                    <div class="marquee-content" id="marquee-row-2-clone" aria-hidden="true"></div>
-                </div>
-            </div>
-        </div>
-
         <!-- Social Proof Stats -->
         <div class="social-proof-bar">
             <div class="proof-stat">
@@ -1475,6 +1460,46 @@
 
     </div>
 </section>
+
+<!-- Interactive Marquee: Playlists & Agents -->
+<section class="im-section" id="im-section" style="display: none;">
+    <div class="im-section-header">
+        <h2 class="im-section-title">Explore Playlists & Agents</h2>
+        <p class="im-section-subtitle">3,000+ curated playlists · 16 AI genre specialists · 48M+ followers</p>
+    </div>
+
+    <!-- Row 1: Scrolls Left (Playlists) -->
+    <div class="im-marquee-wrap im-row-1">
+        <div class="im-marquee-track">
+            <div class="im-marquee-inner" id="im-row-1-content"></div>
+        </div>
+    </div>
+
+    <!-- Row 2: Scrolls Right (Mix of Agents + Playlists) -->
+    <div class="im-marquee-wrap im-row-2">
+        <div class="im-marquee-track">
+            <div class="im-marquee-inner" id="im-row-2-content"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal Overlay -->
+<div class="im-modal-overlay" id="im-modal-overlay"></div>
+
+<!-- Now Playing Bar -->
+<div class="im-now-playing" id="im-now-playing">
+    <div class="im-np-info">
+        <span class="im-np-emoji" id="im-np-emoji">🎵</span>
+        <div class="im-np-text">
+            <span class="im-np-label">Now Playing</span>
+            <span class="im-np-name" id="im-np-name">Playlist Name</span>
+        </div>
+    </div>
+    <button class="im-np-close" onclick="stopBackgroundPlayback()">&times;</button>
+</div>
+
+<!-- Hidden Background Player -->
+<div class="im-bg-player" id="im-bg-player"></div>
 
 <!-- How It Works -->
 <section class="section" id="how-it-works">
@@ -1866,92 +1891,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Genre Agent Avatars
-const GENRE_AGENTS = [
-    { name: "Pulse", emoji: "⚡", genre: "Electronic", image: "/images/agents/pulse_avatar.png" },
-    { name: "Flow", emoji: "🎤", genre: "Hip-Hop", image: "/images/agents/flow_avatar.png" },
-    { name: "Haze", emoji: "🌙", genre: "Lo-Fi", image: "/images/agents/haze_avatar.png" },
-    { name: "Velvet", emoji: "💜", genre: "R&B", image: "/images/agents/velvet_avatar.png" },
-    { name: "Spark", emoji: "✨", genre: "Pop", image: "/images/agents/spark_avatar.png" },
-    { name: "Edge", emoji: "🎸", genre: "Rock", image: "/images/agents/edge_avatar.png" },
-    { name: "Scout", emoji: "🔍", genre: "Indie", image: "/images/agents/scout_avatar.png" },
-    { name: "Sage", emoji: "🍃", genre: "Folk", image: "/images/agents/sage_avatar.png" },
-    { name: "Drift", emoji: "🌊", genre: "Ambient", image: "/images/agents/drift_avatar.png" },
-    { name: "Miles", emoji: "🎺", genre: "Jazz", image: "/images/agents/miles_avatar.png" },
-    { name: "Aria", emoji: "🎻", genre: "Classical", image: "/images/agents/aria_avatar.png" },
-    { name: "Ritmo", emoji: "💃", genre: "Latin", image: "/images/agents/ritmo_avatar.png" },
-    { name: "Forge", emoji: "🔥", genre: "Metal", image: "/images/agents/forge_avatar.png" },
-    { name: "Dusty", emoji: "🤠", genre: "Country", image: "/images/agents/dusty_avatar.png" },
-    { name: "Atlas", emoji: "🌍", genre: "World", image: "/images/agents/atlas_avatar.png" },
-    { name: "Harmony", emoji: "🎵", genre: "All Genres", image: "/images/agents/harmony_avatar.png" }
-];
-
-// Load playlist marquee images with interleaved agents
-async function loadMarqueeImages() {
-    try {
-        const response = await fetch(`${API_BASE}/api/tracks/playlists/featured?limit=32`);
-        if (!response.ok) throw new Error('Failed to load playlists');
-
-        const data = await response.json();
-        const playlists = data.playlists || [];
-
-        if (playlists.length < 10) {
-            return;
-        }
-
-        // Interleave playlists with agents (pattern: 2-3 playlists, then 1 agent)
-        const interleaved = [];
-        let agentIndex = 0;
-
-        for (let i = 0; i < playlists.length; i++) {
-            interleaved.push({
-                type: 'playlist',
-                image: playlists[i].image_url,
-                title: playlists[i].name,
-                subtitle: `${(playlists[i].followers || 0).toLocaleString()} followers`
-            });
-
-            // Insert agent every 3 playlists
-            if ((i + 1) % 3 === 0 && agentIndex < GENRE_AGENTS.length) {
-                interleaved.push({
-                    type: 'agent',
-                    image: GENRE_AGENTS[agentIndex].image,
-                    title: GENRE_AGENTS[agentIndex].name,
-                    subtitle: `${GENRE_AGENTS[agentIndex].emoji} ${GENRE_AGENTS[agentIndex].genre} Agent`
-                });
-                agentIndex++;
-            }
-        }
-
-        const half = Math.ceil(interleaved.length / 2);
-        const row1 = interleaved.slice(0, half);
-        const row2 = interleaved.slice(half);
-
-        const defaultImage = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="%232d2d44" width="100" height="100"/><text x="50" y="55" font-size="30" text-anchor="middle" fill="%23666">♪</text></svg>';
-
-        const renderRow = (items) => items.map(item => `
-            <div class="marquee-item ${item.type}" title="${item.title} - ${item.subtitle}">
-                <img src="${item.image || defaultImage}" alt="${item.title}" loading="lazy" onerror="this.src='${defaultImage}'">
-                ${item.type === 'agent' ? '<div class="agent-badge">AI</div>' : ''}
-            </div>
-        `).join('');
-
-        document.getElementById('marquee-row-1').innerHTML = renderRow(row1);
-        document.getElementById('marquee-row-1-clone').innerHTML = renderRow(row1);
-        document.getElementById('marquee-row-2').innerHTML = renderRow(row2);
-        document.getElementById('marquee-row-2-clone').innerHTML = renderRow(row2);
-
-        // Show marquee container
-        document.getElementById('marquee-container').style.display = 'block';
-
-    } catch (error) {
-        console.log('Marquee load skipped:', error.message);
-    }
-}
-
-// Load marquee on page load
-document.addEventListener('DOMContentLoaded', loadMarqueeImages);
 </script>
+
+<!-- Interactive Marquee JS -->
+<script src="js/interactive-marquee.js"></script>
 
 </body>
 </html>

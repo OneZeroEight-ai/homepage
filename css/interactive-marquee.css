@@ -1,0 +1,891 @@
+/**
+ * Interactive Marquee Styles
+ * OneZeroEight.ai - Playlist & Agent Showcase
+ */
+
+/* ============================================
+   Design Tokens (scoped)
+   ============================================ */
+.im-section {
+    --im-bg: #07060b;
+    --im-surface: #0e0d14;
+    --im-surface2: #16141f;
+    --im-border: #1e1c2a;
+    --im-text: #e8e6f0;
+    --im-text-dim: #8a879e;
+    --im-accent: #7C3AED;
+}
+
+/* ============================================
+   Marquee Section
+   ============================================ */
+.im-section {
+    padding: 60px 0;
+    background: linear-gradient(180deg, var(--im-bg) 0%, var(--im-surface) 100%);
+    overflow: hidden;
+}
+
+.im-section-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 0 24px;
+}
+
+.im-section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 0.05em;
+    color: var(--im-text);
+    margin-bottom: 8px;
+}
+
+.im-section-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--im-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+/* ============================================
+   Marquee Container & Track
+   ============================================ */
+.im-marquee-wrap {
+    width: 100%;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+}
+
+.im-marquee-track {
+    display: flex;
+    width: max-content;
+}
+
+.im-marquee-track:hover .im-marquee-inner {
+    animation-play-state: paused;
+}
+
+.im-marquee-inner {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+/* Row 1: Left scroll */
+.im-row-1 .im-marquee-inner {
+    animation: im-scroll-left 70s linear infinite;
+}
+
+/* Row 2: Right scroll */
+.im-row-2 .im-marquee-inner {
+    animation: im-scroll-right 55s linear infinite;
+}
+
+@keyframes im-scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+@keyframes im-scroll-right {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+}
+
+.im-row-2 {
+    margin-top: 20px;
+}
+
+/* ============================================
+   Playlist Card
+   ============================================ */
+.im-playlist-card {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--im-surface2);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid var(--im-border);
+}
+
+.im-playlist-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.im-card-accent {
+    height: 3px;
+    width: 100%;
+}
+
+.im-card-body {
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+}
+
+/* Cover + Agent Avatar Composite */
+.im-cover-wrap {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+}
+
+.im-cover {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--im-surface);
+    position: relative;
+}
+
+.im-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.im-cover-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.im-play-hint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.im-playlist-card:hover .im-play-hint {
+    opacity: 1;
+}
+
+/* Agent Avatar Overlap */
+.im-agent-overlap {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--im-surface);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 2;
+    background: var(--im-surface2);
+}
+
+.im-agent-overlap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.im-agent-overlap:hover {
+    transform: scale(1.15);
+}
+
+.im-agent-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+/* Card Info */
+.im-card-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.im-card-name {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--im-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.im-card-curator {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--im-text-dim);
+    margin-bottom: 6px;
+}
+
+.im-card-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.im-card-followers {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--im-text-dim);
+}
+
+.im-card-genre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--im-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(124, 58, 237, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* ============================================
+   Agent Card (in marquee row 2)
+   ============================================ */
+.im-agent-card {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--im-surface2);
+    border-radius: 14px;
+    padding: 16px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border: 1px solid var(--im-border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.im-agent-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.im-agent-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--im-surface);
+}
+
+.im-agent-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.im-agent-avatar-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.im-agent-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.im-agent-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.03em;
+    margin-bottom: 2px;
+}
+
+.im-agent-genre-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--im-text-dim);
+}
+
+/* ============================================
+   Modal Overlay
+   ============================================ */
+.im-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(4, 3, 8, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.im-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.im-modal {
+    background: var(--im-surface);
+    border-radius: 20px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.3s ease;
+    border: 1px solid var(--im-border);
+}
+
+.im-modal-overlay.active .im-modal {
+    transform: translateY(0) scale(1);
+}
+
+.im-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--im-text);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 10;
+}
+
+.im-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Modal Hero */
+.im-modal-hero {
+    position: relative;
+    padding: 32px 24px;
+    text-align: center;
+}
+
+.im-modal-cover {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    margin: 0 auto 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.im-modal-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.im-modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 0.03em;
+    color: var(--im-text);
+    margin-bottom: 8px;
+}
+
+.im-modal-curator {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--im-text-dim);
+    margin-bottom: 12px;
+}
+
+.im-modal-badges {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.im-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.im-badge-genre {
+    background: rgba(124, 58, 237, 0.2);
+    color: #a78bfa;
+}
+
+.im-badge-followers {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+/* Modal Body */
+.im-modal-body {
+    padding: 0 24px 24px;
+}
+
+.im-modal-section {
+    margin-bottom: 24px;
+}
+
+.im-modal-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--im-text-dim);
+    margin-bottom: 12px;
+}
+
+.im-modal-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--im-text);
+    line-height: 1.6;
+}
+
+/* Spotify Embed */
+.im-spotify-embed {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.im-spotify-embed iframe {
+    width: 100%;
+    height: 352px;
+    border: none;
+}
+
+/* Play in Background Button */
+.im-play-bg-btn {
+    width: 100%;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.im-play-bg-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Agent Link in Playlist Modal */
+.im-agent-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    background: var(--im-surface2);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: 1px solid var(--im-border);
+}
+
+.im-agent-link:hover {
+    background: var(--im-border);
+}
+
+.im-agent-link-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.im-agent-link-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.im-agent-link-info {
+    flex: 1;
+}
+
+.im-agent-link-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+}
+
+.im-agent-link-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--im-text-dim);
+}
+
+.im-agent-link-arrow {
+    font-size: 18px;
+    color: var(--im-text-dim);
+}
+
+/* ============================================
+   Agent Modal Specific Styles
+   ============================================ */
+.im-modal-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    margin: 0 auto 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.im-modal-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.im-modal-personality {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--im-text-dim);
+    margin-bottom: 16px;
+}
+
+.im-modal-stats {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.im-stat {
+    text-align: center;
+}
+
+.im-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: var(--im-text);
+}
+
+.im-stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--im-text-dim);
+}
+
+/* Visual Identity */
+.im-colors {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.im-color-swatch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.im-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--im-border);
+}
+
+.im-swatch-hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--im-text-dim);
+}
+
+.im-keywords {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.im-keyword {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    background: var(--im-surface2);
+    border-radius: 6px;
+    color: var(--im-text-dim);
+    border: 1px solid var(--im-border);
+}
+
+/* Communication Protocol */
+.im-comm-block {
+    background: var(--im-surface2);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--im-border);
+}
+
+.im-comm-item {
+    margin-bottom: 12px;
+}
+
+.im-comm-item:last-child {
+    margin-bottom: 0;
+}
+
+.im-comm-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--im-text-dim);
+    margin-bottom: 4px;
+}
+
+.im-comm-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--im-text);
+}
+
+.im-signoff {
+    text-align: right;
+    font-style: italic;
+    color: var(--im-text-dim);
+    font-size: 13px;
+    margin-top: 16px;
+}
+
+/* Playlist List in Agent Modal */
+.im-playlist-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.im-playlist-list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--im-surface2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: 1px solid var(--im-border);
+}
+
+.im-playlist-list-item:hover {
+    background: var(--im-border);
+}
+
+.im-playlist-list-cover {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.im-playlist-list-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.im-playlist-list-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.im-playlist-list-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--im-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.im-playlist-list-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--im-text-dim);
+}
+
+/* ============================================
+   Now Playing Bar
+   ============================================ */
+.im-now-playing {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(14, 13, 20, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--im-border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.im-now-playing.active {
+    transform: translateY(0);
+}
+
+.im-np-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.im-np-emoji {
+    font-size: 24px;
+}
+
+.im-np-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.im-np-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--im-text-dim);
+}
+
+.im-np-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--im-text);
+}
+
+.im-np-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--im-text);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.im-np-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Hidden Background Player */
+.im-bg-player {
+    position: fixed;
+    top: -9999px;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 560px) {
+    .im-section {
+        padding: 40px 0;
+    }
+
+    .im-section-title {
+        font-size: 1.8rem;
+    }
+
+    .im-playlist-card {
+        width: 240px;
+    }
+
+    .im-agent-card {
+        width: 180px;
+    }
+
+    .im-modal {
+        max-height: 85vh;
+    }
+
+    .im-modal-hero {
+        padding: 24px 16px;
+    }
+
+    .im-modal-body {
+        padding: 0 16px 16px;
+    }
+
+    .im-modal-cover,
+    .im-modal-avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    .im-modal-title {
+        font-size: 1.6rem;
+    }
+
+    .im-spotify-embed iframe {
+        height: 280px;
+    }
+
+    .im-now-playing {
+        padding: 10px 16px;
+    }
+}
