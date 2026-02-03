@@ -714,20 +714,55 @@ function stopBackgroundPlayback() {
 }
 
 // ============================================
-// Speed Control
+// Speed Control & Animation
 // ============================================
-const BASE_SPEED_ROW1 = 30; // seconds
-const BASE_SPEED_ROW2 = 25; // seconds
-const BASE_SPEED_ROW3 = 36; // seconds (slightly different for visual variety)
+let currentSpeed = 2;
+const PIXELS_PER_SECOND = 100; // Base scroll speed
+
+function setupMarqueeAnimations() {
+    const rows = [
+        { wrap: '.im-row-1', content: '#im-row-1-content', direction: 'left' },
+        { wrap: '.im-row-2', content: '#im-row-2-content', direction: 'right' },
+        { wrap: '.im-row-3', content: '#im-row-3-content', direction: 'left' }
+    ];
+
+    rows.forEach((row, index) => {
+        const content = document.querySelector(row.content);
+        const track = document.querySelector(`${row.wrap} .im-marquee-track`);
+
+        if (!content || !track) return;
+
+        const contentWidth = content.offsetWidth;
+        const duration = contentWidth / (PIXELS_PER_SECOND * currentSpeed);
+
+        // Create unique keyframes for this row
+        const keyframeName = `im-scroll-${index}`;
+        const translateEnd = row.direction === 'left' ? -contentWidth : 0;
+        const translateStart = row.direction === 'left' ? 0 : -contentWidth;
+
+        // Remove old keyframes if they exist
+        const existingStyle = document.getElementById(`marquee-keyframes-${index}`);
+        if (existingStyle) existingStyle.remove();
+
+        // Create new keyframes
+        const style = document.createElement('style');
+        style.id = `marquee-keyframes-${index}`;
+        style.textContent = `
+            @keyframes ${keyframeName} {
+                0% { transform: translateX(${translateStart}px); }
+                100% { transform: translateX(${translateEnd}px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Apply animation
+        track.style.animation = `${keyframeName} ${duration}s linear infinite`;
+    });
+}
 
 function setMarqueeSpeed(multiplier) {
-    const row1 = document.querySelector('.im-row-1 .im-marquee-track');
-    const row2 = document.querySelector('.im-row-2 .im-marquee-track');
-    const row3 = document.querySelector('.im-row-3 .im-marquee-track');
-
-    if (row1) row1.style.animationDuration = (BASE_SPEED_ROW1 / multiplier) + 's';
-    if (row2) row2.style.animationDuration = (BASE_SPEED_ROW2 / multiplier) + 's';
-    if (row3) row3.style.animationDuration = (BASE_SPEED_ROW3 / multiplier) + 's';
+    currentSpeed = multiplier;
+    setupMarqueeAnimations();
 
     // Update active button
     document.querySelectorAll('.im-speed-btn').forEach(btn => {
@@ -856,6 +891,12 @@ async function initInteractiveMarquee() {
 
         buildMarquee();
         console.log('[Marquee] Built marquee');
+
+        // Small delay to let browser calculate widths
+        requestAnimationFrame(() => {
+            setupMarqueeAnimations();
+            console.log('[Marquee] Animations set up');
+        });
 
         setupEventHandlers();
         console.log('[Marquee] Event handlers set up');
