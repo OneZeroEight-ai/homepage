@@ -459,40 +459,31 @@ function buildMarquee() {
     const playlists = loadedPlaylists;
     const agents = Object.values(AGENTS_DATA);
 
-    // Row 1: All playlist cards
-    const row1Items = playlists.slice(0, 12).map((p, i) => renderPlaylistCard(p, i)).join('');
+    // Row 1: First batch of playlists (scroll left)
+    const row1Playlists = playlists.slice(0, 11);
+    const row1Items = row1Playlists.map((p, i) => renderPlaylistCard(p, i)).join('');
 
-    // Row 2: Mix of agent cards and playlist cards
-    let row2Items = '';
-    const row2Playlists = playlists.slice(12);
-    let agentIndex = 0;
+    // Row 2: All agents (scroll right)
+    const row2Items = agents.map(agent => renderAgentCard(agent)).join('');
 
-    for (let i = 0; i < row2Playlists.length; i++) {
-        // Insert agent every 2 playlists
-        if (i % 2 === 0 && agentIndex < agents.length) {
-            row2Items += renderAgentCard(agents[agentIndex]);
-            agentIndex++;
-        }
-        row2Items += renderPlaylistCard(row2Playlists[i], 12 + i);
-    }
-
-    // Add remaining agents
-    while (agentIndex < agents.length) {
-        row2Items += renderAgentCard(agents[agentIndex]);
-        agentIndex++;
-    }
+    // Row 3: Remaining playlists (scroll left, different speed)
+    const row3Playlists = playlists.slice(11);
+    const row3Items = row3Playlists.map((p, i) => renderPlaylistCard(p, 11 + i)).join('');
 
     // Populate rows (duplicate for seamless loop)
     const row1El = document.getElementById('im-row-1-content');
     const row2El = document.getElementById('im-row-2-content');
+    const row3El = document.getElementById('im-row-3-content');
 
-    if (row1El && row2El) {
+    if (row1El && row2El && row3El) {
         row1El.innerHTML = row1Items + row1Items;
         row2El.innerHTML = row2Items + row2Items;
+        row3El.innerHTML = row3Items + row3Items;
         console.log('[Marquee] Row 1 items:', row1El.children.length);
         console.log('[Marquee] Row 2 items:', row2El.children.length);
+        console.log('[Marquee] Row 3 items:', row3El.children.length);
     } else {
-        console.error('[Marquee] Row elements not found!', { row1El, row2El });
+        console.error('[Marquee] Row elements not found!', { row1El, row2El, row3El });
     }
 }
 
@@ -721,13 +712,16 @@ function stopBackgroundPlayback() {
 // ============================================
 const BASE_SPEED_ROW1 = 30; // seconds
 const BASE_SPEED_ROW2 = 25; // seconds
+const BASE_SPEED_ROW3 = 36; // seconds (slightly different for visual variety)
 
 function setMarqueeSpeed(multiplier) {
     const row1 = document.querySelector('.im-row-1 .im-marquee-inner');
     const row2 = document.querySelector('.im-row-2 .im-marquee-inner');
+    const row3 = document.querySelector('.im-row-3 .im-marquee-inner');
 
     if (row1) row1.style.animationDuration = (BASE_SPEED_ROW1 / multiplier) + 's';
     if (row2) row2.style.animationDuration = (BASE_SPEED_ROW2 / multiplier) + 's';
+    if (row3) row3.style.animationDuration = (BASE_SPEED_ROW3 / multiplier) + 's';
 
     // Update active button
     document.querySelectorAll('.im-speed-btn').forEach(btn => {

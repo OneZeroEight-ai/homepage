@@ -124,6 +124,11 @@
     animation: im-scroll-right 12.5s linear infinite;
 }
 
+/* Row 3: Left scroll (different speed for variety) */
+.im-row-3 .im-marquee-inner {
+    animation: im-scroll-left 18s linear infinite;
+}
+
 @keyframes im-scroll-left {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
@@ -135,6 +140,10 @@
 }
 
 .im-row-2 {
+    margin-top: 20px;
+}
+
+.im-row-3 {
     margin-top: 20px;
 }
 
