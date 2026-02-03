@@ -47,45 +47,6 @@
     letter-spacing: 0.1em;
 }
 
-/* Speed Control */
-.im-speed-control {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 16px;
-}
-
-.im-speed-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--im-text-dim);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.im-speed-btn {
-    background: var(--im-surface2);
-    border: 1px solid var(--im-border);
-    color: var(--im-text-dim);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.im-speed-btn:hover {
-    border-color: var(--im-accent);
-    color: var(--im-text);
-}
-
-.im-speed-btn.active {
-    background: var(--im-accent);
-    border-color: var(--im-accent);
-    color: white;
-}
 
 /* ============================================
    Marquee Container & Track
@@ -110,15 +71,15 @@
 }
 
 .im-scroll-left {
-    animation: marquee-left var(--marquee-duration, 40s) linear infinite;
+    animation: marquee-left 20s linear infinite;
 }
 
 .im-scroll-right {
-    animation: marquee-right var(--marquee-duration, 35s) linear infinite;
+    animation: marquee-right 18s linear infinite;
 }
 
 .im-slow {
-    --marquee-duration: 50s;
+    animation-duration: 25s;
 }
 
 @keyframes marquee-left {

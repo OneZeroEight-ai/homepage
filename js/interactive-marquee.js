@@ -705,34 +705,9 @@ function stopBackgroundPlayback() {
 }
 
 // ============================================
-// Speed Control
-// ============================================
-const BASE_DURATION = 40; // seconds at 1x
-
-function setMarqueeSpeed(multiplier) {
-    const duration = BASE_DURATION / multiplier;
-    document.querySelectorAll('.im-marquee-track').forEach(track => {
-        track.style.setProperty('--marquee-duration', duration + 's');
-    });
-
-    // Update active button
-    document.querySelectorAll('.im-speed-btn').forEach(btn => {
-        btn.classList.toggle('active', parseFloat(btn.dataset.speed) === multiplier);
-    });
-}
-
-// ============================================
 // Event Handlers
 // ============================================
 function setupEventHandlers() {
-    // Speed control buttons
-    document.querySelectorAll('.im-speed-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const speed = parseFloat(btn.dataset.speed);
-            setMarqueeSpeed(speed);
-        });
-    });
-
     // Event delegation for all clicks
     document.addEventListener('click', function(e) {
         // Check for data-action attributes (modal buttons)
@@ -842,9 +817,6 @@ async function initInteractiveMarquee() {
 
         buildMarquee();
         console.log('[Marquee] Built marquee');
-
-        // Set initial speed (2x default)
-        setMarqueeSpeed(2);
 
         setupEventHandlers();
         console.log('[Marquee] Event handlers set up');
