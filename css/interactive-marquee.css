@@ -99,9 +99,12 @@
 .im-marquee-track {
     display: flex;
     width: max-content;
+    will-change: transform;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
-.im-marquee-track:hover .im-marquee-inner {
+.im-marquee-track:hover {
     animation-play-state: paused;
 }
 
@@ -109,23 +112,21 @@
     display: flex;
     gap: 20px;
     padding: 10px 0;
-    will-change: transform;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    flex-shrink: 0;
 }
 
 /* Row 1: Left scroll */
-.im-row-1 .im-marquee-inner {
+.im-row-1 .im-marquee-track {
     animation: im-scroll-left 15s linear infinite;
 }
 
 /* Row 2: Right scroll */
-.im-row-2 .im-marquee-inner {
+.im-row-2 .im-marquee-track {
     animation: im-scroll-right 12.5s linear infinite;
 }
 
 /* Row 3: Left scroll (different speed for variety) */
-.im-row-3 .im-marquee-inner {
+.im-row-3 .im-marquee-track {
     animation: im-scroll-left 18s linear infinite;
 }
 

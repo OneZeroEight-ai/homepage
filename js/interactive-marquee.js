@@ -470,20 +470,26 @@ function buildMarquee() {
     const row3Playlists = playlists.slice(11);
     const row3Items = row3Playlists.map((p, i) => renderPlaylistCard(p, 11 + i)).join('');
 
-    // Populate rows (duplicate for seamless loop)
+    // Populate rows (content + clone for seamless loop)
     const row1El = document.getElementById('im-row-1-content');
+    const row1Clone = document.getElementById('im-row-1-clone');
     const row2El = document.getElementById('im-row-2-content');
+    const row2Clone = document.getElementById('im-row-2-clone');
     const row3El = document.getElementById('im-row-3-content');
+    const row3Clone = document.getElementById('im-row-3-clone');
 
-    if (row1El && row2El && row3El) {
-        row1El.innerHTML = row1Items + row1Items;
-        row2El.innerHTML = row2Items + row2Items;
-        row3El.innerHTML = row3Items + row3Items;
-        console.log('[Marquee] Row 1 items:', row1El.children.length);
-        console.log('[Marquee] Row 2 items:', row2El.children.length);
-        console.log('[Marquee] Row 3 items:', row3El.children.length);
+    if (row1El && row1Clone && row2El && row2Clone && row3El && row3Clone) {
+        row1El.innerHTML = row1Items;
+        row1Clone.innerHTML = row1Items;
+        row2El.innerHTML = row2Items;
+        row2Clone.innerHTML = row2Items;
+        row3El.innerHTML = row3Items;
+        row3Clone.innerHTML = row3Items;
+        console.log('[Marquee] Row 1 items:', row1El.children.length, '+ clone');
+        console.log('[Marquee] Row 2 items:', row2El.children.length, '+ clone');
+        console.log('[Marquee] Row 3 items:', row3El.children.length, '+ clone');
     } else {
-        console.error('[Marquee] Row elements not found!', { row1El, row2El, row3El });
+        console.error('[Marquee] Row elements not found!');
     }
 }
 
@@ -715,9 +721,9 @@ const BASE_SPEED_ROW2 = 25; // seconds
 const BASE_SPEED_ROW3 = 36; // seconds (slightly different for visual variety)
 
 function setMarqueeSpeed(multiplier) {
-    const row1 = document.querySelector('.im-row-1 .im-marquee-inner');
-    const row2 = document.querySelector('.im-row-2 .im-marquee-inner');
-    const row3 = document.querySelector('.im-row-3 .im-marquee-inner');
+    const row1 = document.querySelector('.im-row-1 .im-marquee-track');
+    const row2 = document.querySelector('.im-row-2 .im-marquee-track');
+    const row3 = document.querySelector('.im-row-3 .im-marquee-track');
 
     if (row1) row1.style.animationDuration = (BASE_SPEED_ROW1 / multiplier) + 's';
     if (row2) row2.style.animationDuration = (BASE_SPEED_ROW2 / multiplier) + 's';
