@@ -354,11 +354,11 @@ let bgPlaylistEmoji = null;
 // ============================================
 // API & Data Loading
 // ============================================
-const API_BASE = "https://onezeroeight-backend-production.up.railway.app/api";
+const MARQUEE_API = "https://onezeroeight-backend-production.up.railway.app/api";
 
 async function loadFeaturedPlaylists() {
     try {
-        const res = await fetch(`${API_BASE}/tracks/playlists/featured?limit=32`);
+        const res = await fetch(`${MARQUEE_API}/tracks/playlists/featured?limit=32`);
         if (!res.ok) throw new Error("API error");
         const data = await res.json();
         const playlists = data.playlists || data || [];
