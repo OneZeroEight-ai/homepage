@@ -109,6 +109,9 @@
     display: flex;
     gap: 20px;
     padding: 10px 0;
+    will-change: transform;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
 }
 
 /* Row 1: Left scroll */
