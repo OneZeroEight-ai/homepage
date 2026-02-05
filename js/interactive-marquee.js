@@ -324,23 +324,26 @@ function getAgentForGenre(genre) {
 // ============================================
 // Fallback Playlist Data
 // ============================================
+// OneZeroEight Official Playlists - Real Spotify IDs
 const FALLBACK_PLAYLISTS = [
-    {name:"Midnight Frequencies",curator:"DJ Lumina",followers:"45.2K",genre:"Electronic",spotifyId:"37i9dQZF1DX4dyzvuaRJ0n",desc:"Late-night electronic selections. Deep house, techno, and ambient dancefloor moments.",image:"https://i.scdn.co/image/ab67706f00000003ca5a7517156021292e5663a6"},
-    {name:"Bars & Beats",curator:"MC Scholar",followers:"128K",genre:"Hip-Hop",spotifyId:"37i9dQZF1DX0XUsuxWHRQd",desc:"The sharpest bars and hardest beats. From boom-bap to trap.",image:"https://i.scdn.co/image/ab67706f00000003e8e28219724c2423afa4d320"},
-    {name:"3AM Study Session",curator:"lofi.luna",followers:"312K",genre:"Lo-Fi",spotifyId:"37i9dQZF1DWWQRwui0ExPn",desc:"Cozy beats for studying, relaxing, or drifting off.",image:"https://i.scdn.co/image/ab67706f00000003fcd87a72fc3e1a2b7f1f7ff4"},
-    {name:"Silk & Soul",curator:"VelvetVibes",followers:"89K",genre:"R&B",spotifyId:"37i9dQZF1DX4SBhb3fqCJd",desc:"Smooth R&B and neo-soul. Velvet textures, pure emotion.",image:"https://i.scdn.co/image/ab67706f000000035d87b51dc05c7a2c8e5e32e0"},
-    {name:"Main Character Energy",curator:"PopPulse",followers:"267K",genre:"Pop",spotifyId:"37i9dQZF1DXcBWIGoYBM5M",desc:"The biggest pop anthems and rising hits.",image:"https://i.scdn.co/image/ab67706f00000003bd0e19e810bb4b55ab164a95"},
-    {name:"Concrete & Feedback",curator:"NoiseFloor",followers:"34K",genre:"Rock",spotifyId:"37i9dQZF1DWXRqgorJj26U",desc:"Raw guitars, heavy riffs, and unfiltered energy.",image:"https://i.scdn.co/image/ab67706f000000034d26d431869cabfc53c67d8e"},
-    {name:"Hidden Gems",curator:"CrateDig",followers:"56K",genre:"Indie",spotifyId:"37i9dQZF1DX2sUQwD7tbmL",desc:"Undiscovered indie tracks. Scout-approved.",image:"https://i.scdn.co/image/ab67706f00000003d6d028b3ca6cfa7c2e7a4698"},
-    {name:"Campfire Stories",curator:"FolkRoots",followers:"41K",genre:"Folk",spotifyId:"37i9dQZF1DXaUDcU6KDCGh",desc:"Stories told through strings and voice.",image:"https://i.scdn.co/image/ab67706f0000000326a63b3a720e6a2f0f4e4ac9"},
-    {name:"Deep Space Radio",curator:"AmbientMind",followers:"78K",genre:"Ambient",spotifyId:"37i9dQZF1DWV90ZWj21ygB",desc:"Ambient soundscapes for meditation and focus.",image:"https://i.scdn.co/image/ab67706f00000003b0fe40a6e1692822f5a9d8f1"},
-    {name:"Blue Smoke Lounge",curator:"JazzCat",followers:"52K",genre:"Jazz",spotifyId:"37i9dQZF1DXbITWG1ZJKYt",desc:"Smoky jazz and slow blues. Golden-era soul.",image:"https://i.scdn.co/image/ab67706f000000031c5b9f2d3a9f8b3a7c2d9e8f"},
-    {name:"Fuego Latino",curator:"RitmoBeat",followers:"143K",genre:"Latin",spotifyId:"37i9dQZF1DX10zKzsJ2jva",desc:"Hot Latin beats — reggaeton, salsa, bossa nova.",image:"https://i.scdn.co/image/ab67706f00000003f0a8e1c5b9f2d3a9f8b3a7c2"},
-    {name:"Iron Throne",curator:"MetalHorde",followers:"67K",genre:"Metal",spotifyId:"37i9dQZF1DWTcqUzwhNmKv",desc:"Relentless metal. Forged in fire.",image:"https://i.scdn.co/image/ab67706f000000031d2e3f4a5b6c7d8e9f0a1b2c"},
-    {name:"Dusty Highways",curator:"NashVault",followers:"38K",genre:"Country",spotifyId:"37i9dQZF1DWTkxQvqMy4WW",desc:"Country roads and heartland stories.",image:"https://i.scdn.co/image/ab67706f00000003a2b3c4d5e6f7a8b9c0d1e2f3"},
-    {name:"Passport Sounds",curator:"GlobalEar",followers:"29K",genre:"World",spotifyId:"37i9dQZF1DWUgBy2RLHQ7E",desc:"Music without borders. Sounds from every continent.",image:"https://i.scdn.co/image/ab67706f00000003b3c4d5e6f7a8b9c0d1e2f3a4"},
-    {name:"Golden Hour",curator:"ChillWave",followers:"198K",genre:"Lo-Fi",spotifyId:"37i9dQZF1DWWQRwui0ExPn",desc:"Golden sunset vibes. Lo-fi and downtempo bliss.",image:"https://i.scdn.co/image/ab67706f00000003c4d5e6f7a8b9c0d1e2f3a4b5"},
-    {name:"Voltage",curator:"BassMatrix",followers:"91K",genre:"Electronic",spotifyId:"37i9dQZF1DX4dyzvuaRJ0n",desc:"High-voltage electronic. Bass-heavy and peak-time ready.",image:"https://i.scdn.co/image/ab67706f00000003d5e6f7a8b9c0d1e2f3a4b5c6"}
+    // Row 1 - Primary genres
+    {name:"⚡ Electronic",curator:"OneZeroEight",followers:"3K+",genre:"Electronic",spotifyId:"1QDLk6PVWoNZgqOU4eVowV",desc:"Electronic bangers curated by Pulse. EDM, house, techno, and everything that moves.",image:null},
+    {name:"🎤 Hip Hop",curator:"OneZeroEight",followers:"3K+",genre:"Hip-Hop",spotifyId:"7awVYiLk5EA3b6XgraQpem",desc:"The sharpest bars and hardest beats. Flow's selections from boom-bap to trap.",image:null},
+    {name:"☕ Lo-Fi & Chill",curator:"OneZeroEight",followers:"3K+",genre:"Lo-Fi",spotifyId:"4UxQQTkDM1lMPzcR2ofpNB",desc:"Cozy beats for studying, relaxing, or drifting off. Haze-approved vibes.",image:null},
+    {name:"💜 R&B & Soul",curator:"OneZeroEight",followers:"3K+",genre:"R&B",spotifyId:"28CI6nHmaBDMZ1grSYoL4y",desc:"Smooth R&B and neo-soul. Velvet textures, pure emotion.",image:null},
+    {name:"✨ Pop",curator:"OneZeroEight",followers:"3K+",genre:"Pop",spotifyId:"1WLd37m8nWFIq7y6yZetto",desc:"The biggest pop anthems and rising hits. Spark's picks.",image:null},
+    {name:"🎸 Rock & Alternative",curator:"OneZeroEight",followers:"3K+",genre:"Rock",spotifyId:"60Hp0raJkuDyjvr2M6iwnk",desc:"Raw guitars, heavy riffs, and unfiltered energy. Edge's domain.",image:null},
+    {name:"🍂 Indie & Folk",curator:"OneZeroEight",followers:"3K+",genre:"Indie",spotifyId:"6IVrZl1UiMba2V1A01zntL",desc:"Undiscovered indie and folk tracks. Scout and Sage approved.",image:null},
+    {name:"🌙 Ambient",curator:"OneZeroEight",followers:"3K+",genre:"Ambient",spotifyId:"5DqBzx9ou98BcehqkF2dXs",desc:"Ambient soundscapes for meditation and focus. Drift's selections.",image:null},
+    {name:"🎷 Jazz & Blues",curator:"OneZeroEight",followers:"3K+",genre:"Jazz",spotifyId:"3NzKhKUj8sUaDm3p85gMMv",desc:"Smoky jazz and slow blues. Miles' golden-era soul picks.",image:null},
+    {name:"🎻 Classical & Cinematic",curator:"OneZeroEight",followers:"3K+",genre:"Classical",spotifyId:"2vvYwga5AY35LXCpUf1mEm",desc:"Timeless classical and cinematic scores. Aria's refined selections.",image:null},
+    {name:"🔥 Latin",curator:"OneZeroEight",followers:"3K+",genre:"Latin",spotifyId:"2FouNlNr5Z86JkGqH1Z9lq",desc:"Hot Latin beats — reggaeton, salsa, bossa nova. Ritmo's fire.",image:null},
+    // Row 2 - Secondary genres
+    {name:"🌍 World & Global",curator:"OneZeroEight",followers:"3K+",genre:"World",spotifyId:"0P4mQy5bjTz5QUXnh9XAxC",desc:"Music without borders. Atlas brings sounds from every continent.",image:null},
+    {name:"🤠 Country",curator:"OneZeroEight",followers:"3K+",genre:"Country",spotifyId:"5H31gmiH3MD9nflKmQtkS1",desc:"Country roads and heartland stories. Dusty's highways.",image:null},
+    {name:"🙏 Gospel & Christian",curator:"OneZeroEight",followers:"3K+",genre:"Gospel",spotifyId:"0qs0ALpOZEQyPZl54ZketH",desc:"Uplifting gospel and Christian music. Faith-forward selections.",image:null},
+    {name:"🎵 Discoveries",curator:"OneZeroEight",followers:"3K+",genre:"Other",spotifyId:"2DjGILNUx6ZKj6UFANaWrH",desc:"Genre-defying discoveries. Harmony's eclectic picks from across the spectrum.",image:null},
+    {name:"⚡ Electronic Vol. 2",curator:"OneZeroEight",followers:"3K+",genre:"Electronic",spotifyId:"1QDLk6PVWoNZgqOU4eVowV",desc:"More electronic heat from Pulse. Bass-heavy and peak-time ready.",image:null}
 ];
 
 // ============================================
@@ -517,31 +520,18 @@ function openPlaylistModal(playlistName) {
 
                 <div class="im-modal-section">
                     <div class="im-modal-section-title">Listen Now</div>
-                    ${playlist.spotifyId ? `
                     <div class="im-spotify-embed">
                         <iframe src="https://open.spotify.com/embed/playlist/${playlist.spotifyId}?utm_source=generator&theme=0"
                                 height="352" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                                 loading="lazy"></iframe>
                     </div>
-                    ` : `
-                    <a href="https://open.spotify.com/search/${encodeURIComponent(playlist.name)}"
-                       target="_blank" rel="noopener"
-                       style="display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:#1DB954;color:#fff;border-radius:24px;text-decoration:none;font-weight:600;font-size:14px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-                        </svg>
-                        Find on Spotify
-                    </a>
-                    `}
                 </div>
 
-                ${playlist.spotifyId ? `
                 <div class="im-modal-section">
                     <button class="im-play-bg-btn" data-action="play-bg" data-spotify-id="${playlist.spotifyId}" data-playlist-index="${playlistIndex}" data-emoji="${agent.emoji}" style="background:${agent.primary}">
                         <span>▶</span> Play in Background
                     </button>
                 </div>
-                ` : ''}
 
                 <div class="im-modal-section">
                     <div class="im-modal-section-title">Assigned Agent</div>
