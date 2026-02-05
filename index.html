@@ -99,6 +99,30 @@
             list-style: none;
         }
 
+        .ecosystem-links {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-left: 1.5rem;
+            padding-left: 1.5rem;
+            border-left: 1px solid var(--dark-border);
+        }
+
+        .ecosystem-links a {
+            color: var(--gray-600);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .ecosystem-links a:hover {
+            color: var(--primary);
+        }
+
+        .ecosystem-links .divider {
+            color: var(--dark-border);
+        }
+
         .nav-links a {
             color: var(--gray-400);
             text-decoration: none;
@@ -797,7 +821,7 @@
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
             gap: 48px;
             margin-bottom: 48px;
         }
@@ -1360,6 +1384,11 @@
             <li><a href="#pricing">Pricing</a></li>
             <li><a href="/curators/">For Curators</a></li>
             <li><a href="/artists/dashboard.html" class="nav-cta">Artist Login</a></li>
+            <li class="ecosystem-links">
+                <a href="https://sutra.team" target="_blank">sutra.team</a>
+                <span class="divider">|</span>
+                <a href="https://sutra.exchange" target="_blank">sutra.exchange</a>
+            </li>
         </ul>
         <button class="mobile-menu-btn">☰</button>
     </div>
@@ -1470,17 +1499,17 @@
 
     <!-- Row 1: Scrolls Left (Playlists) -->
     <div class="im-marquee-wrap">
-        <div class="im-marquee-track im-scroll-left" id="im-row-1"></div>
+        <div class="im-marquee-track" id="im-row-1"></div>
     </div>
 
     <!-- Row 2: Scrolls Right (Agents) -->
     <div class="im-marquee-wrap">
-        <div class="im-marquee-track im-scroll-right" id="im-row-2"></div>
+        <div class="im-marquee-track" id="im-row-2"></div>
     </div>
 
     <!-- Row 3: Scrolls Left (More Playlists) -->
     <div class="im-marquee-wrap">
-        <div class="im-marquee-track im-scroll-left im-slow" id="im-row-3"></div>
+        <div class="im-marquee-track" id="im-row-3"></div>
     </div>
 </section>
 
@@ -1614,6 +1643,11 @@
                 <a href="https://x.com/OneZeroEight_ai" target="_blank">Twitter</a>
                 <a href="https://t.me/OneZeroEight_ai" target="_blank">Telegram</a>
                 <a href="mailto:support@onezeroeight.ai">Support</a>
+            </div>
+            <div class="footer-section">
+                <h4>Ecosystem</h4>
+                <a href="https://sutra.team" target="_blank">sutra.team <span style="color: var(--gray-600); font-size: 0.8em;">- AI Consulting</span></a>
+                <a href="https://sutra.exchange" target="_blank">sutra.exchange <span style="color: var(--gray-600); font-size: 0.8em;">- Token Ecosystem</span></a>
             </div>
         </div>
         <div class="footer-bottom">
