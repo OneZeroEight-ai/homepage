@@ -1,1935 +1,259 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>OneZeroEight.ai - Get Your Music Heard</title>
-    <meta name="description" content="Paste your Spotify track and see matching playlists instantly. AI-powered playlist placement. Free to start.">
-    <meta property="og:title" content="OneZeroEight.ai - Get Your Music Heard">
-    <meta property="og:description" content="Paste your Spotify track and see matching playlists instantly. Free to start.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://onezeroeight.ai">
-    <link rel="canonical" href="https://onezeroeight.ai">
-    <link rel="icon" type="image/png" href="/favicon.png">
-    <link rel="apple-touch-icon" href="/OZENlogo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/interactive-marquee.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* iPhone Safe Area Fix */
-        html {
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
-
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #10b981;
-            --spotify-green: #1DB954;
-            --dark: #0f0f1a;
-            --dark-card: #1e1e2e;
-            --dark-border: #2d2d44;
-            --gray-600: #888;
-            --gray-400: #a0a0b0;
-            --white: #ffffff;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: var(--white);
-            background: var(--dark);
-            -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            width: 100%;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        /* Navigation */
-        nav {
-            background: rgba(15, 15, 26, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--dark-border);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 64px;
-        }
-
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: var(--white);
-            text-decoration: none;
-        }
-
-        .logo .one { color: var(--primary); }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            list-style: none;
-        }
-
-        .ecosystem-links {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-left: 1.5rem;
-            padding-left: 1.5rem;
-            border-left: 1px solid var(--dark-border);
-        }
-
-        .ecosystem-links a {
-            color: var(--gray-600);
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: color 0.2s;
-        }
-
-        .ecosystem-links a:hover {
-            color: var(--primary);
-        }
-
-        .ecosystem-links .divider {
-            color: var(--dark-border);
-        }
-
-        .nav-links a {
-            color: var(--gray-400);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover { color: var(--white); }
-
-        .nav-cta {
-            background: var(--primary);
-            color: var(--white) !important;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-weight: 600 !important;
-        }
-
-        .nav-cta:hover {
-            background: var(--primary-dark);
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding-top: max(100px, env(safe-area-inset-top) + 80px);
-            padding-bottom: 60px;
-            padding-left: max(20px, env(safe-area-inset-left));
-            padding-right: max(20px, env(safe-area-inset-right));
-            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
-            width: 100%;
-            max-width: 100vw;
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        .hero .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 16px;
-            text-align: center;
-            box-sizing: border-box;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--secondary);
-            color: var(--secondary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 500;
-            margin-bottom: 24px;
-        }
-
-        .hero-badge .dot {
-            width: 8px;
-            height: 8px;
-            background: var(--secondary);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .hero h1 {
-            font-size: 3.5em;
-            font-weight: 800;
-            margin: 0 0 16px;
-            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25em;
-            color: var(--gray-400);
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Track Analyzer */
-        .track-analyzer {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto 40px;
-            padding: 0 16px;
-            box-sizing: border-box;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 12px;
-            background: var(--dark-card);
-            padding: 8px;
-            border-radius: 16px;
-            border: 2px solid var(--dark-border);
-            transition: border-color 0.2s;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .input-group:focus-within {
-            border-color: var(--spotify-green);
-        }
-
-        .spotify-input {
-            flex: 1;
-            padding: 16px 20px;
-            border: none;
-            background: transparent;
-            color: var(--white);
-            font-size: 1em;
-            font-family: inherit;
-        }
-
-        .spotify-input::placeholder {
-            color: #666;
-        }
-
-        .spotify-input:focus {
-            outline: none;
-        }
-
-        .btn-analyze {
-            padding: 16px 32px;
-            background: linear-gradient(135deg, #1DB954, #1ed760);
-            color: #000;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1em;
-            cursor: pointer;
-            white-space: nowrap;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
-        .btn-analyze:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(29, 185, 84, 0.4);
-        }
-
-        .btn-analyze:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .input-hint {
-            color: #666;
-            font-size: 0.85em;
-            margin-top: 12px;
-        }
-
-        /* Hero Stats */
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            margin-top: 48px;
-            padding-top: 32px;
-            border-top: 1px solid var(--dark-border);
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-number {
-            display: block;
-            font-size: 2em;
-            font-weight: 700;
-            color: var(--white);
-        }
-
-        .stat-label {
-            color: var(--gray-600);
-            font-size: 0.9em;
-        }
-
-        /* Analysis Results */
-        .analysis-results {
-            margin-top: 48px;
-            padding: 40px;
-            background: var(--dark-card);
-            border-radius: 20px;
-            border: 1px solid var(--dark-border);
-            text-align: left;
-        }
-
-        .track-preview-card {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            margin-bottom: 32px;
-        }
-
-        .track-artwork {
-            width: 100px;
-            height: 100px;
-            border-radius: 8px;
-            object-fit: cover;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .track-info {
-            flex: 1;
-        }
-
-        .track-info h3 {
-            font-size: 1.25em;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .track-artist {
-            color: var(--gray-400);
-            margin-bottom: 12px;
-        }
-
-        .genre-prediction-section {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 12px;
-            padding: 16px;
-            margin: 16px 0;
-            text-align: left;
-            max-width: 100%;
-            box-sizing: border-box;
-            overflow-wrap: break-word;
-            word-wrap: break-word;
-        }
-
-        .genre-prediction-section h4 {
-            margin: 0 0 10px 0;
-            color: #10b981;
-            font-size: 0.9em;
-        }
-
-        .genre-prediction-summary {
-            font-size: 1em;
-            font-weight: 600;
-            color: #fff;
-            margin: 0 0 10px 0;
-            line-height: 1.4;
-        }
-
-        .genre-prediction-summary strong {
-            color: #10b981;
-        }
-
-        .genre-prediction-reasoning {
-            color: #a0a0b0;
-            font-size: 0.85em;
-            line-height: 1.5;
-            margin: 0;
-        }
-
-        /* Playlist Preview */
-        .playlist-preview {
-            margin-top: 32px;
-        }
-
-        .playlist-preview h3 {
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .playlist-preview h3 span {
-            color: var(--secondary);
-        }
-
-        .playlist-preview-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin: 16px 0;
-            position: relative;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-
-        .playlist-preview-card {
-            background: var(--dark-border);
-            border-radius: 6px;
-            padding: 6px;
-            text-align: center;
-            transition: transform 0.2s;
-            overflow: hidden;
-        }
-
-        .playlist-preview-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .playlist-img-wrapper {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%; /* 1:1 aspect ratio */
-            background: #2d2d44;
-            border-radius: 4px;
-            margin-bottom: 4px;
-            overflow: hidden;
-        }
-
-        .playlist-img-wrapper img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .playlist-img-fallback {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: #666;
-            z-index: 1;
-        }
-
-        .playlist-img-wrapper img[style*="opacity: 1"],
-        .playlist-img-wrapper img[style*="opacity:1"] {
-            z-index: 2;
-        }
-
-        .playlist-img-wrapper.show-fallback .playlist-img-fallback {
-            display: flex;
-        }
-
-        .playlist-name {
-            font-weight: 600;
-            font-size: 0.65em;
-            margin-bottom: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.2;
-        }
-
-        .playlist-followers {
-            color: var(--gray-600);
-            font-size: 0.55em;
-        }
-
-        .playlist-preview-card.blurred {
-            filter: blur(4px);
-            opacity: 0.5;
-        }
-
-        .more-playlists-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(transparent, var(--dark-card) 80%);
-            padding: 60px 20px 20px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            color: var(--gray-400);
-        }
-
-        .more-playlists-overlay span:first-child {
-            font-size: 1.25em;
-            font-weight: 600;
-            color: var(--white);
-        }
-
-        /* Signup Prompt */
-        .signup-prompt {
-            text-align: center;
-            margin-top: 32px;
-            padding-top: 32px;
-            border-top: 1px solid var(--dark-border);
-        }
-
-        .signup-prompt > p {
-            color: var(--gray-400);
-            margin-bottom: 20px;
-        }
-
-        .quick-signup-form {
-            display: flex;
-            gap: 12px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .quick-signup-form input {
-            flex: 1;
-            padding: 14px 18px;
-            border: 2px solid var(--dark-border);
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--white);
-            font-size: 1em;
-            font-family: inherit;
-        }
-
-        .quick-signup-form input::placeholder {
-            color: #666;
-        }
-
-        .quick-signup-form input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .btn-signup {
-            padding: 14px 28px;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1em;
-            cursor: pointer;
-            white-space: nowrap;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-
-        .btn-signup:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-signup:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
-
-        .form-note {
-            color: var(--gray-600);
-            font-size: 0.85em;
-            margin-top: 12px;
-        }
-
-        .form-message {
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-bottom: 16px;
-            font-weight: 500;
-        }
-
-        .form-message.success {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--secondary);
-            border: 1px solid var(--secondary);
-        }
-
-        .form-message.error {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border: 1px solid #ef4444;
-        }
-
-        /* How It Works Section */
-        .section {
-            padding: 80px 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .section-header h2 {
-            font-size: 2.25em;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .section-header p {
-            color: var(--gray-400);
-            font-size: 1.1em;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-        }
-
-        .step {
-            text-align: center;
-            padding: 24px;
-            background: var(--dark-card);
-            border-radius: 16px;
-            border: 1px solid var(--dark-border);
-        }
-
-        .step-number {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            color: var(--white);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.25rem;
-            margin: 0 auto 16px;
-        }
-
-        .step h3 {
-            font-size: 1.1em;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .step p {
-            font-size: 0.9em;
-            color: var(--gray-400);
-            line-height: 1.5;
-        }
-
-        /* Pricing Section */
-        .section-gray {
-            background: var(--dark-card);
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .pricing-card {
-            background: var(--dark);
-            border: 2px solid var(--dark-border);
-            border-radius: 20px;
-            padding: 32px;
-            position: relative;
-            transition: all 0.3s;
-        }
-
-        .pricing-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-
-        .pricing-card.featured {
-            border-color: var(--primary);
-            box-shadow: 0 0 40px rgba(99, 102, 241, 0.2);
-        }
-
-        .pricing-badge {
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary);
-            color: var(--white);
-            padding: 6px 16px;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .pricing-card h3 {
-            font-size: 1.25em;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .pricing-card .price {
-            font-size: 2.5em;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .pricing-card .price span {
-            font-size: 0.4em;
-            font-weight: 500;
-            color: var(--gray-600);
-        }
-
-        .pricing-card .price .original {
-            text-decoration: line-through;
-            opacity: 0.5;
-            font-size: 0.5em;
-            margin-right: 8px;
-        }
-
-        .intro-label {
-            color: var(--secondary);
-            font-size: 0.75em;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .pricing-card .description {
-            color: var(--gray-400);
-            margin-bottom: 24px;
-            font-size: 0.9em;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 24px;
-        }
-
-        .pricing-features li {
-            padding: 8px 0;
-            font-size: 0.9em;
-            color: var(--gray-400);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .pricing-features li::before {
-            content: '✓';
-            color: var(--secondary);
-            font-weight: 700;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 14px 28px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
-            width: 100%;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), #8b5cf6);
-            color: var(--white);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid var(--dark-border);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--gray-600);
-        }
-
-        /* Footer */
-        footer {
-            background: #080810;
-            padding: 60px 0 30px;
-            border-top: 1px solid var(--dark-border);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-            gap: 48px;
-            margin-bottom: 48px;
-        }
-
-        .footer-brand .logo {
-            display: inline-block;
-            margin-bottom: 16px;
-        }
-
-        .footer-brand p {
-            color: var(--gray-600);
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-
-        .footer-section h4 {
-            font-size: 0.85em;
-            font-weight: 600;
-            color: var(--gray-400);
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .footer-section a {
-            display: block;
-            color: var(--gray-600);
-            text-decoration: none;
-            padding: 6px 0;
-            font-size: 0.9em;
-            transition: color 0.2s;
-        }
-
-        .footer-section a:hover {
-            color: var(--white);
-        }
-
-        .footer-bottom {
-            padding-top: 24px;
-            border-top: 1px solid var(--dark-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85em;
-            color: var(--gray-600);
-        }
-
-        .footer-bottom a {
-            color: var(--gray-600);
-            text-decoration: none;
-        }
-
-        .footer-bottom a:hover {
-            color: var(--white);
-        }
-
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--white);
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .steps-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .pricing-grid {
-                grid-template-columns: 1fr;
-                max-width: 400px;
-            }
-
-            .footer-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero {
-                padding: 100px 20px 40px;
-            }
-
-            .hero h1 {
-                font-size: 2.25em;
-            }
-
-            .hero-subtitle {
-                font-size: 1.1em;
-            }
-
-            .input-group {
-                flex-direction: column;
-            }
-
-            .btn-analyze {
-                width: 100%;
-            }
-
-            .hero-stats {
-                gap: 30px;
-            }
-
-            .stat-number {
-                font-size: 1.5em;
-            }
-
-            .track-preview-card {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .track-artwork {
-                width: 120px;
-                height: 120px;
-            }
-
-            .playlist-preview-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 480px) {
-            /* Extra top padding for iPhone notch */
-            .hero {
-                padding-top: max(80px, env(safe-area-inset-top) + 50px);
-                padding-left: max(12px, env(safe-area-inset-left));
-                padding-right: max(12px, env(safe-area-inset-right));
-            }
-
-            .hero .container {
-                padding: 0 12px;
-                width: 100%;
-            }
-
-            .hero h1 {
-                font-size: 1.6em;
-                line-height: 1.3;
-                padding: 0 8px;
-            }
-
-            .hero-subtitle {
-                font-size: 0.95em;
-                padding: 0 8px;
-            }
-
-            .playlist-preview-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 6px;
-                width: 100%;
-                padding: 0 4px;
-            }
-
-            .playlist-preview-card {
-                padding: 4px;
-                border-radius: 4px;
-                width: 100%;
-                overflow: hidden;
-            }
-
-            .playlist-preview-card img {
-                width: 100%;
-                height: auto;
-                min-height: 60px;
-                background-color: #2d2d44;
-            }
-
-            .playlist-name {
-                font-size: 0.6em;
-            }
-
-            .playlist-followers {
-                font-size: 0.5em;
-            }
-
-            .quick-signup-form {
-                flex-direction: column;
-            }
-
-            .steps-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 12px;
-                text-align: center;
-            }
-
-            .genre-prediction-section {
-                padding: 12px;
-                margin: 12px 0;
-                border-radius: 8px;
-            }
-
-            .genre-prediction-section h4 {
-                font-size: 0.85em;
-            }
-
-            .genre-prediction-summary {
-                font-size: 0.9em;
-            }
-
-            .genre-prediction-reasoning {
-                font-size: 0.75em;
-                line-height: 1.4;
-            }
-
-            .track-analyzer {
-                margin: 0 0 24px;
-                padding: 0 12px;
-            }
-
-            .input-group {
-                flex-direction: column;
-                padding: 8px;
-                gap: 8px;
-            }
-
-            .spotify-input {
-                padding: 12px;
-                font-size: 0.9em;
-                width: 100%;
-                text-align: center;
-            }
-
-            .btn-analyze {
-                padding: 12px 20px;
-                font-size: 0.9em;
-                width: 100%;
-            }
-
-            .analysis-results {
-                margin-top: 24px;
-                padding: 16px;
-            }
-
-            .track-preview-card {
-                padding: 12px;
-                border-radius: 8px;
-            }
-
-            /* Fix stats bar on mobile */
-            .social-proof-bar {
-                width: calc(100% - 24px);
-                padding: 16px 12px;
-                gap: 12px;
-            }
-
-            /* Smaller marquee images on mobile */
-            .marquee-playlist {
-                width: 52px;
-                height: 52px;
-            }
-
-            .marquee-content {
-                gap: 6px;
-            }
-
-            .marquee-label {
-                font-size: 0.75em;
-                padding: 0 12px;
-            }
-        }
-
-        /* Small Mobile (iPhone SE, etc) */
-        @media (max-width: 375px) {
-            .hero {
-                padding-top: max(70px, env(safe-area-inset-top) + 40px);
-            }
-
-            .hero h1 {
-                font-size: 1.4em;
-            }
-
-            .playlist-preview-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 4px;
-            }
-
-            .playlist-preview-card {
-                padding: 3px;
-            }
-
-            .playlist-name {
-                font-size: 0.55em;
-            }
-
-            .playlist-followers {
-                display: none;
-            }
-
-            .proof-number {
-                font-size: 1em;
-            }
-
-            .proof-label {
-                font-size: 0.55em;
-            }
-
-            .marquee-playlist {
-                width: 48px;
-                height: 48px;
-            }
-        }
-
-        /* Prevent horizontal scroll on mobile */
-        html, body {
-            overflow-x: hidden;
-            max-width: 100vw;
-            margin: 0;
-            padding: 0;
-        }
-
-        /* Make sure nothing extends past viewport */
-        section, div, .container {
-            max-width: 100vw;
-        }
-
-        /* Playlist Marquee */
-        .playlist-marquee-container {
-            width: 100%;
-            max-width: 100vw;
-            margin: 40px 0;
-            overflow: hidden;
-            box-sizing: border-box;
-        }
-
-        .marquee-label {
-            text-align: center;
-            color: #888;
-            font-size: 0.85em;
-            margin-bottom: 16px;
-        }
-
-        .playlist-marquee {
-            overflow: hidden;
-            position: relative;
-            width: 100%;
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-        }
-
-        .marquee-track {
-            display: flex;
-            width: max-content;
-            animation: marquee 45s linear infinite;
-        }
-
-        .playlist-marquee.reverse .marquee-track {
-            animation: marquee-reverse 50s linear infinite;
-        }
-
-        .marquee-content {
-            display: flex;
-            gap: 12px;
-            padding: 8px 6px;
-        }
-
-        /* Base marquee item */
-        .marquee-item {
-            width: 72px;
-            height: 72px;
-            border-radius: 8px;
-            overflow: hidden;
-            flex-shrink: 0;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .marquee-item:hover {
-            transform: scale(1.15);
-            z-index: 10;
-        }
-
-        .marquee-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Playlist items - square with green glow */
-        .marquee-item.playlist {
-            border-radius: 8px;
-        }
-
-        .marquee-item.playlist:hover {
-            box-shadow: 0 4px 20px rgba(30, 215, 96, 0.4);
-        }
-
-        /* Agent items - circular with purple border */
-        .marquee-item.agent {
-            border-radius: 50%;
-            border: 2px solid rgba(99, 102, 241, 0.6);
-        }
-
-        .marquee-item.agent:hover {
-            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5);
-            border-color: #6366f1;
-        }
-
-        /* AI badge on agent avatars */
-        .agent-badge {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: white;
-            font-size: 8px;
-            font-weight: 700;
-            padding: 2px 5px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* Legacy support */
-        .marquee-playlist {
-            width: 72px;
-            height: 72px;
-            border-radius: 8px;
-            overflow: hidden;
-            flex-shrink: 0;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .marquee-playlist:hover {
-            transform: scale(1.15);
-            z-index: 10;
-            box-shadow: 0 4px 20px rgba(30, 215, 96, 0.4);
-        }
-
-        .marquee-playlist img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        @keyframes marquee-reverse {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0); }
-        }
-
-        .playlist-marquee:hover .marquee-track {
-            animation-play-state: paused;
-        }
-
-        /* Social Proof Bar */
-        .social-proof-bar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 32px;
-            padding: 20px 32px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            margin: 32px auto;
-            width: calc(100% - 32px);
-            max-width: 600px;
-            box-sizing: border-box;
-        }
-
-        .proof-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .proof-number {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: #fff;
-            background: linear-gradient(135deg, #fff, #a5b4fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .proof-label {
-            font-size: 0.7em;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-
-        .proof-divider {
-            width: 1px;
-            height: 32px;
-            background: linear-gradient(to bottom, transparent, #333, transparent);
-        }
-
-        @media (max-width: 500px) {
-            .social-proof-bar {
-                gap: 16px;
-                padding: 16px;
-            }
-            .proof-divider {
-                display: none;
-            }
-            .proof-number {
-                font-size: 1.2em;
-            }
-            .proof-label {
-                font-size: 0.6em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .marquee-item,
-            .marquee-playlist {
-                width: 56px;
-                height: 56px;
-            }
-            .marquee-item.agent {
-                border-width: 1.5px;
-            }
-            .agent-badge {
-                font-size: 6px;
-                padding: 1px 3px;
-            }
-            .marquee-content {
-                gap: 8px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OneZeroEight | Governed AI Agents in Production</title>
+<meta name="description" content="OneZeroEight builds and operates autonomous AI agents with security, cost controls, and accountability built in.">
+<meta property="og:title" content="OneZeroEight">
+<meta property="og:description" content="Governed AI agents in production.">
+<meta property="og:url" content="https://onezeroeight.ai">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@OneZeroEight_ai">
+<link rel="icon" type="image/x-icon" href="images/agents/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: #0a0a0a;
+  color: #e8e8ed;
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 32px; }
+
+/* ── NAV ── */
+nav {
+  padding: 24px 32px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.nav-wordmark {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+.nav-wordmark span { color: #7C3AED; }
+
+/* ── HERO ── */
+.hero {
+  padding: 140px 0 100px;
+  border-bottom: 1px solid #1a1a1a;
+}
+.hero h1 {
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+.hero h1 span { color: #7C3AED; }
+.hero .tagline {
+  font-size: 20px;
+  font-weight: 300;
+  color: #888;
+  max-width: 540px;
+  margin-bottom: 40px;
+}
+.hero-cta { display: flex; gap: 12px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #7C3AED;
+  color: #fff;
+}
+.btn-primary:hover { background: #6D28D9; }
+.btn-outline {
+  background: transparent;
+  color: #888;
+  border: 1px solid #262626;
+}
+.btn-outline:hover { color: #e8e8ed; border-color: #444; }
+
+/* ── PRODUCTS ── */
+.products { padding: 80px 0; border-bottom: 1px solid #1a1a1a; }
+.products-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 40px;
+}
+.products-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.product-card {
+  background: #111;
+  border: 1px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 32px;
+  transition: border-color 0.2s;
+}
+.product-card:hover { border-color: #333; }
+.product-card h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.product-card .subtitle {
+  font-size: 15px;
+  color: #7C3AED;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.product-card p {
+  font-size: 14px;
+  color: #777;
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+.product-card .status {
+  font-size: 13px;
+  color: #059669;
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.product-card a {
+  font-size: 14px;
+  color: #7C3AED;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.product-card a:hover { color: #a78bfa; }
+
+/* ── THESIS ── */
+.thesis { padding: 80px 0; border-bottom: 1px solid #1a1a1a; }
+.thesis p {
+  font-size: 18px;
+  font-weight: 300;
+  color: #888;
+  max-width: 640px;
+  line-height: 1.7;
+}
+
+/* ── CONTACT ── */
+.contact { padding: 80px 0; }
+.contact-label {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 24px;
+}
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.contact-links a {
+  font-size: 14px;
+  color: #777;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.contact-links a:hover { color: #e8e8ed; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 32px 0;
+  border-top: 1px solid #1a1a1a;
+}
+footer p {
+  font-size: 12px;
+  color: #333;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .products-grid { grid-template-columns: 1fr; }
+  .hero-cta { flex-direction: column; }
+  .hero { padding: 100px 0 60px; }
+  .contact-links { flex-direction: column; gap: 12px; }
+}
+</style>
 </head>
 <body>
 
-<!-- Navigation -->
 <nav>
-    <div class="nav-container">
-        <a href="/" class="logo"><span class="one">One</span>ZeroEight</a>
-        <ul class="nav-links">
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#pricing">Pricing</a></li>
-            <li><a href="/curators/">For Curators</a></li>
-            <li><a href="/artists/dashboard.html" class="nav-cta">Artist Login</a></li>
-            <li class="ecosystem-links">
-                <a href="https://sutra.team" target="_blank">sutra.team</a>
-                <span class="divider">|</span>
-                <a href="https://sutra.exchange" target="_blank">sutra.exchange</a>
-            </li>
-        </ul>
-        <button class="mobile-menu-btn">☰</button>
-    </div>
+  <div class="nav-wordmark"><span>One</span>ZeroEight</div>
 </nav>
 
-<!-- Hero Section -->
-<section class="hero">
-    <div class="container">
-        <div class="hero-badge">
-            <span class="dot"></span>
-            Intelligent Agents Now Active
-        </div>
+<div class="container">
 
-        <h1>Get Your Music Heard</h1>
-        <p class="hero-subtitle">
-            Paste your Spotify track and see matching playlists instantly. Free to start.
-        </p>
-
-        <!-- Track Analyzer -->
-        <div class="track-analyzer">
-            <div class="input-group">
-                <input type="url"
-                       id="spotify-url"
-                       class="spotify-input"
-                       placeholder="Paste your Spotify track URL...">
-                <button onclick="analyzeTrack()" id="analyze-btn" class="btn-analyze">
-                    Analyze Track →
-                </button>
-            </div>
-            <p class="input-hint">Example: https://open.spotify.com/track/...</p>
-        </div>
-
-        <!-- Analysis Results (hidden until analysis) -->
-        <div id="analysis-results" class="analysis-results" style="display: none;">
-            <!-- Track Preview -->
-            <div class="track-preview-card">
-                <img id="track-artwork" class="track-artwork" src="" alt="">
-                <div class="track-info">
-                    <h3 id="track-title">Track Title</h3>
-                    <div class="track-artist" id="track-artist">Artist Name</div>
-                </div>
-            </div>
-
-            <!-- Genre Prediction Section -->
-            <div class="genre-prediction-section" id="genre-prediction-section" style="display: none;">
-                <h4>Genre Prediction</h4>
-                <p class="genre-prediction-summary" id="genre-summary"></p>
-                <p class="genre-prediction-reasoning" id="genre-reasoning"></p>
-            </div>
-
-            <!-- Playlist Preview -->
-            <div class="playlist-preview">
-                <h3><span id="match-count">0</span> Playlists Match Your Sound</h3>
-
-                <div class="playlist-preview-grid" id="playlist-preview-grid">
-                    <!-- Populated by JS -->
-                </div>
-
-                <!-- Signup Prompt -->
-                <div class="signup-prompt">
-                    <p>Sign up free to see all matching playlists and start your campaign</p>
-
-                    <div id="signup-message" class="form-message" style="display: none;"></div>
-
-                    <form id="quick-signup" class="quick-signup-form" onsubmit="handleQuickSignup(event)">
-                        <input type="text" id="artist-name" placeholder="Your name" required>
-                        <input type="email" id="artist-email" placeholder="Email" required>
-                        <button type="submit" class="btn-signup" id="signup-btn">Start Free Trial →</button>
-                    </form>
-
-                    <p class="form-note">No credit card required</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Social Proof Stats -->
-        <div class="social-proof-bar">
-            <div class="proof-stat">
-                <span class="proof-number">3,000+</span>
-                <span class="proof-label">Playlists</span>
-            </div>
-            <div class="proof-divider"></div>
-            <div class="proof-stat">
-                <span class="proof-number">48.9M</span>
-                <span class="proof-label">Followers</span>
-            </div>
-            <div class="proof-divider"></div>
-            <div class="proof-stat">
-                <span class="proof-number">2,500+</span>
-                <span class="proof-label">Curators</span>
-            </div>
-            <div class="proof-divider"></div>
-            <div class="proof-stat">
-                <span class="proof-number">AI</span>
-                <span class="proof-label">Matching</span>
-            </div>
-        </div>
-
+  <section class="hero">
+    <h1>Governed AI agents<br>in <span>production</span>.</h1>
+    <p class="tagline">We build and operate autonomous AI agents with security, cost controls, and accountability built in.</p>
+    <div class="hero-cta">
+      <a href="https://sammasuit.com" class="btn btn-primary">Samm&#x101; Suit &rarr;</a>
+      <a href="https://github.com/OneZeroEight-ai" class="btn btn-outline">GitHub &rarr;</a>
     </div>
-</section>
+  </section>
 
-<!-- Interactive Marquee: Playlists & Agents -->
-<section class="im-section" id="im-section">
-    <div class="im-section-header">
-        <h2 class="im-section-title">Explore Playlists & Agents</h2>
-        <p class="im-section-subtitle">3,000+ curated playlists · 16 AI genre specialists · 48M+ followers</p>
+  <section class="products">
+    <div class="products-label">Products</div>
+    <div class="products-grid">
+      <div class="product-card">
+        <h3>Samm&#x101; Suit</h3>
+        <div class="subtitle">Open-source security framework for AI agents</div>
+        <p>8 enforced security layers. OpenClaw plugin. Managed hosting. Gateway protection, permissions, cost controls, audit trails, identity, skill vetting, process isolation, and kill switches.</p>
+        <div class="status">84 tests passing. Live in production.</div>
+        <a href="https://sammasuit.com">sammasuit.com &rarr;</a>
+      </div>
+      <div class="product-card">
+        <h3>Music Division</h3>
+        <div class="subtitle">AI-powered playlist curation at scale</div>
+        <p>16 genre-specialized agents managing 3,000+ verified playlists across Spotify, Apple Music, and YouTube. 48M+ combined follower reach.</p>
+        <div class="status">Our first production deployment &mdash; and the reason we built Samm&#x101; Suit.</div>
+        <a href="https://music.onezeroeight.ai">music.onezeroeight.ai &rarr;</a>
+      </div>
     </div>
+  </section>
 
-    <!-- Row 1: Scrolls Left (Playlists) -->
-    <div class="im-marquee-wrap">
-        <div class="im-marquee-track im-scroll-left" id="im-row-1"></div>
+  <section class="thesis">
+    <p>AI agents are shipping faster than the security architecture to govern them. We saw this firsthand running 16 agents in the music industry &mdash; cost overruns, ungoverned access, no audit trail. So we built the governance layer ourselves. Now it's open source.</p>
+  </section>
+
+  <section class="contact">
+    <div class="contact-label">Contact</div>
+    <div class="contact-links">
+      <a href="mailto:info@sammasuit.com">info@sammasuit.com</a>
+      <a href="https://discord.gg/4A6ExTnKnK">Discord</a>
+      <a href="https://x.com/OneZeroEight_ai">@OneZeroEight_ai</a>
+      <a href="https://github.com/OneZeroEight-ai">GitHub</a>
     </div>
+  </section>
 
-    <!-- Row 2: Scrolls Right (Agents) -->
-    <div class="im-marquee-wrap">
-        <div class="im-marquee-track im-scroll-right" id="im-row-2"></div>
-    </div>
-
-    <!-- Row 3: Scrolls Left (More Playlists) -->
-    <div class="im-marquee-wrap">
-        <div class="im-marquee-track im-scroll-left im-slow" id="im-row-3"></div>
-    </div>
-</section>
-
-<!-- Modal Overlay -->
-<div class="im-modal-overlay" id="im-modal-overlay"></div>
-
-<!-- Now Playing Bar -->
-<div class="im-now-playing" id="im-now-playing">
-    <div class="im-np-info">
-        <span class="im-np-emoji" id="im-np-emoji">🎵</span>
-        <div class="im-np-text">
-            <span class="im-np-label">Now Playing</span>
-            <span class="im-np-name" id="im-np-name">Playlist Name</span>
-        </div>
-    </div>
-    <button class="im-np-close" onclick="stopBackgroundPlayback()">&times;</button>
 </div>
 
-<!-- Hidden Background Player -->
-<div class="im-bg-player" id="im-bg-player"></div>
-
-<!-- How It Works -->
-<section class="section" id="how-it-works">
-    <div class="container">
-        <div class="section-header">
-            <h2>How It Works</h2>
-            <p>Four simple steps to get your music heard</p>
-        </div>
-        <div class="steps-grid">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3>Paste Your Track</h3>
-                <p>Enter your Spotify URL and our AI analyzes your sound instantly</p>
-            </div>
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3>See Matches</h3>
-                <p>View playlists that fit your genre and style</p>
-            </div>
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3>Agents Pitch</h3>
-                <p>Intelligent agents reach out to curators on your behalf</p>
-            </div>
-            <div class="step">
-                <div class="step-number">4</div>
-                <h3>Get Placed</h3>
-                <p>Track placements and grow your audience</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Pricing -->
-<section class="section section-gray" id="pricing">
-    <div class="container">
-        <div class="section-header">
-            <h2>Simple Pricing</h2>
-            <p>Start free. Upgrade when you want more reach.</p>
-        </div>
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <h3>Free Trial</h3>
-                <div class="price">$0</div>
-                <p class="description">Get started with OneZeroEight playlists</p>
-                <ul class="pricing-features">
-                    <li>Placement on OneZeroEight playlists</li>
-                    <li>AI genre analysis</li>
-                    <li>Basic analytics</li>
-                    <li>Community Discord</li>
-                </ul>
-                <a href="#" onclick="scrollToAnalyzer(); return false;" class="btn btn-secondary">Start Free</a>
-            </div>
-            <div class="pricing-card featured">
-                <div class="pricing-badge">Most Popular</div>
-                <h3>Pro</h3>
-                <p class="intro-label">Limited Time Intro Pricing</p>
-                <div class="price"><span class="original">$49</span>$19.95 <span>/ track</span></div>
-                <p class="description">Full access to 3,000+ playlists</p>
-                <ul class="pricing-features">
-                    <li>Everything in Free, plus:</li>
-                    <li>Access to 3,000+ playlists</li>
-                    <li>3+ placements guaranteed</li>
-                    <li>Curator Agent outreach</li>
-                    <li>Priority support</li>
-                    <li>Pay with SUTRA for 20% off</li>
-                </ul>
-                <a href="/artists/submit.html" class="btn btn-primary">Get Started</a>
-            </div>
-            <div class="pricing-card">
-                <div class="pricing-badge" style="background: var(--secondary);">Best Value</div>
-                <h3>Album</h3>
-                <p class="intro-label">Limited Time Intro Pricing</p>
-                <div class="price"><span class="original">$199</span>$99 <span>/ 10 tracks</span></div>
-                <p class="description">Promote your full album or EP</p>
-                <ul class="pricing-features">
-                    <li>Everything in Pro, plus:</li>
-                    <li>10 tracks promoted</li>
-                    <li>Album-wide PR campaign</li>
-                    <li>Coordinated release strategy</li>
-                    <li>30+ placements guaranteed</li>
-                </ul>
-                <a href="/artists/submit.html" class="btn btn-primary">Get Started</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Footer -->
 <footer>
-    <div class="container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <a href="/" class="logo"><span class="one">One</span>ZeroEight</a>
-                <p>Intelligent Agents that promote your music. Playlists, PR, socials—all handled. Start free.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Platform</h4>
-                <a href="#how-it-works">How It Works</a>
-                <a href="#pricing">Pricing</a>
-                <a href="/curators/">For Curators</a>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <a href="https://a.co/d/htCcbRw" target="_blank">OneZeroEight Book</a>
-                <a href="https://a.co/d/avN3yHt" target="_blank">Zen AI Book</a>
-            </div>
-            <div class="footer-section">
-                <h4>Connect</h4>
-                <a href="https://discord.gg/4A6ExTnKnK" target="_blank">Discord</a>
-                <a href="https://x.com/OneZeroEight_ai" target="_blank">Twitter</a>
-                <a href="https://t.me/OneZeroEight_ai" target="_blank">Telegram</a>
-                <a href="mailto:support@onezeroeight.ai">Support</a>
-            </div>
-            <div class="footer-section">
-                <h4>Ecosystem</h4>
-                <a href="https://sutra.team" target="_blank">sutra.team <span style="color: var(--gray-600); font-size: 0.8em;">- AI Consulting</span></a>
-                <a href="https://sutra.exchange" target="_blank">sutra.exchange <span style="color: var(--gray-600); font-size: 0.8em;">- Token Ecosystem</span></a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2026 OneZeroEight.ai. All rights reserved.</p>
-            <p><a href="#">Terms</a> · <a href="#">Privacy</a></p>
-        </div>
-    </div>
+  <div class="container">
+    <p>&copy; 2026 OneZeroEight.ai</p>
+  </div>
 </footer>
-
-<script>
-const API_BASE = 'https://onezeroeight-backend-production.up.railway.app';
-
-// Pending track data for signup
-let pendingTrack = null;
-
-function scrollToAnalyzer() {
-    document.getElementById('spotify-url').focus();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-async function analyzeTrack() {
-    const spotifyUrl = document.getElementById('spotify-url').value.trim();
-    const btn = document.getElementById('analyze-btn');
-    const resultsSection = document.getElementById('analysis-results');
-
-    if (!spotifyUrl || !spotifyUrl.includes('spotify.com/track/')) {
-        alert('Please enter a valid Spotify track URL');
-        return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Analyzing...';
-
-    try {
-        // 1. Fetch track metadata via OEmbed
-        const oembedResponse = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(spotifyUrl)}`);
-        if (!oembedResponse.ok) throw new Error('Could not fetch track info');
-        const trackData = await oembedResponse.json();
-
-        // Parse title (format: "Song Title by Artist Name")
-        const titleParts = trackData.title.split(' by ');
-        const trackTitle = titleParts[0] || trackData.title;
-        const artistName = titleParts.slice(1).join(' by ') || 'Unknown Artist';
-
-        // Show track preview
-        document.getElementById('track-artwork').src = trackData.thumbnail_url;
-        document.getElementById('track-title').textContent = trackTitle;
-        document.getElementById('track-artist').textContent = artistName;
-
-        // Store pending track
-        pendingTrack = {
-            spotify_url: spotifyUrl,
-            track_title: trackTitle,
-            artist_name: artistName,
-            artwork_url: trackData.thumbnail_url,
-            genre: null
-        };
-
-        // 2. Try to get genre prediction from backend
-        let predictedGenre = 'Indie';
-        let matchCount = 500;
-        let samplePlaylists = [];
-        let analysis = null;
-
-        try {
-            const analysisResponse = await fetch(`${API_BASE}/api/tracks/analyze`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ spotify_url: spotifyUrl })
-            });
-
-            if (analysisResponse.ok) {
-                analysis = await analysisResponse.json();
-                predictedGenre = analysis.predicted_primary_genre || 'Indie';
-                pendingTrack.genre = predictedGenre;
-
-                // Display verbose genre prediction
-                displayGenrePrediction(analysis);
-            }
-        } catch (e) {
-            console.log('Genre prediction not available, using default');
-        }
-
-        // 3. Get playlist count for this genre
-        try {
-            const playlistResponse = await fetch(`${API_BASE}/api/tracks/playlists/count?genre=${encodeURIComponent(predictedGenre)}`);
-            if (playlistResponse.ok) {
-                const playlistData = await playlistResponse.json();
-                matchCount = playlistData.count || 500;
-                samplePlaylists = playlistData.sample_playlists || [];
-            }
-        } catch (e) {
-            console.log('Playlist count not available');
-        }
-
-        // Update UI
-        document.getElementById('match-count').textContent = matchCount.toLocaleString();
-        pendingTrack.genre = predictedGenre;
-
-        // Render playlist preview
-        renderPlaylistPreview(samplePlaylists, matchCount);
-
-        // Show results section
-        resultsSection.style.display = 'block';
-
-        // Scroll to results
-        setTimeout(() => {
-            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
-
-    } catch (error) {
-        console.error('Analysis failed:', error);
-        alert('Could not analyze track. Please check the URL and try again.');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = 'Analyze Track →';
-    }
-}
-
-function renderPlaylistPreview(playlists, totalCount) {
-    const grid = document.getElementById('playlist-preview-grid');
-
-    // Default playlists if none returned
-    const defaultPlaylists = [
-        { name: 'Fresh Finds', followers: 125000, image_url: null },
-        { name: 'Indie Vibes', followers: 89000, image_url: null },
-        { name: 'New Music Friday', followers: 245000, image_url: null },
-        { name: 'Chill Hits', followers: 156000, image_url: null },
-        { name: 'Discovery Mode', followers: 78000, image_url: null },
-        { name: 'Rising Artists', followers: 112000, image_url: null },
-        { name: 'Lo-Fi Beats', followers: 98000, image_url: null },
-        { name: 'Alternative Sounds', followers: 67000, image_url: null }
-    ];
-
-    // Show 8 playlists instead of 6
-    const previewPlaylists = playlists.length > 0 ? playlists.slice(0, 8) : defaultPlaylists;
-
-    // Blur cards starting at index 3
-    grid.innerHTML = previewPlaylists.map((p, i) => {
-        // Check if image_url exists and is valid
-        const hasImage = p.image_url && p.image_url.startsWith('http');
-        return `
-        <div class="playlist-preview-card ${i >= 3 ? 'blurred' : ''}">
-            <div class="playlist-img-wrapper">
-                ${hasImage
-                    ? `<img src="${p.image_url}" alt="" loading="eager" onload="this.style.opacity=1" onerror="this.style.display='none';this.parentElement.classList.add('show-fallback');">`
-                    : ''
-                }
-                <div class="playlist-img-fallback">&#9834;</div>
-            </div>
-            <div class="playlist-name">${p.name}</div>
-            <div class="playlist-followers">${formatFollowers(p.followers)} followers</div>
-        </div>
-    `}).join('');
-
-    // Add overlay
-    grid.innerHTML += `
-        <div class="more-playlists-overlay">
-            <span>+${totalCount.toLocaleString()} more playlists</span>
-            <span>Sign up to see all →</span>
-        </div>
-    `;
-}
-
-function formatFollowers(num) {
-    if (!num) return '10K+';
-    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-    if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
-    return num.toString();
-}
-
-function displayGenrePrediction(analysis) {
-    const summaryEl = document.getElementById('genre-summary');
-    const reasoningEl = document.getElementById('genre-reasoning');
-    const sectionEl = document.getElementById('genre-prediction-section');
-
-    const primary = analysis.predicted_primary_genre || 'Unknown';
-    const secondary = analysis.predicted_secondary_genre;
-    const reasoning = analysis.prediction_reasoning || '';
-
-    // Build summary text
-    let summaryText = `We think this is <strong>${primary}</strong>`;
-    if (secondary) {
-        summaryText += ` with elements of <strong>${secondary}</strong>`;
-    }
-
-    summaryEl.innerHTML = summaryText;
-    reasoningEl.textContent = reasoning;
-
-    // Show the section
-    sectionEl.style.display = 'block';
-}
-
-async function handleQuickSignup(e) {
-    e.preventDefault();
-
-    const name = document.getElementById('artist-name').value.trim();
-    const email = document.getElementById('artist-email').value.trim();
-    const btn = document.getElementById('signup-btn');
-    const msg = document.getElementById('signup-message');
-
-    if (!name || !email) {
-        showMessage('Please fill in all fields', 'error');
-        return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = 'Signing up...';
-    msg.style.display = 'none';
-
-    try {
-        const response = await fetch(`${API_BASE}/api/artists/signup`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: name,
-                email: email,
-                artist_name: pendingTrack?.artist_name || name,
-                spotify_link: pendingTrack?.spotify_url || 'https://open.spotify.com/track/placeholder',
-                track_title: pendingTrack?.track_title || null,
-                genre: pendingTrack?.genre || 'indie',
-                interested_tier: 'free',
-                referral_source: 'Homepage Track Analyzer'
-            })
-        });
-
-        const result = await response.json();
-
-        if (response.ok && result.success) {
-            showMessage('🎉 Success! Check your email for next steps.', 'success');
-            // Could redirect to dashboard here
-            // window.location.href = '/artists/dashboard.html?welcome=true';
-        } else {
-            // Extract error message properly from various response formats
-            const errorMsg = result.detail || result.message || result.error || 'Signup failed. Please try again.';
-            showMessage(typeof errorMsg === 'object' ? JSON.stringify(errorMsg) : errorMsg, 'error');
-        }
-    } catch (error) {
-        console.error('Signup error:', error);
-        const errorMsg = error.message || 'Connection error. Please try again.';
-        showMessage(errorMsg, 'error');
-    } finally {
-        btn.disabled = false;
-        btn.textContent = 'Start Free Trial →';
-    }
-}
-
-function showMessage(text, type) {
-    const msg = document.getElementById('signup-message');
-    msg.textContent = text;
-    msg.className = 'form-message ' + type;
-    msg.style.display = 'block';
-}
-
-// Allow Enter key to trigger analysis
-document.getElementById('spotify-url').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        e.preventDefault();
-        analyzeTrack();
-    }
-});
-
-// Smooth scroll for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        const href = this.getAttribute('href');
-        if (href !== '#' && !this.hasAttribute('onclick')) {
-            e.preventDefault();
-            const target = document.querySelector(href);
-            if (target) {
-                const navHeight = 64;
-                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-            }
-        }
-    });
-});
-
-</script>
-
-<!-- Interactive Marquee JS -->
-<script src="js/interactive-marquee.js"></script>
 
 </body>
 </html>
