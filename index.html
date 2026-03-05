@@ -3,256 +3,704 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OneZeroEight | Governed AI Agents in Production</title>
-<meta name="description" content="OneZeroEight builds and operates autonomous AI agents with security, cost controls, and accountability built in.">
-<meta property="og:title" content="OneZeroEight">
-<meta property="og:description" content="Governed AI agents in production.">
+<title>OneZeroEight.ai — Building the Infrastructure for the AI Agent Economy</title>
+<meta name="description" content="OneZeroEight.ai builds platforms where anyone can create, deploy, and govern purpose-built AI agents. Sutra.team, SammaSuit, and music.onezeroeight.ai.">
+<meta property="og:title" content="OneZeroEight.ai">
+<meta property="og:description" content="Building the infrastructure for the AI agent economy.">
 <meta property="og:url" content="https://onezeroeight.ai">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:site" content="@OneZeroEight_ai">
 <link rel="icon" type="image/x-icon" href="images/agents/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* ── RESET ── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  background: #0a0a0a;
-  color: #e8e8ed;
-  font-family: 'Outfit', sans-serif;
+  background: #0A0B14;
+  color: #E8E6E1;
+  font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.container { max-width: 960px; margin: 0 auto; padding: 0 32px; }
+h1, h2, h3, h4, .display {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.container { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+a { color: inherit; text-decoration: none; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards;
+}
+.fade-up-1 { animation-delay: 0.1s; }
+.fade-up-2 { animation-delay: 0.25s; }
+.fade-up-3 { animation-delay: 0.4s; }
+.fade-up-4 { animation-delay: 0.55s; }
 
 /* ── NAV ── */
 nav {
-  padding: 24px 32px;
-  max-width: 960px;
+  padding: 28px 32px;
+  max-width: 1080px;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 .nav-wordmark {
-  font-size: 18px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
 }
-.nav-wordmark span { color: #7C3AED; }
+.nav-wordmark em {
+  font-style: normal;
+  color: #7C3AED;
+}
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  color: #9895A0;
+  letter-spacing: 0.3px;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: #E8E6E1; }
 
 /* ── HERO ── */
 .hero {
-  padding: 140px 0 100px;
-  border-bottom: 1px solid #1a1a1a;
+  padding: 120px 0 100px;
+  border-bottom: 1px solid #1a1b2e;
 }
 .hero h1 {
-  font-size: clamp(40px, 6vw, 64px);
+  font-size: clamp(42px, 5.5vw, 68px);
   font-weight: 700;
   line-height: 1.05;
-  letter-spacing: -2px;
+  letter-spacing: -2.5px;
   color: #fff;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
-.hero h1 span { color: #7C3AED; }
-.hero .tagline {
-  font-size: 20px;
+.hero-sub {
+  font-size: 19px;
   font-weight: 300;
-  color: #888;
-  max-width: 540px;
-  margin-bottom: 40px;
+  color: #9895A0;
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 48px;
 }
-.hero-cta { display: flex; gap: 12px; }
-.btn {
+.hero-products {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.hero-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: all 0.2s;
-  border: none;
-  cursor: pointer;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.25s;
+  border: 1px solid transparent;
 }
-.btn-primary {
-  background: #7C3AED;
-  color: #fff;
+.hero-link-violet {
+  background: rgba(124, 58, 237, 0.12);
+  color: #a78bfa;
+  border-color: rgba(124, 58, 237, 0.25);
 }
-.btn-primary:hover { background: #6D28D9; }
-.btn-outline {
-  background: transparent;
-  color: #888;
-  border: 1px solid #262626;
+.hero-link-violet:hover { background: rgba(124, 58, 237, 0.2); border-color: #7C3AED; }
+.hero-link-emerald {
+  background: rgba(16, 185, 129, 0.08);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.2);
 }
-.btn-outline:hover { color: #e8e8ed; border-color: #444; }
+.hero-link-emerald:hover { background: rgba(16, 185, 129, 0.15); border-color: #10B981; }
+.hero-link-amber {
+  background: rgba(245, 158, 11, 0.08);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.hero-link-amber:hover { background: rgba(245, 158, 11, 0.15); border-color: #F59E0B; }
+
+/* ── THESIS ── */
+.thesis {
+  padding: 100px 0;
+  border-bottom: 1px solid #1a1b2e;
+}
+.thesis-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(20px, 2.8vw, 28px);
+  font-weight: 400;
+  color: #9895A0;
+  max-width: 720px;
+  line-height: 1.65;
+  letter-spacing: -0.3px;
+}
+.thesis-text strong {
+  color: #E8E6E1;
+  font-weight: 600;
+}
 
 /* ── PRODUCTS ── */
-.products { padding: 80px 0; border-bottom: 1px solid #1a1a1a; }
-.products-label {
+.products { padding: 100px 0; border-bottom: 1px solid #1a1b2e; }
+.section-label {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 2px;
+  font-weight: 600;
+  letter-spacing: 3px;
   text-transform: uppercase;
   color: #555;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
 }
 .products-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.2fr 1fr;
   gap: 20px;
 }
 .product-card {
-  background: #111;
-  border: 1px solid #1a1a1a;
-  border-radius: 12px;
-  padding: 32px;
-  transition: border-color 0.2s;
+  background: #12131D;
+  border: 1px solid #1a1b2e;
+  border-radius: 16px;
+  padding: 36px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  position: relative;
+  overflow: hidden;
 }
-.product-card:hover { border-color: #333; }
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+}
+.product-card:hover { border-color: #2a2b3e; }
+.product-card-primary { grid-column: 1 / -1; }
+.product-card-primary::before { background: linear-gradient(90deg, #7C3AED, #a78bfa); }
+.product-card-primary:hover { box-shadow: 0 0 40px rgba(124, 58, 237, 0.06); }
+.product-card-emerald::before { background: linear-gradient(90deg, #10B981, #6ee7b7); }
+.product-card-emerald:hover { box-shadow: 0 0 40px rgba(16, 185, 129, 0.06); }
+.product-card-amber::before { background: linear-gradient(90deg, #F59E0B, #fcd34d); }
+.product-card-amber:hover { box-shadow: 0 0 40px rgba(245, 158, 11, 0.06); }
+
+.product-domain {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.product-domain-violet { color: #a78bfa; }
+.product-domain-emerald { color: #6ee7b7; }
+.product-domain-amber { color: #fcd34d; }
+
 .product-card h3 {
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 26px;
+  font-weight: 700;
   color: #fff;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  letter-spacing: -0.5px;
 }
-.product-card .subtitle {
-  font-size: 15px;
-  color: #7C3AED;
+.product-card .product-subtitle {
+  font-size: 16px;
+  color: #9895A0;
   font-weight: 400;
   margin-bottom: 16px;
 }
-.product-card p {
-  font-size: 14px;
-  color: #777;
-  line-height: 1.65;
-  margin-bottom: 12px;
+.product-card .product-desc {
+  font-size: 15px;
+  color: #706D78;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  max-width: 600px;
 }
-.product-card .status {
-  font-size: 13px;
-  color: #059669;
-  font-weight: 500;
+.product-features {
+  list-style: none;
   margin-bottom: 20px;
 }
-.product-card a {
+.product-features li {
   font-size: 14px;
-  color: #7C3AED;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
+  color: #9895A0;
+  padding: 5px 0;
+  padding-left: 20px;
+  position: relative;
 }
-.product-card a:hover { color: #a78bfa; }
+.product-features li::before {
+  content: '\2022';
+  position: absolute;
+  left: 0;
+  color: #555;
+}
+.product-status {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.product-status-live { color: #10B981; }
+.product-pricing {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 20px;
+}
+.product-link {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.product-link:hover { opacity: 0.8; }
+.product-link-violet { color: #a78bfa; }
+.product-link-emerald { color: #6ee7b7; }
+.product-link-amber { color: #fcd34d; }
 
-/* ── THESIS ── */
-.thesis { padding: 80px 0; border-bottom: 1px solid #1a1a1a; }
-.thesis p {
-  font-size: 18px;
-  font-weight: 300;
-  color: #888;
-  max-width: 640px;
+/* ── IP SECTION ── */
+.ip { padding: 100px 0; border-bottom: 1px solid #1a1b2e; }
+.ip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.ip-block h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: -0.3px;
+}
+.ip-block p, .ip-block li {
+  font-size: 14px;
+  color: #706D78;
   line-height: 1.7;
 }
-
-/* ── CONTACT ── */
-.contact { padding: 80px 0; }
-.contact-label {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+.ip-block .ip-detail {
+  font-size: 13px;
   color: #555;
-  margin-bottom: 24px;
+  margin-top: 8px;
 }
-.contact-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
+.book-item {
+  margin-bottom: 20px;
 }
-.contact-links a {
-  font-size: 14px;
-  color: #777;
-  text-decoration: none;
+.book-item h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #E8E6E1;
+  margin-bottom: 2px;
+}
+.book-item p {
+  font-size: 13px;
+  color: #706D78;
+  line-height: 1.5;
+}
+.book-item a {
+  color: #a78bfa;
   transition: color 0.2s;
 }
-.contact-links a:hover { color: #e8e8ed; }
+.book-item a:hover { color: #c4b5fd; }
+
+/* ── INFRA ── */
+.infra { padding: 80px 0; border-bottom: 1px solid #1a1b2e; }
+.infra-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.infra-stat {
+  text-align: center;
+}
+.infra-stat .label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #E8E6E1;
+  margin-bottom: 4px;
+}
+.infra-stat .sub {
+  font-size: 12px;
+  color: #555;
+}
+.infra-desc {
+  font-size: 14px;
+  color: #706D78;
+  line-height: 1.7;
+  max-width: 680px;
+}
+
+/* ── MUSIC ── */
+.music { padding: 80px 0; border-bottom: 1px solid #1a1b2e; }
+.music-inner {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+.music-art {
+  width: 200px;
+  min-width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+}
+.music-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.music-info h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.music-info .artist {
+  font-size: 15px;
+  color: #fcd34d;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.music-info p {
+  font-size: 14px;
+  color: #706D78;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.music-albums {
+  font-size: 13px;
+  color: #9895A0;
+  margin-bottom: 16px;
+}
+.music-links { display: flex; gap: 16px; }
+.music-links a {
+  font-size: 13px;
+  color: #9895A0;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+.music-links a:hover { color: #fcd34d; }
+
+/* ── FOUNDER ── */
+.founder { padding: 80px 0; border-bottom: 1px solid #1a1b2e; }
+.founder h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.founder .title {
+  font-size: 14px;
+  color: #7C3AED;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.founder p {
+  font-size: 14px;
+  color: #706D78;
+  line-height: 1.7;
+  max-width: 560px;
+  margin-bottom: 16px;
+}
+.founder .location {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 12px;
+}
+.founder-contact {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.founder-contact a {
+  font-size: 13px;
+  color: #9895A0;
+  transition: color 0.2s;
+}
+.founder-contact a:hover { color: #E8E6E1; }
 
 /* ── FOOTER ── */
 footer {
-  padding: 32px 0;
-  border-top: 1px solid #1a1a1a;
+  padding: 60px 0 40px;
 }
-footer p {
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+.footer-col h4 {
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
-  color: #333;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 16px;
+}
+.footer-col a {
+  display: block;
+  font-size: 14px;
+  color: #706D78;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: #E8E6E1; }
+.footer-bottom {
+  border-top: 1px solid #1a1b2e;
+  padding-top: 24px;
+}
+.footer-bottom p {
+  font-size: 12px;
+  color: #3a3a4a;
+  line-height: 1.8;
 }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .products-grid { grid-template-columns: 1fr; }
-  .hero-cta { flex-direction: column; }
-  .hero { padding: 100px 0 60px; }
-  .contact-links { flex-direction: column; gap: 12px; }
+  .product-card-primary { grid-column: auto; }
+  .ip-grid { grid-template-columns: 1fr; }
+  .music-inner { flex-direction: column; text-align: center; }
+  .music-art { margin: 0 auto; }
+  .music-links { justify-content: center; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero { padding: 80px 0 60px; }
+  .hero-products { flex-direction: column; }
+  .nav-links { display: none; }
+  .infra-stats { grid-template-columns: repeat(2, 1fr); }
+  .founder-contact { flex-direction: column; gap: 8px; }
 }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-wordmark"><span>One</span>ZeroEight</div>
+  <div class="nav-wordmark"><em>One</em>ZeroEight<span style="color:#555;font-weight:400">.ai</span></div>
+  <div class="nav-links">
+    <a href="https://sutra.team">Sutra.team</a>
+    <a href="https://sammasuit.com">SammaSuit</a>
+    <a href="https://github.com/OneZeroEight-ai">GitHub</a>
+  </div>
 </nav>
 
 <div class="container">
 
+  <!-- ━━━ HERO ━━━ -->
   <section class="hero">
-    <h1>Governed AI agents<br>in <span>production</span>.</h1>
-    <p class="tagline">We build and operate autonomous AI agents with security, cost controls, and accountability built in.</p>
-    <div class="hero-cta">
-      <a href="https://sammasuit.com" class="btn btn-primary">Samm&#x101; Suit &rarr;</a>
-      <a href="https://github.com/OneZeroEight-ai" class="btn btn-outline">GitHub &rarr;</a>
+    <h1 class="fade-up fade-up-1">Building the infrastructure<br>for the AI agent economy.</h1>
+    <p class="hero-sub fade-up fade-up-2">We create platforms where anyone can build, deploy, and govern purpose-built AI agents &mdash; from individuals to enterprises.</p>
+    <div class="hero-products fade-up fade-up-3">
+      <a href="https://sutra.team" class="hero-link hero-link-violet">Sutra.team &rarr;</a>
+      <a href="https://sammasuit.com" class="hero-link hero-link-emerald">SammaSuit.com &rarr;</a>
+      <a href="https://music.onezeroeight.ai" class="hero-link hero-link-amber">music.onezeroeight.ai &rarr;</a>
     </div>
   </section>
 
+  <!-- ━━━ THESIS ━━━ -->
+  <section class="thesis fade-up fade-up-4">
+    <p class="thesis-text">
+      The AI industry has commoditized intelligence. The price of a language model drops every quarter.<br><br>
+      What holds its value is <strong>agency</strong> &mdash; purpose-built AI specialists with persistent identity, principled behavior, and provable differentiation.<br><br>
+      We&rsquo;re building the platforms that make that possible.
+    </p>
+  </section>
+
+  <!-- ━━━ PRODUCTS ━━━ -->
   <section class="products">
-    <div class="products-label">Products</div>
+    <div class="section-label">The Ecosystem</div>
     <div class="products-grid">
-      <div class="product-card">
-        <h3>Samm&#x101; Suit</h3>
-        <div class="subtitle">Open-source security framework for AI agents</div>
-        <p>8 enforced security layers. OpenClaw plugin. Managed hosting. Gateway protection, permissions, cost controls, audit trails, identity, skill vetting, process isolation, and kill switches.</p>
-        <div class="status">84 tests passing. Live in production.</div>
-        <a href="https://sammasuit.com">sammasuit.com &rarr;</a>
+
+      <!-- Sutra.team — Primary -->
+      <div class="product-card product-card-primary">
+        <div class="product-domain product-domain-violet">sutra.team</div>
+        <h3>Sutra.team</h3>
+        <div class="product-subtitle">Your AI Agency</div>
+        <p class="product-desc">An AI agency creation platform where anyone &mdash; from stay-at-home parents to Fortune 500 teams &mdash; can create, deploy, and operate purpose-built AI agents with persistent identity and principled value frameworks.</p>
+        <ul class="product-features">
+          <li>15 prebuilt specialist agents + unlimited custom agents</li>
+          <li>35+ skills: web search, email, calendar, browser, code execution, Slack, Telegram</li>
+          <li>Council deliberation: 14 agents analyze questions from different perspectives</li>
+          <li>Portable Mind Format: agents run on any LLM provider</li>
+          <li>8-layer security governance via SammaSuit</li>
+        </ul>
+        <div class="product-status product-status-live">Live in production. Patent pending.</div>
+        <div class="product-pricing">Explorer $9/mo &middot; Pro $29/mo &middot; International $49/mo &middot; Enterprise custom</div>
+        <a href="https://sutra.team" class="product-link product-link-violet">Enter Sutra.team &rarr;</a>
       </div>
-      <div class="product-card">
+
+      <!-- SammaSuit -->
+      <div class="product-card product-card-emerald">
+        <div class="product-domain product-domain-emerald">sammasuit.com</div>
+        <h3>Samm&#x101; Suit</h3>
+        <div class="product-subtitle">Agent Security Infrastructure</div>
+        <p class="product-desc">An 8-layer governance framework for autonomous AI agents. Budget enforcement. Audit trails. Cryptographic identity. Skill vetting. Kill switches. Process isolation.</p>
+        <ul class="product-features">
+          <li>OpenClaw plugin for 196K+ developer ecosystem</li>
+          <li>Standalone platform for security-first deployments</li>
+          <li>KARMA &middot; SILA &middot; METTA &middot; SANGHA &middot; NIRVANA &middot; DHARMA &middot; BODHI &middot; SUTRA</li>
+          <li>Open source. Enforcement by default.</li>
+        </ul>
+        <div class="product-status product-status-live">Live in production.</div>
+        <a href="https://sammasuit.com" class="product-link product-link-emerald">Enter SammaSuit.com &rarr;</a>
+      </div>
+
+      <!-- Music -->
+      <div class="product-card product-card-amber">
+        <div class="product-domain product-domain-amber">music.onezeroeight.ai</div>
         <h3>Music Division</h3>
-        <div class="subtitle">AI-powered playlist curation at scale</div>
-        <p>16 genre-specialized agents managing 3,000+ verified playlists across Spotify, Apple Music, and YouTube. 48M+ combined follower reach.</p>
-        <div class="status">Our first production deployment &mdash; and the reason we built Samm&#x101; Suit.</div>
-        <a href="https://music.onezeroeight.ai">music.onezeroeight.ai &rarr;</a>
+        <div class="product-subtitle">AI-Powered Music Promotion</div>
+        <p class="product-desc">Autonomous AI agents managing music promotion at scale. The first production deployment on the OneZeroEight.ai backend &mdash; and the reason we built SammaSuit.</p>
+        <ul class="product-features">
+          <li>AI promotion agents for independent artists</li>
+          <li>Shared backend infrastructure with Sutra.team</li>
+          <li>Where the platform was battle-tested</li>
+        </ul>
+        <div class="product-status product-status-live">Live in production.</div>
+        <a href="https://music.onezeroeight.ai" class="product-link product-link-amber">Enter music.onezeroeight.ai &rarr;</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ━━━ IP & PUBLICATIONS ━━━ -->
+  <section class="ip">
+    <div class="section-label">Intellectual Property &amp; Publications</div>
+    <div class="ip-grid">
+      <div class="ip-block">
+        <h3>Patent Pending</h3>
+        <p>U.S. Provisional Patent (Filed January 30, 2026)<br><br>
+        <em>System and Method for Creating and Operating Persistent Intelligent Agent Personas with Integrated Value Frameworks, Memory Systems, and Multi-Modal Creative Output Capabilities</em></p>
+        <p style="margin-top:12px">10 claims covering a six-layer architecture for portable, principled, measurably differentiated AI agents.</p>
+        <p class="ip-detail">Non-provisional filing: January 30, 2027</p>
+      </div>
+      <div class="ip-block">
+        <h3>Published Works</h3>
+        <div class="book-item">
+          <h4><a href="https://www.amazon.com/dp/9798248356416" target="_blank" rel="noopener">The Portable Mind</a></h4>
+          <p>AI Constitutions, Persona Architecture, and the Future of Transportable Intelligence<br>Amazon KDP Hardback &middot; ISBN 9798248356416</p>
+        </div>
+        <div class="book-item">
+          <h4><a href="https://www.amazon.com/dp/B0F1Y6NGWR" target="_blank" rel="noopener">How to Use Autonomous Agents</a></h4>
+          <p>A Practical Guide to Building Your AI Agency<br>Amazon Kindle</p>
+        </div>
+        <div class="book-item">
+          <h4><a href="https://www.amazon.com/dp/B0DXHV3LLQ" target="_blank" rel="noopener">Zen AI</a></h4>
+          <p>The Philosophical Foundation for Values-Based AI Alignment</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="thesis">
-    <p>AI agents are shipping faster than the security architecture to govern them. We saw this firsthand running 16 agents in the music industry &mdash; cost overruns, ungoverned access, no audit trail. So we built the governance layer ourselves. Now it's open source.</p>
+  <!-- ━━━ INFRASTRUCTURE ━━━ -->
+  <section class="infra">
+    <div class="section-label">Infrastructure</div>
+    <div class="infra-stats">
+      <div class="infra-stat">
+        <div class="label">&#127470;&#127480; Iceland Powered</div>
+        <div class="sub">Dedicated VPS</div>
+      </div>
+      <div class="infra-stat">
+        <div class="label">100% Renewable</div>
+        <div class="sub">Geothermal &amp; Hydro</div>
+      </div>
+      <div class="infra-stat">
+        <div class="label">Patent Pending</div>
+        <div class="sub">U.S. Provisional 2026</div>
+      </div>
+      <div class="infra-stat">
+        <div class="label">Open Source</div>
+        <div class="sub">SammaSuit &amp; OpenClaw</div>
+      </div>
+      <div class="infra-stat">
+        <div class="label">LLM Agnostic</div>
+        <div class="sub">6 providers supported</div>
+      </div>
+      <div class="infra-stat">
+        <div class="label">&lt;$100/mo</div>
+        <div class="sub">Total infra cost</div>
+      </div>
+    </div>
+    <p class="infra-desc">The entire OneZeroEight.ai infrastructure &mdash; agent execution, payment processing, security governance &mdash; runs on a dedicated Iceland VPS powered by geothermal and hydroelectric energy. Total monthly infrastructure cost: under $100. Built by one founder with AI-native development practices.</p>
   </section>
 
-  <section class="contact">
-    <div class="contact-label">Contact</div>
-    <div class="contact-links">
-      <a href="mailto:info@onezeroeight.ai">info@onezeroeight.ai</a>
-      <a href="mailto:info@sammasuit.com">info@sammasuit.com</a>
-      <a href="https://discord.gg/4A6ExTnKnK">Discord</a>
-      <a href="https://x.com/OneZeroEight_ai">@OneZeroEight_ai</a>
-      <a href="https://github.com/OneZeroEight-ai">GitHub</a>
+  <!-- ━━━ MUSIC ━━━ -->
+  <section class="music">
+    <div class="section-label">From the Same Mind</div>
+    <div class="music-inner">
+      <div class="music-art">
+        <img src="images/neosoul-cover.jpg" alt="NeoSoul album cover" loading="lazy">
+      </div>
+      <div class="music-info">
+        <h3>Sutra and the Noble 8</h3>
+        <div class="artist">Original music by JB Wagoner</div>
+        <p>40+ original tracks across 4 albums exploring consciousness, ethics, and AI identity through music.</p>
+        <div class="music-albums">Booting Samsara &middot; Harmonic Alignment &middot; Turing Bodhi &middot; NeoSoul</div>
+        <div class="music-links">
+          <a href="https://open.spotify.com/artist/3pNxQReyEz4t67YRVO2fhV" target="_blank" rel="noopener">Spotify</a>
+          <a href="https://music.apple.com/us/artist/sutra-and-the-noble-8/1796429498" target="_blank" rel="noopener">Apple Music</a>
+          <a href="https://www.youtube.com/@sutraandthenoble8" target="_blank" rel="noopener">YouTube Music</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ━━━ FOUNDER ━━━ -->
+  <section class="founder">
+    <h3>JB Wagoner</h3>
+    <div class="title">Founder &amp; CEO</div>
+    <p>Author of <em>Zen AI</em> and <em>The Portable Mind</em>. Creator of the Sutra persona and Noble 8 agent ensemble. Patent inventor. Solo founder building with AI-native practices.</p>
+    <div class="location">Temecula, California</div>
+    <div class="founder-contact">
+      <a href="mailto:jbwagoner@gmail.com">jbwagoner@gmail.com</a>
+      <a href="tel:+19513129195">(951) 312-9195</a>
     </div>
   </section>
 
 </div>
 
+<!-- ━━━ FOOTER ━━━ -->
 <footer>
   <div class="container">
-    <p>&copy; 2026 OneZeroEight.ai</p>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="https://sutra.team">Sutra.team</a>
+        <a href="https://sammasuit.com">SammaSuit.com</a>
+        <a href="https://music.onezeroeight.ai">music.onezeroeight.ai</a>
+        <a href="https://sutra.exchange">Sutra.exchange</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="https://sutra.team/patent">Patent</a>
+        <a href="https://sutra.team/book">Book</a>
+        <a href="https://sutra.team/blog">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="mailto:info@onezeroeight.ai">info@onezeroeight.ai</a>
+        <a href="https://x.com/OneZeroEight_ai" target="_blank" rel="noopener">@OneZeroEight_ai</a>
+        <a href="https://x.com/sutra_ai" target="_blank" rel="noopener">@sutra_ai</a>
+        <a href="https://x.com/jbwagoner" target="_blank" rel="noopener">@jbwagoner</a>
+        <a href="https://github.com/OneZeroEight-ai" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://discord.gg/4A6ExTnKnK" target="_blank" rel="noopener">Discord</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 OneZeroEight.ai &middot; Temecula, CA<br>
+      Patent Pending &mdash; U.S. Provisional Application (Filed January 30, 2026)<br>
+      Protected by Samm&#x101; Suit &middot; Open Source &middot; Iceland Powered</p>
+    </div>
   </div>
 </footer>
 
