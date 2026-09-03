@@ -319,7 +319,9 @@ nav {
 .infra { padding: 80px 0; border-bottom: 1px solid #1a1b2e; }
 .infra-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  /* 148px, not 150px: six badges then fit on one row at desktop widths
+     instead of laying out five across and orphaning the sixth. */
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
   gap: 24px;
   margin-bottom: 32px;
 }
