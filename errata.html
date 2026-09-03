@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Errata — The Verification Imperative: Trustworthy AI in the Practice of Law | OneZeroEight.ai</title>
+<meta name="description" content="Errata and corrections for The Verification Imperative: Trustworthy AI in the Practice of Law by JB Wagoner. Every change made to the text after first publication, with the date it was applied.">
+<link rel="canonical" href="https://onezeroeight.ai/errata">
+<meta property="og:title" content="Errata — The Verification Imperative">
+<meta property="og:description" content="Corrections to The Verification Imperative: Trustworthy AI in the Practice of Law by JB Wagoner.">
+<meta property="og:url" content="https://onezeroeight.ai/errata">
+<meta property="og:type" content="article">
+<link rel="icon" type="image/x-icon" href="images/agents/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0A0B14;
+  color: #E8E6E1;
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+a { color: inherit; }
+
+nav {
+  padding: 28px 32px;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-wordmark {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -0.5px;
+}
+.nav-wordmark a { text-decoration: none; }
+.nav-wordmark em { font-style: normal; color: #7C3AED; }
+.nav-links { display: flex; gap: 28px; }
+.nav-links a {
+  font-size: 13px; font-weight: 500; color: #9895A0;
+  letter-spacing: 0.3px; text-decoration: none;
+}
+.nav-links a:hover { color: #E8E6E1; }
+
+/* ── the page itself: plain, generous measure ── */
+main { max-width: 660px; margin: 0 auto; padding: 56px 32px 24px; }
+
+.book-head { border-bottom: 1px solid #1a1b2e; padding-bottom: 32px; margin-bottom: 32px; }
+.book-head h1 {
+  font-size: clamp(30px, 4.5vw, 42px); font-weight: 700;
+  line-height: 1.12; letter-spacing: -1.2px; color: #fff;
+}
+.book-head .sub {
+  font-size: clamp(16px, 2.2vw, 19px); color: #9895A0; margin-top: 10px;
+}
+.book-head .author {
+  font-size: 14px; color: #706D78; margin-top: 14px;
+  letter-spacing: 1.4px; text-transform: uppercase;
+}
+
+main p { margin: 0 0 16px; font-size: 16px; }
+main section { margin-bottom: 44px; }
+
+h2 {
+  font-size: 21px; font-weight: 600; color: #fff;
+  letter-spacing: -0.4px; margin: 0 0 6px;
+}
+h3 {
+  font-size: 16px; font-weight: 600; color: #E8E6E1;
+  letter-spacing: -0.2px; margin: 32px 0 12px;
+}
+.applied { font-size: 14px; color: #706D78; margin-bottom: 22px; }
+
+main ul { list-style: none; margin: 0 0 22px; }
+main li {
+  position: relative; padding-left: 20px; margin-bottom: 14px;
+  font-size: 15px; line-height: 1.62;
+}
+main li::before {
+  content: ""; position: absolute; left: 2px; top: 10px;
+  width: 5px; height: 5px; border-radius: 50%; background: #7C3AED;
+}
+main li strong { font-weight: 600; color: #fff; }
+
+.meta {
+  border-top: 1px solid #1a1b2e; padding-top: 22px;
+  font-size: 14px; color: #706D78;
+}
+.meta dt {
+  font-family: 'Space Grotesk', sans-serif; font-size: 11px;
+  letter-spacing: 1.6px; text-transform: uppercase; color: #555; margin-top: 12px;
+}
+.meta dd { margin: 2px 0 0; }
+.meta dt:first-child { margin-top: 0; }
+
+.report a { color: #a78bfa; }
+
+footer { padding: 24px 0 40px; }
+footer .container { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+.footer-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px; margin-bottom: 48px;
+}
+.footer-col h4 {
+  font-size: 12px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: #555; margin-bottom: 16px;
+}
+.footer-col a {
+  display: block; font-size: 14px; color: #706D78;
+  padding: 4px 0; text-decoration: none;
+}
+.footer-col a:hover { color: #E8E6E1; }
+.footer-bottom { border-top: 1px solid #1a1b2e; padding-top: 24px; }
+.footer-bottom p { font-size: 12px; color: #3a3a4a; line-height: 1.8; }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  main { padding: 40px 22px 16px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-wordmark"><a href="/"><em>One</em>ZeroEight<span style="color:#555;font-weight:400">.ai</span></a></div>
+  <div class="nav-links">
+    <a href="https://sutra.team">Sutra.team</a>
+    <a href="https://sammasuit.com">SammaSuit</a>
+    <a href="https://github.com/OneZeroEight-ai">GitHub</a>
+  </div>
+</nav>
+
+<main>
+
+  <header class="book-head">
+    <h1>The Verification Imperative</h1>
+    <p class="sub">Trustworthy AI in the Practice of Law</p>
+    <p class="author">JB Wagoner</p>
+  </header>
+
+  <section>
+      <p>A book that argues for verification should show its own corrections. This page lists every change made to the text after first publication, with the date it was applied.</p>
+  </section>
+
+  <section>
+      <h2>Which printing do you have?</h2>
+      <p>Check the copyright page. The corrected printing reads
+      &ldquo;First edition, 2026. Corrected printing, September 2026.&rdquo; If your copy does not carry that line, you have the first
+      printing, and every correction below applies to it.</p>
+  </section>
+
+  <section id="corrections-2026-09-03">
+      <h2>Corrections &mdash; <time datetime="2026-09-03">September 3, 2026</time></h2>
+      <p class="applied">Applied to the ebook (ASIN B0H6CG8XXL) and paperback (ISBN 9798183715118) interiors.</p>
+      <ul>
+        <li>Ch. 2, nn. 5–6: removed a pre-publication editorial note that was left in the text. The figures it referred to were subsequently confirmed correct against Magesh et al., 22 J. Empirical Legal Stud. 216 (2025).</li>
+        <li>Ch. 2 n. 6; Ch. 5 nn. 3, 5; Ch. 6 n. 8: repaired duplicated footnote text.</li>
+        <li>Ch. 6 nn. 7–8: corrected mis-anchored notes.</li>
+        <li>Ch. 10 nn. 1, 6: corrected prime character to apostrophe; removed a second editorial note.</li>
+        <li>Ch. 6 n. 1: "above" corrected to "below."</li>
+        <li>Ch. 4 n. 2: corrected an internal cross-reference that pointed to Chapter 2, notes 3–6; the material cited appears at note 7.</li>
+        <li>Epigraph and Chs. 1, 3, 10: upgraded the <em>Mattox</em> citation to its published reporter cite, 807 F. Supp. 3d 1341, 1343 (E.D. Okla. 2025).</li>
+        <li>Ch. 1 n. 6: corrected Prososki docket number to S-25-0295.</li>
+        <li>Ch. 6 nn. 3, 7, 8, 9: replaced "(confirmed by the author)" with an accurate description of the source — the author's own record of the build, with no external corroboration.</li>
+        <li>Copyright page: added an errata address and a corrected-printing line.</li>
+      </ul>
+      <p>No footnote was deleted and no note was renumbered. Every chapter carries the same number of notes as the first printing, and the book's internal cross-references resolve unchanged. The paperback is 117 pages before and after, so pagination and the printed table of contents are identical to the first printing.</p>
+      <p>Nothing in this pass changes the argument, the framework, or any factual claim. The substantive text is as first published.</p>
+      <h3>Notes on three of the above</h3>
+      <p><strong>The editorial notes (Ch. 2 and Ch. 10).</strong> Two working reminders written during drafting survived into the printed footnotes. Neither affected a stated fact. The Chapter 2 note asked the author to re-check the per-tool hallucination rates and product names against the study; that check was completed and the printed figures were correct as they stood. The Chapter 10 note asked that a live database count be refreshed at press; the text's claim there is a deliberately conservative floor and remains accurate. Both reminders have been removed, and the Chapter 10 note now says plainly that the current figure should be confirmed against the live database before any future edition.</p>
+      <p><strong>The duplicated footnotes (Chs. 2, 5, 6).</strong> Four notes printed twice, in consecutive positions, with identical text. This was a typesetting artifact: a note cited at two places in a chapter was set out in full at each one. The repair keeps the second note in place and replaces its body with a short back-reference to the first, so that no note was removed and every "see Chapter N, note X" pointer elsewhere in the book still lands where it did. In Chapter 6 the two notes had also become attached to the wrong sentences; they now carry distinct text, note 7 on the freshness observation and note 8 on the mid-2020 coverage seam.</p>
+      <p><strong>"Confirmed by the author" (Ch. 6).</strong> Four footnotes authenticated a claim with the parenthetical "(confirmed by the author)" — four times in the first printing, at printed nn. 3, 7, 8 and 9; three in the corrected printing, since the note 7/8 repair above gave note 8 distinct text. Chapter 3 of this book argues that a check which cannot fail independently of the thing being checked is not a check. A footnote in which the author certifies the author's own claim reproduces that circle inside the book's own apparatus. The claims themselves are unchanged and the body text already frames them as the author's observations from his build. Only their attribution has been made accurate: each now reads "(the author's own record of the build; no external source)," which is what the parenthetical always meant and what a reader is entitled to know.</p>
+  </section>
+
+  <section class="report">
+      <h2>Report an error</h2>
+      <p>If you find an error in this book, please write to
+      <a href="mailto:info@onezeroeight.ai">info@onezeroeight.ai</a>. Corrections are published on this page with the
+      date they were applied.</p>
+  </section>
+
+  <section>
+      <dl class="meta">
+        <dt>Paperback</dt><dd>ISBN 9798183715118</dd>
+        <dt>Ebook</dt><dd>ASIN B0H6CG8XXL</dd>
+        <dt>Author</dt><dd>JB Wagoner</dd>
+      </dl>
+  </section>
+
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Products</h4>
+        <a href="https://sutra.team">Sutra.team</a>
+        <a href="https://sammasuit.com">SammaSuit.com</a>
+        <a href="https://music.onezeroeight.ai">music.onezeroeight.ai</a>
+        <a href="https://sutra.exchange">Sutra.exchange</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="https://sutra.team/patent">Patent</a>
+        <a href="https://sutra.team/book">Book</a>
+        <a href="https://sutra.team/blog">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <a href="mailto:info@onezeroeight.ai">info@onezeroeight.ai</a>
+        <a href="https://x.com/OneZeroEight_ai" target="_blank" rel="noopener">@OneZeroEight_ai</a>
+        <a href="https://x.com/jbwagoner" target="_blank" rel="noopener">@jbwagoner</a>
+        <a href="https://github.com/OneZeroEight-ai" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 OneZeroEight.ai &middot; Temecula, CA<br>
+      Patent Pending &mdash; U.S. Provisional Application (Filed January 30, 2026)<br>
+      Protected by Samm&#x101; Suit &middot; Open Source &middot; Iceland Powered</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
