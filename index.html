@@ -200,6 +200,10 @@ nav {
 .product-card-emerald:hover { box-shadow: 0 0 40px rgba(16, 185, 129, 0.06); }
 .product-card-amber::before { background: linear-gradient(90deg, #F59E0B, #fcd34d); }
 .product-card-amber:hover { box-shadow: 0 0 40px rgba(245, 158, 11, 0.06); }
+/* slate: deliberately not one of the three brand accents — this card is an
+   independent project, not a OneZeroEight product */
+.product-card-slate::before { background: linear-gradient(90deg, #475569, #94a3b8); }
+.product-card-slate:hover { box-shadow: 0 0 40px rgba(148, 163, 184, 0.06); }
 
 .product-domain {
   font-family: 'Space Grotesk', sans-serif;
@@ -211,6 +215,7 @@ nav {
 .product-domain-violet { color: #a78bfa; }
 .product-domain-emerald { color: #6ee7b7; }
 .product-domain-amber { color: #fcd34d; }
+.product-domain-slate { color: #94a3b8; }
 
 .product-card h3 {
   font-size: 26px;
@@ -270,6 +275,7 @@ nav {
 .product-link-violet { color: #a78bfa; }
 .product-link-emerald { color: #6ee7b7; }
 .product-link-amber { color: #fcd34d; }
+.product-link-slate { color: #94a3b8; }
 
 /* ── IP SECTION ── */
 .ip { padding: 100px 0; border-bottom: 1px solid #1a1b2e; }
@@ -577,6 +583,32 @@ footer {
         <a href="https://music.onezeroeight.ai" class="product-link product-link-amber">Enter music.onezeroeight.ai &rarr;</a>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ━━━ IN DEVELOPMENT ━━━ -->
+  <!-- Reuses .products for section padding/border and .product-card for the
+       card itself, so no new layout CSS is needed. The card sits directly in
+       the section rather than in .products-grid: a lone card in a two-column
+       grid would leave a gap. -->
+  <section class="products">
+    <div class="section-label">In Development</div>
+    <div class="product-card product-card-slate">
+      <div class="product-domain product-domain-slate">citationrecord.org</div>
+      <h3>The Citation Record</h3>
+      <div class="product-subtitle">Independent benchmark of citation accuracy in legal AI</div>
+      <p class="product-desc">A quarterly measurement of how often legal AI research systems cite cases that do not exist, cite them incorrectly, or attribute holdings the opinions do not contain. Methodology, scoring rubric, and raw outputs are published with each edition.</p>
+      <ul class="product-features">
+        <li>Ground truth from CourtListener</li>
+        <li>Attorneys score every judgment call; no AI scores any item</li>
+        <li>Methodology and tooling published openly</li>
+        <li>CC BY 4.0</li>
+        <li>No funding from any measured vendor</li>
+      </ul>
+      <div class="product-status">In development. Edition One has not been published.</div>
+      <a href="https://citationrecord.org" class="product-link product-link-slate">citationrecord.org &rarr;</a>
+      <span class="product-pricing">&middot;</span>
+      <a href="https://medium.com/@jbwagoner/every-legal-ai-company-says-it-solved-hallucinated-citations-13771df71a83" class="product-link product-link-slate" target="_blank" rel="noopener">Announcement essay &rarr;</a>
     </div>
   </section>
 
